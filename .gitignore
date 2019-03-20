@@ -1,0 +1,48 @@
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+### IDE - STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IDE - IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### IDE - NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+/build/
+
+# System Files
+.DS_Store
+Thumbs.db
+
+**/target/
+
+HELP.md
+/target/
+!.mvn/wrapper/maven-wrapper.jar
