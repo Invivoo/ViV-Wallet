@@ -1,4 +1,31 @@
-<dx-button
-    text="Click me"
-    (onClick)="helloWorld()">
-</dx-button>
+<div class="form">
+    <div class="page-title">Edit User</div>
+    <div class="dx-fieldset">
+        <div class="dx-field">
+            <div class="dx-field-label">First Name</div>
+            <div class="dx-field-value">
+                <dx-text-box value="John"></dx-text-box>
+            </div>
+        </div>
+
+        <div class="dx-field">
+            <div class="dx-field-label">Family Name</div>
+            <div class="dx-field-value">
+                <dx-text-box value="DOE"></dx-text-box>
+            </div>
+        </div>
+
+    </div>
+
+    <dx-button
+        text="Confirm"
+        (onClick)="helloWorld()"
+        type="success">
+    </dx-button>
+
+    <dx-button
+        text="Cancel"
+        (onClick)="helloWorld()"
+        type="normal">
+    </dx-button>
+</div>
