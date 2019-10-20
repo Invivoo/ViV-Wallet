@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/maurelio1234/ViV-Wallet.svg?style=svg)](https://circleci.com/gh/maurelio1234/ViV-Wallet)
+
 # ViV-Wallet
 
 ## Development server (app + api)
