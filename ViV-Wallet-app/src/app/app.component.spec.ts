@@ -1,15 +1,20 @@
 import { TestBed, async } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
+import { AdminEditUserComponent } from './admin-edit-user/admin-edit-user.component';
+import { DxButtonModule, DxTextBoxModule } from 'devextreme-angular';
 
 describe('AppComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             imports: [
-                RouterTestingModule
+                RouterTestingModule,
+                DxButtonModule,
+                DxTextBoxModule
             ],
             declarations: [
-                AppComponent
+                AppComponent,
+                AdminEditUserComponent
             ],
         }).compileComponents();
     }));
