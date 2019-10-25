@@ -20,9 +20,11 @@
     "@angular/platform-browser-dynamic": "~8.2.8",
     "@angular/router": "~8.2.8",
     "core-js": "^2.5.4",
-    "devextreme": "19.1.6",
-    "devextreme-angular": "latest",
+    "devextreme": "19.2.3",
+    "devextreme-angular": "19.2.3",
     "devextreme-schematics": "^1.0.11",
+    "jquery": "1.9.1",
+    "popper.js": "1.16.0",
     "rxjs": "~6.5.3",
     "tslib": "^1.10.0",
     "zone.js": "~0.9.1"
