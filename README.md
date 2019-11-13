@@ -3,13 +3,13 @@
 Table des matières :
 
 - [Introduction](#introduction)
-- [Contribuer au projet fil rouge](#contribiuer-au-projet-fil-rouge)
+- [Contribuer au projet fil rouge](#contribuer-au-projet-fil-rouge)
 - [À lire avant de commencer](#à-lire-avant-de-commencer)
-- [Let's code](lets-code)
+- [Let's code](#lets-code)
 
 ## Introduction
 
-Grow Together est un programme d&#39;entreprise qui a un double objectif : permettre aux consultants qui souhaitent s&#39;impliquer de développer et de faire valoir leur expertise, et faire évoluer le positionnement d&#39;Invivoo vers une offre à plus forte valeur ajoutée répondant aux besoins de nos clients. Comme son nom l&#39;indique, il s&#39;agit bien de grandir tous ensemble.
+Grow Together est un programme d'entreprise qui a un double objectif : permettre aux consultants qui souhaitent s&#39;impliquer de développer et de faire valoir leur expertise, et faire évoluer le positionnement d&#39;Invivoo vers une offre à plus forte valeur ajoutée répondant aux besoins de nos clients. Comme son nom l&#39;indique, il s&#39;agit bien de grandir tous ensemble.
 
 Pour cela, le programme repose principalement sur la mise en place d&#39;un parcours d&#39;évolution cadré pour les consultants désireux de développer des compétences tout en s&#39;impliquant dans le développement d&#39;Invivoo. Ce parcours propose différents niveaux d&#39;implication allant de Consultant Senior à Partner en passant par Manager ou Manager Senior. S&#39;impliquer dans un de ces rôles est récompensé par une réelle plus-value que ce soit en termes d&#39;évolution de carrière, de responsabilités confiées ou d&#39;incentive financier sous la forme d&#39;une monnaie Virtuel, le VIV, la Virtual Invivoo Value en fonction de la contribution.
 
