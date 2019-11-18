@@ -19,5 +19,6 @@ jobs:
           key: v1-dependencies-{{ checksum "pom.xml" }}
       - run:
           command: mvn clean install
+          no_output_timeout: 20m
       - store_artifacts:
           path: /home/circleci/.npm/_logs/
