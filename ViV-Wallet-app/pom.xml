@@ -66,6 +66,15 @@
             </configuration>
           </execution>
           <execution>
+            <id>npm run e2e</id>
+            <goals>
+              <goal>npm</goal>
+            </goals>
+            <configuration>
+              <arguments>run e2e</arguments>
+            </configuration>
+          </execution>
+          <execution>
             <id>prod</id>
             <goals>
               <goal>npm</goal>
