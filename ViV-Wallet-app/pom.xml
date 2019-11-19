@@ -62,7 +62,7 @@
               <goal>npm</goal>
             </goals>
             <configuration>
-              <arguments>run test</arguments>
+              <arguments>run test-ci</arguments>
             </configuration>
           </execution>
           <execution>
