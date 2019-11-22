@@ -23,6 +23,8 @@ Le VIV-Wallet est une application qui s&#39;adresses à différents types d&#39;
 
 Le VIV Wallet est un projet fil rouge dans le cadre du Programme Grow Together. Il est open-source.
 
+**/!\ Attention /!\ en tant que projet Open-Source, il est accessible par tout le monde. Il faut donc apporter un soin particulier à ne pas insérer des informations confidentielles dans le code**
+
 Si tu veux contribuer, voilà la marche à suivre :
 
 - Lis bien l'intégralité de ce README !
