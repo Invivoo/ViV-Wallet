@@ -10,7 +10,7 @@
 
 <h1>Users Magamenent</h1>
 
-<a href="users/add">Add</a>
+<a routerLink="add">Add</a>
 
 <form action="users/" method="POST">
     <fieldset>
@@ -21,7 +21,7 @@
                 <p>Login: {{user.login}}</p>
                 <p>Name: {{user.name}}</p>
             </label>
-            <p><a href="users/edit">Edit</a></p>
+            <p><a routerLink="{{user.login}}/edit">Edit</a></p>
         </div>
     </fieldset>
 </form>
