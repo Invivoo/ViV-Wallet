@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { User } from '../types';
+import { User, Role } from '../types';
+import { LoginService } from '../login.service';
 
 @Component({
     selector: 'wallet-admin-manage-users',
@@ -17,10 +18,19 @@ export class AdminManageUsersComponent implements OnInit {
         { id: '3', login: 'rflondin', name: "Roger Flodin", email: "roget.flondin@invivoo.com" },
     ];
 
+    currentRoleName: string;
 
-    constructor() { }
+    constructor(private loginService: LoginService) { }
 
     ngOnInit() {
+        switch (this.loginService.getCurrentRole()) {
+            case Role.Admin:
+                this.currentRoleName = "System Administrator";
+                break;
+            default:
+                this.currentRoleName = "UNKNOWN";
+                break;
+        }
     }
 
 }

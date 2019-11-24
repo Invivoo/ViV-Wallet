@@ -4,3 +4,11 @@ export interface User {
     name: string;
     email: string;
 }
+
+export enum Role {
+    ExpertiseConsultant,
+    ExpertiseManager,
+    TeamMember,
+    TeamMAnager,
+    Admin
+}
