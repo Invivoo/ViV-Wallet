@@ -33,4 +33,7 @@ export class AdminManageUsersComponent implements OnInit {
         }
     }
 
+    logout() {
+        window.location.href = '/';
+    }
 }
