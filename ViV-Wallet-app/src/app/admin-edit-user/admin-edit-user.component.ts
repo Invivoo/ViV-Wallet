@@ -12,9 +12,9 @@ export class AdminEditUserComponent implements OnInit {
     user: User = {
         id: '7',
         login: 'rleloup',
-        name: "Roch Leloup",
-        email: "roch.leloup@invivoo.com"
-    }
+        name: 'Roch Leloup',
+        email: 'roch.leloup@invivoo.com'
+    };
 
     constructor(
         private route: ActivatedRoute
@@ -27,6 +27,6 @@ export class AdminEditUserComponent implements OnInit {
 
     confirm() {
         alert('Hello world!');
-        window.location.href = "/users";
+        window.location.href = '/users';
     }
 }
