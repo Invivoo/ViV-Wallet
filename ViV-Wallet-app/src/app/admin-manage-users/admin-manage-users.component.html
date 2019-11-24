@@ -16,12 +16,12 @@
     <fieldset>
         <legend>Actions</legend>
         <div *ngFor="let user of users">
-            <input type="radio" id="user{{user.login}}" name="{{user.name}}" value="{{user.login}}"/>
-            <label for="user{{user.login}}">
+            <input type="radio" id="user_{{user.id}}" name="{{user.name}}" value="{{user.id}}"/>
+            <label for="user_{{user.id}}">
                 <p>Login: {{user.login}}</p>
                 <p>Name: {{user.name}}</p>
             </label>
-            <p><a routerLink="{{user.login}}/edit">Edit</a></p>
+            <p><a routerLink="{{user.id}}/edit">Edit</a></p>
         </div>
     </fieldset>
 </form>

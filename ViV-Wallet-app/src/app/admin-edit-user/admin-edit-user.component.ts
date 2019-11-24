@@ -10,6 +10,7 @@ import { User } from '../types';
 export class AdminEditUserComponent implements OnInit {
 
     user: User = {
+        id: '7',
         login: 'rleloup',
         name: "Roch Leloup",
         email: "roch.leloup@invivoo.com"
