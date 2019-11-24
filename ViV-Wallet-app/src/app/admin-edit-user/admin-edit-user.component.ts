@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { User } from '../types';
 
 @Component({
@@ -14,7 +15,11 @@ export class AdminEditUserComponent implements OnInit {
         email: "roch.leloup@invivoo.com"
     }
 
-    constructor() { }
+    constructor(
+        private route: ActivatedRoute
+    ) {
+        this.user.login = route.snapshot.params.login;
+    }
 
     ngOnInit() {
     }
