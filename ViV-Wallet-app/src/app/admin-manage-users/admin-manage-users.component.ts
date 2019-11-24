@@ -36,4 +36,8 @@ export class AdminManageUsersComponent implements OnInit {
     logout() {
         window.location.href = '/';
     }
+
+    delete() {
+        alert('Are you sure tou want do delete it?');
+    }
 }
