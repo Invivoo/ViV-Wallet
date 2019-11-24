@@ -25,7 +25,8 @@ export class AdminEditUserComponent implements OnInit {
     ngOnInit() {
     }
 
-    helloWorld() {
+    confirm() {
         alert('Hello world!');
+        window.location.href = "/users";
     }
 }
