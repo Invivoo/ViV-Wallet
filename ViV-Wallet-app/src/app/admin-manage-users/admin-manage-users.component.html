@@ -1,7 +1,7 @@
 <header>
+    <a href="logout" (click)="!!logout()" id="logout">Logout</a>
     <p>User: {{user.name}}</p>
     <p>{{currentRoleName}}</p>
-    <a href="logout" (click)="!!logout()">Logout</a>
 </header>
 
 <nav>
@@ -10,19 +10,20 @@
 
 <h1>Users Magamenent</h1>
 
-<p><a routerLink="add">Add</a></p>
-<p><a routerLink="delete" (click)="!!delete()">Delete</a></p>
+<div class="actionButtons">
+    <dx-button icon="plus" routerLink="add">
+    </dx-button>
+    <dx-button icon="minus" (onClick)="!!delete()">
+    </dx-button>
+</div>
 
-<form action="users/" method="POST">
-    <fieldset>
-        <legend>Actions</legend>
-        <div *ngFor="let user of users">
-            <input type="radio" id="user_{{user.id}}" name="{{user.name}}" value="{{user.id}}"/>
-            <label for="user_{{user.id}}">
-                <p>Login: {{user.login}}</p>
-                <p>Name: {{user.name}}</p>
-            </label>
-            <p><a routerLink="{{user.id}}/edit">Edit</a></p>
-        </div>
-    </fieldset>
-</form>
+<dx-data-grid
+    id="gridContainer"
+    class="afterActionButtons"
+    [dataSource]="users"
+    [columns]="['login', 'name']"
+    [showBorders]="true">
+    <dxo-selection
+        mode="single">
+    </dxo-selection>
+</dx-data-grid>

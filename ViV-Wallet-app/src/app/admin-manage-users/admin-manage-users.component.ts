@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { User, Role } from '../types';
 import { LoginService } from '../login.service';
+import { DxDataGridComponent } from "devextreme-angular";
 
 @Component({
     selector: 'wallet-admin-manage-users',
@@ -8,6 +9,7 @@ import { LoginService } from '../login.service';
     styleUrls: ['./admin-manage-users.component.scss']
 })
 export class AdminManageUsersComponent implements OnInit {
+    @ViewChild(DxDataGridComponent, { static: false }) dataGrid: DxDataGridComponent;
 
     user: User =
         { id: '7', login: 'tmontgomery', name: "MONTGOMERY Théophile", email: "theophile.montgomery@invivoo.com" };
@@ -37,7 +39,14 @@ export class AdminManageUsersComponent implements OnInit {
         window.location.href = '/';
     }
 
+    add() {
+
+    }
+
     delete() {
-        alert('Are you sure tou want do delete it?');
+        const selectedElement = this.dataGrid.instance.getSelectedRowsData()[0] as User;
+        if (selectedElement) {
+            confirm(`Are you sure you want to delete user ${selectedElement.login}?`);
+        }
     }
 }

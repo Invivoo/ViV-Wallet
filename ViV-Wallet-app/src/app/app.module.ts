@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { DxButtonModule, DxTextBoxModule, DxValidatorModule } from 'devextreme-angular';
+import { DxButtonModule, DxTextBoxModule, DxValidatorModule, DxDataGridModule } from 'devextreme-angular';
 import { AdminEditUserComponent } from './admin-edit-user/admin-edit-user.component';
 import { AdminManageUsersComponent } from './admin-manage-users/admin-manage-users.component';
 
@@ -18,7 +18,8 @@ import { AdminManageUsersComponent } from './admin-manage-users/admin-manage-use
         AppRoutingModule,
         DxButtonModule,
         DxTextBoxModule,
-        DxValidatorModule
+        DxValidatorModule,
+        DxDataGridModule
     ],
     providers: [],
     bootstrap: [AppComponent]
