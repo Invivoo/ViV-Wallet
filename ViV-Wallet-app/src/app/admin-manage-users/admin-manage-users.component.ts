@@ -7,6 +7,10 @@ import { User } from '../types';
     styleUrls: ['./admin-manage-users.component.scss']
 })
 export class AdminManageUsersComponent implements OnInit {
+
+    user: User =
+        { login: 'tmontgomery', name: "MONTGOMERY Théophile", email: "theophile.montgomery@invivoo.com" };
+
     users: User[] = [
         { login: 'rleloup', name: "Roch Leloup", email: "roch.leloup@invivoo.com" },
         { login: 'dboudet', name: "Djeferson Boudet", email: "djeverson.boudet@invivoo.com" },
