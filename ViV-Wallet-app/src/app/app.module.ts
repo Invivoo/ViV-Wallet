@@ -5,11 +5,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DxButtonModule, DxTextBoxModule } from 'devextreme-angular';
 import { AdminEditUserComponent } from './admin-edit-user/admin-edit-user.component';
+import { AdminManageUsersComponent } from './admin-manage-users/admin-manage-users.component';
 
 @NgModule({
     declarations: [
         AppComponent,
-        AdminEditUserComponent
+        AdminEditUserComponent,
+        AdminManageUsersComponent
     ],
     imports: [
         BrowserModule,
