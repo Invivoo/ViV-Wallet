@@ -2,16 +2,23 @@
     <div class="page-title">Edit User</div>
     <div class="dx-fieldset">
         <div class="dx-field">
-            <div class="dx-field-label">First Name</div>
+            <div class="dx-field-label">Name</div>
             <div class="dx-field-value">
-                <dx-text-box value="John"></dx-text-box>
+                <dx-text-box value="{{user.name}}"></dx-text-box>
             </div>
         </div>
 
         <div class="dx-field">
-            <div class="dx-field-label">Family Name</div>
+            <div class="dx-field-label">Login</div>
             <div class="dx-field-value">
-                <dx-text-box value="DOE"></dx-text-box>
+                <dx-text-box value="{{user.login}}"></dx-text-box>
+            </div>
+        </div>
+
+        <div class="dx-field">
+            <div class="dx-field-label">Email</div>
+            <div class="dx-field-value">
+                <dx-text-box value="{{user.email}}"></dx-text-box>
             </div>
         </div>
 

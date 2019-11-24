@@ -1,1 +1,27 @@
-<p>admin-manage-users works!</p>
+<header>
+    <p>User: MONTGOMERY Théophile</p>
+    <p>System Administrator</p>
+    <a href="javascript:alert('TODO')">Logout</a>
+</header>
+
+<nav>
+    <a routerLink="/users"> Users </a>
+</nav>
+
+<h1>Users Magamenent</h1>
+
+<a href="users/add">Add</a>
+
+<form action="users/" method="POST">
+    <fieldset>
+        <legend>Actions</legend>
+        <div *ngFor="let user of users">
+            <input type="radio" id="user{{user.login}}" name="{{user.name}}" value="{{user.login}}"/>
+            <label for="user{{user.login}}">
+                <p>Login: {{user.login}}</p>
+                <p>Name: {{user.name}}</p>
+            </label>
+            <p><a href="users/edit">Edit</a></p>
+        </div>
+    </fieldset>
+</form>
