@@ -43,6 +43,7 @@
     "devextreme-themebuilder": "latest",
     "jasmine-core": "~2.99.1",
     "jasmine-spec-reporter": "~4.2.1",
+    "json-server": "^0.15.1",
     "karma": "^4.3.0",
     "karma-chrome-launcher": "~2.2.0",
     "karma-coverage-istanbul-reporter": "~2.0.1",
