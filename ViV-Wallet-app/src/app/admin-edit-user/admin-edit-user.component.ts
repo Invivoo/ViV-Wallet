@@ -29,6 +29,6 @@ export class AdminEditUserComponent implements OnInit {
     }
 
     confirm() {
-        this.usersService.saveUser(this.user).subscribe(() => window.location.href = '/users';);
+        this.usersService.saveUser(this.user).subscribe(() => window.location.href = '/users');
     }
 }
