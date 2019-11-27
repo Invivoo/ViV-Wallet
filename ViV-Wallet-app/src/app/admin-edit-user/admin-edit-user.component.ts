@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { User } from '../types';
+import { UsersService } from '../users.service';
 
 @Component({
     selector: 'wallet-admin-edit-user',
@@ -17,16 +18,17 @@ export class AdminEditUserComponent implements OnInit {
     };
 
     constructor(
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private usersService: UsersService
     ) {
-        this.user.login = route.snapshot.params.login;
+        this.user.id = route.snapshot.params.id;
     }
 
     ngOnInit() {
+        this.usersService.getUser(this.user.id).subscribe(u => this.user = u);
     }
 
     confirm() {
-        alert('Hello world!');
-        window.location.href = '/users';
+        this.usersService.saveUser(this.user).subscribe(() => window.location.href = '/users';);
     }
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { User } from './types';
 import { HttpClient } from '@angular/common/http';
 
@@ -12,5 +12,13 @@ export class UsersService {
 
     getUsers(): Observable<User[]> {
         return this.http.get<User[]>('http://localhost:3000/api/v1/users');
+    }
+
+    saveUser(user: User): Observable<Object> {
+        return this.http.put('http://localhost:3000/api/v1/users/' + user.id, user);
+    }
+
+    getUser(id: string): Observable<User> {
+        return this.http.get<User>('http://localhost:3000/api/v1/users/' + id);
     }
 }
