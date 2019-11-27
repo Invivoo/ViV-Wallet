@@ -13,7 +13,7 @@ export class AdminManageUsersComponent implements OnInit {
     @ViewChild(DxDataGridComponent, { static: false }) dataGrid: DxDataGridComponent;
 
     user: User =
-        { id: '7', login: 'tmontgomery', name: 'MONTGOMERY Théophile', email: 'theophile.montgomery@invivoo.com' };
+        { id: '7', login: 'tmontgomery', fullname: 'MONTGOMERY Théophile', email: 'theophile.montgomery@invivoo.com' };
 
     users: User[] = [];
 
