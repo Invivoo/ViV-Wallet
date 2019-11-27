@@ -19,9 +19,9 @@
       <plugin>
         <groupId>com.github.eirslett</groupId>
         <artifactId>frontend-maven-plugin</artifactId>
-        <version>1.6</version>
+        <version>1.8.0</version>
         <configuration>
-          <nodeVersion>v10.13.0</nodeVersion>
+          <nodeVersion>v12.13.0</nodeVersion>
           <npmVersion>6.3.0</npmVersion>
           <workingDirectory>.</workingDirectory>
         </configuration>
@@ -39,12 +39,39 @@
             </goals>
           </execution>
           <execution>
+            <id>npm run lint</id>
+            <goals>
+              <goal>npm</goal>
+            </goals>
+            <configuration>
+              <arguments>run lint</arguments>
+            </configuration>
+          </execution>
+          <execution>
             <id>npm run build</id>
             <goals>
               <goal>npm</goal>
             </goals>
             <configuration>
               <arguments>run build</arguments>
+            </configuration>
+          </execution>
+          <execution>
+            <id>npm run test</id>
+            <goals>
+              <goal>npm</goal>
+            </goals>
+            <configuration>
+              <arguments>run test-ci</arguments>
+            </configuration>
+          </execution>
+          <execution>
+            <id>npm run e2e</id>
+            <goals>
+              <goal>npm</goal>
+            </goals>
+            <configuration>
+              <arguments>run e2e</arguments>
             </configuration>
           </execution>
           <execution>

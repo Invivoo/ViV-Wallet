@@ -1,0 +1,44 @@
+<div class="form">
+    <h2 class="page-title">Edit User</h2>
+    <div class="dx-fieldset">
+        <div class="dx-field">
+            <div class="dx-field-label">Name</div>
+            <div class="dx-field-value">
+                <dx-text-box value="{{user.fullname}}"></dx-text-box>
+            </div>
+        </div>
+
+        <div class="dx-field">
+            <div class="dx-field-label">Login</div>
+            <div class="dx-field-value">
+                <dx-text-box value="{{user.login}}"></dx-text-box>
+            </div>
+        </div>
+
+        <div class="dx-field">
+            <div class="dx-field-label">Email</div>
+            <div class="dx-field-value">
+                <dx-text-box value="{{user.email}}">
+                    <dx-validator>
+                        <dxi-validation-rule
+                            type="email">
+                        </dxi-validation-rule>
+                    </dx-validator>
+                </dx-text-box>
+            </div>
+        </div>
+
+    </div>
+
+    <dx-button
+        text="Confirm"
+        (onClick)="confirm()"
+        type="success">
+    </dx-button>
+
+    <dx-button
+        text="Cancel"
+        routerLink="/users"
+        type="normal">
+    </dx-button>
+</div>

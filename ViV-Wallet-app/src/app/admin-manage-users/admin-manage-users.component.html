@@ -1,0 +1,33 @@
+<header>
+    <a href="logout" (click)="!!logout()" id="logout">Logout</a>
+    <p>User: {{user.fullname}}</p>
+    <p>{{currentRoleName}}</p>
+</header>
+
+<nav>
+    <dx-button
+        icon="group"
+        text="Users"
+        routerLink="/users">
+    </dx-button>
+</nav>
+
+<h1 class="page-title">Users Management</h1>
+
+<div class="actionButtons">
+    <dx-button icon="plus" routerLink="add">
+    </dx-button>
+    <dx-button icon="minus" (onClick)="!!delete()">
+    </dx-button>
+</div>
+
+<dx-data-grid
+    id="gridContainer"
+    class="afterActionButtons"
+    [dataSource]="users"
+    [columns]="['login', 'name']"
+    [showBorders]="true">
+    <dxo-selection
+        mode="single">
+    </dxo-selection>
+</dx-data-grid>
