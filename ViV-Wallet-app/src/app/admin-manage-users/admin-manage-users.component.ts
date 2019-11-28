@@ -45,7 +45,7 @@ export class AdminManageUsersComponent implements OnInit {
     edit() {
         const selectedElement = this.dataGrid.instance.getSelectedRowsData()[0] as User;
         if (selectedElement) {
-            window.location.href = '/users/' + selectedElement.id + "/edit";
+            window.location.href = '/users/' + selectedElement.id + '/edit';
         }
     }
 
