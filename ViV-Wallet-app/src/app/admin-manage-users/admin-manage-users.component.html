@@ -1,5 +1,5 @@
 <header>
-    <a href="logout" (click)="!!logout()" id="logout">Logout</a>
+    <a href="#" (click)="!!logout()" id="logout">Logout</a>
     <p>User: {{user.fullname}}</p>
     <p>{{currentRoleName}}</p>
 </header>
@@ -17,7 +17,7 @@
 <div class="actionButtons">
     <dx-button icon="edit" (onClick)="!!edit()">
     </dx-button>
-    <dx-button icon="plus" routerLink="add">
+    <dx-button icon="plus" [routerLink]="['/users/add']">
     </dx-button>
     <dx-button icon="minus" (onClick)="!!delete()">
     </dx-button>
@@ -27,7 +27,7 @@
     id="gridContainer"
     class="afterActionButtons"
     [dataSource]="users"
-    [columns]="['login', 'name']"
+    [columns]="['login', 'fullname']"
     [showBorders]="true">
     <dxo-selection
         mode="single">
