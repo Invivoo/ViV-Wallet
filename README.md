@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/maurelio1234/ViV-Wallet.svg?style=svg)](https://circleci.com/gh/maurelio1234/ViV-Wallet)
+[![CircleCI](https://circleci.com/gh/Invivoo/ViV-Wallet.svg?style=svg)](https://circleci.com/gh/Invivoo/ViV-Wallet)
 
 # Le VIV Wallet
 
