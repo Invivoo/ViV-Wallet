@@ -2,7 +2,7 @@ import { TestBed, async } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
 import { AdminEditUserComponent } from './admin-edit-user/admin-edit-user.component';
-import { DxButtonModule, DxTextBoxModule } from 'devextreme-angular';
+import { DxButtonModule, DxTextBoxModule, DxValidatorModule } from 'devextreme-angular';
 
 describe('AppComponent', () => {
     beforeEach(async(() => {
@@ -10,7 +10,8 @@ describe('AppComponent', () => {
             imports: [
                 RouterTestingModule,
                 DxButtonModule,
-                DxTextBoxModule
+                DxTextBoxModule,
+                DxValidatorModule
             ],
             declarations: [
                 AppComponent,

@@ -1,42 +1,37 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-import {Router} from '@angular/router';
-import {User} from '../types';
-import {UsersService} from '../users.service';
-import {isNullOrUndefined} from 'util';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
+import { User } from '../types';
+import { UsersService } from '../users.service';
 
 @Component({
-             selector: 'wallet-admin-edit-user',
-             templateUrl: './admin-edit-user.component.html',
-             styleUrls: ['./admin-edit-user.component.scss']
-           })
+    selector: 'wallet-admin-edit-user',
+    templateUrl: './admin-edit-user.component.html',
+    styleUrls: ['./admin-edit-user.component.scss']
+})
 export class AdminEditUserComponent implements OnInit {
 
-  user: User;
+    user: User = new User();
 
-  constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-    private usersService: UsersService
-  ) {
-    const id = route.snapshot.params.id;
-    this.initUser(id);
-  }
-
-  ngOnInit() {
-  }
-
-  confirm() {
-    this.usersService.saveUser(this.user)
-        .subscribe(() => this.router.navigate(['/users']));
-  }
-
-  private initUser(id) {
-    if (isNullOrUndefined(id)) {
-      this.user = new User();
-    } else {
-      this.usersService.getUser(id)
-          .subscribe(u => this.user = u);
+    constructor(
+        private router: Router,
+        private route: ActivatedRoute,
+        private usersService: UsersService
+    ) {
     }
-  }
+
+    ngOnInit() {
+        const id = this.route.snapshot.params.id;
+        this.initUser(id);
+    }
+
+    confirm() {
+        this.usersService.saveUser(this.user)
+            .subscribe(() => this.router.navigate(['/users']));
+    }
+
+    private initUser(id: string) {
+        this.usersService.getUser(id)
+            .subscribe(u => this.user = u);
+    }
 }
