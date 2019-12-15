@@ -18,6 +18,10 @@ export class LoginService {
         return this.role;
     }
 
+    getJwtToken(): string | undefined {
+        return '';
+    }
+
     logout() {
 
     }

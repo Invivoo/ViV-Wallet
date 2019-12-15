@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { User } from './types';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { isNullOrUndefined } from 'util';
+import { LoginService } from './login.service';
 
 const usersEndpoint = 'http://localhost:3000/api/v1/users';
 
@@ -11,7 +12,7 @@ const usersEndpoint = 'http://localhost:3000/api/v1/users';
 })
 export class UsersService {
 
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, private login: LoginService) {
     }
 
     getUsers(): Observable<User[]> {
@@ -20,9 +21,23 @@ export class UsersService {
 
     saveUser(user: User): Observable<Object> {
         if (isNullOrUndefined(user.id)) {
-            return this.http.post(usersEndpoint, user);
+            return this.http.post(usersEndpoint,
+                user,
+                {
+                    headers: new HttpHeaders(
+                        {
+                            'Authorization': this.login.getJwtToken()
+                        })
+                });
         }
-        return this.http.put(usersEndpoint + '/' + user.id, user);
+        return this.http.put(usersEndpoint + '/' + user.id,
+            user,
+            {
+                headers: new HttpHeaders(
+                    {
+                        'Authorization': this.login.getJwtToken()
+                    })
+            });
     }
 
     getUser(id: string): Observable<User> {
