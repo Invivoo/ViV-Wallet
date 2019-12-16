@@ -51,7 +51,11 @@ Quelques guidelines ont été données pour assurer la cohérence du projet ains
 
 ## Let's code 
 
-### Pour lancer le server de développement
+### Pour travailler sur le backend
 
 Run `mvn clean install` to build ViV-Wallet-app and move it to ViV-Wallet-api resources. Run it in sudo mode the first time to install the version of node used by the frontend-maven-plugin. 
 Move to ViV-Wallet-api folder and run `mvn spring-boot:run` for a dev server. Navigate to `http://localhost:8080/`.
+
+### Pour travailler sur le frontend
+
+In the `ViV-Wallet-app/` folder, run `npm run mock-server` to start a mock backend server. Then start the front end by typing `ng serve`.

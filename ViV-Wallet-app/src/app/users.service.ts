@@ -1,33 +1,50 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
-import {User} from './types';
-import {HttpClient} from '@angular/common/http';
-import {isNullOrUndefined} from 'util';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { User } from './types';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { isNullOrUndefined } from 'util';
+import { LoginService } from './login.service';
+
+const usersEndpoint = 'http://localhost:3000/api/v1/users';
 
 @Injectable({
-              providedIn: 'root'
-            })
+    providedIn: 'root'
+})
 export class UsersService {
 
-  constructor(private http: HttpClient) {
-  }
-
-  getUsers(): Observable<User[]> {
-    return this.http.get<User[]>('http://localhost:3000/api/v1/users');
-  }
-
-  saveUser(user: User): Observable<Object> {
-    if (isNullOrUndefined(user.id)) {
-      return this.http.post('http://localhost:3000/api/v1/users', user);
+    constructor(private http: HttpClient, private login: LoginService) {
     }
-    return this.http.put('http://localhost:3000/api/v1/users/' + user.id, user);
-  }
 
-  getUser(id: string): Observable<User> {
-    return this.http.get<User>('http://localhost:3000/api/v1/users/' + id);
-  }
+    getUsers(): Observable<User[]> {
+        return this.http.get<User[]>(usersEndpoint);
+    }
 
-  deleteUser(user: User): Observable<any> {
-    return this.http.delete('http://localhost:3000/api/v1/users/' + user.id);
-  }
+    saveUser(user: User): Observable<Object> {
+        if (isNullOrUndefined(user.id)) {
+            return this.http.post(usersEndpoint,
+                user,
+                {
+                    headers: new HttpHeaders(
+                        {
+                            'Authorization': this.login.getJwtToken()
+                        })
+                });
+        }
+        return this.http.put(usersEndpoint + '/' + user.id,
+            user,
+            {
+                headers: new HttpHeaders(
+                    {
+                        'Authorization': this.login.getJwtToken()
+                    })
+            });
+    }
+
+    getUser(id: string): Observable<User> {
+        return this.http.get<User>(usersEndpoint + '/' + id);
+    }
+
+    deleteUser(user: User): Observable<any> {
+        return this.http.delete(usersEndpoint + '/' + user.id);
+    }
 }
