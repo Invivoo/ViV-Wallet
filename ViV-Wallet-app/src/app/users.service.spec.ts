@@ -5,6 +5,7 @@ import { LoginService } from './login.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { AuthenticationInterceptor } from './http-interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { environment } from './../environments/environment';
 
 describe('UsersService', () => {
     let httpTestingController: HttpTestingController;
@@ -12,7 +13,7 @@ describe('UsersService', () => {
     const token = 'token';
     const loginSpy = jasmine.createSpyObj('LoginService', { 'getJwtToken': token });
 
-    const usersEndpoint = 'http://localhost:3000/api/v1/users';
+    const usersEndpoint = `${environment.backendUrl}/api/v1/users`;
     const prototypeUser: User = {
         id: '123',
         login: 'mylogin',

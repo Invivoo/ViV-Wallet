@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { User } from './types';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { isNullOrUndefined } from 'util';
 import { LoginService } from './login.service';
+import { environment } from './../environments/environment';
 
-const usersEndpoint = 'http://localhost:3000/api/v1/users';
+const usersEndpoint = `${environment.backendUrl}/api/v1/users`;
 
 @Injectable({
     providedIn: 'root'
