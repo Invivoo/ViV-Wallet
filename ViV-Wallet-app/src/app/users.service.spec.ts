@@ -7,16 +7,16 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 describe('UsersService', () => {
     let httpTestingController: HttpTestingController;
     let service: UsersService;
-    const token: string = 'token';
+    const token = 'token';
     const loginSpy = jasmine.createSpyObj('LoginService', { 'getJwtToken': token });
 
-    const usersEndpoint = 'http://localhost:3000/api/v1/users'
+    const usersEndpoint = 'http://localhost:3000/api/v1/users';
     const prototypeUser: User = {
         id: '123',
         login: 'mylogin',
         fullname: 'My LOGIN',
         email: 'my.login@invivoo.com'
-    }
+    };
 
     beforeEach(() => {
         TestBed.configureTestingModule({
