@@ -21,23 +21,9 @@ export class UsersService {
 
     saveUser(user: User): Observable<Object> {
         if (isNullOrUndefined(user.id)) {
-            return this.http.post(usersEndpoint,
-                user,
-                {
-                    headers: new HttpHeaders(
-                        {
-                            'Authorization': this.login.getJwtToken()
-                        })
-                });
+            return this.http.post(usersEndpoint, user);
         }
-        return this.http.put(usersEndpoint + '/' + user.id,
-            user,
-            {
-                headers: new HttpHeaders(
-                    {
-                        'Authorization': this.login.getJwtToken()
-                    })
-            });
+        return this.http.put(usersEndpoint + '/' + user.id, user);
     }
 
     getUser(id: string): Observable<User> {

@@ -3,6 +3,8 @@ import { User } from './types';
 import { UsersService } from './users.service';
 import { LoginService } from './login.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { AuthenticationInterceptor } from './http-interceptor';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 describe('UsersService', () => {
     let httpTestingController: HttpTestingController;
@@ -23,6 +25,7 @@ describe('UsersService', () => {
             imports: [HttpClientTestingModule],
             providers: [
                 { provide: LoginService, useValue: loginSpy },
+                { provide: HTTP_INTERCEPTORS, useClass: AuthenticationInterceptor },
             ]
         });
 
@@ -46,7 +49,7 @@ describe('UsersService', () => {
         const testRequest = httpTestingController.expectOne(usersEndpoint);
         expect(testRequest.request.method).toBe('POST');
         expect(testRequest.request.headers.has('Authorization')).toBeTruthy();
-        expect(testRequest.request.headers.get('Authorization')).toBe(token);
+        expect(testRequest.request.headers.get('Authorization')).toBe(`Bearer ${token}`);
 
         testRequest.flush(prototypeUser);
     });
@@ -59,7 +62,7 @@ describe('UsersService', () => {
         const testRequest = httpTestingController.expectOne(usersEndpoint + '/123');
         expect(testRequest.request.method).toBe('PUT');
         expect(testRequest.request.headers.has('Authorization')).toBeTruthy();
-        expect(testRequest.request.headers.get('Authorization')).toBe(token);
+        expect(testRequest.request.headers.get('Authorization')).toBe(`Bearer ${token}`);
 
         testRequest.flush(prototypeUser);
     });
