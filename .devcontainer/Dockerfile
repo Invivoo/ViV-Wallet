@@ -30,6 +30,7 @@ RUN rm -rf /var/lib/apt/lists/* && apt-get update \
   #
   # Install tslint and typescript globally
   && npm install -g tslint typescript \
+  && npm install -g npm-check-updates \
   #
   # [Optional] Update a non-root user to match UID/GID - see https://aka.ms/vscode-remote/containers/non-root-user.
   && if [ "$USER_GID" != "1000" ]; then groupmod circleci --gid $USER_GID; fi \
