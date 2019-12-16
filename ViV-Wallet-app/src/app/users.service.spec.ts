@@ -25,7 +25,7 @@ describe('UsersService', () => {
             imports: [HttpClientTestingModule],
             providers: [
                 { provide: LoginService, useValue: loginSpy },
-                { provide: HTTP_INTERCEPTORS, useClass: AuthenticationInterceptor },
+                { provide: HTTP_INTERCEPTORS, useClass: AuthenticationInterceptor, multi: true },
             ]
         });
 

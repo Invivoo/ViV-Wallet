@@ -26,7 +26,7 @@ import { AuthenticationInterceptor } from './http-interceptor';
         DxDataGridModule
     ],
     providers: [
-        { provide: HTTP_INTERCEPTORS, useClass: AuthenticationInterceptor },
+        { provide: HTTP_INTERCEPTORS, useClass: AuthenticationInterceptor, multi: true },
     ],
     bootstrap: [AppComponent]
 })
