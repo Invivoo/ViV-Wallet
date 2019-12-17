@@ -1,55 +1,63 @@
-#-------------------------------------------------------------------------------------------------------------
-# Copyright (c) Microsoft Corporation. All rights reserved.
-# Licensed under the MIT License. See https://go.microsoft.com/fwlink/?linkid=2090316 for license information.
-#-------------------------------------------------------------------------------------------------------------
+FROM openjdk:11-jdk
 
-FROM circleci/openjdk:11-jdk-browsers
-
-# Avoid warnings by switching to noninteractive
-ENV DEBIAN_FRONTEND=noninteractive
-
-# The node image comes with a base non-root 'node' user which this Dockerfile
-# gives sudo access. However, for Linux, this user's GID/UID must match your local
-# user UID/GID to avoid permission issues with bind mounts. Update USER_UID / USER_GID 
-# if yours is not 1000. See https://aka.ms/vscode-remote/containers/non-root-user.
+# This Dockerfile adds a non-root user with sudo access. Use the "remoteUser"
+# property in devcontainer.json to use it. On Linux, the container user's GID/UIDs
+# will be updated to match your local UID/GID (when using the dockerFile property).
+# See https://aka.ms/vscode-remote/containers/non-root-user for details.
+ARG USERNAME=vscode
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
-USER root
+# Configure apt
+ENV DEBIAN_FRONTEND=noninteractive
+RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
+    && echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list
 
-RUN echo 'kernel.unprivileged_userns_clone=1' > /etc/sysctl.d/userns.conf
-# Configure apt and install packages
-RUN rm -rf /var/lib/apt/lists/* && apt-get update \
-  && apt-get -y install --no-install-recommends apt-utils dialog 2>&1 \ 
-  #
-  # Verify git and needed tools are installed
-  && apt-get -y install git iproute2 procps \
-  && apt-get install -y curl apt-transport-https lsb-release \
-  && curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash - \
-  && apt-get install -y nodejs \
-  #
-  # Install tslint and typescript globally
-  && npm install -g tslint typescript \
-  && npm install -g npm-check-updates \
-  #
-  # [Optional] Update a non-root user to match UID/GID - see https://aka.ms/vscode-remote/containers/non-root-user.
-  && if [ "$USER_GID" != "1000" ]; then groupmod circleci --gid $USER_GID; fi \
-  && if [ "$USER_UID" != "1000" ]; then usermod --uid $USER_UID circleci; fi \
-  # [Optional] Add add sudo support for non-root user
-  && apt-get install -y sudo \
-  && echo circleci ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/circleci \
-  && chmod 0440 /etc/sudoers.d/circleci \
-  #
-  # Clean up
-  && apt-get autoremove -y \
-  && apt-get clean -y \
-  && rm -rf /var/lib/apt/lists/*
+RUN apt-get update \
+    && apt-get -y install --no-install-recommends apt-utils dialog 2>&1 \
+    #
+    # Create a non-root user to use if preferred - see https://aka.ms/vscode-remote/containers/non-root-user.
+    && groupadd --gid $USER_GID $USERNAME \
+    && useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $USERNAME \
+    # [Optional] Add sudo support for the non-root user
+    && apt-get install -y sudo \
+    && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME\
+    && chmod 0440 /etc/sudoers.d/$USERNAME \
+    #
+    # Verify git, needed tools installed
+    && apt-get -y install git iproute2 procps curl lsb-release \
+    && apt-get install -y curl apt-transport-https lsb-release \
+    && curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash - \
+    && apt-get install -y nodejs \
+    #
+    # Install tslint and typescript globally
+    && npm install -g tslint typescript \
+    && npm install -g npm-check-updates \
+    && npm install -g @vue/cli \
+    # cypres
+    && apt-get -y install xvfb libgtk-3-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 \
+    && apt-get -y install google-chrome-stable
 
-# Switch back to dialog for any ad-hoc use of apt-get
-ENV DEBIAN_FRONTEND=
 
-USER circleci
+ARG MAVEN_VERSION=3.6.3
+ARG MAVEN_SHA=c35a1803a6e70a126e80b2b3ae33eed961f83ed74d18fcd16909b2d44d7dada3203f1ffe726c17ef8dcca2dcaa9fca676987befeadc9b9f759967a8cb77181c0
+RUN mkdir -p /usr/share/maven /usr/share/maven/ref \
+    && curl -fsSL -o /tmp/apache-maven.tar.gz https://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz \
+    && echo "${MAVEN_SHA} /tmp/apache-maven.tar.gz" | sha512sum -c - \
+    && tar -xzf /tmp/apache-maven.tar.gz -C /usr/share/maven --strip-components=1 \
+    && rm -f /tmp/apache-maven.tar.gz \
+    && ln -s /usr/share/maven/bin/mvn /usr/bin/mvn
+COPY maven-settings.xml /usr/share/maven/ref/
+ENV MAVEN_HOME /usr/share/maven
+ENV MAVEN_CONFIG /root/.m2
 
+# Clean up
+RUN apt-get autoremove -y \
+    && apt-get clean -y \
+    && rm -rf /var/lib/apt/lists/*
+ENV DEBIAN_FRONTEND=dialog
 
 # Allow for a consistant java home location for settings - image is changing over time
-# RUN if [ ! -d "/docker-java-home" ]; then ln -s "${JAVA_HOME}" /docker-java-home; fi
+RUN if [ ! -d "/docker-java-home" ]; then ln -s "${JAVA_HOME}" /docker-java-home; fi
+ENV DISPLAY :99
+

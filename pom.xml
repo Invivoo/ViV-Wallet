@@ -21,7 +21,6 @@
 
 	 <modules>
         <module>ViV-Wallet-api</module>
-        <module>ViV-Wallet-app</module>
     </modules>
 
 </project>
