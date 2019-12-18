@@ -35,7 +35,8 @@ Si tu veux contribuer, voilà la marche à suivre :
 - Attend le go d'un manager d'expertise (il vérifiera que le ticket est faisable et n'est pas déjà traité par quelqu'un d'autre),
 - Déplace le ticket dans In Progress en t'affectant sur le ticket [ici](https://github.com/Invivoo/ViV-Wallet/projects/1). N'hésite pas à demander plus d'info dans la conversation liée au ticket sur Teams.
 - Crée une branche intitulée _viv/feature|hotfix/id-du-ticket_ à partir de la branche develop,
-- Un fois le développement fait, crée une pull request et demande via Teams à un manager d'expertise de la valider dans la conversation liée au ticket sur Teams,
+- Pour chaque ticket, ajoute des Tests en t'inspirant de la spec et des tests existants !
+- Une fois le développement fait, crée une pull request et demande via Teams à un manager d'expertise de la valider dans la conversation liée au ticket sur Teams,
 - _Et Voilà_, le nombre de VIV associé au ticket sera débloqué une fois que l'ensemble de la version sera livrée.
 
 /!\ Attention /!\ dans certains cas, les VIVs ne seront pas crédités :
@@ -60,8 +61,12 @@ Pour installer l'extension VSCode pour le remote development, suivre la procédu
 
 ### Pour travailler sur le backend
 
-Run `mvn clean install` to build ViV-Wallet-app and move it to ViV-Wallet-api resources. Run it in sudo mode the first time to install the version of node used by the frontend-maven-plugin.
+Run `mvn clean install` from the project root to build ViV-Wallet-app and move it to ViV-Wallet-api resources. 
+Run it in sudo mode the first time to install the version of node used by the frontend-maven-plugin.
 Move to ViV-Wallet-api folder and run `mvn spring-boot:run` for a dev server. Navigate to `http://localhost:8080/`.
+
+Failed to execute goal com.github.eirslett:frontend-maven-plugin:1.8.0:install-node-and-npm (install node and npm) on project ViV-Wallet-app: Could not extract the Node archive: Could not extract archive: '/Users/bjonathas/.m2/repository/com/github/eirslett/node/12.13.1/node-12.13.1-darwin-x64.tar.gz'
+
 
 ### Pour travailler sur le frontend
 

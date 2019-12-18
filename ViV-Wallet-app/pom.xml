@@ -24,6 +24,7 @@
           <nodeVersion>v12.13.1</nodeVersion>
           <npmVersion>6.12.1</npmVersion>
           <workingDirectory>.</workingDirectory>
+          <installDirectory>target/</installDirectory>
         </configuration>
         <executions>
           <execution>
