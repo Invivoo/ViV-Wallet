@@ -26,8 +26,7 @@ export class AdminEditUserComponent implements OnInit {
     }
 
     confirm(event) {
-        let result = event.validationGroup.validate();
-        if (result.isValid) {
+        if (event.validationGroup.validate().isValid) {
             this.usersService.saveUser(this.user)
                 .subscribe(() => this.router.navigate(['/users']));
         }

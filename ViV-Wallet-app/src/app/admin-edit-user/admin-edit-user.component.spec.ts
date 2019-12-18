@@ -49,9 +49,9 @@ describe('AdminEditUserComponent', () => {
     });
 
     it('should not save when form is not valid', () => {
-        let event = {
+        const event = {
             validationGroup: {
-                validate: () => { return { isValid: false }; }
+                validate: () => ({ isValid: false })
             },
         };
 
@@ -60,9 +60,9 @@ describe('AdminEditUserComponent', () => {
     });
 
     it('should  save when form is  valid', () => {
-        let event = {
+        const event = {
             validationGroup: {
-                validate: () => { return { isValid: true }; }
+                validate: () => ({ isValid: true })
             },
         };
 
