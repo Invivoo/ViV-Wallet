@@ -59,14 +59,12 @@ Quelques guidelines ont été données pour assurer la cohérence du projet ains
 
 Pour installer l'extension VSCode pour le remote development, suivre la procédure suivante: [https://code.visualstudio.com/docs/remote/containers](https://code.visualstudio.com/docs/remote/containers).
 
-### Pour travailler sur le backend
+### Pour travailler sur le backend avec le front
 
 Run `mvn clean install` from the project root to build ViV-Wallet-app and move it to ViV-Wallet-api resources. 
 Run it in sudo mode the first time to install the version of node used by the frontend-maven-plugin.
 Move to ViV-Wallet-api folder and run `mvn spring-boot:run` for a dev server. Navigate to `http://localhost:8080/`.
-
-Failed to execute goal com.github.eirslett:frontend-maven-plugin:1.8.0:install-node-and-npm (install node and npm) on project ViV-Wallet-app: Could not extract the Node archive: Could not extract archive: '/Users/bjonathas/.m2/repository/com/github/eirslett/node/12.13.1/node-12.13.1-darwin-x64.tar.gz'
-
+As we are using spring dev tools, you just have to compile to see your changes. If the hot swap  failed, just restart the api.
 
 ### Pour travailler sur le frontend
 

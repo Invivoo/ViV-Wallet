@@ -1,8 +1,8 @@
 export const environment = {
-  production: true,
+  production: false,
   vivWallet: {
     api: {
-      url: 'TO_BE_DEFINED'
+      url: 'http://localhost:8080/api'
     }
   }
 };

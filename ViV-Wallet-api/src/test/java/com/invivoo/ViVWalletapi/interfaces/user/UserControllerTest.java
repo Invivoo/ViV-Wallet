@@ -30,7 +30,8 @@ public class UserControllerTest {
     private static final User TEST_USER_1 = new User(1L, "User 1", "user1", "password");
     private static final User TEST_USER_2 = new User(2L, "User 2", "user2", "password");
     private static final List<User> TEST_USERS = Arrays.asList(TEST_USER_1, TEST_USER_2);
-    public static final ObjectMapper mapper = new ObjectMapper();
+    private static final ObjectMapper mapper = new ObjectMapper();
+
     @Autowired
     private MockMvc mockMvc;
 
