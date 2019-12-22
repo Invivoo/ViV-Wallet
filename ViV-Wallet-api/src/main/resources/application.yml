@@ -1,2 +1,7 @@
 app:
   url: http://localhost:4200
+spring:
+  h2:
+    console:
+      enabled: true
+      path: /h2

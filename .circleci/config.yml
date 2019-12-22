@@ -18,6 +18,12 @@ jobs:
             - ~/.m2
           key: v1-dependencies-{{ checksum "pom.xml" }}
       - run:
+          name: Install Chrome latest version
+          command: |
+            wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+            sudo apt install ./google-chrome-stable_current_amd64.deb
+            rm ./google-chrome-stable_current_amd64.deb
+      - run:
           command: mvn clean install
           no_output_timeout: 20m
       - store_artifacts:

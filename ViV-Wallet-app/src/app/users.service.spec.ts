@@ -13,7 +13,7 @@ describe('UsersService', () => {
     const token = 'token';
     const loginSpy = jasmine.createSpyObj('LoginService', { 'getJwtToken': token });
 
-    const usersEndpoint = `${environment.backendUrl}/api/v1/users`;
+    const usersEndpoint = `${environment.vivWallet.api.url}/v1/users`;
     const prototypeUser: User = {
         id: '123',
         login: 'mylogin',
