@@ -6,7 +6,7 @@ import { isNullOrUndefined } from 'util';
 import { LoginService } from './login.service';
 import { environment } from '../environments/environment';
 
-const usersEndpoint = environment.vivWallet.api.url + '/v1/users';
+const usersEndpoint = `${environment.vivWallet.api.url}/v1/users`;
 
 @Injectable({
     providedIn: 'root'
