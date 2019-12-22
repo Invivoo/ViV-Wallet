@@ -9,12 +9,14 @@ import { AdminEditUserComponent } from './admin-edit-user/admin-edit-user.compon
 import { AdminManageUsersComponent } from './admin-manage-users/admin-manage-users.component';
 
 import { AuthenticationInterceptor } from './http-interceptor';
+import { AdminMenuComponent } from './admin-menu/admin-menu.component';
 
 @NgModule({
     declarations: [
         AppComponent,
         AdminEditUserComponent,
-        AdminManageUsersComponent
+        AdminManageUsersComponent,
+        AdminMenuComponent
     ],
     imports: [
         HttpClientModule,
