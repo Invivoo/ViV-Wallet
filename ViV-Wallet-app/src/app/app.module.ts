@@ -10,13 +10,15 @@ import { AdminManageUsersComponent } from './admin-manage-users/admin-manage-use
 
 import { AuthenticationInterceptor } from './http-interceptor';
 import { AdminMenuComponent } from './admin-menu/admin-menu.component';
+import { BannerComponent } from './banner/banner.component';
 
 @NgModule({
     declarations: [
         AppComponent,
         AdminEditUserComponent,
         AdminManageUsersComponent,
-        AdminMenuComponent
+        AdminMenuComponent,
+        BannerComponent
     ],
     imports: [
         HttpClientModule,

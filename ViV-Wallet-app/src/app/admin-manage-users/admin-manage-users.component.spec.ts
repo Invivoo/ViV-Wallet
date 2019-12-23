@@ -6,6 +6,7 @@ import { AppRoutingModule } from '../app-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { AdminEditUserComponent } from '../admin-edit-user/admin-edit-user.component';
 import { AdminMenuComponent } from '../admin-menu/admin-menu.component';
+import { BannerComponent } from '../banner/banner.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('AdminManageUsersComponent', () => {
@@ -23,7 +24,11 @@ describe('AdminManageUsersComponent', () => {
                 BrowserModule,
                 HttpClientTestingModule,
             ],
-            declarations: [AdminManageUsersComponent, AdminEditUserComponent, AdminMenuComponent],
+            declarations: [
+                AdminManageUsersComponent,
+                AdminEditUserComponent,
+                AdminMenuComponent,
+                BannerComponent],
             providers: [AdminEditUserComponent]
         })
             .compileComponents();
