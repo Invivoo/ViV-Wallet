@@ -29,6 +29,8 @@
     "wix.vscode-import-cost",
     "oderwat.indent-rainbow",
     "2gua.rainbow-brackets",
-    "esbenp.prettier-vscode"
+    "esbenp.prettier-vscode",
+    "octref.vetur",
+    "zignd.html-css-class"
   ]
 }
