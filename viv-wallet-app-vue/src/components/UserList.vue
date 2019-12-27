@@ -1,10 +1,14 @@
 <template>
     <div>
-        <ol>
-            <li v-for="user in users" :key="user.id">
-                {{ user.login }}
-            </li>
-        </ol>
+        <section v-if="errored">
+            <p>We're sorry, we're not able to retrieve this information at the moment, please try back later</p>
+        </section>
+        <section v-else>
+            <div v-if="loading">Loading...</div>
+            <ol v-else>
+                <li v-for="user in users" :key="user.id">{{ user.login }}</li>
+            </ol>
+        </section>
     </div>
 </template>
 
@@ -12,14 +16,24 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 import axios from "axios";
 import { User } from "../models/user";
-import { BACKEND_BASE_URL } from "../config/constants";
+import { BACKEND_BASE_URL, REQUEST_TIMEOUT_MS } from "../config/constants";
 
 @Component
 export default class UserList extends Vue {
     users: User[] = [];
+    loading = true;
+    errored = false;
 
-    mounted() {
-        axios.get<User[]>(`${BACKEND_BASE_URL}/users`).then(response => (this.users = response.data));
+    async mounted() {
+        try {
+            var response = await axios.get<User[]>(`${BACKEND_BASE_URL}/users`, { timeout: REQUEST_TIMEOUT_MS });
+            this.users = response.data;
+        } catch (ex) {
+            console.error(ex);
+            this.errored = true;
+        } finally {
+            this.loading = false;
+        }
     }
 }
 </script>
