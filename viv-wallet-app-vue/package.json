@@ -11,6 +11,7 @@
     "mock-server": "json-server --watch mock-server.json --routes mock-server-routes.json"
   },
   "dependencies": {
+    "axios": "^0.19.0",
     "core-js": "^3.4.3",
     "json-server": "^0.15.1",
     "vue": "^2.6.10",
