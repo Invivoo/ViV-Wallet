@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Role, User } from '../types';
-import { LoginService } from '../login.service';
+import { User } from '../types';
 import { UsersService } from '../users.service';
 import { DxDataGridComponent } from 'devextreme-angular';
 import { Router } from '@angular/router';
@@ -13,27 +12,14 @@ import { Router } from '@angular/router';
 export class AdminManageUsersComponent implements OnInit {
     @ViewChild(DxDataGridComponent, { static: false }) dataGrid: DxDataGridComponent;
 
-    user: User =
-        { id: '7', login: 'tmontgomery', fullname: 'MONTGOMERY Théophile', email: 'theophile.montgomery@invivoo.com' };
-
     users: User[] = [];
 
-    currentRoleName: string;
-
-    constructor(private router: Router,
-        private loginService: LoginService,
+    constructor(
+        private router: Router,
         private usersService: UsersService) {
     }
 
     ngOnInit() {
-        switch (this.loginService.getCurrentRole()) {
-            case Role.Admin:
-                this.currentRoleName = 'System Administrator';
-                break;
-            default:
-                this.currentRoleName = 'UNKNOWN';
-                break;
-        }
 
         this.usersService.getUsers()
             .subscribe(users => this.users = users);
