@@ -43,7 +43,9 @@ jobs:
           working_directory: viv-wallet-app-vue
           command: npm run test:e2e
       - *save_node
-      
+      - store_artifacts:
+          path: ~/repo/viv-wallet-app-vue/tests/e2e/videos
+
   build:
     docker:
       - image: circleci/openjdk:11-jdk-browsers
