@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { User } from './types';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { isNullOrUndefined } from 'util';
 import { LoginService } from './login.service';
+import { environment } from '../environments/environment';
 
-const usersEndpoint = 'http://localhost:3000/api/v1/users';
+const usersEndpoint = `${environment.vivWallet.api.url}/v1/users`;
 
 @Injectable({
     providedIn: 'root'
@@ -21,23 +22,9 @@ export class UsersService {
 
     saveUser(user: User): Observable<Object> {
         if (isNullOrUndefined(user.id)) {
-            return this.http.post(usersEndpoint,
-                user,
-                {
-                    headers: new HttpHeaders(
-                        {
-                            'Authorization': this.login.getJwtToken()
-                        })
-                });
+            return this.http.post(usersEndpoint, user);
         }
-        return this.http.put(usersEndpoint + '/' + user.id,
-            user,
-            {
-                headers: new HttpHeaders(
-                    {
-                        'Authorization': this.login.getJwtToken()
-                    })
-            });
+        return this.http.put(usersEndpoint + '/' + user.id, user);
     }
 
     getUser(id: string): Observable<User> {
