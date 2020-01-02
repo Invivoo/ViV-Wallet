@@ -1,8 +1,6 @@
 <template>
     <div>
-        <ol>
-            <UserItem v-for="user in users" :key="user.id" v-bind:user="user" />
-        </ol>
+        <b-table striped hover :items="users"></b-table>
     </div>
 </template>
 
@@ -10,11 +8,8 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 import axios from "axios";
 import { User } from "../models/user";
-import UserItem from "@/components/UserItem.vue";
 
-@Component({
-    components: { UserItem }
-})
+@Component
 export default class UserList extends Vue {
     @Prop() users!: User[];
 }
