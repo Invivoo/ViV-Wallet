@@ -1,5 +1,51 @@
-version: 2
+version: 2.1
+references:
+  save_node: &save_node
+    save_cache:
+      name: Save node_modules for vuejs app
+      key: v1-viv-wallet-app-vue-{{ .Branch }}-{{ checksum "viv-wallet-app-vue/package-lock.json" }}
+      paths:
+        - viv-wallet-app-vue/node_modules
+        
+  restore_node: &restore_node
+    restore_cache:
+      name: Restore node_modules for vuejs app
+      keys:
+        - v1-viv-wallet-app-vue-{{ .Branch }}-{{ checksum "viv-wallet-app-vue/package-lock.json" }}
+        - v1-viv-wallet-app-vue-{{ .Branch }}-
+        - v1-viv-wallet-app-vue-
 jobs:
+  build-vuejs:
+    docker:
+      - image: circleci/node:12.13.0-browsers
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - *restore_node
+      - run:
+          name: Prepare
+          working_directory: viv-wallet-app-vue
+          command: npm install
+      - run:
+          name: Lint
+          working_directory: viv-wallet-app-vue
+          command: npm run lint
+      - run:
+          name: Build
+          working_directory: viv-wallet-app-vue
+          command: npm run build
+      - run:
+          name: Unit Test
+          working_directory: viv-wallet-app-vue
+          command: npm run test:unit
+      - run:
+          name: E2E Test
+          working_directory: viv-wallet-app-vue
+          command: npm run test:e2e
+      - *save_node
+      - store_artifacts:
+          path: ~/repo/viv-wallet-app-vue/tests/e2e/videos
+
   build:
     docker:
       - image: circleci/openjdk:11-jdk-browsers
@@ -22,3 +68,8 @@ jobs:
           no_output_timeout: 20m
       - store_artifacts:
           path: /home/circleci/.npm/_logs/
+workflows:
+  build_and_test_all:
+    jobs:
+      - build
+      - build-vuejs

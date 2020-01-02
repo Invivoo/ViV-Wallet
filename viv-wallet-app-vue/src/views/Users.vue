@@ -32,7 +32,6 @@ export default class Users extends Vue {
             var response = await axios.get<User[]>(`${BACKEND_BASE_URL}/users`, { timeout: REQUEST_TIMEOUT_MS });
             this.users = response.data;
         } catch (ex) {
-            console.error(ex);
             this.errored = true;
         } finally {
             this.loading = false;
