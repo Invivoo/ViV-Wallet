@@ -1,5 +1,6 @@
 <template>
     <div id="app">
+        <Banner></Banner>
         <div id="nav"><router-link to="/">Home</router-link> | <router-link to="/users">Users</router-link></div>
         <router-view />
     </div>
