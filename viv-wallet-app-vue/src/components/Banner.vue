@@ -38,7 +38,7 @@ export default class Banner extends Vue {
     }
 
     logout() {
-      alert('Hello world!');
+        this.loginService.logout();
     }
 }
 </script>
