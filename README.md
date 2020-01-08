@@ -53,6 +53,16 @@ Quelques guidelines ont été données pour assurer la cohérence du projet ains
 
 ## Let's code
 
+### Comment créer sa clef SSH pour travailler en local avec son compte GitHub
+
+Normalement tout est décrit [dans l'aide GitHub sur le sujet](https://help.github.com/en/enterprise/2.17/user/authenticating-to-github/connecting-to-github-with-ssh). Vos clés SSH se trouvent dans c:\users\<vous>\.ssh sous Windows ou dans /.ssh sous Unix.
+
+Idéalement, il faudrait d'abord installer [gitbash](https://www.atlassian.com/git/tutorials/git-bash), afin ensuite de créer sa clé SSH.
+
+Suivez [ce guide](https://git-scm.com/book/fr/v2/Git-sur-le-serveur-G%C3%A9n%C3%A9ration-des-cl%C3%A9s-publiques-SSH) ou celui de la page d'aide de GitHub pour créer la clef, puis copier son contenu dans votre compte GitHub pour la déclarer (voir [là](https://help.github.com/en/enterprise/2.17/user/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account).
+
+Ensuite le git clone la prendra en compte.
+
 ### Pour travailler en isolation dans un container avec VSCode Remote Development
 
 [VSCode Remote Development](https://code.visualstudio.com/docs/remote/remote-overview) permet de travailler dans un environnement isolé (container docker par exemple). Pas besoin d'installer de jdk ou nodejs sur sa machine, l'environnement standard de dev (défini dans le répertoire .devcontainer) est créé automatiquement lors du premier lancement.
