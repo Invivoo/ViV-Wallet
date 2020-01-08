@@ -5,7 +5,7 @@
     "scripts": {
         "serve": "vue-cli-service serve",
         "build": "vue-cli-service build",
-        "test:unit": "vue-cli-service test:unit --watch",
+        "test:unit": "vue-cli-service test:unit",
         "test:e2e": "vue-cli-service test:e2e --browser chrome --headless",
         "lint": "vue-cli-service lint",
         "mock-server": "json-server --watch mock-server.json --routes mock-server-routes.json"
