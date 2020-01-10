@@ -1,46 +1,51 @@
-import { shallowMount } from "@vue/test-utils";
 import UserList from "@/components/UserList.vue";
 import Users from "@/views/Users.vue";
 import { User } from "@/models/user";
-import axios from "axios";
-import { BACKEND_BASE_URL } from "@/config/constants";
+import { UsersService } from "@/services/users";
 import { factory } from "../testHelpers";
 
-jest.mock("axios");
-const mockedAxios = axios as jest.Mocked<typeof axios>;
+jest.mock("@/services/users");
 
 describe("Users", () => {
     beforeEach(() => {
-        mockedAxios.get.mockClear();
-        mockedAxios.get.mockReturnValue(Promise.resolve({}));
+        (UsersService as jest.Mock<UsersService>).mockClear();
     });
 
-    it("should render a UserList when the backend returns a list of users", async () => {
+    it("needs the users service", () => {
+        factory(Users)();
+        expect((UsersService as jest.Mock<UsersService>)).toHaveBeenCalled();
+    });
+
+    it("should render a UserList when the users service returns a list of users", async () => {
         const user: User = { id: "0", fullname: "myName", login: "login", email: "test@test" };
 
-        const response = {
-            data: [user]
-        };
-        mockedAxios.get.mockReturnValue(Promise.resolve(response));
+        UsersService.prototype.getUsers = jest.fn().mockImplementation(() => {
+            return [user];
+        });
 
         const wrapper = factory(Users)();
         await wrapper.vm.$nextTick();
 
-        expect(mockedAxios.get).toHaveBeenCalledWith(`${BACKEND_BASE_URL}/users`, { timeout: 10000 });
+        expect(UsersService.prototype.getUsers).toHaveBeenCalled();
+
         const userListWrapper = wrapper.find(UserList);
         expect(userListWrapper.element).toBeDefined();
-        expect(userListWrapper.props().users).toEqual(response.data);
+        expect(userListWrapper.props().users).toEqual([user]);
     });
 
     it("should render an error message when an error occurs in the backend call", async () => {
-        mockedAxios.get.mockReturnValue(Promise.reject("cannot get users"));
+        UsersService.prototype.getUsers = jest.fn().mockImplementation(() => {
+            throw "cannot get users";
+        });
+
         const errorMessage =
             "We're sorry, we're not able to retrieve this information at the moment, please try back later";
 
         const wrapper = factory(Users)();
         await wrapper.vm.$nextTick();
 
-        expect(mockedAxios.get).toHaveBeenCalledWith(`${BACKEND_BASE_URL}/users`, { timeout: 10000 });
+        expect(UsersService.prototype.getUsers).toHaveBeenCalled();
+
         const userListWrapper = wrapper.find(UserList);
         expect(userListWrapper.element).toBeUndefined();
         expect(wrapper.text()).toEqual(errorMessage);
