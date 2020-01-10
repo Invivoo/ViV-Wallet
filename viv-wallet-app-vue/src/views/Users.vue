@@ -12,9 +12,9 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import axios from "axios";
 import { User } from "../models/user";
-import { BACKEND_BASE_URL, REQUEST_TIMEOUT_MS } from "../config/constants";
+import { UsersService } from "@/services/users";
+
 // @ is an alias to /src
 import UserList from "@/components/UserList.vue";
 
@@ -26,11 +26,11 @@ export default class Users extends Vue {
     users: User[] = [];
     loading = true;
     errored = false;
+    usersService = new UsersService();
 
     async mounted() {
         try {
-            var response = await axios.get<User[]>(`${BACKEND_BASE_URL}/users`, { timeout: REQUEST_TIMEOUT_MS });
-            this.users = response.data;
+            this.users = await this.usersService.getUsers();
         } catch (ex) {
             this.errored = true;
         } finally {
