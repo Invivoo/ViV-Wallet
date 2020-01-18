@@ -3,17 +3,18 @@ references:
   save_node: &save_node
     save_cache:
       name: Save node_modules for vuejs app
-      key: v1-viv-wallet-app-vue-{{ .Branch }}-{{ checksum "viv-wallet-app-vue/package-lock.json" }}
+      key: v2-viv-wallet-app-vue-{{ .Branch }}-{{ checksum "viv-wallet-app-vue/package-lock.json" }}
       paths:
         - viv-wallet-app-vue/node_modules
+        - /home/circleci/.cache/Cypress
         
   restore_node: &restore_node
     restore_cache:
       name: Restore node_modules for vuejs app
       keys:
-        - v1-viv-wallet-app-vue-{{ .Branch }}-{{ checksum "viv-wallet-app-vue/package-lock.json" }}
-        - v1-viv-wallet-app-vue-{{ .Branch }}-
-        - v1-viv-wallet-app-vue-
+        - v2-viv-wallet-app-vue-{{ .Branch }}-{{ checksum "viv-wallet-app-vue/package-lock.json" }}
+        - v2-viv-wallet-app-vue-{{ .Branch }}-
+        - v2-viv-wallet-app-vue-
 jobs:
   build-vuejs:
     docker:
