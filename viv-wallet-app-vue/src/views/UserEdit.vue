@@ -74,10 +74,14 @@ export default class UserEdit extends Vue {
 }
 </script>
 
-<style>
+<style scoped>
 .userEdit {
     width: 50%;
     text-align: left;
     display: inline-block;
+}
+
+h2 {
+    text-align: center;
 }
 </style>

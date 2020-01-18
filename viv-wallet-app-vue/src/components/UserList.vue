@@ -1,14 +1,26 @@
 <template>
-    <div>
-        <b-table 
-          striped 
-          hover 
-          selectable
-          primary-key="id" 
-          :items="users"
-          @row-selected="onRowSelected">
-        </b-table>
+<section>
+  <h2>Users management</h2>
+  <div id="users-list-container">
+    <div id="users-list-actions">
+      <b-button 
+        id='add-user-button'
+        variant='primary'
+        to='/users/add'>
+        Add
+      </b-button>
     </div>
+    <b-table 
+      id='users-list'
+      striped 
+      hover 
+      selectable
+      primary-key="id" 
+      :items="users"
+      @row-selected="onRowSelected">
+    </b-table>
+  </div>
+</section>
 </template>
 
 <script lang="ts">
@@ -27,4 +39,35 @@ export default class UserList extends Vue {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped></style>
+<style scoped>
+#users-list-container {
+    display: flex;
+    flex-direction:  column;
+    align-items: center;
+    width: 90%;
+}
+
+#add-user-button {
+}
+
+#users-list {
+    top: 3em;
+}
+
+#users-list-actions {
+    margin-bottom: 1.5em;
+    margin-top: 1.5em;
+    min-width: 100%;
+    text-align: right;
+}
+
+h2 {
+    text-align: center;
+}
+
+section {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+</style>
