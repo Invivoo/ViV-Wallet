@@ -52,7 +52,7 @@
 
               <b-button type="submit" variant="primary">Confirm</b-button>
               &nbsp;
-              <b-button type="reset"  variant="danger">Cancel</b-button>
+              <b-button type="reset"  variant="danger" to="/users">Cancel</b-button>
             </b-form>
         </section>
     </div>
