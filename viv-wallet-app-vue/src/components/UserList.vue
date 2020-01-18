@@ -1,6 +1,13 @@
 <template>
     <div>
-        <b-table striped hover :items="users"></b-table>
+        <b-table 
+          striped 
+          hover 
+          selectable
+          primary-key="id" 
+          :items="users"
+          @row-selected="onRowSelected">
+        </b-table>
     </div>
 </template>
 
@@ -12,6 +19,10 @@ import { User } from "../models/user";
 @Component
 export default class UserList extends Vue {
     @Prop() users!: User[];
+
+    onRowSelected(items: User[]) {
+        this.$router.push({ path: 'users/'+items[0].id })
+    }
 }
 </script>
 
