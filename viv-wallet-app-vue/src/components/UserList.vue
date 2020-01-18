@@ -47,9 +47,6 @@ export default class UserList extends Vue {
     width: 90%;
 }
 
-#add-user-button {
-}
-
 #users-list {
     top: 3em;
 }
