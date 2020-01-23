@@ -50,9 +50,11 @@
               </b-form-group>
 
 
-              <b-button type="submit" variant="primary">Confirm</b-button>
+              <b-button variant="primary" v-on:click="confirmUser">Confirm</b-button>
               &nbsp;
-              <b-button type="reset"  variant="danger" to="/users">Cancel</b-button>
+              <b-button variant="outline-primary" to="/users">Cancel</b-button>
+              &nbsp;
+              <b-button variant="danger" v-on:click="deleteUser" to="/users">Delete</b-button>
             </b-form>
         </section>
     </div>
@@ -89,6 +91,13 @@ export default class UserEdit extends UserEditProps {
             this.loading = false;
         }
     }
+    async confirmUser() {
+        await this.usersService.saveUser(this.user);
+    }
+    async deleteUser() {
+        await this.usersService.deleteUser(this.user);
+    }
+
 }
 </script>
 
