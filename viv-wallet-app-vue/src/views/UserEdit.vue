@@ -83,6 +83,7 @@ export default class UserEdit extends UserEditProps {
     async mounted() {
         try {
             if (this.id !== 'add') {
+                this.loading = true;
                 this.user = await this.usersService.getUser(this.id);
             }
         } catch (ex) {
@@ -92,12 +93,30 @@ export default class UserEdit extends UserEditProps {
         }
     }
     async confirmUser() {
-        await this.usersService.saveUser(this.user);
-        this.$router.push({ path: '/users' });
+        try {
+            this.loading = true;
+            if (this.user) {
+                await this.usersService.saveUser(this.user);
+                this.$router.push({ path: '/users' });
+            }
+        } catch(ex) {
+            this.errored = true;
+        } finally {
+            this.loading = false;
+        }
     }
     async deleteUser() {
-        await this.usersService.deleteUser(this.user);
-        this.$router.push({ path: '/users' });
+        try {
+            if (this.user) {
+                this.loading = true;
+                await this.usersService.deleteUser(this.user);
+                this.$router.push({ path: '/users' });
+            }
+        } catch(ex) {
+            this.errored = true;
+        } finally {
+            this.loading = false;
+        }
     }
 
 }
