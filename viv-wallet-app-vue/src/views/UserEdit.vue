@@ -73,14 +73,16 @@ const UserEditProps = Vue.extend({
     name: "user"
 })
 export default class UserEdit extends UserEditProps {
-    user: User | null = { id: "0", fullname: "myName0", login: "login0", email: "test0@test" };
+    user: User | null = { id: "", fullname: "", login: "", email: "" };
     loading = false;
     errored = false;
     usersService = new UsersService();
 
     async mounted() {
         try {
-            this.user = await this.usersService.getUser(this.id);
+            if (this.id !== 'add') {
+                this.user = await this.usersService.getUser(this.id);
+            }
         } catch (ex) {
             this.errored = true;
         } finally {
