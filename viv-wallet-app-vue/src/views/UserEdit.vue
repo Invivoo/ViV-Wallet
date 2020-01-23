@@ -50,9 +50,11 @@
               </b-form-group>
 
 
-              <b-button type="submit" variant="primary">Confirm</b-button>
+              <b-button variant="primary" v-on:click="confirmUser">Confirm</b-button>
               &nbsp;
-              <b-button type="reset"  variant="danger" to="/users">Cancel</b-button>
+              <b-button variant="outline-primary" to="/users">Cancel</b-button>
+              &nbsp;
+              <b-button variant="danger" v-on:click="deleteUser" to="/users">Delete</b-button>
             </b-form>
         </section>
     </div>
@@ -73,20 +75,31 @@ const UserEditProps = Vue.extend({
     name: "user"
 })
 export default class UserEdit extends UserEditProps {
-    user: User | null = { id: "0", fullname: "myName0", login: "login0", email: "test0@test" };
+    user: User | null = { id: "", fullname: "", login: "", email: "" };
     loading = false;
     errored = false;
     usersService = new UsersService();
 
     async mounted() {
         try {
-            this.user = await this.usersService.getUser(this.id);
+            if (this.id !== 'add') {
+                this.user = await this.usersService.getUser(this.id);
+            }
         } catch (ex) {
             this.errored = true;
         } finally {
             this.loading = false;
         }
     }
+    async confirmUser() {
+        await this.usersService.saveUser(this.user);
+        this.$router.push({ path: '/' });
+    }
+    async deleteUser() {
+        await this.usersService.deleteUser(this.user);
+        this.$router.push({ path: '/' });
+    }
+
 }
 </script>
 
