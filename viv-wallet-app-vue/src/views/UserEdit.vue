@@ -93,9 +93,11 @@ export default class UserEdit extends UserEditProps {
     }
     async confirmUser() {
         await this.usersService.saveUser(this.user);
+        this.$router.push({ path: '/' });
     }
     async deleteUser() {
         await this.usersService.deleteUser(this.user);
+        this.$router.push({ path: '/' });
     }
 
 }
