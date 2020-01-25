@@ -22,6 +22,6 @@ describe("UserList", () => {
         // @ts-ignore: vm is our instance of UserList, but I cannot make ts see it.
         wrapper.vm.onRowSelected([user0]);
 
-        expect(wrapper.vm.$router.currentRoute.path).toBe('/users/0');
+        expect(wrapper.vm.$router.currentRoute.path).toBe("/users/0");
     });
 });

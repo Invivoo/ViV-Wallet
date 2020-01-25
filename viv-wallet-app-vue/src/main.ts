@@ -15,5 +15,5 @@ new Vue({
 }).$mount("#app");
 
 axios.interceptors.request.use(function(config) {
-    return { ...config, headers: { 'Authorization': new LoginService().getJwtToken() } };
+    return { ...config, headers: { Authorization: new LoginService().getJwtToken() } };
 });

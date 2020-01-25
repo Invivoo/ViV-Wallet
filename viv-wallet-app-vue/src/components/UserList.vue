@@ -1,26 +1,24 @@
 <template>
-<section>
-  <h2>Users management</h2>
-  <div id="users-list-container">
-    <div id="users-list-actions">
-      <b-button 
-        id='add-user-button'
-        variant='primary'
-        to='/users/add'>
-        Add
-      </b-button>
-    </div>
-    <b-table 
-      id='users-list'
-      striped 
-      hover 
-      selectable
-      primary-key="id" 
-      :items="users"
-      @row-selected="onRowSelected">
-    </b-table>
-  </div>
-</section>
+    <section>
+        <h2>Users management</h2>
+        <div id="users-list-container">
+            <div id="users-list-actions">
+                <b-button id="add-user-button" variant="primary" to="/users/add">
+                    Add
+                </b-button>
+            </div>
+            <b-table
+                id="users-list"
+                striped
+                hover
+                selectable
+                primary-key="id"
+                :items="users"
+                @row-selected="onRowSelected"
+            >
+            </b-table>
+        </div>
+    </section>
 </template>
 
 <script lang="ts">
@@ -33,7 +31,7 @@ export default class UserList extends Vue {
     @Prop() users!: User[];
 
     onRowSelected(items: User[]) {
-        this.$router.push({ path: 'users/'+items[0].id })
+        this.$router.push({ path: "users/" + items[0].id });
     }
 }
 </script>
@@ -42,7 +40,7 @@ export default class UserList extends Vue {
 <style scoped>
 #users-list-container {
     display: flex;
-    flex-direction:  column;
+    flex-direction: column;
     align-items: center;
     width: 90%;
 }

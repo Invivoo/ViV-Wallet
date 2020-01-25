@@ -13,7 +13,7 @@ describe("Users", () => {
 
     it("needs the users service", () => {
         factory(Users)();
-        expect((UsersService as jest.Mock<UsersService>)).toHaveBeenCalled();
+        expect(UsersService as jest.Mock<UsersService>).toHaveBeenCalled();
     });
 
     it("should render a UserList when the users service returns a list of users", async () => {

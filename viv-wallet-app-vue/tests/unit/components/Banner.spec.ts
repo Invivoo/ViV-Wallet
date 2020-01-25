@@ -17,5 +17,4 @@ describe("Banner", () => {
         await wrapper.vm.$nextTick();
         expect(wrapper.text().toLowerCase()).toContain("administrator");
     });
-
 });

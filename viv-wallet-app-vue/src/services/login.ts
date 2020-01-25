@@ -1,7 +1,6 @@
-import { Role } from '../models/role';
+import { Role } from "../models/role";
 
 export class LoginService {
-
     private role: Role | undefined;
 
     constructor() {
@@ -13,10 +12,8 @@ export class LoginService {
     }
 
     getJwtToken(): string | undefined {
-        return '';
+        return "";
     }
 
-    logout() {
-
-    }
+    logout() {}
 }
