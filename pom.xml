@@ -15,7 +15,7 @@
     </parent>
     <packaging>pom</packaging>
     <modules>
-        <module>viv-wallet-app-vue</module>
+        <module>viv-wallet-app</module>
         <module>ViV-Wallet-api</module>
     </modules>
 

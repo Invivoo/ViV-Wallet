@@ -1,4 +1,4 @@
-# viv-wallet-app-vue
+# viv-wallet-app
 
 ## Project setup
 ```

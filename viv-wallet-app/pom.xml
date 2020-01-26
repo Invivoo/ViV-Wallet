@@ -8,9 +8,9 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
 
-  <artifactId>viv-wallet-app-vue</artifactId>
+  <artifactId>viv-wallet-app</artifactId>
 
-  <name>viv-wallet-app-vue</name>
+  <name>viv-wallet-app</name>
   <description>App for Invivoo Virtual Value Wallet</description>
 
   <build>

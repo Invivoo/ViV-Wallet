@@ -68,4 +68,4 @@ As we are using spring dev tools, you just have to compile to see your changes. 
 
 ### Pour travailler sur le frontend
 
-In the `viv-wallet-app-vue/` folder, run `npm run mock-server` to start a mock backend server. Then start the front end by typing `npm run serve`.
+In the `viv-wallet-app/` folder, run `npm run mock-server` to start a mock backend server. Then start the front end by typing `npm run serve`.
