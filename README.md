@@ -18,7 +18,7 @@ Pour cela, le programme repose principalement sur la mise en place d&#39;un parc
 Le VIV-Wallet est une application qui s&#39;adresses à différents types d&#39;utilisateurs, ou persona. Il va permettre :
 
 - à chaque consultant de suivre sa cagnotte de VIV,
-- à chaque membre des équipes RH, Recrutement, Sales et Communication, d&#39;attribuer ces VIV,
+- aux membres du programme de suivre leurs objectifs,
 - aux membres de l&#39;équipe Admin, de convertir ses VIV sur la paie du collaborateur.
 
 ## À lire avant de commencer
