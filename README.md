@@ -25,8 +25,8 @@ Le VIV-Wallet est une application qui s&#39;adresses à différents types d&#39;
 
 Quelques guidelines ont été données pour assurer la cohérence du projet ainsi que son modèle de données
 
-- Dans ce projet, tu pourras retrouver des tickets Java et des tickets Front-End. Retrouve [ici](https://invivoo.sharepoint.com/:w:/s/Managersd'Expertise/EeWUsfMrHMdOgpooDoYeWCYBsczKABL8gNalyRRjTDFb_g?e=ebTLgZ) l'intégralité des user stories par persona qui ont permis de les générer.
-- Pour donner de la cohérence au projet, le modèle de données, les apis disponible et la structure du projet Java ont été défini en amont. Si il y a besoin de les faire évoluer, merci de créer une conversation à ce sujet dans [dans le canal du projet](https://teams.microsoft.com/l/channel/19%3a4ad8360f9c4e4016a157bfe3f7ca968a%40thread.skype/VIV-Wallet?groupId=d5a0827f-1103-4e19-89f3-d85e7caeb167&tenantId=6d13640c-ba8f-4480-a2a0-0093bacdb7c1). Tu peux retrouver ces 3 éléments dans le document des [Technical Specifications](https://invivoo.sharepoint.com/:w:/s/Managersd'Expertise/ES5hwrPj9fdFj1g8w58NLvcBn2_JeJ9HslSdzdUwafGFpQ?e=KSssb3).
+- Dans ce projet, tu pourras retrouver des tickets Java et des tickets Front-End. Retrouve [ici l'intégralité des user stories par persona qui ont permis de les générer](https://invivoo.sharepoint.com/:w:/s/Managersd'Expertise/EeWUsfMrHMdOgpooDoYeWCYBsczKABL8gNalyRRjTDFb_g?e=ebTLgZ).
+- Pour donner de la cohérence au projet, le modèle de données, les apis disponible et la structure du projet Java ont été défini en amont. Si il y a besoin de les faire évoluer, merci de créer une conversation à ce sujet dans [dans le canal du projet](https://teams.microsoft.com/l/channel/19%3a4ad8360f9c4e4016a157bfe3f7ca968a%40thread.skype/VIV-Wallet?groupId=d5a0827f-1103-4e19-89f3-d85e7caeb167&tenantId=6d13640c-ba8f-4480-a2a0-0093bacdb7c1). Tu peux retrouver ces 3 éléments dans [le document des Technical Specifications](https://invivoo.sharepoint.com/:w:/s/Managersd'Expertise/ES5hwrPj9fdFj1g8w58NLvcBn2_JeJ9HslSdzdUwafGFpQ?e=KSssb3).
 
 ## Contribuer au projet fil rouge
 
