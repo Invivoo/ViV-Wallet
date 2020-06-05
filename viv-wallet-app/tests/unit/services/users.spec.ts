@@ -27,6 +27,38 @@ describe("UsersService", () => {
         expect(service).toBeTruthy();
     });
 
+    it("should get all users", async () => {
+        const response = {
+            data: [prototypeUser]
+        };
+        mockedAxios.get.mockReturnValue(Promise.resolve(response));
+
+        expect(await service.getUsers()).toEqual(response.data);
+
+        expect(mockedAxios.get).toHaveBeenCalledWith(`${BACKEND_BASE_URL}/users`, { timeout: 10000 });
+    });
+
+    it("should get user by id", async () => {
+        const response = {
+            data: { ...prototypeUser, id: 'id1', login: 'lid1' }
+        };
+        mockedAxios.get.mockReturnValue(Promise.resolve(response));
+
+        const returnedUser = await service.getUser('id1');
+        expect(returnedUser.id).toEqual('id1');
+        expect(returnedUser.login).toEqual('lid1');
+
+        expect(mockedAxios.get).toHaveBeenCalledWith(`${BACKEND_BASE_URL}/users/id1`, { timeout: 10000 });
+    });
+
+    it("should delete user by id", async () => {
+        mockedAxios.delete.mockReturnValue(Promise.resolve({}));
+
+        await service.deleteUser(prototypeUser);
+
+        expect(mockedAxios.delete).toHaveBeenCalledWith(`${BACKEND_BASE_URL}/users/123`, { timeout: 10000 });
+    });
+
     it("should post user if there's no id", async () => {
         const response = {
             data: prototypeUser
