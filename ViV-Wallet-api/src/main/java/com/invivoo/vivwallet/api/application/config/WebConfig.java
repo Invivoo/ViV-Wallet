@@ -1,4 +1,4 @@
-package com.invivoo.ViVWalletapi.application.config;
+package com.invivoo.vivwallet.api.application.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;

@@ -1,4 +1,4 @@
-package com.invivoo.ViVWalletapi.interfaces.user;
+package com.invivoo.vivwallet.api.interfaces.users;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

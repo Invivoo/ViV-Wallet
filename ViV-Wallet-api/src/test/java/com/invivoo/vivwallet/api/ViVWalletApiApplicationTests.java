@@ -1,4 +1,4 @@
-package com.invivoo.ViVWalletapi;
+package com.invivoo.vivwallet.api;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

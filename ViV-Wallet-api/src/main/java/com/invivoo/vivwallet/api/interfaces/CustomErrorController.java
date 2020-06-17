@@ -1,4 +1,4 @@
-package com.invivoo.ViVWalletapi.interfaces;
+package com.invivoo.vivwallet.api.interfaces;
 
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.web.bind.annotation.RequestMapping;

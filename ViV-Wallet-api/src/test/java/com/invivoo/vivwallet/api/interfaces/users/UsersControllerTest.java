@@ -1,8 +1,8 @@
-package com.invivoo.ViVWalletapi.interfaces.user;
+package com.invivoo.vivwallet.api.interfaces.users;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.invivoo.ViVWalletapi.domain.user.User;
-import com.invivoo.ViVWalletapi.domain.user.UserRepository;
+import com.invivoo.vivwallet.api.domain.user.User;
+import com.invivoo.vivwallet.api.domain.user.UserRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -23,12 +23,12 @@ import java.util.List;
 import java.util.Optional;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(UserController.class)
-public class UserControllerTest {
+@WebMvcTest(UsersController.class)
+public class UsersControllerTest {
 
     private static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(), MediaType.APPLICATION_JSON.getSubtype(), StandardCharsets.UTF_8);
-    private static final User TEST_USER_1 = new User(1L, "User 1", "user1", "password");
-    private static final User TEST_USER_2 = new User(2L, "User 2", "user2", "password");
+    private static final User TEST_USER_1 = new User(1L, "User 1");
+    private static final User TEST_USER_2 = new User(2L, "User 2");
     private static final List<User> TEST_USERS = Arrays.asList(TEST_USER_1, TEST_USER_2);
     private static final ObjectMapper mapper = new ObjectMapper();
 
@@ -50,8 +50,8 @@ public class UserControllerTest {
         //then
         resultActions.andExpect(MockMvcResultMatchers.status().isOk())
                      .andExpect(MockMvcResultMatchers.content().string(jsonTestUsers))
-                     .andExpect(MockMvcResultMatchers.jsonPath("$[0].login").value(TEST_USERS.get(0).getLogin()))
-                     .andExpect(MockMvcResultMatchers.jsonPath("$[1].login").value(TEST_USERS.get(1).getLogin()));
+                     .andExpect(MockMvcResultMatchers.jsonPath("$[0].fullName").value(TEST_USERS.get(0).getFullName()))
+                     .andExpect(MockMvcResultMatchers.jsonPath("$[1].fullName").value(TEST_USERS.get(1).getFullName()));
     }
 
     @Test

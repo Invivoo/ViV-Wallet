@@ -1,7 +1,7 @@
-package com.invivoo.ViVWalletapi.interfaces.user;
+package com.invivoo.vivwallet.api.interfaces.users;
 
-import com.invivoo.ViVWalletapi.domain.user.User;
-import com.invivoo.ViVWalletapi.domain.user.UserRepository;
+import com.invivoo.vivwallet.api.domain.user.User;
+import com.invivoo.vivwallet.api.domain.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,14 +17,14 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping(UserController.API_V_1_USERS)
-public class UserController {
+@RequestMapping(UsersController.API_V_1_USERS)
+public class UsersController {
 
     static final String API_V_1_USERS = "/api/v1/users";
     private final UserRepository userRepository;
 
     @Autowired
-    public UserController(UserRepository userRepository) {
+    public UsersController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
