@@ -18,7 +18,14 @@ import { Component, Vue } from "vue-property-decorator";
 import Banner from "./components/Banner.vue";
 
 @Component({ components: { Banner } })
-export default class App extends Vue {}
+export default class App extends Vue {
+    mounted() {
+        const ui = document.querySelector('x4b-ui');
+        ui.addEventListener('menuToggleButtonClicked', e => {
+            console.log('menuToggleButtonClicked ', e.detail);
+        });
+    }
+}
 </script>
 
 <style>
