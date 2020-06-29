@@ -111,11 +111,11 @@ public class ActivityToActionMapper {
 //                builder.type(ActionType.SHORT_NEW_MEDIUM_FIRST_PUBLICATION);
 //                builder.context(String.format("Article : %s", activity.getComment()));
 //                break;
-//            case PUBLIER_UN_ARTICLE_MOYEN:
-//                builder.type(ActionType.ARTICLE_PUBLICATION);
+            case PUBLIER_UN_ARTICLE_MOYEN:
+                builder.type(ActionType.ARTICLE_PUBLICATION);
 //                builder.type(ActionType.NEW_MEDIUM_FIRST_PUBLICATION);
-//                builder.context(String.format("Article : %s", activity.getComment()));
-//                break;
+                builder.context(String.format("Article : %s", activity.getComment()));
+                break;
 //            case PUBLIER_UN_ARTICLE_LONG:
 //                builder.type(ActionType.LONG_ARTICLE_PUBLICATION);
 //                builder.type(ActionType.LONG_NEW_MEDIUM_FIRST_PUBLICATION);

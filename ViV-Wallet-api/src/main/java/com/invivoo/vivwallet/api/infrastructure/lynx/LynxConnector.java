@@ -34,6 +34,10 @@ public class LynxConnector {
 
     public List<Action> findActions(){
         List<Activity> activities = findActivities();
+        return getActionsFromActivities(activities);
+    }
+
+    public List<Action> getActionsFromActivities(List<Activity> activities) {
         List<Action> actions = activities.stream()
                                          .map(activityToActionMapper::convert)
                                          // .filter(...) todo filter on actStatus Held (why do Not Held or planned statuses have actDate and valDate
@@ -47,9 +51,6 @@ public class LynxConnector {
     public List<Activity> findActivities() {
         UriComponents lynxActionsUri = UriComponentsBuilder.fromHttpUrl("http://172.18.0.11:9000/api/report/getinfo")
                                                   .queryParam("name", "viv")
-                                                  .queryParam("begin_date", "2020-01-01")
-                                                  .queryParam("end_date", "2020-01-31")
-                                                  .queryParam("stageid", 39)
                                                   .build();
         ResponseEntity<Activities> response = restTemplate.getForEntity(lynxActionsUri.toString(), Activities.class);
         if(HttpStatus.OK != response.getStatusCode()){

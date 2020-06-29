@@ -17,6 +17,14 @@ public class ActionService {
         this.lynxConnector = lynxConnector;
     }
 
+    public List<Action> findAll(){
+        return actionRepository.findAll();
+    }
+
+    public void saveAll(List<Action> actions) {
+        actionRepository.saveAll(actions);
+    }
+
     public List<Action> updateFromLynx() {
         List<Action> actionsFromLynx = lynxConnector.findActions();
         List<Action> unpaidActions = actionRepository.findAllByPaymentIsNull();
