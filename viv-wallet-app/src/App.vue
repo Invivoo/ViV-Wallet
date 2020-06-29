@@ -1,7 +1,11 @@
 <template>
     <div id="app">
         <Banner></Banner>
-        <div id="nav"><router-link to="/">Home</router-link> | <router-link to="/users">Users</router-link></div>
+        <div id="nav">
+            <router-link to="/">Home</router-link>|
+            <router-link to="/users">Users</router-link>|
+            <router-link to="/wallet">Wallet</router-link>
+        </div>
         <router-view />
     </div>
 </template>
@@ -20,6 +24,9 @@ export default class App extends Vue {}
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
+    background-color: #ebf4ff;
+    height: 100vh;
+    margin: 0;
 }
 
 #nav {
