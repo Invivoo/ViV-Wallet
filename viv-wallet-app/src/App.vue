@@ -5,9 +5,11 @@
           version="version"
           disable-fake-elements="true"
           color="#5e2572">
+    <div class="content">
     <Banner></Banner>
-    <div id="nav"><router-link to="/">Home</router-link> | <router-link to="/users">Users</router-link></div>
-    <router-view />
+        <div id="nav"><router-link to="/">Home</router-link> | <router-link to="/users">Users</router-link></div>
+            <router-view />
+        </div>
   </x4b-ui>
 </div>
 </template>
@@ -20,12 +22,23 @@ export default class App extends Vue {}
 </script>
 
 <style>
+html, body {
+    height: 100%;
+}
+
+.content {
+    height: 100%;
+}
+
 #app {
     font-family: "Avenir", Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
 }
 
 #nav {
