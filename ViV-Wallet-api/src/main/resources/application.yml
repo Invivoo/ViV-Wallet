@@ -5,3 +5,7 @@ spring:
     console:
       enabled: true
       path: /h2
+x4b:
+  auth:
+    issuer: X4B
+    secret: U29tZVhDb21wb25lbnRLb29yZGluYXRvclNlY3JldA==

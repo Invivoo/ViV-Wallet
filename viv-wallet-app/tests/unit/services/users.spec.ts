@@ -18,7 +18,7 @@ describe("UsersService", () => {
     const prototypeUser: User = {
         id: "123",
         user: "mylogin",
-        fullname: "My LOGIN",
+        fullName: "My LOGIN",
         email: "my.login@invivoo.com"
     };
 

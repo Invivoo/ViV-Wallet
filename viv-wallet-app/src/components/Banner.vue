@@ -1,11 +1,10 @@
 <template>
-    <div id="user">{{ currentRoleName }}</div>
+    <div id="user">{{ currentRoleNames }}</div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { User } from "../models/user";
-import { Role } from "../models/role";
 import { LoginService } from "../services/login";
 
 @Component
@@ -13,10 +12,10 @@ export default class Banner extends Vue {
     user: User = {
         id: "7",
         user: "tmontgomery",
-        fullname: "MONTGOMERY Théophile",
+        fullName: "MONTGOMERY Théophile",
         email: "theophile.montgomery@invivoo.com"
     };
-    currentRoleName: string = "";
+    currentRoleNames: string = "";
     loginService: LoginService;
 
     constructor() {
@@ -25,14 +24,7 @@ export default class Banner extends Vue {
     }
 
     mounted() {
-        switch (this.loginService.getCurrentRole()) {
-            case Role.Admin:
-                this.currentRoleName = "Admin";
-                break;
-            default:
-                this.currentRoleName = "UNKNOWN";
-                break;
-        }
+        this.currentRoleNames = this.loginService.getRoles().join(", ");
     }
 }
 </script>

@@ -1,27 +1,40 @@
-import { Role } from "../models/role";
-import jwt_decode from "jwt-decode";
-import { getToken, login } from "x4b-ui";
-import { LOGIN_URL } from "../config/constants";
+import {Role} from '../models/role';
+import jwt_decode from 'jwt-decode';
+import {getToken, login} from 'x4b-ui';
 
 export interface DecodedJwtTokenContent {
     exp: number;
     iss: string;
     user: string;
-    // for now we use scenario tokens... but hopefully this will change soon
-    scenario: string;
+    "viv-wallet": string;
+}
+
+export interface Authorizations {
+    roles: Role[];
+    userId: string;
 }
 
 export class LoginService {
     private token: string | undefined;
-    private decodedToken: DecodedJwtTokenContent | undefined;
+    private decodedToken: DecodedJwtTokenContent;
+    private authorizations: Authorizations;
 
     constructor() {
-        this.token = getToken();
+        this.token = process.env.NODE_ENV === "production" ? getToken() : process.env.VUE_APP_DEV_JWT;
         this.decodedToken = this.token && jwt_decode<DecodedJwtTokenContent>(this.token);
+        this.authorizations = JSON.parse(this.decodedToken["viv-wallet"]) as Authorizations;
     }
 
-    getCurrentRole(): Role | undefined {
-        return Role.Admin;
+    getRoles(): Role[] {
+        return this.authorizations.roles;
+    }
+
+    getUserId(): string {
+        return this.authorizations.userId;
+    }
+
+    getUserFullName(): string {
+        return this.decodedToken.user;
     }
 
     getJwtToken(): string | undefined {
@@ -30,7 +43,7 @@ export class LoginService {
 
     ensureLoggedIn() {
         if (!this.token) {
-            login(LOGIN_URL);
+            login(process.env.VUE_APP_LOGIN_URL);
         }
     }
 }
