@@ -4,7 +4,6 @@
             <p>User: {{ user.fullname }}</p>
             <p>{{ currentRoleName }}</p>
         </div>
-        <a href="#" v-on:click="logout" id="logout">Logout</a>
     </header>
 </template>
 
@@ -39,10 +38,6 @@ export default class Banner extends Vue {
                 this.currentRoleName = "UNKNOWN";
                 break;
         }
-    }
-
-    logout() {
-        this.loginService.logout();
     }
 }
 </script>
