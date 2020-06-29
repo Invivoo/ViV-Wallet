@@ -3,6 +3,7 @@ package com.invivoo.vivwallet.api.interfaces.users;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.invivoo.vivwallet.api.domain.user.User;
 import com.invivoo.vivwallet.api.domain.user.UserRepository;
+import com.invivoo.vivwallet.api.domain.user.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -37,6 +38,9 @@ public class UsersControllerTest {
 
     @MockBean
     private UserRepository userRepository;
+
+    @MockBean
+    private UserService userService;
 
     @Test
     public void whenGetUsers_shouldReturnUsers() throws Exception {
@@ -128,5 +132,21 @@ public class UsersControllerTest {
         //then
         Mockito.verify(userRepository, Mockito.times(1)).delete(testUser);
         resultActions.andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void whenGetBalanceForUser_shouldReturnBalance() throws Exception {
+        //Given
+        User testUser = TEST_USER_1;
+        long expectedBalance = 20;
+        Mockito.when(userService.computeBalance(testUser.getId())).thenReturn(expectedBalance);
+
+        //When
+        ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get(String.format("/api/v1/users/%s/balance", testUser.getId())))
+                .andDo(MockMvcResultHandlers.print());
+
+        //then
+        resultActions.andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().string(String.valueOf(expectedBalance)));
     }
 }

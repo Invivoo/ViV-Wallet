@@ -2,6 +2,7 @@ package com.invivoo.vivwallet.api.interfaces.users;
 
 import com.invivoo.vivwallet.api.domain.user.User;
 import com.invivoo.vivwallet.api.domain.user.UserRepository;
+import com.invivoo.vivwallet.api.domain.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,10 +23,12 @@ public class UsersController {
 
     static final String API_V_1_USERS = "/api/v1/users";
     private final UserRepository userRepository;
+    private final UserService userService;
 
     @Autowired
-    public UsersController(UserRepository userRepository) {
+    public UsersController(UserRepository userRepository, UserService userService) {
         this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     @GetMapping
@@ -66,6 +69,12 @@ public class UsersController {
                              .map(ResponseEntity::ok)
                              .orElse(ResponseEntity.notFound()
                                                    .build());
+    }
+
+    @GetMapping("/{id}/balance")
+    public ResponseEntity<Long> getBalance(@PathVariable("id") Long userId) {
+        long balance = userService.computeBalance(userId);
+        return ResponseEntity.ok(balance);
     }
 
     private User deleteUser(User user) {
