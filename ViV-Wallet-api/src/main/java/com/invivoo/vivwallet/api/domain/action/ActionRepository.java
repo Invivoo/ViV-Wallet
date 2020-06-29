@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface ActionRepository extends JpaRepository<Action, Long> {
 
+    List<Action> findAllByOrderByDateDesc();
+
     List<Action> findAllByPaymentIsNull();
 
     List<Action> findAllByPaymentIdOrderByDateDesc(@Param("paymentId") Long paymentId);
