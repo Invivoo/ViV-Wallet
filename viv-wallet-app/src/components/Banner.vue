@@ -44,6 +44,7 @@ export default class Banner extends Vue {
 
 <style scoped>
 header {
+    margin-top: 2em;
     display: flex;
     justify-content: space-between;
 }
