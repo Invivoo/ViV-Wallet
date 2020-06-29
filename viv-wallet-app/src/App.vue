@@ -17,6 +17,7 @@
 import { Component, Vue } from "vue-property-decorator";
 import Banner from "./components/Banner.vue";
 import 'x4b-ui/dist/x4b-ui/x4b-ui.css';
+import { getToken, login } from "x4b-ui";
 
 @Component({ components: { Banner } })
 export default class App extends Vue {
@@ -25,6 +26,10 @@ export default class App extends Vue {
         ui.addEventListener('menuToggleButtonClicked', e => {
             console.log('menuToggleButtonClicked ', e.detail);
         });
+
+        if (!getToken()) {
+            login('http://login.master.496a8aa9ae8c48329209.northeurope.aksapp.io');
+        }
     }
 }
 </script>
