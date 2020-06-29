@@ -14,7 +14,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import BalanceCard from "../components/BalanceCard";
+import BalanceCard from "../components/BalanceCard.vue";
 
 @Component({
     name: "wallet",
