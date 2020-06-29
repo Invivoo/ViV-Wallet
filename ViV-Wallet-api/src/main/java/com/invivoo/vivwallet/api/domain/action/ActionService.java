@@ -18,6 +18,10 @@ public class ActionService {
         this.lynxConnector = lynxConnector;
     }
 
+    public List<Action> getActionsOrderedByDateDesc() {
+       return actionRepository.findAllByOrderByDateDesc();
+    }
+
     public List<Action> findAll(){
         return actionRepository.findAll();
     }
