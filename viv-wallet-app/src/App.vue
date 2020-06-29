@@ -1,8 +1,9 @@
 <template>
 <div id="app">
   <x4b-ui application="scenario"
-          appsServiceUrl="http://apps.master.496a8aa9ae8c48329209.northeurope.aksapp.io/applications"
+          apps-service-url="http://apps.master.496a8aa9ae8c48329209.northeurope.aksapp.io"
           version="version"
+          disable-fake-elements="true"
           color="#5e2572">
     <Banner></Banner>
     <div id="nav"><router-link to="/">Home</router-link> | <router-link to="/users">Users</router-link></div>
