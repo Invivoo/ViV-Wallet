@@ -16,6 +16,7 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import Banner from "./components/Banner.vue";
+import 'x4b-ui/dist/x4b-ui/x4b-ui.css';
 
 @Component({ components: { Banner } })
 export default class App extends Vue {
