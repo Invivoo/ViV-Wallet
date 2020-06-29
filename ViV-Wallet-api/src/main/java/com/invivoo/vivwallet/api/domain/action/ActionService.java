@@ -21,6 +21,10 @@ public class ActionService {
         return actionRepository.findAll();
     }
 
+    public List<Action> findAllByAchiever(Long achieverId) {
+        return actionRepository.findAllByAchieverOrderByDateDesc(achieverId);
+    }
+
     public void saveAll(List<Action> actions) {
         actionRepository.saveAll(actions);
     }
@@ -49,4 +53,5 @@ public class ActionService {
         action.setAchiever(actionFromLynx.getAchiever());
         action.setCreator(actionFromLynx.getCreator());
     }
+
 }

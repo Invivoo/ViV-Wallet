@@ -7,4 +7,6 @@ import java.util.List;
 public interface ActionRepository extends JpaRepository<Action, Long> {
 
     List<Action> findAllByPaymentIsNull();
+
+    List<Action> findAllByAchieverOrderByDateDesc(long achieverId);
 }

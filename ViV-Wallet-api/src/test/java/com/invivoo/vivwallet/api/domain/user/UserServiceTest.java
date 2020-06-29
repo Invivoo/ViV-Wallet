@@ -39,7 +39,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void should_return_a_balance_of_20_VIV_for_user1_when_one_user1_did_2_actions_of_10_VIV_not_paid_and_user2_did_1_action_of_5_VIV_not_paid() {
+    public void should_return_a_balance_of_20_VIV_for_user1_when_user1_did_2_actions_of_10_VIV_not_paid_and_user2_did_1_action_of_5_VIV_not_paid() {
         //Given
         User user1 = User.builder().id((long) 1).build();
         User user2 = User.builder().id((long) 2).build();
