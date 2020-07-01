@@ -1,0 +1,10 @@
+@import "./colors.scss";
+@import "./typescale.scss";
+@import "./margins.scss";
+@import "./borders.scss";
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans&display=swap");
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+}

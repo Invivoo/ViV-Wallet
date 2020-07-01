@@ -2,13 +2,13 @@
     <div class="card-container">
         <div class="heading">
             <div>
-                <h2 class="user">{{fullName}}</h2>
+                <h2 class="user">{{ fullName }}</h2>
             </div>
-            <div class="balance">{{vivBalance}} VIV</div>
+            <div class="balance">{{ vivBalance }} VIV</div>
         </div>
         <div class="user-details">
-            <div>{{expertise}}</div>
-            <div>{{consultantStatus}}</div>
+            <div>{{ expertise }}</div>
+            <div>{{ consultantStatus }}</div>
         </div>
     </div>
 </template>
@@ -28,14 +28,14 @@ export default class BalanceCard extends Vue {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .card-container {
-    background: #ffffff;
-    color: #3c366b;
-    border-radius: 12px;
+    background: $white;
+    color: $primary-900;
+    border-radius: $rounded-md;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     min-width: 500px;
-    padding: 24px;
+    padding: $m-6;
     text-align: left;
 }
 .heading {
@@ -46,24 +46,24 @@ export default class BalanceCard extends Vue {
 }
 
 .balance {
-    background: #f0fff4;
-    border: 1px solid #c6f6d5;
-    border-radius: 16px;
-    color: #276749;
+    background: $green-100;
+    border: 1px solid $green-200;
+    border-radius: $rounded-lg;
+    color: $green-800;
     font-weight: 600;
-    font-size: 28px;
-    padding: 8px 12px;
+    font-size: $text-3xl;
+    padding: $m-2 $m-3;
 }
 
 .user {
     font-weight: 600;
-    font-size: 24px;
+    font-size: $text-2xl;
 }
 
 .user-details {
     margin-top: -10px;
-    color: #4a5568;
-    font-size: 16px;
+    color: $gray-700;
+    font-size: $text-base;
     font-weight: 400;
 }
 </style>
