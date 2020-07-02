@@ -1,10 +1,8 @@
 <template>
     <div class="card-container">
         <div class="heading">
-            <div>
-                <h2 class="user">{{ fullName }}</h2>
-            </div>
-            <div class="balance">{{ vivBalance }} VIV</div>
+            <h2 class="user">{{ fullName }}</h2>
+            <span class="balance">{{ vivBalance }} VIV</span>
         </div>
         <div class="user-details">
             <div>{{ expertise }}</div>
@@ -16,10 +14,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 
-@Component({
-    name: "balanceCard",
-    components: {}
-})
+@Component
 export default class BalanceCard extends Vue {
     @Prop() fullName!: string;
     @Prop() expertise!: string;
@@ -52,7 +47,8 @@ export default class BalanceCard extends Vue {
     color: $green-800;
     font-weight: 600;
     font-size: $text-3xl;
-    padding: $m-2 $m-3;
+    padding: $m-1 $m-3;
+    line-height: 1.2;
 }
 
 .user {
@@ -61,7 +57,6 @@ export default class BalanceCard extends Vue {
 }
 
 .user-details {
-    margin-top: -10px;
     color: $gray-700;
     font-size: $text-base;
     font-weight: 400;
