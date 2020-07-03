@@ -6,10 +6,10 @@ export enum ValidationStatus {
 export interface Action {
     id: string;
     type: string;
-    comment: string;
+    comment?: string;
     creationDate: Date;
     payment: number;
     status: ValidationStatus;
-    validationDate: Date;
+    validationDate?: Date;
     expertise: string;
 }
