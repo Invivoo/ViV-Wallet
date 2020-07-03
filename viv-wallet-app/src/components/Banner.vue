@@ -1,10 +1,7 @@
 <template>
-    <header>
-        <div id="user">
-            <p>User: {{ user.fullname }}</p>
-            <p>{{ currentRoleName }}</p>
-        </div>
-    </header>
+      <div id="user">
+        {{ currentRoleName }}
+      </div>
 </template>
 
 <script lang="ts">
@@ -32,7 +29,7 @@ export default class Banner extends Vue {
     mounted() {
         switch (this.loginService.getCurrentRole()) {
             case Role.Admin:
-                this.currentRoleName = "System Administrator";
+                this.currentRoleName = "Admin";
                 break;
             default:
                 this.currentRoleName = "UNKNOWN";
@@ -43,18 +40,11 @@ export default class Banner extends Vue {
 </script>
 
 <style scoped>
-header {
-    display: flex;
-    justify-content: space-between;
-}
-
 #user {
-    margin-top: 2em;
-    text-align: left;
-    margin-left: 1em;
-}
-
-#logout {
-    margin-right: 1em;
+    text-align: center;
+    padding: 1em;
+    font-size: 0.8em;
+    font-style: italic;
+    cursor: pointer;
 }
 </style>
