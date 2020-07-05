@@ -24,7 +24,7 @@ import { Component, Vue, Prop } from "vue-property-decorator";
 import Banner from "./components/Banner.vue";
 import 'x4b-ui/dist/x4b-ui/x4b-ui.css';
 import { getToken, login } from "x4b-ui";
-import { LOGIN_URL, APPS_URL } from './config/constants.ts';
+import { LOGIN_URL, APPS_URL } from './config/constants';
 import {version} from '../package.json';
 
 @Component({ components: { Banner } })
