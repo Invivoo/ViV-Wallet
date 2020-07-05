@@ -54,9 +54,9 @@ html, body {
 
 .content {
     height: 100%;
-    padding-left: 2rem;
-    padding-top: 2rem;
-    padding-right: 2rem;
+    padding-left: $m-6;
+    padding-top: $m-6;
+    padding-right: $m-6;
     flex-grow: 1;
     flex-shrink: 1;
     overflow-y: auto;
@@ -77,7 +77,7 @@ html, body {
     background-color: var(--app-primary-color);
     display: flex;
     flex-direction: column;
-    color: #fff;
+    color: $white;
 }
 
 .menu.hidden {
@@ -85,16 +85,16 @@ html, body {
 }
 
 .menu a {
-    padding: 0.92857143em 1.14285714em;
-    color: rgb(184, 184, 230);
+    padding: $m-3 $m-5;
+    color: $green-200;
 }
 
 .menu a:hover {
-    background-color: #f2f2f2;
+    background-color: $primary-400;
 }
 
 .menu a.router-link-exact-active {
-    background-color: #6b6c99;
+    background-color: $primary-200;
     color: $green-700;
 }
 

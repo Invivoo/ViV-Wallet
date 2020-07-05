@@ -39,12 +39,13 @@ export default class Banner extends Vue {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 #user {
     text-align: center;
-    padding: 1em;
-    font-size: 0.8em;
+    padding: $m-2;
+    font-size: $text-xs;
     font-style: italic;
     cursor: pointer;
+    text-decoration: underline;
 }
 </style>
