@@ -1,7 +1,7 @@
 <template>
     <Section>
         <h2>Actions</h2>
-        <table>
+        <table v-if="actions.length > 0">
             <colgroup>
                 <col style="width:25%" />
                 <col style="width:40%" />
@@ -9,7 +9,7 @@
                 <col style="width:25%" />
             </colgroup>
             <thead>
-                <tr class="table-header">
+                <tr>
                     <th class="right">DATE DE CREATION</th>
                     <th>ACTION</th>
                     <th class="right">VIV</th>
@@ -21,85 +21,94 @@
                     <td class="right">{{ action.creationDate.toDateString() }}</td>
                     <td>
                         <div>
-                            <div>{{ action.type }} / {{ action.expertise }}</div>
-                            <div>{{ action.comment }}</div>
+                            <div class="type">{{ action.type }} - {{ action.expertise }}</div>
+                            <div class="comment">{{ action.comment }}</div>
                         </div>
                     </td>
-                    <td class="right">{{ action.payment }}</td>
+                    <td class="right payment">{{ action.payment }}</td>
                     <td>
                         <div>
-                            <div>{{ formatValidationStatus(action.status) }}</div>
-                            <div>{{ action.validationDate ? action.validationDate.toDateString() : "" }}</div>
+                            <div>
+                                <status-badge :type="getValidationStatusType(action.status)">{{
+                                    formatValidationStatus(action.status)
+                                }}</status-badge>
+                            </div>
+                            <div class="validation-date">
+                                {{ action.validationDate ? action.validationDate.toDateString() : "" }}
+                            </div>
                         </div>
                     </td>
                 </tr>
             </tbody>
         </table>
+        <p v-else class="none">Aucune action trouvé !</p>
     </Section>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Prop } from "vue-property-decorator";
 import { Action, ValidationStatus } from "../models/action";
+import StatusBadge from "../components/StatusBadge.vue";
 
-@Component
+@Component({
+    name: "actions-block",
+    components: { StatusBadge }
+})
 export default class ActionsBlock extends Vue {
     @Prop({ default: [] }) actions!: Action[];
 
     formatValidationStatus(status: ValidationStatus) {
         return ValidationStatus[status];
     }
+    getValidationStatusType(status: ValidationStatus) {
+        switch (status) {
+            case ValidationStatus.Done:
+                return "green";
+            case ValidationStatus.Rejected:
+            default:
+                return "red";
+        }
+    }
 }
 </script>
 
 <style lang="scss" scoped>
+@import "../styles/table.scss";
 h2 {
-    font-size: $text-xl;
+    font-size: $text-2xl;
     color: $gray-700;
     text-align: left;
     font-weight: 600;
     margin: $m-6 0 $m-3 0;
 }
 
-table {
-    border-collapse: separate;
-    border-spacing: 0;
-    table-layout: fixed;
-    width: 100%;
-    border: none;
-    border-radius: $rounded-md;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+.none {
+    text-align: left;
+    font-size: $text-xl;
+    color: $gray-900;
+    font-weight: normal;
+}
 
-    * {
-        border: none;
-    }
-    tr:nth-child(even) {
-        background: $gray-200;
-    }
+.validation-date {
+    color: $gray-600;
+    font-weight: 400;
+    margin-top: $m-2;
+    padding-left: $m-3;
+}
 
-    .table-header {
-        background: $gray-200;
-        color: $gray-600;
-        font-size: $text-sm;
-        font-weight: 500;
-        text-align: left;
-    }
+.payment {
+    font-weight: 600;
+    color: $gray-700;
+}
 
-    td {
-        color: $gray-900;
-        text-align: left;
-        padding: $m-5 $m-5;
-        vertical-align: middle;
-    }
+.comment {
+    color: $gray-600;
+    font-weight: 400;
+    margin-top: $m-2;
+}
 
-    th {
-        padding: $m-3 $m-5;
-        vertical-align: middle;
-    }
-
-    td.right,
-    th.right {
-        text-align: right;
-    }
+.type {
+    font-weight: 600;
+    color: $gray-700;
 }
 </style>

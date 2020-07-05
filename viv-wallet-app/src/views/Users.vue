@@ -15,7 +15,7 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 import { User } from "../models/user";
 import { UsersService } from "@/services/users";
 
-import { UserList } from "@/components";
+import UserList from "@/components/UserList.vue";
 
 @Component({
     name: "users",
