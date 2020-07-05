@@ -5,7 +5,7 @@
           :apps-service-url="appsUrl"
           :version="appVersion"
           disable-fake-elements="true"
-          color="#4C51BF">
+          :color="primaryColor">
     <div class="root">
         <div class="menu">
           <Banner></Banner>
@@ -26,12 +26,14 @@ import 'x4b-ui/dist/x4b-ui/x4b-ui.css';
 import { getToken, login } from "x4b-ui";
 import { LOGIN_URL, APPS_URL } from './config/constants';
 import {version} from '../package.json';
+import colors from './styles/colors.scss';
 
 @Component({ components: { Banner } })
 export default class App extends Vue {
     private appsUrl: string = APPS_URL;
     private appVersion: string = version;
-    
+    private primaryColor: string = colors.primaryColor;
+
     mounted() {
         const ui = document.querySelector("x4b-ui");
         ui && ui.addEventListener("menuToggleButtonClicked", e => {
