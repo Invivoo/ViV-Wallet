@@ -79,7 +79,7 @@ html, body {
 }
 
 .menu a {
-    padding: .92857143em 1.14285714em;
+    padding: 0.92857143em 1.14285714em;
     color: rgb(184, 184, 230);
 }
 
@@ -89,7 +89,7 @@ html, body {
 
 .menu a.router-link-exact-active {
     background-color: #6b6c99;
-        color: $green-700;
+    color: $green-700;
 }
 
 #app {
@@ -104,6 +104,5 @@ html, body {
     height: 100vh;
     overflow: hidden;
     margin: 0;
-
 }
 </style>
