@@ -1,32 +1,33 @@
-
 <template>
-<div id="app">
-  <x4b-ui application="viv-wallet"
-          :apps-service-url="appsUrl"
-          :version="appVersion"
-          disable-fake-elements="true"
-          :color="primaryColor">
-    <div class="root">
-        <div class="menu">
-          <Banner></Banner>
-          <router-link to="/">Home</router-link>
-          <router-link to="/users">Users</router-link>
-        </div>
-        <div class="content">    
-            <router-view />
-        </div>
+    <div id="app">
+        <x4b-ui
+            application="viv-wallet"
+            :apps-service-url="appsUrl"
+            :version="appVersion"
+            disable-fake-elements="true"
+            :color="primaryColor"
+        >
+            <div class="root">
+                <div class="menu">
+                    <Banner></Banner>
+                    <router-link to="/">Home</router-link>
+                    <router-link to="/users">Users</router-link>
+                </div>
+                <div class="content">
+                    <router-view />
+                </div>
+            </div>
+        </x4b-ui>
     </div>
-  </x4b-ui>
-</div>
 </template>
 <script lang="ts">
 import { Component, Vue, Prop } from "vue-property-decorator";
 import Banner from "./components/Banner.vue";
-import 'x4b-ui/dist/x4b-ui/x4b-ui.css';
+import "x4b-ui/dist/x4b-ui/x4b-ui.css";
 import { getToken, login } from "x4b-ui";
-import { LOGIN_URL, APPS_URL } from './config/constants';
-import {version} from '../package.json';
-import colors from './styles/colors.scss';
+import { LOGIN_URL, APPS_URL } from "./config/constants";
+import { version } from "../package.json";
+import colors from "./styles/colors.scss";
 
 @Component({ components: { Banner } })
 export default class App extends Vue {
@@ -36,11 +37,12 @@ export default class App extends Vue {
 
     mounted() {
         const ui = document.querySelector("x4b-ui");
-        ui && ui.addEventListener("menuToggleButtonClicked", e => {
-            const menu = document.querySelector(".menu");
-            menu && menu.classList.toggle("hidden");
-        });
-        
+        ui &&
+            ui.addEventListener("menuToggleButtonClicked", e => {
+                const menu = document.querySelector(".menu");
+                menu && menu.classList.toggle("hidden");
+            });
+
         if (!getToken()) {
             login(LOGIN_URL);
         }
@@ -49,7 +51,8 @@ export default class App extends Vue {
 </script>
 
 <style lang="scss">
-html, body {
+html,
+body {
     height: 100%;
     box-sizing: content-box;
 }

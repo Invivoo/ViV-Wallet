@@ -1,7 +1,7 @@
 <template>
-      <div id="user">
+    <div id="user">
         {{ currentRoleName }}
-      </div>
+    </div>
 </template>
 
 <script lang="ts">
