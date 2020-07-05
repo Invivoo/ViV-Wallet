@@ -2,7 +2,7 @@
 <template>
 <div id="app">
   <x4b-ui application="viv-wallet"
-          apps-service-url="http://apps.master.496a8aa9ae8c48329209.northeurope.aksapp.io"
+          :apps-service-url="appsUrl"
           version="version"
           disable-fake-elements="true"
           color="#4C51BF">
@@ -20,21 +20,24 @@
 </div>
 </template>
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue, Prop } from "vue-property-decorator";
 import Banner from "./components/Banner.vue";
 import 'x4b-ui/dist/x4b-ui/x4b-ui.css';
 import { getToken, login } from "x4b-ui";
+import { LOGIN_URL, APPS_URL } from './config/constants.ts';
 
 @Component({ components: { Banner } })
 export default class App extends Vue {
+    private appsUrl: string = APPS_URL;
     mounted() {
-        const ui = document.querySelector('x4b-ui');
-        ui.addEventListener('menuToggleButtonClicked', e => {
-            document.querySelector('.menu').classList.toggle('hidden');
+        const ui = document.querySelector("x4b-ui");
+        ui && ui.addEventListener("menuToggleButtonClicked", e => {
+            const menu = document.querySelector(".menu");
+            menu && menu.classList.toggle("hidden");
         });
-
+        
         if (!getToken()) {
-            login('http://login.master.496a8aa9ae8c48329209.northeurope.aksapp.io');
+            login(LOGIN_URL);
         }
     }
 }
