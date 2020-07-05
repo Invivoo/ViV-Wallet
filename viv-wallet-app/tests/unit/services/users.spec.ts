@@ -40,13 +40,13 @@ describe("UsersService", () => {
 
     it("should get user by id", async () => {
         const response = {
-            data: { ...prototypeUser, id: 'id1', login: 'lid1' }
+            data: { ...prototypeUser, id: "id1", login: "lid1" }
         };
         mockedAxios.get.mockReturnValue(Promise.resolve(response));
 
-        const returnedUser = await service.getUser('id1');
-        expect(returnedUser.id).toEqual('id1');
-        expect(returnedUser.login).toEqual('lid1');
+        const returnedUser = await service.getUser("id1");
+        expect(returnedUser.id).toEqual("id1");
+        expect(returnedUser.login).toEqual("lid1");
 
         expect(mockedAxios.get).toHaveBeenCalledWith(`${BACKEND_BASE_URL}/users/id1`, { timeout: 10000 });
     });

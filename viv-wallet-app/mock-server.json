@@ -1,22 +1,36 @@
 {
-  "users": [
-    {
-      "id": "1",
-      "login": "rleloup",
-      "fullname": "Roch Leloup",
-      "email": "roch.leloup@invivoo.com"
-    },
-    {
-      "id": "2",
-      "login": "dboudet",
-      "fullname": "Djeferson Boudet",
-      "email": "djeverson.boudet@invivoo.com"
-    },
-    {
-      "id": "3",
-      "login": "rflondin",
-      "fullname": "Roger Flodin",
-      "email": "roget.flondin@invivoo.com"
-    }
-  ]
+    "users": [
+        {
+            "id": "1",
+            "login": "rleloup",
+            "fullname": "Roch Leloup",
+            "email": "roch.leloup@invivoo.com"
+        },
+        {
+            "id": "2",
+            "login": "dboudet",
+            "fullname": "Djeferson Boudet",
+            "email": "djeverson.boudet@invivoo.com"
+        },
+        {
+            "id": "3",
+            "login": "rflondin",
+            "fullname": "Roger Flodin",
+            "email": "roget.flondin@invivoo.com"
+        }
+    ],
+    "balances": [
+        {
+            "id": "1",
+            "value": 300
+        },
+        {
+            "id": "2",
+            "value": 250
+        },
+        {
+            "id": "3",
+            "value": 300
+        }
+    ]
 }

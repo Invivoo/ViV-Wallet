@@ -40,7 +40,7 @@ export default class App extends Vue {
 }
 </script>
 
-<style>
+<style lang="scss">
 html, body {
     height: 100%;
     box-sizing: content-box;
@@ -89,17 +89,21 @@ html, body {
 
 .menu a.router-link-exact-active {
     background-color: #6b6c99;
-    color: #fff;
+        color: $green-700;
 }
 
 #app {
-    font-family: "Avenir", Helvetica, Arial, sans-serif;
+    font-family: "Open Sans", sans-serif;
+    font-size: 16px;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
-    color: #2c3e50;
+    color: $black;
+    background-color: $gray-100;
     width: 100%;
-    height: 100%;
+    height: 100vh;
     overflow: hidden;
+    margin: 0;
+
 }
 </style>
