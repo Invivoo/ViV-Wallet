@@ -38,7 +38,7 @@ export default class App extends Vue {
     mounted() {
         const ui = document.querySelector("x4b-ui");
         ui &&
-            ui.addEventListener("menuToggleButtonClicked", e => {
+            ui.addEventListener("menuToggleButtonClicked", () => {
                 const menu = document.querySelector(".menu");
                 menu && menu.classList.toggle("hidden");
             });
@@ -65,6 +65,7 @@ body {
     flex-grow: 1;
     flex-shrink: 1;
     overflow-y: auto;
+    background-color: $gray-100;
 }
 
 .root {

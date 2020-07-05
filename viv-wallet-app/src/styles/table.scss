@@ -1,5 +1,5 @@
 table {
-    border-collapse: separate;
+    border-collapse: collapse;
     border-spacing: 0;
     table-layout: fixed;
     width: 100%;
@@ -44,5 +44,21 @@ table {
     td.right,
     th.right {
         text-align: right;
+    }
+
+    tr:last-child td:first-child {
+        border-bottom-left-radius: $rounded-md;
+    }
+
+    th:first-child {
+        border-top-left-radius: $rounded-md;
+    }
+
+    tr:last-child td:last-child {
+        border-bottom-right-radius: $rounded-md;
+    }
+
+    th:last-child {
+        border-top-right-radius: $rounded-md;
     }
 }
