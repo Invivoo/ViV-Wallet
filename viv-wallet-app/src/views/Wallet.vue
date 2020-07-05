@@ -43,6 +43,16 @@ export default class wallet extends Vue {
             status: ValidationStatus.Rejected,
             validationDate: new Date(),
             expertise: "Front-End"
+        },
+        {
+            id: "3",
+            type: "Article",
+            comment: "This is an other great comment",
+            creationDate: new Date(),
+            payment: 50,
+            status: ValidationStatus.Rejected,
+            validationDate: new Date(),
+            expertise: "Front-End"
         }
     ];
 }
@@ -52,6 +62,7 @@ export default class wallet extends Vue {
 .main {
     max-width: 900px;
     margin: 0 auto;
+    padding: $m-3 $m-5;
 }
 
 .header {

@@ -1,7 +1,7 @@
 <template>
     <div class="card-container">
         <div class="heading">
-            <h2 class="user">{{ fullName }}</h2>
+            <span class="user">{{ fullName }}</span>
             <span class="balance">{{ vivBalance }} VIV</span>
         </div>
         <div class="user-details">
