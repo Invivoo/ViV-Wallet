@@ -12,6 +12,7 @@
                     <Banner></Banner>
                     <router-link to="/">Home</router-link>
                     <router-link to="/users">Users</router-link>
+                    <router-link to="/wallet">Wallet</router-link>
                 </div>
                 <div class="content">
                     <router-view />
