@@ -1,11 +1,7 @@
 <template>
-    <header>
-        <div id="user">
-            <p>User: {{ user.fullname }}</p>
-            <p>{{ currentRoleName }}</p>
-        </div>
-        <a href="#" v-on:click="logout" id="logout">Logout</a>
-    </header>
+    <div id="user">
+        {{ currentRoleName }}
+    </div>
 </template>
 
 <script lang="ts">
@@ -33,32 +29,23 @@ export default class Banner extends Vue {
     mounted() {
         switch (this.loginService.getCurrentRole()) {
             case Role.Admin:
-                this.currentRoleName = "System Administrator";
+                this.currentRoleName = "Admin";
                 break;
             default:
                 this.currentRoleName = "UNKNOWN";
                 break;
         }
     }
-
-    logout() {
-        this.loginService.logout();
-    }
 }
 </script>
 
-<style scoped>
-header {
-    display: flex;
-    justify-content: space-between;
-}
-
+<style lang="scss" scoped>
 #user {
-    text-align: left;
-    margin-left: 1em;
-}
-
-#logout {
-    margin-right: 1em;
+    text-align: center;
+    padding: $m-2;
+    font-size: $text-xs;
+    font-style: italic;
+    cursor: pointer;
+    text-decoration: underline;
 }
 </style>
