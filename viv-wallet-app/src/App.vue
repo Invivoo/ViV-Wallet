@@ -1,7 +1,10 @@
 <template>
     <div id="app">
         <Banner></Banner>
-        <div id="nav"><router-link to="/">Home</router-link> | <router-link to="/users">Users</router-link></div>
+        <div id="nav">
+            <router-link to="/">Home</router-link>| <router-link to="/users">Users</router-link>|
+            <router-link to="/wallet">Wallet</router-link>
+        </div>
         <router-view />
     </div>
 </template>
@@ -13,25 +16,28 @@ import Banner from "./components/Banner.vue";
 export default class App extends Vue {}
 </script>
 
-<style>
+<style lang="scss">
 #app {
-    font-family: "Avenir", Helvetica, Arial, sans-serif;
+    font-family: "Open Sans", sans-serif;
+    font-size: 16px;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
-    color: #2c3e50;
+    color: $black;
+    background-color: $gray-100;
+    height: 100vh;
+    margin: 0;
 }
 
 #nav {
     padding: 30px;
-}
+    a {
+        font-weight: bold;
+        color: $black;
+    }
 
-#nav a {
-    font-weight: bold;
-    color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-    color: #42b983;
+    a.router-link-exact-active {
+        color: $green-700;
+    }
 }
 </style>
