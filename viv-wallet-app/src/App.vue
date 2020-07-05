@@ -74,7 +74,7 @@ html, body {
 .menu {
     flex-grow: 0;
     flex-shrink: 0;
-    background-color: var(--app-primary-color);
+    background-color: $primary-700;
     display: flex;
     flex-direction: column;
     color: $white;
