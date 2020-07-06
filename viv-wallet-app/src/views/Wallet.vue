@@ -15,8 +15,10 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import { Illustration, BalanceCard, ActionsBlock } from "../components";
 import { Action, ValidationStatus } from "../models/action";
+import BalanceCard from "../components/BalanceCard.vue";
+import Illustration from "../components/Illustration.vue";
+import ActionsBlock from "../components/ActionsBlock.vue";
 
 @Component({
     name: "wallet",
