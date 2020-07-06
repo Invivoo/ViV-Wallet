@@ -1,7 +1,5 @@
 <template>
-    <div id="user">
-        {{ currentRoleName }}
-    </div>
+    <div id="user">{{ currentRoleName }}</div>
 </template>
 
 <script lang="ts">
@@ -41,11 +39,11 @@ export default class Banner extends Vue {
 
 <style lang="scss" scoped>
 #user {
-    text-align: center;
-    padding: $m-2;
+    padding: $m-3 $m-6;
+    text-align: left;
     font-size: $text-xs;
     font-style: italic;
-    cursor: pointer;
-    text-decoration: underline;
+    color: $white;
+    font-weight: 400;
 }
 </style>

@@ -84,24 +84,29 @@ body {
     display: flex;
     flex-direction: column;
     color: $white;
+    text-align: left;
+    a {
+        padding: $m-3 $m-7 $m-3 $m-6;
+        color: $primary-200;
+        outline: none;
+        text-decoration: none;
+        font-size: $text-lg;
+        font-weight: 400;
+        &:hover {
+            background-color: $primary-600;
+            color: $white;
+        }
+    }
+}
+
+a.router-link-exact-active {
+    background-color: $primary-600;
+    color: $white;
+    font-weight: 600;
 }
 
 .menu.hidden {
     display: none;
-}
-
-.menu a {
-    padding: $m-3 $m-5;
-    color: $green-200;
-}
-
-.menu a:hover {
-    background-color: $primary-400;
-}
-
-.menu a.router-link-exact-active {
-    background-color: $primary-200;
-    color: $green-700;
 }
 
 #app {
