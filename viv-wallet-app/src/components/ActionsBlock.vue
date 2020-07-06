@@ -13,7 +13,9 @@
                     <th class="right">DATE DE CREATION</th>
                     <th>ACTION</th>
                     <th class="right">VIV</th>
-                    <th>STATUS</th>
+                    <th>
+                        <span class="status-header">STATUS</span>
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -29,13 +31,15 @@
                     <td>
                         <div>
                             <div>
-                                <status-badge :type="getValidationStatusType(action.status)">{{
+                                <status-badge :type="getValidationStatusType(action.status)">
+                                    {{
                                     formatValidationStatus(action.status)
-                                }}</status-badge>
+                                    }}
+                                </status-badge>
                             </div>
-                            <div class="validation-date">
-                                {{ action.validationDate ? action.validationDate.toDateString() : "" }}
-                            </div>
+                            <div
+                                class="validation-date"
+                            >{{ action.validationDate ? action.validationDate.toDateString() : "" }}</div>
                         </div>
                     </td>
                 </tr>
@@ -58,8 +62,15 @@ export default class ActionsBlock extends Vue {
     @Prop({ default: [] }) actions!: Action[];
 
     formatValidationStatus(status: ValidationStatus) {
-        return ValidationStatus[status];
+        switch (status) {
+            case ValidationStatus.Done:
+                return "Validé";
+            case ValidationStatus.Rejected:
+            default:
+                return "Rejeté";
+        }
     }
+
     getValidationStatusType(status: ValidationStatus) {
         switch (status) {
             case ValidationStatus.Done:
@@ -94,6 +105,10 @@ h2 {
     font-weight: 400;
     margin-top: $m-2;
     padding-left: $m-3;
+}
+
+.status-header {
+    padding-left: $m-2;
 }
 
 .payment {
