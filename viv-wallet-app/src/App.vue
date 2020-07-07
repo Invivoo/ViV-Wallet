@@ -10,9 +10,9 @@
             <div class="root">
                 <div class="menu">
                     <Banner></Banner>
-                    <router-link to="/">Home</router-link>
-                    <router-link to="/users">Users</router-link>
-                    <router-link to="/wallet">Wallet</router-link>
+                    <custom-router-link to="/">Home</custom-router-link>
+                    <custom-router-link to="/users">Users</custom-router-link>
+                    <custom-router-link to="/wallet">Wallet</custom-router-link>
                 </div>
                 <div class="content">
                     <router-view />
@@ -28,8 +28,9 @@ import "x4b-ui/dist/x4b-ui/x4b-ui.css";
 import { getToken, login } from "x4b-ui";
 import { LOGIN_URL, APPS_URL } from "./config/constants";
 import { version } from "../package.json";
+import CustomRouterLink from "./components/CustomRouterLink.vue";
 
-@Component({ components: { Banner } })
+@Component({ components: { Banner, CustomRouterLink } })
 export default class App extends Vue {
     private appsUrl: string = APPS_URL;
     private appVersion: string = version;
@@ -85,6 +86,7 @@ body {
     flex-direction: column;
     color: $white;
     text-align: left;
+    width: 155px;
     a {
         padding: $m-3 $m-7 $m-3 $m-6;
         color: $primary-200;
@@ -99,7 +101,7 @@ body {
     }
 }
 
-a.router-link-exact-active {
+a.router-link-active {
     background-color: $primary-600;
     color: $white;
     font-weight: 600;
