@@ -62,3 +62,17 @@ table {
         border-top-right-radius: $rounded-md;
     }
 }
+
+h2 {
+    font-size: $text-2xl;
+    color: $gray-700;
+    text-align: left;
+    font-weight: 600;
+    margin: $m-6 0 $m-3 0;
+}
+.none {
+    text-align: left;
+    font-size: $text-xl;
+    color: $gray-900;
+    font-weight: normal;
+}
