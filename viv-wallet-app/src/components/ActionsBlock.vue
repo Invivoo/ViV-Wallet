@@ -32,14 +32,12 @@
                         <div>
                             <div>
                                 <status-badge :type="getValidationStatusType(action.status)">
-                                    {{
-                                    formatValidationStatus(action.status)
-                                    }}
+                                    {{ formatValidationStatus(action.status) }}
                                 </status-badge>
                             </div>
-                            <div
-                                class="validation-date"
-                            >{{ action.validationDate ? action.validationDate.toDateString() : "" }}</div>
+                            <div class="validation-date">
+                                {{ action.validationDate ? action.validationDate.toDateString() : "" }}
+                            </div>
                         </div>
                     </td>
                 </tr>
@@ -85,20 +83,6 @@ export default class ActionsBlock extends Vue {
 
 <style lang="scss" scoped>
 @import "../styles/table.scss";
-h2 {
-    font-size: $text-2xl;
-    color: $gray-700;
-    text-align: left;
-    font-weight: 600;
-    margin: $m-6 0 $m-3 0;
-}
-
-.none {
-    text-align: left;
-    font-size: $text-xl;
-    color: $gray-900;
-    font-weight: normal;
-}
 
 .validation-date {
     color: $gray-600;
