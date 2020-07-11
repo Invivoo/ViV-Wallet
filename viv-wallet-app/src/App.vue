@@ -116,7 +116,7 @@ a.router-link-active {
     font-size: 16px;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    text-align: center;
+    text-align: left;
     color: $black;
     background-color: $gray-100;
     width: 100%;

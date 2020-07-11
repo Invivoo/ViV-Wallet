@@ -1,0 +1,36 @@
+.primary-button {
+    background: $primary-700;
+    color: $white;
+    font-weight: bold;
+    font-size: $text-sm;
+    border-radius: $rounded-md;
+    border: none;
+    padding: $m-2 $m-4;
+    cursor: pointer;
+    &:hover {
+        background: $primary-800;
+    }
+    &:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px $primary-400;
+    }
+}
+
+.secondary-button {
+    background: transparent;
+    color: $primary-700;
+    font-weight: 600;
+    font-size: $text-sm;
+    border-radius: $rounded-md;
+    border: solid 1px $primary-700;
+    padding: $m-2 $m-4;
+    cursor: pointer;
+    &:hover {
+        background: $primary-700;
+        color: $white;
+    }
+    &:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px $primary-400;
+    }
+}
