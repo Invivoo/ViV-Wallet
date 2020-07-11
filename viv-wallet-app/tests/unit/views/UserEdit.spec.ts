@@ -34,10 +34,9 @@ describe("UserEd", () => {
         await wrapper.vm.$nextTick();
 
         expect(UsersService.prototype.getUser).toHaveBeenCalledWith("123");
-
-        expect(wrapper.find("#fullname-1").props().value).toBe("myName");
-        expect(wrapper.find("#login-1").props().value).toBe("login");
-        expect(wrapper.find("#email-1").props().value).toBe("test@test");
+        expect((wrapper.find("#fullname-1").element as HTMLInputElement).value).toBe("myName");
+        expect((wrapper.find("#login-1").element as HTMLInputElement).value).toBe("login");
+        expect((wrapper.find("#email-1").element as HTMLInputElement).value).toBe("test@test");
     });
 
     it("detects error getting user", async () => {

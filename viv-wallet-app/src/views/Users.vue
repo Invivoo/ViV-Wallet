@@ -38,3 +38,11 @@ export default class Users extends Vue {
     }
 }
 </script>
+
+<style scoped lang="scss">
+.users {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: $m-3 $m-5;
+}
+</style>
