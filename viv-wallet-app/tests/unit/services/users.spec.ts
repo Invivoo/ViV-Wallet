@@ -13,7 +13,7 @@ describe("UsersService", () => {
         mockedAxios.get.mockClear();
         mockedAxios.get.mockReturnValue(Promise.resolve({}));
 
-        service = new UsersService();
+        service = new UsersService(mockedAxios);
     });
 
     const prototypeUser: User = {
@@ -35,7 +35,7 @@ describe("UsersService", () => {
 
         expect(await service.getUsers()).toEqual(response.data);
 
-        expect(mockedAxios.get).toHaveBeenCalledWith(`${BACKEND_BASE_URL}/users`, { timeout: 10000 });
+        expect(mockedAxios.get).toHaveBeenCalledWith('');
     });
 
     it("should get user by id", async () => {
@@ -48,7 +48,7 @@ describe("UsersService", () => {
         expect(returnedUser.id).toEqual("id1");
         expect(returnedUser.login).toEqual("lid1");
 
-        expect(mockedAxios.get).toHaveBeenCalledWith(`${BACKEND_BASE_URL}/users/id1`, { timeout: 10000 });
+        expect(mockedAxios.get).toHaveBeenCalledWith(`id1`);
     });
 
     it("should delete user by id", async () => {
@@ -56,7 +56,7 @@ describe("UsersService", () => {
 
         await service.deleteUser(prototypeUser);
 
-        expect(mockedAxios.delete).toHaveBeenCalledWith(`${BACKEND_BASE_URL}/users/123`, { timeout: 10000 });
+        expect(mockedAxios.delete).toHaveBeenCalledWith(`123`);
     });
 
     it("should post user if there's no id", async () => {
@@ -68,7 +68,7 @@ describe("UsersService", () => {
         const postedUser = { ...prototypeUser, id: undefined };
         expect(await service.saveUser(postedUser)).toEqual(prototypeUser);
 
-        expect(mockedAxios.post).toHaveBeenCalledWith(`${BACKEND_BASE_URL}/users`, postedUser, { timeout: 10000 });
+        expect(mockedAxios.post).toHaveBeenCalledWith('', postedUser);
     });
 
     it("should update user if there's an id", async () => {
@@ -79,8 +79,6 @@ describe("UsersService", () => {
 
         expect(await service.saveUser(prototypeUser)).toEqual(prototypeUser);
 
-        expect(mockedAxios.put).toHaveBeenCalledWith(`${BACKEND_BASE_URL}/users/123`, prototypeUser, {
-            timeout: 10000
-        });
+        expect(mockedAxios.put).toHaveBeenCalledWith(`123`, prototypeUser);
     });
 });

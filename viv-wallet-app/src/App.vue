@@ -5,6 +5,7 @@
             :apps-service-url="appsUrl"
             :version="appVersion"
             disable-fake-elements="true"
+            languages="fr"
             :color="primaryColor"
         >
             <div class="root">

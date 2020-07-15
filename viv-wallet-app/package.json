@@ -13,7 +13,6 @@
     "dependencies": {
         "axios": "^0.19.2",
         "core-js": "^3.6.5",
-        "json-server": "^0.16.1",
         "vue": "^2.6.11",
         "vue-class-component": "^7.2.3",
         "vue-property-decorator": "^9.0.0",
@@ -38,6 +37,7 @@
         "eslint": "^5.16.0",
         "eslint-plugin-prettier": "^3.1.2",
         "eslint-plugin-vue": "^5.0.0",
+        "json-server": "^0.16.1",
         "prettier": "^1.19.1",
         "sass": "^1.26.9",
         "sass-loader": "^8.0.2",
