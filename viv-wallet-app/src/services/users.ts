@@ -7,8 +7,8 @@ export class UsersService {
 
     private http: AxiosInstance;
 
-    constructor() {
-        this.http = axios.create({
+    constructor(http?: AxiosInstance) {
+        this.http = http || axios.create({
             baseURL: `${BACKEND_BASE_URL}/users`,
             timeout: REQUEST_TIMEOUT_MS,
             headers: { 'Authorization': `Bearer ${getToken()}` },
