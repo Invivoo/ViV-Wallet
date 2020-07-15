@@ -1,5 +1,4 @@
 import { User } from "@/models/user";
-import { BACKEND_BASE_URL } from "@/config/constants";
 import axios from "axios";
 import { UsersService } from "@/services/users";
 
@@ -35,7 +34,7 @@ describe("UsersService", () => {
 
         expect(await service.getUsers()).toEqual(response.data);
 
-        expect(mockedAxios.get).toHaveBeenCalledWith('');
+        expect(mockedAxios.get).toHaveBeenCalledWith("");
     });
 
     it("should get user by id", async () => {
@@ -68,7 +67,7 @@ describe("UsersService", () => {
         const postedUser = { ...prototypeUser, id: undefined };
         expect(await service.saveUser(postedUser)).toEqual(prototypeUser);
 
-        expect(mockedAxios.post).toHaveBeenCalledWith('', postedUser);
+        expect(mockedAxios.post).toHaveBeenCalledWith("", postedUser);
     });
 
     it("should update user if there's an id", async () => {

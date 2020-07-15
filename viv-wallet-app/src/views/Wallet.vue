@@ -1,16 +1,18 @@
 <template>
     <div class="main">
-        <div class="header">
-            <balance-card
-                fullName="Théophile Montgommery"
-                expertise="Expertise front-end"
-                consultantStatus="Consultant sénior"
-                vivBalance="220"
-            />
-            <illustration />
-        </div>
-        <actions-block v-bind:actions="actions" />
-        <payment-history-block v-bind:payments="payments" />
+        <loading v-bind:loading="loading" v-bind:errored="errored">
+            <div class="header">
+                <balance-card
+                    fullName="Théophile Montgommery"
+                    expertise="Expertise front-end"
+                    consultantStatus="Consultant sénior"
+                    v-bind:vivBalance="balance"
+                />
+                <illustration />
+            </div>
+            <actions-block v-bind:actions="actions" />
+            <payment-history-block v-bind:payments="payments" />
+        </loading>
     </div>
 </template>
 
@@ -22,10 +24,12 @@ import Illustration from "../components/Illustration.vue";
 import ActionsBlock from "../components/ActionsBlock.vue";
 import PaymentHistoryBlock from "../components/PaymentHistoryBlock.vue";
 import { Payment } from "../models/payment";
+import { BalanceService } from "../services/balance";
+import Loading from "../components/Loading.vue";
 
 @Component({
     name: "wallet",
-    components: { BalanceCard, Illustration, ActionsBlock, PaymentHistoryBlock }
+    components: { BalanceCard, Illustration, ActionsBlock, PaymentHistoryBlock, Loading }
 })
 export default class wallet extends Vue {
     actions: Action[] = [
@@ -81,6 +85,21 @@ export default class wallet extends Vue {
             amount: 220
         }
     ];
+    loading = true;
+    errored = false;
+    balanceService = new BalanceService();
+    balance = 0;
+    userId = "1";
+
+    async mounted() {
+        try {
+            this.balance = await this.balanceService.getBalance(this.userId);
+        } catch (ex) {
+            this.errored = true;
+        } finally {
+            this.loading = false;
+        }
+    }
 }
 </script>
 
