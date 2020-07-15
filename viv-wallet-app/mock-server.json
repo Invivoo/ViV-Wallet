@@ -32,5 +32,67 @@
             "id": "3",
             "value": 300
         }
+    ],
+    "actions": [
+        {
+            "id": "1",
+            "type": "Interview",
+            "comment": "This is a comment",
+            "creationDate": "2020-07-15T15:00:00",
+            "payment": 20,
+            "status": "Done",
+            "validationDate": "2020-07-15T15:00:00",
+            "expertise": "Front-End"
+        },
+        {
+            "id": "1",
+            "type": "Interview",
+            "comment": "This is a comment",
+            "creationDate": "2020-07-15T15:00:00",
+            "payment": 20,
+            "status": "Rejected",
+            "validationDate": "2020-07-15T15:00:00",
+            "expertise": "Front-End"
+        },
+        {
+            "id": "1",
+            "type": "Article",
+            "comment": "This is another comment",
+            "creationDate": "2020-07-15T15:00:00",
+            "payment": 50,
+            "status": "Done",
+            "validationDate": "2020-07-12T15:00:00",
+            "expertise": "Front-End"
+        },
+        {
+            "id": "2",
+            "type": "Interview",
+            "comment": "This is a comment",
+            "creationDate": "2020-07-15T15:00:00",
+            "payment": 20,
+            "status": "Done",
+            "validationDate": "2020-07-15T15:00:00",
+            "expertise": "Front-End"
+        },
+        {
+            "id": "2",
+            "type": "Interview",
+            "comment": "This is a comment",
+            "creationDate": "2020-07-15T15:00:00",
+            "payment": 20,
+            "status": "Rejected",
+            "validationDate": "2020-07-15T15:00:00",
+            "expertise": "Front-End"
+        },
+        {
+            "id": "3",
+            "type": "Article",
+            "comment": "This is another comment",
+            "creationDate": "2020-07-15T15:00:00",
+            "payment": 50,
+            "status": "Done",
+            "validationDate": "2020-07-15T15:00:00",
+            "expertise": "Front-End"
+        }
     ]
 }

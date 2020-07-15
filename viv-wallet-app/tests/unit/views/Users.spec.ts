@@ -1,4 +1,5 @@
 import UserList from "@/components/UserList.vue";
+import Loading from "@/components/Loading.vue";
 import Users from "@/views/Users.vue";
 import { User } from "@/models/user";
 import { UsersService } from "@/services/users";
@@ -38,25 +39,20 @@ describe("Users", () => {
             throw "cannot get users";
         });
 
-        const errorMessage =
-            "We're sorry, we're not able to retrieve this information at the moment, please try back later";
-
         const wrapper = factory(Users)();
         await wrapper.vm.$nextTick();
 
         expect(UsersService.prototype.getUsers).toHaveBeenCalled();
-
-        const userListWrapper = wrapper.find(UserList);
-        expect(userListWrapper.element).toBeUndefined();
-        expect(wrapper.text()).toEqual(errorMessage);
+        const loadingWrapper = wrapper.find(Loading);
+        expect(loadingWrapper.props().errored).toBeTruthy();
+        expect(loadingWrapper.props().loading).toBeFalsy();
     });
 
     it("should render a loading message when waiting for backend response", () => {
-        const loadingMessage = "Loading...";
         const wrapper = factory(Users)();
 
-        const userListWrapper = wrapper.find(UserList);
-        expect(userListWrapper.element).toBeUndefined();
-        expect(wrapper.text()).toEqual(loadingMessage);
+        const loadingWrapper = wrapper.find(Loading);
+        expect(loadingWrapper.props().errored).toBeFalsy();
+        expect(loadingWrapper.props().loading).toBeTruthy();
     });
 });

@@ -1,12 +1,8 @@
 <template>
     <div class="users">
-        <section v-if="errored">
-            <p>We're sorry, we're not able to retrieve this information at the moment, please try back later</p>
-        </section>
-        <section v-else>
-            <div v-if="loading">Loading...</div>
-            <UserList v-else v-bind:users="users" />
-        </section>
+        <loading v-bind:loading="loading" v-bind:errored="errored">
+            <UserList v-bind:users="users" />
+        </loading>
     </div>
 </template>
 
@@ -14,12 +10,13 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 import { User } from "../models/user";
 import { UsersService } from "@/services/users";
+import Loading from "../components/Loading.vue";
 
 import UserList from "@/components/UserList.vue";
 
 @Component({
     name: "users",
-    components: { UserList }
+    components: { UserList, Loading }
 })
 export default class Users extends Vue {
     users: User[] = [];

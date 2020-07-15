@@ -5,6 +5,9 @@ import axios from "axios";
 import { LoginService } from "@/services/login";
 
 import { applyPolyfills, defineCustomElements } from "x4b-ui/loader";
+import { Plugin } from "vue-fragment";
+
+Vue.use(Plugin);
 
 Vue.config.ignoredElements = [/x4b-\w*/];
 applyPolyfills().then(() => {
