@@ -24,7 +24,7 @@ import Illustration from "../components/Illustration.vue";
 import ActionsBlock from "../components/ActionsBlock.vue";
 import PaymentHistoryBlock from "../components/PaymentHistoryBlock.vue";
 import { Payment } from "../models/payment";
-import { BalanceService } from "../services/balance";
+import { WalletService } from "../services/wallet";
 import Loading from "../components/Loading.vue";
 
 @Component({
@@ -32,38 +32,7 @@ import Loading from "../components/Loading.vue";
     components: { BalanceCard, Illustration, ActionsBlock, PaymentHistoryBlock, Loading }
 })
 export default class wallet extends Vue {
-    actions: Action[] = [
-        {
-            id: "0",
-            type: "Interview",
-            comment: "This is a comment",
-            creationDate: new Date(),
-            payment: 20,
-            status: ValidationStatus.Done,
-            validationDate: new Date(),
-            expertise: "Front-End"
-        },
-        {
-            id: "1",
-            type: "Article",
-            comment: "This is a comment",
-            creationDate: new Date(),
-            payment: 50,
-            status: ValidationStatus.Rejected,
-            validationDate: new Date(),
-            expertise: "Front-End"
-        },
-        {
-            id: "3",
-            type: "Article",
-            comment: "This is an other great comment",
-            creationDate: new Date(),
-            payment: 50,
-            status: ValidationStatus.Rejected,
-            validationDate: new Date(),
-            expertise: "Front-End"
-        }
-    ];
+    actions: Action[] = [];
 
     payments: Payment[] = [
         {
@@ -87,13 +56,15 @@ export default class wallet extends Vue {
     ];
     loading = true;
     errored = false;
-    balanceService = new BalanceService();
+    walletService = new WalletService();
+
     balance = 0;
     userId = "1";
 
     async mounted() {
         try {
-            this.balance = await this.balanceService.getBalance(this.userId);
+            this.balance = await this.walletService.getBalance(this.userId);
+            this.actions = await this.walletService.getActions(this.userId);
         } catch (ex) {
             this.errored = true;
         } finally {
