@@ -4,7 +4,7 @@ references:
     tags:
       only: /^[0-9]++\.[0-9]++/
     branches:
-      only: /.*/
+      only: /^(master|develop)$/
   job_filters_branches_only: &job_filters_branches_only
     branches:
       only: /.*/
