@@ -1,6 +1,7 @@
 import axios from "axios";
 import { WalletService } from "@/services/wallet";
-import { Action, ValidationStatus } from "@/models/action";
+import { Action, PaymentStatus } from "@/models/action";
+import { Payment } from "@/models/payment";
 
 jest.mock("axios");
 const mockedAxios = axios as jest.Mocked<typeof axios>;
@@ -39,8 +40,8 @@ describe("BalanceService", () => {
             comment: "This is a comment",
             creationDate: new Date("2020-07-15T15:00:00"),
             payment: 20,
-            status: ValidationStatus.Done,
-            validationDate: new Date("2020-07-15T15:00:00"),
+            status: PaymentStatus.Paid,
+            paymentDate: new Date("2020-07-15T15:00:00"),
             expertise: "Front-End"
         };
         const response = {
@@ -53,5 +54,24 @@ describe("BalanceService", () => {
         expect(action).toEqual(returnedActions[0]);
 
         expect(mockedAxios.get).toHaveBeenCalledWith(`id1/actions`);
+    });
+
+    it("should get the payments of a given user", async () => {
+        const payment: Payment = {
+            id: "id1",
+            date: new Date(),
+            viv: 1000,
+            amount: 2200
+        };
+        const response = {
+            data: [payment]
+        };
+        mockedAxios.get.mockReturnValue(Promise.resolve(response));
+
+        const returnedPayments = await service.getPayments("id1");
+        expect(1).toEqual(returnedPayments.length);
+        expect(payment).toEqual(returnedPayments[0]);
+
+        expect(mockedAxios.get).toHaveBeenCalledWith(`id1/payments`);
     });
 });

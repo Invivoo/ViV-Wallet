@@ -1,6 +1,6 @@
-export enum ValidationStatus {
-    Rejected,
-    Done
+export enum PaymentStatus {
+    Unpaid,
+    Paid
 }
 
 export interface Action {
@@ -9,7 +9,7 @@ export interface Action {
     comment?: string;
     creationDate: Date;
     payment: number;
-    status: ValidationStatus;
-    validationDate?: Date;
+    status: PaymentStatus;
+    paymentDate?: Date;
     expertise: string;
 }

@@ -35,64 +35,107 @@
     ],
     "actions": [
         {
+            "userId": "1",
             "id": "1",
             "type": "Interview",
             "comment": "This is a comment",
             "creationDate": "2020-07-15T15:00:00",
             "payment": 20,
-            "status": "Done",
-            "validationDate": "2020-07-15T15:00:00",
+            "status": "Paid",
+            "paymentDate": "2020-07-15T15:00:00",
             "expertise": "Front-End"
         },
         {
-            "id": "1",
-            "type": "Interview",
-            "comment": "This is a comment",
-            "creationDate": "2020-07-15T15:00:00",
-            "payment": 20,
-            "status": "Rejected",
-            "validationDate": "2020-07-15T15:00:00",
-            "expertise": "Front-End"
-        },
-        {
-            "id": "1",
-            "type": "Article",
-            "comment": "This is another comment",
-            "creationDate": "2020-07-15T15:00:00",
-            "payment": 50,
-            "status": "Done",
-            "validationDate": "2020-07-12T15:00:00",
-            "expertise": "Front-End"
-        },
-        {
+            "userId": "1",
             "id": "2",
             "type": "Interview",
             "comment": "This is a comment",
             "creationDate": "2020-07-15T15:00:00",
             "payment": 20,
-            "status": "Done",
-            "validationDate": "2020-07-15T15:00:00",
+            "status": "Unpaid",
+            "paymentDate": "2020-07-15T15:00:00",
             "expertise": "Front-End"
         },
         {
-            "id": "2",
-            "type": "Interview",
-            "comment": "This is a comment",
-            "creationDate": "2020-07-15T15:00:00",
-            "payment": 20,
-            "status": "Rejected",
-            "validationDate": "2020-07-15T15:00:00",
-            "expertise": "Front-End"
-        },
-        {
+            "userId": "1",
             "id": "3",
             "type": "Article",
+            "comment": "This is another comment with much details",
+            "creationDate": "2020-07-15T15:00:00",
+            "payment": 50,
+            "status": "Paid",
+            "paymentDate": "2020-07-12T15:00:00",
+            "expertise": "Front-End"
+        },
+        {
+            "userId": "2",
+            "id": "4",
+            "type": "Interview",
+            "comment": "This is a comment",
+            "creationDate": "2020-07-15T15:00:00",
+            "payment": 20,
+            "status": "Paid",
+            "paymentDate": "2020-07-15T15:00:00",
+            "expertise": "Front-End"
+        },
+        {
+            "userId": "2",
+            "id": "5",
+            "type": "Interview",
+            "comment": "This is a comment",
+            "creationDate": "2020-07-15T15:00:00",
+            "payment": 20,
+            "status": "Unpaid",
+            "paymentDate": "2020-07-15T15:00:00",
+            "expertise": "Front-End"
+        },
+        {
+            "userId": "3",
+            "id": "6",
+            "type": "Article",
             "comment": "This is another comment",
             "creationDate": "2020-07-15T15:00:00",
             "payment": 50,
-            "status": "Done",
-            "validationDate": "2020-07-15T15:00:00",
+            "status": "Paid",
+            "paymentDate": "2020-07-15T15:00:00",
             "expertise": "Front-End"
+        }
+    ],
+    "payments": [
+        {
+            "userId": "1",
+            "id": "1",
+            "date": "2020-07-16T15:00:00",
+            "viv": 1000,
+            "amount": 2200
+        },
+        {
+            "userId": "1",
+            "id": "2",
+            "date": "2020-07-15T15:00:00",
+            "viv": 500,
+            "amount": 1000
+        },
+        {
+            "userId": "1",
+            "id": "3",
+            "date": "2020-07-15T15:00:00",
+            "viv": 100,
+            "amount": 220
+        },
+        {
+            "userId": "2",
+            "id": "4",
+            "date": "2020-07-15T15:00:00",
+            "viv": 1000,
+            "amount": 2200
+        },
+        {
+            "userId": "3",
+            "id": "5",
+            "date": "2020-07-15T15:00:00",
+            "viv": 1000,
+            "amount": 2200
         }
     ]
 }

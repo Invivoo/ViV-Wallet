@@ -1,6 +1,7 @@
 import { AxiosInstance } from "axios";
 import { ServiceBase } from "./serviceBase";
-import { Action, ValidationStatus } from "@/models/action";
+import { Action, PaymentStatus } from "@/models/action";
+import { Payment } from "@/models/payment";
 
 export class WalletService extends ServiceBase {
     constructor(http?: AxiosInstance) {
@@ -15,8 +16,16 @@ export class WalletService extends ServiceBase {
         const rawData = (await this.http.get(`${userId}/actions`)).data;
         return rawData.map(action => {
             action.creationDate = new Date(action.creationDate);
-            action.validationDate = new Date(action.validationDate);
-            action.status = ValidationStatus[action.status];
+            action.paymentDate = new Date(action.paymentDate);
+            action.status = PaymentStatus[action.status];
+            return action;
+        });
+    }
+
+    async getPayments(userId: string): Promise<Payment[]> {
+        const rawData = (await this.http.get(`${userId}/payments`)).data;
+        return rawData.map(action => {
+            action.date = new Date(action.date);
             return action;
         });
     }

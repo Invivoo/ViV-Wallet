@@ -18,7 +18,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import { Action, ValidationStatus } from "../models/action";
+import { Action, PaymentStatus } from "../models/action";
 import BalanceCard from "../components/BalanceCard.vue";
 import Illustration from "../components/Illustration.vue";
 import ActionsBlock from "../components/ActionsBlock.vue";
@@ -33,27 +33,7 @@ import Loading from "../components/Loading.vue";
 })
 export default class wallet extends Vue {
     actions: Action[] = [];
-
-    payments: Payment[] = [
-        {
-            id: "1",
-            date: new Date(),
-            viv: 1000,
-            amount: 2200
-        },
-        {
-            id: "2",
-            date: new Date(),
-            viv: 500,
-            amount: 1100
-        },
-        {
-            id: "3",
-            date: new Date(),
-            viv: 100,
-            amount: 220
-        }
-    ];
+    payments: Payment[] = [];
     loading = true;
     errored = false;
     walletService = new WalletService();
@@ -65,6 +45,7 @@ export default class wallet extends Vue {
         try {
             this.balance = await this.walletService.getBalance(this.userId);
             this.actions = await this.walletService.getActions(this.userId);
+            this.payments = await this.walletService.getPayments(this.userId);
         } catch (ex) {
             this.errored = true;
         } finally {

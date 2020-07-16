@@ -4,8 +4,8 @@
         <table v-if="actions.length > 0">
             <colgroup>
                 <col style="width:25%" />
-                <col style="width:40%" />
-                <col style="width:10%" />
+                <col style="width:42%" />
+                <col style="width:8%" />
                 <col style="width:25%" />
             </colgroup>
             <thead>
@@ -24,19 +24,19 @@
                     <td>
                         <div>
                             <div class="type">{{ action.type }} - {{ action.expertise }}</div>
-                            <div class="comment">{{ action.comment }}</div>
+                            <div class="comment" v-bind:title="action.comment">{{ action.comment }}</div>
                         </div>
                     </td>
                     <td class="right payment">{{ action.payment }}</td>
                     <td>
                         <div>
                             <div>
-                                <status-badge :type="getValidationStatusType(action.status)">
-                                    {{ formatValidationStatus(action.status) }}
-                                </status-badge>
+                                <status-badge :type="getPaymentStatusType(action.status)">{{
+                                    formatPaymentStatus(action.status)
+                                }}</status-badge>
                             </div>
-                            <div class="validation-date">
-                                {{ action.validationDate ? action.validationDate.toDateString() : "" }}
+                            <div class="payment-date">
+                                {{ action.paymentDate ? action.paymentDate.toDateString() : "" }}
                             </div>
                         </div>
                     </td>
@@ -49,7 +49,7 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from "vue-property-decorator";
-import { Action, ValidationStatus } from "../models/action";
+import { Action, PaymentStatus } from "../models/action";
 import StatusBadge from "../components/StatusBadge.vue";
 
 @Component({
@@ -59,21 +59,21 @@ import StatusBadge from "../components/StatusBadge.vue";
 export default class ActionsBlock extends Vue {
     @Prop({ default: [] }) actions!: Action[];
 
-    formatValidationStatus(status: ValidationStatus) {
+    formatPaymentStatus(status: PaymentStatus) {
         switch (status) {
-            case ValidationStatus.Done:
-                return "Validé";
-            case ValidationStatus.Rejected:
+            case PaymentStatus.Paid:
+                return "Payé";
+            case PaymentStatus.Unpaid:
             default:
-                return "Rejeté";
+                return "Non payé";
         }
     }
 
-    getValidationStatusType(status: ValidationStatus) {
+    getPaymentStatusType(status: PaymentStatus) {
         switch (status) {
-            case ValidationStatus.Done:
+            case PaymentStatus.Paid:
                 return "green";
-            case ValidationStatus.Rejected:
+            case PaymentStatus.Unpaid:
             default:
                 return "red";
         }
@@ -84,7 +84,7 @@ export default class ActionsBlock extends Vue {
 <style lang="scss" scoped>
 @import "../styles/table.scss";
 
-.validation-date {
+.payment-date {
     color: $gray-600;
     font-weight: 400;
     margin-top: $m-2;
@@ -104,6 +104,9 @@ export default class ActionsBlock extends Vue {
     color: $gray-600;
     font-weight: 400;
     margin-top: $m-2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .type {
