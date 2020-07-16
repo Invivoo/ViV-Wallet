@@ -4,7 +4,7 @@ references:
     tags:
       only: /^[0-9]++\.[0-9]++/
     branches:
-      only: /^(master|develop)$/
+      only: /.*/
   job_filters_branches_only: &job_filters_branches_only
     branches:
       only: /.*/
@@ -126,9 +126,14 @@ jobs:
           name: Push image to DockerHub
           working_directory: ViV-Wallet-api
           command: |
-            echo $DOCKERHUB_PASSWORD | docker login -u xcomponentteam --password-stdin
-            docker push xcomponent/viv-wallet:${CIRCLE_SHA1}
-            docker push xcomponent/viv-wallet:${BUILD_VERSION_TAG}
+            if [ -z "$DOCKERHUB_PASSWORD" ]
+            then
+                echo "No dockerhub token"
+            else
+                echo $DOCKERHUB_PASSWORD | docker login -u xcomponentteam --password-stdin
+                docker push xcomponent/viv-wallet:${CIRCLE_SHA1}
+                docker push xcomponent/viv-wallet:${BUILD_VERSION_TAG}
+            fi
 
 workflows:
   viv_wallet:
