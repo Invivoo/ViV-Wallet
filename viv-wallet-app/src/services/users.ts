@@ -1,7 +1,5 @@
-import axios, { AxiosInstance } from "axios";
+import { AxiosInstance } from "axios";
 import { User } from "../models/user";
-import { BACKEND_BASE_URL, REQUEST_TIMEOUT_MS } from "../config/constants";
-import { getToken } from "x4b-ui";
 import { ServiceBase } from "./serviceBase";
 
 export class UsersService extends ServiceBase {

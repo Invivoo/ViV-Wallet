@@ -5,11 +5,11 @@ import { getToken } from "x4b-ui";
 export class ServiceBase {
     protected http: AxiosInstance;
 
-    constructor(http?: AxiosInstance) {
+    constructor(http?: AxiosInstance, route = "/users") {
         this.http =
             http ||
             axios.create({
-                baseURL: `${BACKEND_BASE_URL}/users`,
+                baseURL: `${BACKEND_BASE_URL}${route}`,
                 timeout: REQUEST_TIMEOUT_MS,
                 headers: { Authorization: `Bearer ${getToken()}` },
                 withCredentials: true

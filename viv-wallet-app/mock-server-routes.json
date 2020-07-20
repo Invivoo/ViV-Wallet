@@ -1,5 +1,6 @@
 {
     "/api/v1/*": "/$1",
     "/:users/:id/balance": "/balances/:id",
-    "/:users/:id/actions": "/actions?id=:id"
+    "/:users/:id/actions": "/actions?userId=:id",
+    "/:users/:id/payments": "/payments?userId=:id"
 }
