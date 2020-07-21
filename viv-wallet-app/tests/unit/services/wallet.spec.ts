@@ -74,4 +74,26 @@ describe("BalanceService", () => {
 
         expect(mockedAxios.get).toHaveBeenCalledWith(`id1/payments`);
     });
+
+    it("should post payment of a given user", async () => {
+
+        const userId= "userId";
+        const payment: Payment = {
+            id: "id1",
+            date: new Date(),
+            viv: 1000,
+            amount: 2200
+        };
+
+        const response = {
+            data: payment
+        };
+        mockedAxios.post.mockReturnValue(Promise.resolve(response));
+
+        const postedPayment = { ...payment, id: "id1" };
+        expect(await service.savePayment(userId, postedPayment)).toEqual(payment);
+
+        expect(mockedAxios.post).toHaveBeenCalledWith(`${userId}/payments`, postedPayment);
+    });
+    
 });

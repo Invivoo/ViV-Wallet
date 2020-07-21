@@ -29,4 +29,8 @@ export class WalletService extends ServiceBase {
             return action;
         });
     }
+
+    async savePayment(userId: string, payment: Payment): Promise<Object> {
+        return (await this.http.post<Payment>(`${userId}/payments`, payment)).data;
+    }
 }
