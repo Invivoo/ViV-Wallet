@@ -10,11 +10,13 @@ import com.invivoo.vivwallet.api.domain.expertise.Expertise;
 import com.invivoo.vivwallet.api.domain.expertise.ExpertiseMember;
 import com.invivoo.vivwallet.api.domain.expertise.ExpertiseMemberRepository;
 import com.invivoo.vivwallet.api.domain.payment.Payment;
+import com.invivoo.vivwallet.api.domain.payment.PaymentService;
 import com.invivoo.vivwallet.api.domain.user.User;
 import com.invivoo.vivwallet.api.domain.user.UserRepository;
 import com.invivoo.vivwallet.api.domain.user.UserService;
 import com.invivoo.vivwallet.api.interfaces.actions.ActionDto;
 import com.invivoo.vivwallet.api.interfaces.actions.ActionStatus;
+import com.invivoo.vivwallet.api.interfaces.payments.PaymentDto;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,6 +40,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
@@ -64,6 +67,12 @@ public class UsersControllerTest {
 
     @MockBean
     private ExpertiseMemberRepository expertiseMemberRepository;
+
+    @MockBean
+    private PaymentService paymentService;
+
+    public UsersControllerTest() {
+    }
 
     @BeforeClass
     public static void beforeClass() {
@@ -100,7 +109,7 @@ public class UsersControllerTest {
                                                                                  .content(jsonTestUser))
                                                   .andDo(MockMvcResultHandlers.print());
         //then
-        Mockito.verify(userRepository, Mockito.times(1)).save(testUser);
+        verify(userRepository, Mockito.times(1)).save(testUser);
         resultActions.andExpect(MockMvcResultMatchers.status().isCreated())
                      .andExpect(MockMvcResultMatchers.redirectedUrl(String.format("/api/v1/users/%s", testUser.getId())))
                      .andExpect(MockMvcResultMatchers.content().string(jsonTestUser));
@@ -143,7 +152,7 @@ public class UsersControllerTest {
                                                   .andDo(MockMvcResultHandlers.print());
         //then
         String expectedJsonUpdatedUser = mapper.writeValueAsString(expectedUser);
-        Mockito.verify(userRepository, Mockito.times(1)).save(expectedUser);
+        verify(userRepository, Mockito.times(1)).save(expectedUser);
         resultActions.andExpect(MockMvcResultMatchers.status().isOk())
                      .andExpect(MockMvcResultMatchers.content().string(expectedJsonUpdatedUser));
     }
@@ -159,7 +168,7 @@ public class UsersControllerTest {
         ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.delete(String.format("/api/v1/users/%s", TEST_USER_1.getId())))
                                                   .andDo(MockMvcResultHandlers.print());
         //then
-        Mockito.verify(userRepository, Mockito.times(1)).delete(testUser);
+        verify(userRepository, Mockito.times(1)).delete(testUser);
         resultActions.andExpect(MockMvcResultMatchers.status().isOk());
     }
 
@@ -175,7 +184,7 @@ public class UsersControllerTest {
                 .andDo(MockMvcResultHandlers.print());
 
         //Then
-        Mockito.verify(userService).computeBalance(testUser.getId());
+        verify(userService).computeBalance(testUser.getId());
         resultActions.andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().string(String.valueOf(expectedBalance)));
     }
@@ -208,11 +217,10 @@ public class UsersControllerTest {
                 buildActionDto(action1, testUserExpertise));
         String expectedJson = mapper.writeValueAsString(expectedActionDtos);
 
-        Mockito.verify(actionService).findAllByAchiever(testUser.getId());
+        verify(actionService).findAllByAchiever(testUser.getId());
         resultActions.andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().string(expectedJson));
     }
-
 
     @Test
     public void whenGetListOfActionsForUserNotInAnExpertise_shouldReturnListOfActions() throws Exception {
@@ -236,11 +244,10 @@ public class UsersControllerTest {
                 buildActionDto(action1));
         String expectedJson = mapper.writeValueAsString(expectedActionDtos);
 
-        Mockito.verify(actionService).findAllByAchiever(testUser.getId());
+        verify(actionService).findAllByAchiever(testUser.getId());
         resultActions.andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().string(expectedJson));
     }
-
 
     private Action anUnpaidAction(User user) {
         return Action.builder().id(1L)
@@ -289,4 +296,33 @@ public class UsersControllerTest {
         return actionDto;
     }
 
+    @Test
+    public void whenGetListOfPaymentsForUser_shouldReturnListOfPayments() throws Exception {
+        //Given
+        User testUser = TEST_USER_1;
+        PaymentDto payment1 = PaymentDto.builder()
+                .id(1L)
+                .userId(testUser.getId())
+                .date(LocalDateTime.of(2020, Month.JANUARY, 1, 12, 0))
+                .viv(BigDecimal.valueOf(50))
+                .amount(BigDecimal.valueOf(250)).build();
+        PaymentDto payment2 = PaymentDto.builder()
+                .id(2L)
+                .userId(testUser.getId())
+                .date(LocalDateTime.of(2020, Month.JUNE, 1, 12, 0))
+                .viv(BigDecimal.valueOf(50))
+                .amount(BigDecimal.valueOf(250)).build();
+        List<PaymentDto> expectedPayments = Arrays.asList(payment2, payment1);
+        when(paymentService.findAllByReceiver(testUser.getId())).thenReturn(expectedPayments);
+
+        //When
+        ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get(String.format("/api/v1/users/%s/payments", testUser.getId())))
+                .andDo(MockMvcResultHandlers.print());
+
+        //Then
+        verify(paymentService).findAllByReceiver(testUser.getId());
+        String expectedJson = mapper.writeValueAsString(expectedPayments);
+        resultActions.andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().string(expectedJson));
+    }
 }

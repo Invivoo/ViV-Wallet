@@ -5,11 +5,13 @@ import com.invivoo.vivwallet.api.domain.action.ActionService;
 import com.invivoo.vivwallet.api.domain.expertise.Expertise;
 import com.invivoo.vivwallet.api.domain.expertise.ExpertiseMember;
 import com.invivoo.vivwallet.api.domain.expertise.ExpertiseMemberRepository;
+import com.invivoo.vivwallet.api.domain.payment.PaymentService;
 import com.invivoo.vivwallet.api.domain.user.User;
 import com.invivoo.vivwallet.api.domain.user.UserRepository;
 import com.invivoo.vivwallet.api.domain.user.UserService;
 import com.invivoo.vivwallet.api.interfaces.actions.ActionDto;
 import com.invivoo.vivwallet.api.interfaces.actions.ActionStatus;
+import com.invivoo.vivwallet.api.interfaces.payments.PaymentDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,14 +30,17 @@ public class UsersController {
     private final UserService userService;
     private final ActionService actionService;
     private final ExpertiseMemberRepository expertiseMemberRepository;
+    private final PaymentService paymentService;
 
     @Autowired
     public UsersController(UserRepository userRepository, UserService userService,
-                           ActionService actionService, ExpertiseMemberRepository expertiseMemberRepository) {
+                           ActionService actionService, ExpertiseMemberRepository expertiseMemberRepository,
+                           PaymentService paymentService) {
         this.userRepository = userRepository;
         this.userService = userService;
         this.actionService = actionService;
         this.expertiseMemberRepository = expertiseMemberRepository;
+        this.paymentService = paymentService;
     }
 
     @GetMapping
@@ -132,5 +137,10 @@ public class UsersController {
         );
 
         return actionDto;
+    }
+
+    @GetMapping("/{id}/payments")
+    public ResponseEntity<List<PaymentDto>> getPayments(@PathVariable("id") Long userId) {
+        return ResponseEntity.ok(paymentService.findAllByReceiver(userId));
     }
 }
