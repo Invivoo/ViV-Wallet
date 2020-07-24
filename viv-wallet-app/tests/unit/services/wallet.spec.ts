@@ -1,7 +1,7 @@
 import axios from "axios";
 import { WalletService } from "@/services/wallet";
 import { Action, PaymentStatus } from "@/models/action";
-import { Payment } from "@/models/payment";
+import { Payment, PaymentPost } from "@/models/payment";
 
 jest.mock("axios");
 const mockedAxios = axios as jest.Mocked<typeof axios>;
@@ -76,24 +76,21 @@ describe("BalanceService", () => {
     });
 
     it("should post payment of a given user", async () => {
-
-        const userId= "userId";
-        const payment: Payment = {
-            id: "id1",
+        const postedPayment: PaymentPost = {
+            receiver: "userId",
             date: new Date(),
-            viv: 1000,
-            amount: 2200
+            actions: ['1', '2', '3']
+        };
+        const result = true;
+        const response = {
+            data: result
         };
 
-        const response = {
-            data: payment
-        };
         mockedAxios.post.mockReturnValue(Promise.resolve(response));
 
-        const postedPayment = { ...payment, id: "id1" };
-        expect(await service.savePayment(userId, postedPayment)).toEqual(payment);
+        expect(await service.savePayment(postedPayment)).toEqual(result);
 
-        expect(mockedAxios.post).toHaveBeenCalledWith(`${userId}/payments`, postedPayment);
+        expect(mockedAxios.post).toHaveBeenCalledWith(`payments`, postedPayment);
     });
-    
+
 });

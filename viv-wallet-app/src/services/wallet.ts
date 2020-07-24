@@ -1,7 +1,7 @@
 import { AxiosInstance } from "axios";
 import { ServiceBase } from "./serviceBase";
 import { Action, PaymentStatus } from "@/models/action";
-import { Payment } from "@/models/payment";
+import { Payment, PaymentPost } from "@/models/payment";
 
 export class WalletService extends ServiceBase {
     constructor(http?: AxiosInstance) {
@@ -30,7 +30,7 @@ export class WalletService extends ServiceBase {
         });
     }
 
-    async savePayment(userId: string, payment: Payment): Promise<Object> {
-        return (await this.http.post<Payment>(`${userId}/payments`, payment)).data;
+    async savePayment(payment: PaymentPost): Promise<Object> {
+        return (await this.http.post<boolean>("payments", payment)).data;
     }
 }

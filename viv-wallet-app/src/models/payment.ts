@@ -4,3 +4,8 @@ export interface Payment {
     viv: number;
     amount: number;
 }
+export interface PaymentPost {
+    date: Date;
+    receiver: string;
+    actions: string[];
+}
