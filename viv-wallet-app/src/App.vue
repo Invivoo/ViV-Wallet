@@ -26,16 +26,17 @@
 import { Component, Vue } from "vue-property-decorator";
 import Banner from "./components/Banner.vue";
 import "x4b-ui/dist/x4b-ui/x4b-ui.css";
-import { getToken, login } from "x4b-ui";
 import { LOGIN_URL, APPS_URL } from "./config/constants";
 import { version } from "../package.json";
 import CustomRouterLink from "./components/CustomRouterLink.vue";
+import { LoginService } from "./services/login";
 
 @Component({ components: { Banner, CustomRouterLink } })
 export default class App extends Vue {
     private appsUrl: string = APPS_URL;
     private appVersion: string = version;
     private primaryColor: string = require("./styles/index.scss").primaryColor;
+    private loginService: LoginService = new LoginService();
 
     mounted() {
         const ui = document.querySelector("x4b-ui");
@@ -45,9 +46,7 @@ export default class App extends Vue {
                 menu && menu.classList.toggle("hidden");
             });
 
-        if (!getToken()) {
-            login(LOGIN_URL);
-        }
+        this.loginService.ensureLoggedIn();
     }
 }
 </script>
