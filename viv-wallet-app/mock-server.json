@@ -19,123 +19,167 @@
             "email": "roget.flondin@invivoo.com"
         }
     ],
-    "balances": [
-        {
-            "id": "1",
-            "value": 300
-        },
-        {
-            "id": "2",
-            "value": 250
-        },
-        {
-            "id": "3",
-            "value": 300
-        }
-    ],
-    "actions": [
-        {
-            "userId": "1",
-            "id": "1",
-            "type": "Interview",
-            "comment": "This is a comment",
-            "creationDate": "2020-07-15T15:00:00",
-            "payment": 20,
-            "status": "Paid",
-            "paymentDate": "2020-07-15T15:00:00",
-            "expertise": "Front-End"
-        },
-        {
-            "userId": "1",
-            "id": "2",
-            "type": "Interview",
-            "comment": "This is a comment",
-            "creationDate": "2020-07-15T15:00:00",
-            "payment": 20,
-            "status": "Unpaid",
-            "paymentDate": "2020-07-15T15:00:00",
-            "expertise": "Front-End"
-        },
-        {
-            "userId": "1",
-            "id": "3",
-            "type": "Article",
-            "comment": "This is another comment with much details",
-            "creationDate": "2020-07-15T15:00:00",
-            "payment": 50,
-            "status": "Paid",
-            "paymentDate": "2020-07-12T15:00:00",
-            "expertise": "Front-End"
-        },
-        {
-            "userId": "2",
-            "id": "4",
-            "type": "Interview",
-            "comment": "This is a comment",
-            "creationDate": "2020-07-15T15:00:00",
-            "payment": 20,
-            "status": "Paid",
-            "paymentDate": "2020-07-15T15:00:00",
-            "expertise": "Front-End"
-        },
-        {
-            "userId": "2",
-            "id": "5",
-            "type": "Interview",
-            "comment": "This is a comment",
-            "creationDate": "2020-07-15T15:00:00",
-            "payment": 20,
-            "status": "Unpaid",
-            "paymentDate": "2020-07-15T15:00:00",
-            "expertise": "Front-End"
-        },
-        {
-            "userId": "3",
-            "id": "6",
-            "type": "Article",
-            "comment": "This is another comment",
-            "creationDate": "2020-07-15T15:00:00",
-            "payment": 50,
-            "status": "Paid",
-            "paymentDate": "2020-07-15T15:00:00",
-            "expertise": "Front-End"
-        }
-    ],
-    "payments": [
-        {
-            "userId": "1",
-            "id": "1",
-            "date": "2020-07-16T15:00:00",
-            "viv": 1000,
-            "amount": 2200
-        },
-        {
-            "userId": "1",
-            "id": "2",
-            "date": "2020-07-15T15:00:00",
-            "viv": 500,
-            "amount": 1000
-        },
-        {
-            "userId": "1",
-            "id": "3",
-            "date": "2020-07-15T15:00:00",
-            "viv": 100,
-            "amount": 220
-        },
-        {
-            "userId": "2",
-            "id": "4",
-            "date": "2020-07-15T15:00:00",
-            "viv": 1000,
-            "amount": 2200
-        },
-        {
-            "userId": "3",
-            "id": "5",
-            "date": "2020-07-15T15:00:00",
-            "viv": 1000,
-            "amount": 2200
-        }
-    ]
+  "expertiseMembers": [
+    {
+      "id": "1",
+      "user": "rleloup",
+      "expertise": "csharp",
+      "status": "CONSULTANT_SENIOR_IN_ONBOARDING",
+      "startDate": "25/07/2020, 19:34:55",
+      "endDate": "25/07/2020, 19:34:55"
+    },
+    {
+      "id": "2",
+      "user": "dboudet",
+      "expertise": "csharp",
+      "status": "CONSULTANT_SENIOR",
+      "startDate": "25/07/2020, 19:34:55",
+      "endDate": "25/07/2020, 19:34:55"
+    },
+    {
+      "id": "3",
+      "user": "rflonding",
+      "expertise": "csharp",
+      "status": "MANAGER",
+      "startDate": "25/07/2020, 19:34:55",
+      "endDate": "25/07/2020, 19:34:55"
+    }
+  ],
+  "expertises": [
+    {
+      "id": "csharp",
+      "expertiseName": "Programmation C#"
+    },
+    {
+      "id": "java",
+      "expertiseName": "Programmation Java"
+    },
+    {
+      "id": "python",
+      "expertiseName": "Programmation Python"
+    },
+    {
+      "id": "frontend",
+      "expertiseName": "Front-End"
+    }
+  ],
+  "balances": [
+    {
+      "id": "1",
+      "value": 300
+    },
+    {
+      "id": "2",
+      "value": 250
+    },
+    {
+      "id": "3",
+      "value": 300
+    }
+  ],
+  "actions": [
+    {
+      "userId": "1",
+      "id": "1",
+      "type": "Interview",
+      "comment": "This is a comment",
+      "creationDate": "2020-07-15T15:00:00",
+      "payment": 20,
+      "status": "Paid",
+      "paymentDate": "2020-07-15T15:00:00",
+      "expertise": "Front-End"
+    },
+    {
+      "userId": "1",
+      "id": "2",
+      "type": "Interview",
+      "comment": "This is a comment",
+      "creationDate": "2020-07-15T15:00:00",
+      "payment": 20,
+      "status": "Unpaid",
+      "paymentDate": "2020-07-15T15:00:00",
+      "expertise": "Front-End"
+    },
+    {
+      "userId": "1",
+      "id": "3",
+      "type": "Article",
+      "comment": "This is another comment with much details",
+      "creationDate": "2020-07-15T15:00:00",
+      "payment": 50,
+      "status": "Paid",
+      "paymentDate": "2020-07-12T15:00:00",
+      "expertise": "Front-End"
+    },
+    {
+      "userId": "2",
+      "id": "4",
+      "type": "Interview",
+      "comment": "This is a comment",
+      "creationDate": "2020-07-15T15:00:00",
+      "payment": 20,
+      "status": "Paid",
+      "paymentDate": "2020-07-15T15:00:00",
+      "expertise": "Front-End"
+    },
+    {
+      "userId": "2",
+      "id": "5",
+      "type": "Interview",
+      "comment": "This is a comment",
+      "creationDate": "2020-07-15T15:00:00",
+      "payment": 20,
+      "status": "Unpaid",
+      "paymentDate": "2020-07-15T15:00:00",
+      "expertise": "Front-End"
+    },
+    {
+      "userId": "3",
+      "id": "6",
+      "type": "Article",
+      "comment": "This is another comment",
+      "creationDate": "2020-07-15T15:00:00",
+      "payment": 50,
+      "status": "Paid",
+      "paymentDate": "2020-07-15T15:00:00",
+      "expertise": "Front-End"
+    }
+  ],
+  "payments": [
+    {
+      "userId": "1",
+      "id": "1",
+      "date": "2020-07-16T15:00:00",
+      "viv": 1000,
+      "amount": 2200
+    },
+    {
+      "userId": "1",
+      "id": "2",
+      "date": "2020-07-15T15:00:00",
+      "viv": 500,
+      "amount": 1000
+    },
+    {
+      "userId": "1",
+      "id": "3",
+      "date": "2020-07-15T15:00:00",
+      "viv": 100,
+      "amount": 220
+    },
+    {
+      "userId": "2",
+      "id": "4",
+      "date": "2020-07-15T15:00:00",
+      "viv": 1000,
+      "amount": 2200
+    },
+    {
+      "userId": "3",
+      "id": "5",
+      "date": "2020-07-15T15:00:00",
+      "viv": 1000,
+      "amount": 2200
+    }
+  ]
 }
