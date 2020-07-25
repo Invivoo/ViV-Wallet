@@ -1,29 +1,31 @@
 {
-    "users": [
-        {
-            "id": "1",
-            "login": "rleloup",
-            "fullname": "Roch Leloup",
-            "email": "roch.leloup@invivoo.com"
-        },
-        {
-            "id": "2",
-            "login": "dboudet",
-            "fullname": "Djeferson Boudet",
-            "email": "djeverson.boudet@invivoo.com"
-        },
-        {
-            "id": "3",
-            "login": "rflondin",
-            "fullname": "Roger Flodin",
-            "email": "roget.flondin@invivoo.com"
-        }
-    ],
+  "users": [
+    {
+      "id": "1",
+      "login": "rleloup",
+      "fullname": "Roch Leloup",
+      "email": "roch.leloup@invivoo.com"
+    },
+    {
+      "id": "2",
+      "login": "dboudet",
+      "fullname": "Djeferson Boudet",
+      "email": "djeverson.boudet@invivoo.com"
+    },
+    {
+      "id": "3",
+      "login": "rflondin",
+      "fullname": "Roger Flodin",
+      "email": "roget.flondin@invivoo.com"
+    }
+  ],
   "expertiseMembers": [
     {
       "id": "1",
       "user": "rleloup",
+      "fullname": "Roch Leloup",
       "expertise": "csharp",
+      "email": "roch.leloup@invivoo.com",
       "status": "CONSULTANT_SENIOR_IN_ONBOARDING",
       "startDate": "25/07/2020, 19:34:55",
       "endDate": "25/07/2020, 19:34:55"
@@ -32,6 +34,8 @@
       "id": "2",
       "user": "dboudet",
       "expertise": "csharp",
+      "email": "djeverson.boudet@invivoo.com",
+      "fullname": "Djeferson Boudet",
       "status": "CONSULTANT_SENIOR",
       "startDate": "25/07/2020, 19:34:55",
       "endDate": "25/07/2020, 19:34:55"
@@ -41,6 +45,8 @@
       "user": "rflonding",
       "expertise": "csharp",
       "status": "MANAGER",
+      "fullname": "Roger Flodin",
+      "email": "roget.flondin@invivoo.com",
       "startDate": "25/07/2020, 19:34:55",
       "endDate": "25/07/2020, 19:34:55"
     }
