@@ -14,6 +14,7 @@
                     <custom-router-link to="/">Home</custom-router-link>
                     <custom-router-link to="/users">Users</custom-router-link>
                     <custom-router-link to="/wallet">Wallet</custom-router-link>
+                    <custom-router-link to="/members">Expertise</custom-router-link>
                 </div>
                 <div class="content">
                     <router-view />
