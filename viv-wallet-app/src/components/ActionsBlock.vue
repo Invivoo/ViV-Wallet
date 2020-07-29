@@ -131,7 +131,7 @@ export default class ActionsBlock extends Vue {
 }
 
 .pay-button {
-    margin-top: $m-1;
-    margin-bottom: -0.5rem;
+    margin-top: $m-3;
+    margin-left: $m-3;
 }
 </style>
