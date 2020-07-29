@@ -21,7 +21,7 @@
                 <tbody>
                     <tr v-on:click="onRowSelected(user)" v-for="user in users" :key="user.id">
                         <td class="right">{{ user.id }}</td>
-                        <td>{{ user.login }}</td>
+                        <td>{{ user.user }}</td>
                         <td>{{ user.fullname }}</td>
                         <td>{{ user.email }}</td>
                     </tr>

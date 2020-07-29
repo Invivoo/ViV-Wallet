@@ -13,8 +13,8 @@
                 </div>
 
                 <div class="element-block">
-                    <label id="input-login-1" label-for="login-1">Identifiant</label>
-                    <input id="login-1" type="text" v-model="user.login" placeholder="Identifiant" />
+                    <label id="input-user-1" label-for="user-1">Identifiant</label>
+                    <input id="user-1" type="text" v-model="user.user" placeholder="Identifiant" />
                 </div>
 
                 <div class="element-block">
@@ -47,7 +47,7 @@ const UserEditProps = Vue.extend({
     name: "user"
 })
 export default class UserEdit extends UserEditProps {
-    user: User | null = { id: "", fullname: "", login: "", email: "" };
+    user: User | null = { id: "", fullname: "", user: "", email: "" };
     loading = false;
     errored = false;
     usersService = new UsersService();

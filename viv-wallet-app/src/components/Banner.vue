@@ -12,7 +12,7 @@ import { LoginService } from "../services/login";
 export default class Banner extends Vue {
     user: User = {
         id: "7",
-        login: "tmontgomery",
+        user: "tmontgomery",
         fullname: "MONTGOMERY Théophile",
         email: "theophile.montgomery@invivoo.com"
     };

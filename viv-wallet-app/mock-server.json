@@ -2,19 +2,19 @@
     "users": [
         {
             "id": "1",
-            "login": "rleloup",
+            "user": "rleloup",
             "fullname": "Roch Leloup",
             "email": "roch.leloup@invivoo.com"
         },
         {
             "id": "2",
-            "login": "dboudet",
+            "user": "dboudet",
             "fullname": "Djeferson Boudet",
             "email": "djeverson.boudet@invivoo.com"
         },
         {
             "id": "3",
-            "login": "rflondin",
+            "user": "rflondin",
             "fullname": "Roger Flodin",
             "email": "roget.flondin@invivoo.com"
         }

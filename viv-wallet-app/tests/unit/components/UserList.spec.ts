@@ -3,8 +3,8 @@ import { User } from "@/models/user";
 import { factory } from "../testHelpers";
 
 describe("UserList", () => {
-    const user0: User = { id: "0", fullname: "myName0", login: "login0", email: "test0@test" };
-    const user1: User = { id: "1", fullname: "myName1", login: "login1", email: "test1@test" };
+    const user0: User = { id: "0", fullname: "myName0", user: "user0", email: "test0@test" };
+    const user1: User = { id: "1", fullname: "myName1", user: "user1", email: "test1@test" };
     const users: User[] = [user0, user1];
 
     it("renders a list of user item", () => {

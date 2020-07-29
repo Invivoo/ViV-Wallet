@@ -17,7 +17,7 @@ describe("UsersService", () => {
 
     const prototypeUser: User = {
         id: "123",
-        login: "mylogin",
+        user: "mylogin",
         fullname: "My LOGIN",
         email: "my.login@invivoo.com"
     };
@@ -39,13 +39,13 @@ describe("UsersService", () => {
 
     it("should get user by id", async () => {
         const response = {
-            data: { ...prototypeUser, id: "id1", login: "lid1" }
+            data: { ...prototypeUser, id: "id1", user: "lid1" }
         };
         mockedAxios.get.mockReturnValue(Promise.resolve(response));
 
         const returnedUser = await service.getUser("id1");
         expect(returnedUser.id).toEqual("id1");
-        expect(returnedUser.login).toEqual("lid1");
+        expect(returnedUser.user).toEqual("lid1");
 
         expect(mockedAxios.get).toHaveBeenCalledWith(`id1`);
     });
