@@ -7,7 +7,7 @@ import { prototype } from "vue/types/umd";
 jest.mock("@/services/users");
 
 describe("UserEd", () => {
-    const user: User = { id: "0", fullname: "myName", login: "login", email: "test@test" };
+    const user: User = { id: "0", fullname: "myName", user: "login", email: "test@test" };
 
     beforeEach(() => {
         (UsersService as jest.Mock<UsersService>).mockClear();
@@ -35,7 +35,7 @@ describe("UserEd", () => {
 
         expect(UsersService.prototype.getUser).toHaveBeenCalledWith("123");
         expect((wrapper.find("#fullname-1").element as HTMLInputElement).value).toBe("myName");
-        expect((wrapper.find("#login-1").element as HTMLInputElement).value).toBe("login");
+        expect((wrapper.find("#user-1").element as HTMLInputElement).value).toBe("login");
         expect((wrapper.find("#email-1").element as HTMLInputElement).value).toBe("test@test");
     });
 
