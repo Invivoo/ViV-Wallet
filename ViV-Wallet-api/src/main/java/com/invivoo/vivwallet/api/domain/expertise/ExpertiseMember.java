@@ -1,5 +1,6 @@
 package com.invivoo.vivwallet.api.domain.expertise;
 
+import com.invivoo.vivwallet.api.domain.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +17,8 @@ public class ExpertiseMember {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String user;
+    @ManyToOne
+    private User user;
 
     @Enumerated(EnumType.STRING)
     private Expertise expertise;

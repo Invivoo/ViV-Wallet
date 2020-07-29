@@ -5,7 +5,6 @@ import com.invivoo.vivwallet.api.interfaces.payments.PaymentDto;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,24 +22,25 @@ public class PaymentService {
     }
 
     public List<PaymentDto> findAllByReceiver(Long receiverId) {
-        List<PaymentDto> payments = new ArrayList<>();
+        return userRepository.findById(receiverId)
+                             .map(paymentRepository::findAllByReceiverOrderByDateDesc)
+                             .map(payments -> payments.stream()
+                                                      .map(payment -> convertToDto(payment, receiverId))
+                                                      .collect(Collectors.toList()))
+                             .orElse(List.of());
+    }
 
-        userRepository.findById(receiverId).ifPresent(
-                user -> payments.addAll(paymentRepository.findAllByReceiverOrderByDateDesc(user.getFullName()).stream()
-                            .map(payment -> convertToDto(payment, receiverId))
-                            .collect(Collectors.toList()))
-        );
-
-        return payments;
+    public Payment save(Payment payment) {
+        return paymentRepository.save(payment);
     }
 
     private PaymentDto convertToDto(Payment payment, Long userId) {
         int totalViv = payment.getActions().stream().mapToInt(action -> action.getViv().intValue()).sum();
         return PaymentDto.builder()
-                .id(payment.getId())
-                .userId(userId)
-                .date(payment.getDate())
-                .viv(BigDecimal.valueOf(totalViv))
-                .amount(BigDecimal.valueOf(totalViv* FACTOR_VIV_TO_AMOUNT)).build();
+                         .id(payment.getId())
+                         .userId(userId)
+                         .date(payment.getDate())
+                         .viv(BigDecimal.valueOf(totalViv))
+                         .amount(BigDecimal.valueOf(totalViv * FACTOR_VIV_TO_AMOUNT)).build();
     }
 }

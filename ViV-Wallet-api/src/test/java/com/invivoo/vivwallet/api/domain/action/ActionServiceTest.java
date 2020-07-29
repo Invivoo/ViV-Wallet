@@ -31,7 +31,7 @@ public class ActionServiceTest {
         ActionService actionService = new ActionService(actionRepository, lynxConnector);
 
         //When
-        List<Action> actions = actionService.findAllByAchiever(user.getId());
+        List<Action> actions = actionService.findAllByAchiever(user);
 
         //Then
         assertThat(actions).isEmpty();
@@ -44,11 +44,11 @@ public class ActionServiceTest {
         Action action1 = Action.builder().id((long) 1).achiever(user).date(LocalDateTime.of(2020, Month.JANUARY, 1, 12, 0)).build();
         Action action2 = Action.builder().id((long) 2).achiever(user).date(LocalDateTime.of(2020, Month.JUNE, 1, 12, 0)).build();
         List<Action> expectedActions = Arrays.asList(action2, action1);
-        when(actionRepository.findAllByAchieverOrderByDateDesc(user.getId())).thenReturn(expectedActions);
+        when(actionRepository.findAllByAchieverOrderByDateDesc(user)).thenReturn(expectedActions);
         ActionService actionService = new ActionService(actionRepository, lynxConnector);
 
         //When
-        List<Action> actions = actionService.findAllByAchiever(user.getId());
+        List<Action> actions = actionService.findAllByAchiever(user);
 
         //Then
         assertThat(actions).containsExactly(action2, action1);

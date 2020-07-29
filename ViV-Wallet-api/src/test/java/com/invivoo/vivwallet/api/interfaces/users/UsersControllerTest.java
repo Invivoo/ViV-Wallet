@@ -196,16 +196,16 @@ public class UsersControllerTest {
         Action action1 = anUnpaidAction(testUser);
         Action action2 = aPaidAction(testUser);
         List<Action> expectedActions = Arrays.asList(action2, action1);
-        when(actionService.findAllByAchiever(testUser.getId())).thenReturn(expectedActions);
+        when(actionService.findAllByAchiever(testUser)).thenReturn(expectedActions);
 
         when(userRepository.findById(testUser.getId())).thenReturn(Optional.of(testUser));
 
         Expertise testUserExpertise = Expertise.PROGRAMMATION_JAVA;
         ExpertiseMember testUserExpertiseMember = ExpertiseMember.builder()
-                .user(testUser.getFullName())
+                .user(testUser)
                 .expertise(testUserExpertise).build();
-        when(expertiseMemberRepository.findByUser(testUser.getFullName()))
-                .thenReturn(Optional.of(testUserExpertiseMember));
+        when(expertiseMemberRepository.findByUser(testUser))
+                .thenReturn(List.of(testUserExpertiseMember));
 
         //When
         ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get(String.format("/api/v1/users/%s/actions", testUser.getId())))
@@ -217,7 +217,7 @@ public class UsersControllerTest {
                 buildActionDto(action1, testUserExpertise));
         String expectedJson = mapper.writeValueAsString(expectedActionDtos);
 
-        verify(actionService).findAllByAchiever(testUser.getId());
+        verify(actionService).findAllByAchiever(testUser);
         resultActions.andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().string(expectedJson));
     }
@@ -229,10 +229,11 @@ public class UsersControllerTest {
         Action action1 = anUnpaidAction(testUser);
         Action action2 = aPaidAction(testUser);
         List<Action> expectedActions = Arrays.asList(action2, action1);
-        when(actionService.findAllByAchiever(testUser.getId())).thenReturn(expectedActions);
+        when(userRepository.findById(testUser.getId())).thenReturn(Optional.of(testUser));
+        when(actionService.findAllByAchiever(testUser)).thenReturn(expectedActions);
 
-        when(expertiseMemberRepository.findByUser(testUser.getFullName()))
-                .thenReturn(Optional.empty());
+        when(expertiseMemberRepository.findByUser(testUser))
+                .thenReturn(List.of());
 
         //When
         ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get(String.format("/api/v1/users/%s/actions", testUser.getId())))
@@ -244,7 +245,7 @@ public class UsersControllerTest {
                 buildActionDto(action1));
         String expectedJson = mapper.writeValueAsString(expectedActionDtos);
 
-        verify(actionService).findAllByAchiever(testUser.getId());
+        verify(actionService).findAllByAchiever(testUser);
         resultActions.andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().string(expectedJson));
     }

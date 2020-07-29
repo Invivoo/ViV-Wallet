@@ -23,7 +23,8 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private LocalDateTime date;
-    private String receiver;
+    @ManyToOne
+    private User receiver;
     @ManyToOne
     private User creator;
     @OneToMany(mappedBy="payment")

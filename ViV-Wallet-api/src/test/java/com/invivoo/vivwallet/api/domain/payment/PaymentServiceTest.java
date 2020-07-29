@@ -51,7 +51,7 @@ public class PaymentServiceTest {
         //Given
         User testUser = TEST_USER;
         when(userRepository.findById(testUser.getId())).thenReturn(Optional.of(testUser));
-        when(paymentRepository.findAllByReceiverOrderByDateDesc(testUser.getFullName())).thenReturn(Collections.emptyList());
+        when(paymentRepository.findAllByReceiverOrderByDateDesc(testUser)).thenReturn(Collections.emptyList());
         PaymentService paymentService = new PaymentService(userRepository, paymentRepository);
 
         //When
@@ -59,7 +59,7 @@ public class PaymentServiceTest {
 
         //Then
         verify(userRepository).findById(testUser.getId());
-        verify(paymentRepository).findAllByReceiverOrderByDateDesc(testUser.getFullName());
+        verify(paymentRepository).findAllByReceiverOrderByDateDesc(testUser);
         assertThat(paymentDtos).isEmpty();
     }
 
@@ -70,11 +70,11 @@ public class PaymentServiceTest {
         when(userRepository.findById(testUser.getId())).thenReturn(Optional.of(testUser));
         BigDecimal actionViv = BigDecimal.valueOf(50);
         Payment payment = Payment.builder()
-                .id(1L)
-                .date(LocalDateTime.of(2020, Month.JULY, 1, 12, 0))
-                .receiver(testUser.getFullName())
-                .actions(List.of(Action.builder().id(1L).viv(actionViv).build())).build();
-        when(paymentRepository.findAllByReceiverOrderByDateDesc(testUser.getFullName())).thenReturn(List.of(payment));
+                                 .id(1L)
+                                 .date(LocalDateTime.of(2020, Month.JULY, 1, 12, 0))
+                                 .receiver(testUser)
+                                 .actions(List.of(Action.builder().id(1L).viv(actionViv).build())).build();
+        when(paymentRepository.findAllByReceiverOrderByDateDesc(testUser)).thenReturn(List.of(payment));
         PaymentService paymentService = new PaymentService(userRepository, paymentRepository);
 
         //When
@@ -82,13 +82,13 @@ public class PaymentServiceTest {
 
         //Then
         verify(userRepository).findById(testUser.getId());
-        verify(paymentRepository).findAllByReceiverOrderByDateDesc(testUser.getFullName());
+        verify(paymentRepository).findAllByReceiverOrderByDateDesc(testUser);
         PaymentDto expectedPaymentDto = PaymentDto.builder()
-                .id(payment.getId())
-                .userId(testUser.getId())
-                .date(payment.getDate())
-                .viv(actionViv)
-                .amount(BigDecimal.valueOf(250)).build();
+                                                  .id(payment.getId())
+                                                  .userId(testUser.getId())
+                                                  .date(payment.getDate())
+                                                  .viv(actionViv)
+                                                  .amount(BigDecimal.valueOf(250)).build();
         assertThat(paymentDtos).containsExactly(expectedPaymentDto);
     }
 
@@ -98,13 +98,13 @@ public class PaymentServiceTest {
         User testUser = TEST_USER;
         when(userRepository.findById(testUser.getId())).thenReturn(Optional.of(testUser));
         Payment payment = Payment.builder()
-                .id(1L)
-                .date(LocalDateTime.of(2020, Month.JULY, 1, 12, 0))
-                .receiver(testUser.getFullName())
-                .actions(List.of(
-                        Action.builder().id(1L).viv(BigDecimal.valueOf(50)).build(),
-                        Action.builder().id(2L).viv(BigDecimal.valueOf(50)).build())).build();
-        when(paymentRepository.findAllByReceiverOrderByDateDesc(testUser.getFullName())).thenReturn(List.of(payment));
+                                 .id(1L)
+                                 .date(LocalDateTime.of(2020, Month.JULY, 1, 12, 0))
+                                 .receiver(testUser)
+                                 .actions(List.of(
+                                         Action.builder().id(1L).viv(BigDecimal.valueOf(50)).build(),
+                                         Action.builder().id(2L).viv(BigDecimal.valueOf(50)).build())).build();
+        when(paymentRepository.findAllByReceiverOrderByDateDesc(testUser)).thenReturn(List.of(payment));
         PaymentService paymentService = new PaymentService(userRepository, paymentRepository);
 
         //When
@@ -112,13 +112,13 @@ public class PaymentServiceTest {
 
         //Then
         verify(userRepository).findById(testUser.getId());
-        verify(paymentRepository).findAllByReceiverOrderByDateDesc(testUser.getFullName());
+        verify(paymentRepository).findAllByReceiverOrderByDateDesc(testUser);
         PaymentDto expectedPaymentDto = PaymentDto.builder()
-                .id(payment.getId())
-                .userId(testUser.getId())
-                .date(payment.getDate())
-                .viv(BigDecimal.valueOf(100))
-                .amount(BigDecimal.valueOf(500)).build();
+                                                  .id(payment.getId())
+                                                  .userId(testUser.getId())
+                                                  .date(payment.getDate())
+                                                  .viv(BigDecimal.valueOf(100))
+                                                  .amount(BigDecimal.valueOf(500)).build();
         assertThat(paymentDtos).containsExactly(expectedPaymentDto);
     }
 
@@ -128,16 +128,16 @@ public class PaymentServiceTest {
         User testUser = TEST_USER;
         when(userRepository.findById(testUser.getId())).thenReturn(Optional.of(testUser));
         Payment payment1 = Payment.builder()
-                .id(1L)
-                .date(LocalDateTime.of(2020, Month.JANUARY, 1, 12, 0))
-                .receiver(testUser.getFullName())
-                .actions(List.of(Action.builder().id(1L).viv(BigDecimal.valueOf(50)).build())).build();
+                                  .id(1L)
+                                  .date(LocalDateTime.of(2020, Month.JANUARY, 1, 12, 0))
+                                  .receiver(testUser)
+                                  .actions(List.of(Action.builder().id(1L).viv(BigDecimal.valueOf(50)).build())).build();
         Payment payment2 = Payment.builder()
-                .id(1L)
-                .date(LocalDateTime.of(2020, Month.JULY, 1, 12, 0))
-                .receiver(testUser.getFullName())
-                .actions(List.of(Action.builder().id(2L).viv(BigDecimal.valueOf(50)).build())).build();
-        when(paymentRepository.findAllByReceiverOrderByDateDesc(testUser.getFullName())).thenReturn(List.of(payment2, payment1));
+                                  .id(1L)
+                                  .date(LocalDateTime.of(2020, Month.JULY, 1, 12, 0))
+                                  .receiver(testUser)
+                                  .actions(List.of(Action.builder().id(2L).viv(BigDecimal.valueOf(50)).build())).build();
+        when(paymentRepository.findAllByReceiverOrderByDateDesc(testUser)).thenReturn(List.of(payment2, payment1));
         PaymentService paymentService = new PaymentService(userRepository, paymentRepository);
 
         //When
@@ -145,19 +145,19 @@ public class PaymentServiceTest {
 
         //Then
         verify(userRepository).findById(testUser.getId());
-        verify(paymentRepository).findAllByReceiverOrderByDateDesc(testUser.getFullName());
+        verify(paymentRepository).findAllByReceiverOrderByDateDesc(testUser);
         PaymentDto expectedPaymentDto1 = PaymentDto.builder()
-                .id(payment1.getId())
-                .userId(testUser.getId())
-                .date(payment1.getDate())
-                .viv(BigDecimal.valueOf(50))
-                .amount(BigDecimal.valueOf(250)).build();
+                                                   .id(payment1.getId())
+                                                   .userId(testUser.getId())
+                                                   .date(payment1.getDate())
+                                                   .viv(BigDecimal.valueOf(50))
+                                                   .amount(BigDecimal.valueOf(250)).build();
         PaymentDto expectedPaymentDto2 = PaymentDto.builder()
-                .id(payment2.getId())
-                .userId(testUser.getId())
-                .date(payment2.getDate())
-                .viv(BigDecimal.valueOf(50))
-                .amount(BigDecimal.valueOf(250)).build();
+                                                   .id(payment2.getId())
+                                                   .userId(testUser.getId())
+                                                   .date(payment2.getDate())
+                                                   .viv(BigDecimal.valueOf(50))
+                                                   .amount(BigDecimal.valueOf(250)).build();
         assertThat(paymentDtos).containsExactly(expectedPaymentDto2, expectedPaymentDto1);
     }
 }

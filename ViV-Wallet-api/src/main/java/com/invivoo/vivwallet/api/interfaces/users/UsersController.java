@@ -105,13 +105,17 @@ public class UsersController {
 
     @GetMapping("/{id}/actions")
     public ResponseEntity<List<ActionDto>> getActions(@PathVariable("id") Long userId) {
-        Expertise expertise = userRepository.findById(userId)
-                .flatMap(
-                    user -> expertiseMemberRepository.findByUser(user.getFullName()).map(ExpertiseMember::getExpertise)
-                )
-                .orElse(null);
+        Optional<User> userOpt = userRepository.findById(userId);
+        if(userOpt.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+        User user = userOpt.get();
+        Expertise expertise = expertiseMemberRepository.findByUser(user).stream()
+                                                       .findFirst()
+                                                       .map(ExpertiseMember::getExpertise)
+                                                       .orElse(null);
 
-        List<Action> userActions = actionService.findAllByAchiever(userId);
+        List<Action> userActions = actionService.findAllByAchiever(user);
         List<ActionDto> userActionDtos = userActions.stream()
                 .map(action -> convertToGetDto(action, expertise))
                 .collect(Collectors.toList());
@@ -119,14 +123,19 @@ public class UsersController {
         return ResponseEntity.ok(userActionDtos);
     }
 
+    @GetMapping("/{id}/payments")
+    public ResponseEntity<List<PaymentDto>> getPayments(@PathVariable("id") Long userId) {
+        return ResponseEntity.ok(paymentService.findAllByReceiver(userId));
+    }
+
     private ActionDto convertToGetDto(Action action, Expertise userExpertise) {
         ActionDto actionDto = ActionDto.builder()
-                .id(action.getId())
-                .userId(action.getAchiever().getId())
-                .type(action.getType().getName())
-                .comment(action.getContext())
-                .creationDate(action.getDate())
-                .payment(action.getViv()).build();
+                                       .id(action.getId())
+                                       .userId(action.getAchiever().getId())
+                                       .type(action.getType().getName())
+                                       .comment(action.getContext())
+                                       .creationDate(action.getDate())
+                                       .payment(action.getViv()).build();
         Optional.ofNullable(userExpertise).ifPresent(expertise -> actionDto.setExpertise(expertise.getExpertiseName()));
         Optional.ofNullable(action.getPayment()).ifPresentOrElse(
                 payment -> {
@@ -137,10 +146,5 @@ public class UsersController {
         );
 
         return actionDto;
-    }
-
-    @GetMapping("/{id}/payments")
-    public ResponseEntity<List<PaymentDto>> getPayments(@PathVariable("id") Long userId) {
-        return ResponseEntity.ok(paymentService.findAllByReceiver(userId));
     }
 }
