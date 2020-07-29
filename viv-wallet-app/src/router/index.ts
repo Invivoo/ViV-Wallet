@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
+require("focus-visible");
 
 Vue.use(VueRouter);
 

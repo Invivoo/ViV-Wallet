@@ -34,3 +34,16 @@
         box-shadow: 0 0 0 2px $primary-400;
     }
 }
+
+.tertiary-button {
+    background: none;
+    color: $primary-700;
+    font-weight: 600;
+    font-size: $text-base;
+    border-radius: none;
+    padding: 0;
+    cursor: pointer;
+    &:hover {
+        color: $primary-900;
+    }
+}

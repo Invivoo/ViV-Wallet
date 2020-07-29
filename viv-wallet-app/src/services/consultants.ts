@@ -21,5 +21,4 @@ export class ConsultantsService extends ServiceBase {
     async getConsultant(id: string): Promise<Consultant> {
         return (await this.http.get<Consultant>(`${id}`)).data;
     }
-
 }
