@@ -10,7 +10,7 @@
                 />
                 <illustration />
             </div>
-            <actions-block v-bind:actions="actions" />
+            <actions-block v-bind:actions="actions" v-bind:user-role="userRole" />
             <payment-history-block v-bind:payments="payments" />
         </loading>
     </div>
@@ -26,26 +26,33 @@ import PaymentHistoryBlock from "../components/PaymentHistoryBlock.vue";
 import { Payment } from "../models/payment";
 import { WalletService } from "../services/wallet";
 import Loading from "../components/Loading.vue";
+import { Role } from "../models/role";
+import { LoginService } from "../services/login";
 
 @Component({
     name: "wallet",
     components: { BalanceCard, Illustration, ActionsBlock, PaymentHistoryBlock, Loading }
 })
 export default class wallet extends Vue {
+    userRole: Role | null | undefined = null;
     actions: Action[] = [];
     payments: Payment[] = [];
     loading = true;
     errored = false;
     walletService = new WalletService();
+    loginService = new LoginService();
 
     balance = 0;
     userId = "1";
 
     async mounted() {
         try {
-            this.balance = await this.walletService.getBalance(this.userId);
-            this.actions = await this.walletService.getActions(this.userId);
-            this.payments = await this.walletService.getPayments(this.userId);
+            [this.balance, this.actions, this.payments, this.userRole] = await Promise.all([
+                this.walletService.getBalance(this.userId),
+                this.walletService.getActions(this.userId),
+                this.walletService.getPayments(this.userId),
+                this.loginService.getCurrentRole()
+            ]);
         } catch (ex) {
             this.errored = true;
         } finally {

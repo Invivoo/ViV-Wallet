@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from "axios";
 import { BACKEND_BASE_URL, REQUEST_TIMEOUT_MS } from "@/config/constants";
-import { LoginService } from './login';
+import { LoginService } from "./login";
 
 export class ServiceBase {
     protected http: AxiosInstance;

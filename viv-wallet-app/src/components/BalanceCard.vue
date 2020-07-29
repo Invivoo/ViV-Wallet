@@ -26,7 +26,7 @@ export default class BalanceCard extends Vue {
 <style lang="scss" scoped>
 .card-container {
     background: $white;
-    color: $primary-900;
+    color: $primary-700;
     border-radius: $rounded-md;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     min-width: 500px;

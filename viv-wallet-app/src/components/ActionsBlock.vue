@@ -31,12 +31,17 @@
                     <td>
                         <div>
                             <div>
-                                <status-badge :type="getPaymentStatusType(action.status)">{{
-                                    formatPaymentStatus(action.status)
-                                }}</status-badge>
+                                <status-badge :type="getPaymentStatusType(action.status)">
+                                    {{ formatPaymentStatus(action.status) }}
+                                </status-badge>
                             </div>
-                            <div class="payment-date">
+                            <div v-if="isPaymentPaid(action)" class="payment-date">
                                 {{ action.paymentDate ? action.paymentDate.toDateString() : "" }}
+                            </div>
+                            <div v-else>
+                                <button v-if="shouldDisplayPayButton()" class="tertiary-button pay-button">
+                                    Payer maintenant
+                                </button>
                             </div>
                         </div>
                     </td>
@@ -51,6 +56,7 @@
 import { Component, Vue, Prop } from "vue-property-decorator";
 import { Action, PaymentStatus } from "../models/action";
 import StatusBadge from "../components/StatusBadge.vue";
+import { Role } from "../models/role";
 
 @Component({
     name: "actions-block",
@@ -58,6 +64,15 @@ import StatusBadge from "../components/StatusBadge.vue";
 })
 export default class ActionsBlock extends Vue {
     @Prop({ default: [] }) actions!: Action[];
+    @Prop() userRole?: Role;
+
+    isPaymentPaid(action: Action) {
+        return action.status === PaymentStatus.Paid;
+    }
+
+    shouldDisplayPayButton() {
+        return this.userRole && this.userRole === Role.Admin;
+    }
 
     formatPaymentStatus(status: PaymentStatus) {
         switch (status) {
@@ -83,6 +98,7 @@ export default class ActionsBlock extends Vue {
 
 <style lang="scss" scoped>
 @import "../styles/table.scss";
+@import "../styles/buttons.scss";
 
 .payment-date {
     color: $gray-600;
@@ -112,5 +128,10 @@ export default class ActionsBlock extends Vue {
 .type {
     font-weight: 600;
     color: $gray-700;
+}
+
+.pay-button {
+    margin-top: $m-1;
+    margin-bottom: -0.5rem;
 }
 </style>
