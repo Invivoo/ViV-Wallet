@@ -17,6 +17,7 @@ import com.invivoo.vivwallet.api.domain.user.UserService;
 import com.invivoo.vivwallet.api.interfaces.actions.ActionDto;
 import com.invivoo.vivwallet.api.interfaces.actions.ActionStatus;
 import com.invivoo.vivwallet.api.interfaces.payments.PaymentDto;
+import org.hamcrest.Matchers;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -186,7 +187,7 @@ public class UsersControllerTest {
         //Then
         verify(userService).computeBalance(testUser.getId());
         resultActions.andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string(String.valueOf(expectedBalance)));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.value", Matchers.is(20)));
     }
 
     @Test

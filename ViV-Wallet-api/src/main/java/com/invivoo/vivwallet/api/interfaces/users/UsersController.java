@@ -98,9 +98,9 @@ public class UsersController {
     }
 
     @GetMapping("/{id}/balance")
-    public ResponseEntity<Long> getBalance(@PathVariable("id") Long userId) {
+    public ResponseEntity<BalanceDto> getBalance(@PathVariable("id") Long userId) {
         long balance = userService.computeBalance(userId);
-        return ResponseEntity.ok(balance);
+        return ResponseEntity.ok(new BalanceDto(balance));
     }
 
     @GetMapping("/{id}/actions")
