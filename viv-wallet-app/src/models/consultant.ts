@@ -7,7 +7,7 @@ export interface Consultant {
 }
 
 export enum ConsultantStatus {
-    SENIOR,
-    SENIOR_IN_ONBOARDING,
+    CONSULTANT_SENIOR,
+    CONSULTANT_SENIOR_IN_ONBOARDING,
     MANAGER
 }

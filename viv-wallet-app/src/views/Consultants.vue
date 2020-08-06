@@ -1,7 +1,7 @@
 <template>
     <div class="consultants">
         <loading v-bind:loading="loading" v-bind:errored="errored">
-            <ConsultantList v-bind:consultants="consultants" />
+            <consultant-list v-bind:consultants="consultants" />
         </loading>
     </div>
 </template>
@@ -39,7 +39,7 @@ export default class Consultants extends Vue {
 </script>
 
 <style scoped lang="scss">
-.users {
+.consultants {
     max-width: 900px;
     margin: 0 auto;
     padding: $m-3 $m-5;
