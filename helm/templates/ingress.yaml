@@ -1,0 +1,36 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+{{$labelData := dict "Chart" .Chart "Release" .Release "Name" .Values.ingress.name }}
+metadata:
+  name: {{ .Release.Name }}-ingress
+  namespace:  {{ .Release.Namespace }}
+  labels:
+    {{- include "labels" $labelData | nindent 4 }}
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: {{ .Values.ingress.sslredirect | quote }}
+    {{- include "ingress.issuer" . | nindent 4 -}}
+    kubernetes.io/ingress.class: {{ .Values.ingress.class }}
+spec:
+  {{- include "ingress.tls" . | nindent 2 -}}
+  rules:
+  - host: {{ include "idp.url" . }}
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: {{ .Release.Name }}-{{ .Values.idp.name }}-svc
+          servicePort: {{ .Values.idp.port }}
+  - host: {{ include "login.url" . }}
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: {{ .Release.Name }}-{{ .Values.login.name }}-svc
+          servicePort: {{ .Values.login.service.externalPort }}
+  - host: {{ include "apps.url" . }}
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: {{ .Release.Name }}-{{ .Values.apps.name }}-svc
+          servicePort: {{ .Values.apps.service.externalPort }}

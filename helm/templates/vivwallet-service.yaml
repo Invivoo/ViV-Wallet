@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+{{$labelData := dict "Chart" .Chart "Release" .Release "Name" .Values.login.name }}
+metadata:
+    name: {{ .Release.Name }}-{{ .Values.login.name }}-svc
+    labels:
+        {{- include "labels" $labelData | nindent 8 }}
+spec:
+    selector:
+        {{- include "labels.noversion" $labelData | nindent 8 }}
+    ports:
+    - port: {{ .Values.login.service.externalPort }}
+      targetPort: {{ .Values.login.port }}
+      protocol: TCP
+
+
