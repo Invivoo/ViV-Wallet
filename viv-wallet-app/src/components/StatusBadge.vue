@@ -32,4 +32,9 @@ export default class StatusBadge extends Vue {
     border: 1px solid $red-200;
     color: $red-800;
 }
+.yellow {
+    background: $yellow-100;
+    border: 1px solid $yellow-300;
+    color: $yellow-800;
+}
 </style>

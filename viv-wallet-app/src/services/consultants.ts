@@ -1,5 +1,5 @@
 import { AxiosInstance } from "axios";
-import { Consultant } from "../models/consultant";
+import { Consultant, ConsultantStatus } from "../models/consultant";
 import { ServiceBase } from "./serviceBase";
 
 export class ConsultantsService extends ServiceBase {
@@ -8,7 +8,11 @@ export class ConsultantsService extends ServiceBase {
     }
 
     async getConsultants(): Promise<Consultant[]> {
-        return (await this.http.get<Consultant[]>("")).data;
+        const rawData = (await this.http.get("")).data;
+        return rawData.map(consultant => {
+            consultant.status = ConsultantStatus[consultant.status];
+            return consultant;
+        });
     }
 
     async saveConsultant(consultant: Consultant): Promise<Object> {
@@ -19,6 +23,8 @@ export class ConsultantsService extends ServiceBase {
     }
 
     async getConsultant(id: string): Promise<Consultant> {
-        return (await this.http.get<Consultant>(`${id}`)).data;
+        const consultant = (await this.http.get(`${id}`)).data;
+        consultant.status = ConsultantStatus[consultant.status];
+        return consultant;
     }
 }
