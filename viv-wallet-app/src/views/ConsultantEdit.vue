@@ -4,22 +4,22 @@
             <p>We're sorry, we're not able to retrieve this information at the moment, please try back later</p>
         </section>
         <section v-else>
-            <h2>Mettre à jour consultant</h2>
+            <h2>Editer consultant</h2>
             <div v-if="loading">Loading...</div>
             <form v-else class="consultant-form">
                 <div class="element-block">
                     <label id="input-fullname-1" for="fullname-1">Nom</label>
-                    <input id="fullname-1" type="text" v-model="consultant.fullname" placeholder="Nom" />
-                </div>
-
-                <div class="element-block">
-                    <label id="input-consultant-1" label-for="consultant-1">Identifiant</label>
-                    <input id="consultant-1" type="text" v-model="consultant.consultant" placeholder="Identifiant" />
+                    <input id="fullname-1" type="text" v-model="consultant.fullname" placeholder="Nom" readonly="true"/>
                 </div>
 
                 <div class="element-block">
                     <label id="input-email-1" label-for="email-1">Email</label>
                     <input id="email-1" type="text" v-model="consultant.email" placeholder="Email" />
+                </div>
+
+                <div class="element-block">
+                    <label id="input-status-1" label-for="status-1">Status</label>
+                    <input id="status-1" type="text" v-model="consultant.status" placeholder="Status" />
                 </div>
 
                 <div class="buttons">
@@ -33,7 +33,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import { Consultant } from "../models/consultant";
+import { Consultant, ConsultantStatus } from "../models/consultant";
 import { ConsultantsService } from "../services/consultants";
 
 const ConsultantEditProps = Vue.extend({
@@ -48,7 +48,7 @@ const ConsultantEditProps = Vue.extend({
 })
 export default class ConsultantEdit extends ConsultantEditProps {
     consultantsService;
-    consultant: Consultant | undefined;
+    consultant: Consultant = {id: '', user: '', email: '', fullname: '', status: ConsultantStatus.MANAGER};
     loading = false;
     errored = false;
 
