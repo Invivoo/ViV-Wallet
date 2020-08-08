@@ -3,5 +3,5 @@
   "/:users/:id/balance": "/balances/:id",
   "/:users/:id/actions": "/actions?userId=:id",
   "/:users/:id/payments": "/payments?userId=:id",
-  "/expertises/:id/members": "/expertiseMembers?expertise=:id"
-}
+  "/expertises/:id/members": "/expertiseMembers?expertise=:id",
+  "/expertises/:expertieName/members/:id": "/expertiseMembers/:id"}
