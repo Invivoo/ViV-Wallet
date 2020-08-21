@@ -7,7 +7,7 @@
                     <div class="selector-container">
                         <label class="expertise-label" for="select-expertise">Expertise :</label>
                         <div class="select">
-                            <select id="select-expertise" v-model="selectedExpertiseId">
+                            <select id="select-expertise" v-model="selectedExpertiseId" v-on:change="expertiseChanged">
                                 <option disabled value>Choisissez</option>
                                 <option
                                     v-for="expertise in expertises"
@@ -54,9 +54,13 @@ export default class Consultants extends Vue {
     async mounted() {
         try {
             this.expertises = await this.expertisesService.getExpertises();
-            this.selectedExpertiseId = this.$route.params.id || "";
-            if (this.expertises.length > 0 && this.selectedExpertiseId === "") {
-                this.selectedExpertiseId = this.expertises[0].id;
+            if (this.$route.params.id) {
+                this.selectedExpertiseId = this.$route.params.id;
+                await this.updateConsultants();
+            } else {
+                if (this.expertises.length > 0) {
+                    this.$router.push(`/members/${this.expertises[0].id}`);
+                }
             }
         } catch (ex) {
             this.errored = true;
@@ -65,7 +69,20 @@ export default class Consultants extends Vue {
         }
     }
 
-    @Watch("selectedExpertiseId")
+    @Watch("$route")
+    async routeChanged() {
+        if (this.$route.params.id) {
+            this.selectedExpertiseId = this.$route.params.id;
+            await this.updateConsultants();
+        } else {
+            this.expertiseChanged();
+        }
+    }
+
+    expertiseChanged() {
+        this.$router.push(`/members/${this.selectedExpertiseId}`);
+    }
+
     async updateConsultants() {
         const consultantsService = new ConsultantsService(this.selectedExpertiseId);
         this.consultants = await consultantsService.getConsultants();
