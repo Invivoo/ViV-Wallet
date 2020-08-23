@@ -14,7 +14,7 @@
 
                 <div class="element-block">
                     <label id="input-email-1" label-for="email-1">Email</label>
-                    <input id="email-1" type="text" v-model="consultant.email" placeholder="Email" />
+                    <input id="email-1" type="text" v-model="consultant.email" placeholder="Email" readonly="true" />
                 </div>
 
                 <div class="element-block">
