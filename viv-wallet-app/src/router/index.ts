@@ -34,13 +34,13 @@ const routes = [
     {
         path: "/members/:expertiseName/:consultantId",
         name: "memberEdit",
-        component: () => import(/* webpackChunkName: "users" */ "../views/ConsultantEdit.vue"),
+        component: () => import(/* webpackChunkName: "members" */ "../views/ConsultantEdit.vue"),
         props: true
     },
     {
         path: "/users/:id",
         name: "userEdit",
-        component: () => import(/* webpackChunkName: "useredit" */ "../views/UserEdit.vue"),
+        component: () => import(/* webpackChunkName: "users" */ "../views/UserEdit.vue"),
         props: true
     }
 ];
