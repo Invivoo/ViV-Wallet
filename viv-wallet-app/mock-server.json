@@ -49,6 +49,16 @@
             "email": "roget.flondin@invivoo.com",
             "startDate": "25/07/2020, 19:34:55",
             "endDate": "25/07/2020, 19:34:55"
+        },
+        {
+            "id": "4",
+            "user": "rflonding",
+            "expertise": "java",
+            "status": "MANAGER",
+            "fullname": "Roger Flodin",
+            "email": "roget.flondin@invivoo.com",
+            "startDate": "25/07/2020, 19:34:55",
+            "endDate": "25/07/2020, 19:34:55"
         }
     ],
     "expertises": [

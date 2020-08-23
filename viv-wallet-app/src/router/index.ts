@@ -14,7 +14,7 @@ const routes = [
     {
         path: "/wallet",
         name: "wallet",
-        component: () => import(/* webpackChunkName: "users" */ "../views/Wallet.vue")
+        component: () => import(/* webpackChunkName: "wallet" */ "../views/Wallet.vue")
     },
     {
         path: "/users",
@@ -24,7 +24,12 @@ const routes = [
     {
         path: "/members",
         name: "members",
-        component: () => import(/* webpackChunkName: "users" */ "../views/Consultants.vue")
+        component: () => import(/* webpackChunkName: "members" */ "../views/Consultants.vue")
+    },
+    {
+        path: "/members/:id",
+        name: "membersByExpertise",
+        component: () => import(/* webpackChunkName: "members" */ "../views/Consultants.vue")
     },
     {
         path: "/members/:expertiseName/:consultantId",
@@ -35,7 +40,7 @@ const routes = [
     {
         path: "/users/:id",
         name: "userEdit",
-        component: () => import(/* webpackChunkName: "user" */ "../views/UserEdit.vue"),
+        component: () => import(/* webpackChunkName: "useredit" */ "../views/UserEdit.vue"),
         props: true
     }
 ];
