@@ -19,11 +19,14 @@
 
                 <div class="element-block">
                   <label id="input-status-1" label-for="status-1">Status du consultant</label>
-                  <select id="status-1" v-model="consultant.status" placeholder="Choisissez une option">
-                    <option disabled value="">Choisissez une option</option>
-                    <option value="0">Sénior</option>
-                    <option value="1">Onboarding</option>
-                    <option value="2">Manager</option>
+                  <select id="status-1" v-model="consultant.status">
+                    <option
+                      v-bind:key="option.value"
+                      v-for="option in options"
+                      v-bind:value="option.value"
+                      v-bind:disabled="option.disabled">
+                      {{ option.text }}
+                    </option> 
                   </select>
                 </div>
 
@@ -38,7 +41,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import { Consultant, ConsultantStatus } from "../models/consultant";
+import { Consultant, ConsultantStatus, toString } from "../models/consultant";
 import { ConsultantsService } from "../services/consultants";
 
 const ConsultantEditProps = Vue.extend({
@@ -56,10 +59,18 @@ export default class ConsultantEdit extends ConsultantEditProps {
     consultant: Consultant = {id: '', user: '', email: '', fullname: '', status: ConsultantStatus.MANAGER};
     loading = false;
     errored = false;
+    options: {text: string, value: string, disabled: bool}[] = [
+        { text: "Choisissez une option", value: "", disabled: true }
+    ];
 
     constructor() {
         super();
         this.consultantsService = new ConsultantsService(this.expertiseName);
+        for (const [key, value] of Object.entries(ConsultantStatus)) {
+            if (isNaN(Number(key))) { // .entries contains either the constant names and indexes
+                this.options.push({text: toString(value), value: value, disabled: false});
+            }
+        }
     }
     
     async mounted() {
