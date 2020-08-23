@@ -16,6 +16,7 @@ export class ConsultantsService extends ServiceBase {
     }
 
     async saveConsultant(consultant: Consultant): Promise<Object> {
+        consultant.status = ConsultantStatus[consultant.status] as unknown as ConsultantStatus;
         if (!consultant.id) {
             return (await this.http.post<Consultant>("", consultant)).data;
         }

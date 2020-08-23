@@ -18,8 +18,13 @@
                 </div>
 
                 <div class="element-block">
-                    <label id="input-status-1" label-for="status-1">Status</label>
-                    <input id="status-1" type="text" v-model="consultant.status" placeholder="Status" />
+                  <label id="input-status-1" label-for="status-1">Status du consultant</label>
+                  <select id="status-1" v-model="consultant.status" placeholder="Choisissez une option">
+                    <option disabled value="">Choisissez une option</option>
+                    <option value="0">Sénior</option>
+                    <option value="1">Onboarding</option>
+                    <option value="2">Manager</option>
+                  </select>
                 </div>
 
                 <div class="buttons">
@@ -67,18 +72,19 @@ export default class ConsultantEdit extends ConsultantEditProps {
             this.loading = false;
         }
     }
+    
     async confirm() {
-        // try {
-        //     this.loading = true;
-        //     if (this.user) {
-        //         await this.usersService.saveUser(this.user);
-        //         this.$router.push({ path: "/users" });
-        //     }
-        // } catch (ex) {
-        //     this.errored = true;
-        // } finally {
-        //     this.loading = false;
-        // }
+        try {
+            this.loading = true;
+            if (this.consultant) {
+                await this.consultantsService.saveConsultant(this.consultant);
+                this.$router.push({ path: `/members/${this.expertiseName}` });
+            }
+        } catch (ex) {
+            this.errored = true;
+        } finally {
+            this.loading = false;
+        }
     }
 }
 </script>
@@ -87,7 +93,7 @@ export default class ConsultantEdit extends ConsultantEditProps {
 @import "../styles/form.scss";
 @import "../styles/buttons.scss";
 
-.userEdit {
+.consultantEdit {
     width: 50%;
     margin: auto;
 }
@@ -100,7 +106,7 @@ h2 {
     margin: $m-6 0 $m-3 0;
 }
 
-.user-form {
+.consultant-form {
     width: 400px;
     margin: $m-5 auto;
     padding: $m-5 $m-6;
