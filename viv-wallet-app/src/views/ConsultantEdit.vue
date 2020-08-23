@@ -68,7 +68,13 @@ export default class ConsultantEdit extends ConsultantEditProps {
         this.consultantsService = new ConsultantsService(this.expertiseName);
         for (const [key, value] of Object.entries(ConsultantStatus)) {
             if (isNaN(Number(key))) { // .entries contains either the constant names and indexes
-                this.options.push({text: toString(value), value: value, disabled: false});
+                this.options.push(
+                    {
+                        text: toString(value as ConsultantStatus),
+                        value: value as string,
+                        disabled: false
+                    }
+                );
             }
         }
     }
