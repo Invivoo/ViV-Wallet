@@ -1,7 +1,5 @@
 export enum Role {
-    ExpertiseConsultant,
-    ExpertiseManager,
-    TeamMember,
-    TeamMAnager,
-    Admin
+    EXPERTISE_MANAGER = "EXPERTISE_MANAGER",
+    SENIOR_MANAGER = "SENIOR_MANAGER",
+    COMPANY_ADMINISTRATOR = "COMPANY_ADMINISTRATOR"
 }

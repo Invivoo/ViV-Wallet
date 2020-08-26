@@ -1,5 +1,4 @@
 import axios, { AxiosInstance } from "axios";
-import { BACKEND_BASE_URL, REQUEST_TIMEOUT_MS } from "@/config/constants";
 import { LoginService } from "./login";
 
 export class ServiceBase {
@@ -11,8 +10,8 @@ export class ServiceBase {
         this.http =
             http ||
             axios.create({
-                baseURL: `${BACKEND_BASE_URL}${route}`,
-                timeout: REQUEST_TIMEOUT_MS,
+                baseURL: `${process.env.VUE_APP_BACKEND_BASE_URL}${route}`,
+                timeout: process.env.VUE_APP_REQUEST_TIMEOUT_MS,
                 headers: { Authorization: `Bearer ${this.loginService.getJwtToken()}` },
                 withCredentials: true
             });
