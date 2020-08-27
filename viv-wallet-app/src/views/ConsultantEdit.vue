@@ -5,13 +5,22 @@
     <form class="consultant-form">
       <div class="element-block">
         <label id="input-fullname-1" for="fullname-1">Nom</label>
-        <input
+        <input v-if="consultantId != 'add'"
           id="fullname-1"
           type="text"
           v-model="consultant.fullname"
           placeholder="Nom"
           readonly="true"
-          />
+               />
+        <select v-else id="fullname-1" v-model="consultant.id">
+          <option
+            v-for="user in usersNotAlreadyInExpertise"
+            v-bind:key="user.id"
+            v-bind:value="user.id"
+            >
+            {{ user.fullName }}
+          </option>
+        </select>
       </div>
       
       <div class="element-block">
@@ -54,9 +63,11 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import { Consultant, ConsultantStatus, toString } from "../models/consultant";
 import { ConsultantsService } from "../services/consultants";
+import { UsersService } from "../services/users";
+import { User } from "../models/user";
 import Loading from "../components/Loading.vue";
 
 const ConsultantEditProps = Vue.extend({
@@ -72,7 +83,9 @@ const ConsultantEditProps = Vue.extend({
 })
 export default class ConsultantEdit extends ConsultantEditProps {
     consultantsService;
+    usersService;
     consultant: Consultant = { id: "", user: "", email: "", fullname: "", status: ConsultantStatus.MANAGER };
+    usersNotAlreadyInExpertise: User[] = [];
     loading = false;
     errored = false;
     options: { text: string; value: string; disabled: boolean }[] = [
@@ -82,6 +95,8 @@ export default class ConsultantEdit extends ConsultantEditProps {
     constructor() {
         super();
         this.consultantsService = new ConsultantsService(this.expertiseName);
+        this.usersService = new UsersService();
+        
         for (const [key, value] of Object.entries(ConsultantStatus)) {
             if (isNaN(Number(key))) {
                 // .entries contains either the constant names and indexes
@@ -97,7 +112,18 @@ export default class ConsultantEdit extends ConsultantEditProps {
     async mounted() {
         try {
             this.loading = true;
-            this.consultant = await this.consultantsService.getConsultant(this.consultantId);
+            if (this.consultantId !== "add") {
+                this.loading = true;
+                this.consultant = await this.consultantsService.getConsultant(this.consultantId);
+            } else {
+                this.loading = true;
+                const consultantsInExpertise = await this.consultantsService.getConsultants();
+                const allUsers = await this.usersService.getUsers();
+                
+                this.usersNotAlreadyInExpertise = allUsers.filter(u => !consultantsInExpertise.find(u1 => u1.id === u.id));
+                this.consultant.startDate = new Date().toLocaleDateString('en-CA'); // the format should be YYYY-MM-DD
+                this.consultant.status = ConsultantStatus.CONSULTANT_SENIOR_IN_ONBOARDING;
+            }
         } catch (ex) {
             this.errored = true;
         } finally {
@@ -117,6 +143,14 @@ export default class ConsultantEdit extends ConsultantEditProps {
         } finally {
             this.loading = false;
         }
+    }
+
+    @Watch('consultant.id')
+    async onSelectedUserChanged(value: number) {
+        const selectedUser = this.usersNotAlreadyInExpertise.find(u=>u.id === value);
+        this.consultant.user = selectedUser.user;
+        this.consultant.fullName = selectedUser.fullName;
+        this.consultant.email = selectedUser.email;
     }
 }
 </script>
