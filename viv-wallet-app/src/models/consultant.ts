@@ -9,7 +9,8 @@ export interface Consultant {
 export enum ConsultantStatus {
     CONSULTANT_SENIOR,
     CONSULTANT_SENIOR_IN_ONBOARDING,
-    MANAGER
+    MANAGER,
+    MANAGER_SENIOR
 }
 
 export function toString(status: ConsultantStatus): string {
@@ -18,6 +19,8 @@ export function toString(status: ConsultantStatus): string {
             return "Senior";
         case ConsultantStatus.MANAGER:
             return "Manager";
+        case ConsultantStatus.MANAGER_SENIOR:
+            return "Manager Senior";
         case ConsultantStatus.CONSULTANT_SENIOR_IN_ONBOARDING:
             return "Onboarding";
         default:
