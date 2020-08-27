@@ -4,9 +4,9 @@
             <p>We're sorry, we're not able to retrieve this information at the moment, please try back later</p>
         </section>
         <section v-else>
-            <h2>Editer consultant</h2>
-            <div v-if="loading">Loading...</div>
-            <form v-else class="consultant-form">
+          <h2>Editer consultant</h2>
+          <loading v-bind:loading="loading" v-bind:errored="errored">
+            <form class="consultant-form">
                 <div class="element-block">
                     <label id="input-fullname-1" for="fullname-1">Nom</label>
                     <input
@@ -42,6 +42,7 @@
                     <router-link class="secondary-button" to="/consultants" tag="button">Cancel</router-link>
                 </div>
             </form>
+            </loading>
         </section>
     </div>
 </template>
@@ -50,6 +51,7 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 import { Consultant, ConsultantStatus, toString } from "../models/consultant";
 import { ConsultantsService } from "../services/consultants";
+import Loading from "../components/Loading.vue";
 
 const ConsultantEditProps = Vue.extend({
     props: {
@@ -59,7 +61,8 @@ const ConsultantEditProps = Vue.extend({
 });
 
 @Component({
-    name: "consultant"
+    name: "consultant",
+    components: { Loading }
 })
 export default class ConsultantEdit extends ConsultantEditProps {
     consultantsService;

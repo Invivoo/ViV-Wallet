@@ -4,9 +4,9 @@
             <p>We're sorry, we're not able to retrieve this information at the moment, please try back later</p>
         </section>
         <section v-else>
-            <h2>Edit User</h2>
-            <div v-if="loading">Loading...</div>
-            <form v-else class="user-form">
+          <h2>Edit User</h2>
+          <loading v-bind:loading="loading" v-bind:errored="errored">
+            <form class="user-form">
                 <div class="element-block">
                     <label id="input-fullname-1" for="fullname-1">Nom</label>
                     <input id="fullname-1" type="text" v-model="user.fullName" placeholder="Nom" />
@@ -28,6 +28,7 @@
                     <button class="secondary-button" v-on:click="deleteUser">Supprimer</button>
                 </div>
             </form>
+          </loading>
         </section>
     </div>
 </template>
@@ -36,6 +37,7 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 import { User } from "../models/user";
 import { UsersService } from "@/services/users";
+import Loading from "../components/Loading.vue";
 
 const UserEditProps = Vue.extend({
     props: {
@@ -44,7 +46,8 @@ const UserEditProps = Vue.extend({
 });
 
 @Component({
-    name: "user"
+    name: "user",
+    components: { Loading }
 })
 export default class UserEdit extends UserEditProps {
     user: User | null = { id: "", fullName: "", user: "", email: "" };
