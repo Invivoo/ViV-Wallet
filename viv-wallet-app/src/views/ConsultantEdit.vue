@@ -1,6 +1,7 @@
 <template>
 <div class="consultantEdit">
-  <h2>Editer consultant</h2>
+  <h2 v-if="consultantId == 'add'">Ajouter consultant</h2>
+  <h2 v-else>Editer consultant</h2>
   <loading v-bind:loading="loading" v-bind:errored="errored">
     <form class="consultant-form">
       <div class="element-block">
@@ -55,7 +56,7 @@
 
       <div class="buttons">
         <button class="primary-button" v-on:click="confirm">Confirmer</button>
-        <router-link class="secondary-button" to="/consultants" tag="button">Cancel</router-link>
+        <router-link class="secondary-button" v-bind:to="`/members/${expertiseName}`" tag="button">Cancel</router-link>
       </div>
     </form>
   </loading>
@@ -148,9 +149,11 @@ export default class ConsultantEdit extends ConsultantEditProps {
     @Watch('consultant.id')
     async onSelectedUserChanged(value: number) {
         const selectedUser = this.usersNotAlreadyInExpertise.find(u=>u.id === value);
-        this.consultant.user = selectedUser.user;
-        this.consultant.fullName = selectedUser.fullName;
-        this.consultant.email = selectedUser.email;
+        if (selectedUser) {
+            this.consultant.user = selectedUser.user;
+            this.consultant.fullName = selectedUser.fullName;
+            this.consultant.email = selectedUser.email;
+        }            
     }
 }
 </script>
