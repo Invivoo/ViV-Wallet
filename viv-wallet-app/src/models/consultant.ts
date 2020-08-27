@@ -1,9 +1,11 @@
 export interface Consultant {
-    id: string;
-    user: string;
-    email: string;
-    fullname: string;
-    status: ConsultantStatus;
+    id?: string;
+    user?: string;
+    email?: string;
+    fullName?: string;
+    status?: ConsultantStatus;
+    startDate?: string;
+    endDate?: string;
 }
 
 export enum ConsultantStatus {

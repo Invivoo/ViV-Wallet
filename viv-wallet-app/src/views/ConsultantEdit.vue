@@ -5,16 +5,16 @@
         <loading v-bind:loading="loading" v-bind:errored="errored">
             <form class="consultant-form">
                 <div class="element-block">
-                    <label id="input-fullname-1" for="fullname-1">Nom</label>
+                    <label id="input-fullName-1" for="fullName-1">Nom</label>
                     <input
                         v-if="consultantId != 'add'"
-                        id="fullname-1"
+                        id="fullName-1"
                         type="text"
-                        v-model="consultant.fullname"
+                        v-model="consultant.fullName"
                         placeholder="Nom"
                         readonly="true"
                     />
-                    <select v-else id="fullname-1" v-model="consultant.id">
+                    <select v-else id="fullName-1" v-model="consultant.id">
                         <option v-for="user in usersNotAlreadyInExpertise" v-bind:key="user.id" v-bind:value="user.id">
                             {{ user.fullName }}
                         </option>
@@ -83,7 +83,7 @@ const ConsultantEditProps = Vue.extend({
 export default class ConsultantEdit extends ConsultantEditProps {
     consultantsService;
     usersService;
-    consultant: Consultant = { id: "", user: "", email: "", fullname: "", status: ConsultantStatus.MANAGER };
+    consultant: Consultant = {};
     usersNotAlreadyInExpertise: User[] = [];
     loading = false;
     errored = false;
@@ -147,7 +147,7 @@ export default class ConsultantEdit extends ConsultantEditProps {
     }
 
     @Watch("consultant.id")
-    async onSelectedUserChanged(value: number) {
+    async onSelectedUserChanged(value: string) {
         const selectedUser = this.usersNotAlreadyInExpertise.find(u => u.id === value);
         if (selectedUser) {
             this.consultant.user = selectedUser.user;

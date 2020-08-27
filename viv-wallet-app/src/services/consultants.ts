@@ -10,13 +10,15 @@ export class ConsultantsService extends ServiceBase {
     async getConsultants(): Promise<Consultant[]> {
         const rawData = (await this.http.get("")).data;
         return rawData.map(consultant => {
-            consultant.status = ConsultantStatus[consultant.status];
+            consultant.status = ConsultantStatus[consultant.status || ConsultantStatus.CONSULTANT_SENIOR];
             return consultant;
         });
     }
 
     async saveConsultant(consultant: Consultant): Promise<Object> {
-        consultant.status = (ConsultantStatus[consultant.status] as unknown) as ConsultantStatus;
+        consultant.status = (ConsultantStatus[
+            consultant.status || ConsultantStatus.CONSULTANT_SENIOR
+        ] as unknown) as ConsultantStatus;
         if (!consultant.id) {
             return (await this.http.post<Consultant>("", consultant)).data;
         }
