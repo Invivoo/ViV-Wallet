@@ -17,6 +17,12 @@
       "user": "rflondin",
       "fullName": "Roger Flodin",
       "email": "roget.flondin@invivoo.com"
+    },
+    {
+      "id": "4",
+      "user": "rflondingjava",
+      "fullName": "Roger Flodin Java",
+      "email": "roget.flondin.java@invivoo.com"
     }
   ],
   "expertiseMembers": [
