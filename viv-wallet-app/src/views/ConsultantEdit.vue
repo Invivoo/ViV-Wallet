@@ -32,7 +32,18 @@
           </option>
         </select>
       </div>
+
+      <div class="element-block">
+        <label id="input-startDate-1" label-for="startDate-1">Arrivé</label>
+        <input id="startDate-1" type="date" v-model="consultant.startDate" placeholder="Date d'arrivé" />
+      </div>
+
+      <div class="element-block">
+        <label id="input-endDate-1" label-for="endDate-1">Départ</label>
+        <input id="endDate-1" type="date" v-model="consultant.endDate" placeholder="Date de départ" />
+      </div>
       
+
       <div class="buttons">
         <button class="primary-button" v-on:click="confirm">Confirmer</button>
         <router-link class="secondary-button" to="/consultants" tag="button">Cancel</router-link>
