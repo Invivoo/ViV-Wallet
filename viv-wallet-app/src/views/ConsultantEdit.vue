@@ -1,66 +1,64 @@
 <template>
-<div class="consultantEdit">
-  <h2 v-if="consultantId == 'add'">Ajouter consultant</h2>
-  <h2 v-else>Editer consultant</h2>
-  <loading v-bind:loading="loading" v-bind:errored="errored">
-    <form class="consultant-form">
-      <div class="element-block">
-        <label id="input-fullname-1" for="fullname-1">Nom</label>
-        <input v-if="consultantId != 'add'"
-          id="fullname-1"
-          type="text"
-          v-model="consultant.fullname"
-          placeholder="Nom"
-          readonly="true"
-               />
-        <select v-else id="fullname-1" v-model="consultant.id">
-          <option
-            v-for="user in usersNotAlreadyInExpertise"
-            v-bind:key="user.id"
-            v-bind:value="user.id"
-            >
-            {{ user.fullName }}
-          </option>
-        </select>
-      </div>
-      
-      <div class="element-block">
-        <label id="input-email-1" label-for="email-1">Email</label>
-        <input id="email-1" type="text" v-model="consultant.email" placeholder="Email" readonly="true" />
-      </div>
-      
-      <div class="element-block">
-        <label id="input-status-1" label-for="status-1">Status du consultant</label>
-        <select id="status-1" v-model="consultant.status">
-          <option
-            v-bind:key="option.value"
-            v-for="option in options"
-            v-bind:value="option.value"
-            v-bind:disabled="option.disabled"
-            >
-            {{ option.text }}
-          </option>
-        </select>
-      </div>
+    <div class="consultantEdit">
+        <h2 v-if="consultantId == 'add'">Ajouter consultant</h2>
+        <h2 v-else>Editer consultant</h2>
+        <loading v-bind:loading="loading" v-bind:errored="errored">
+            <form class="consultant-form">
+                <div class="element-block">
+                    <label id="input-fullname-1" for="fullname-1">Nom</label>
+                    <input
+                        v-if="consultantId != 'add'"
+                        id="fullname-1"
+                        type="text"
+                        v-model="consultant.fullname"
+                        placeholder="Nom"
+                        readonly="true"
+                    />
+                    <select v-else id="fullname-1" v-model="consultant.id">
+                        <option v-for="user in usersNotAlreadyInExpertise" v-bind:key="user.id" v-bind:value="user.id">
+                            {{ user.fullName }}
+                        </option>
+                    </select>
+                </div>
 
-      <div class="element-block">
-        <label id="input-startDate-1" label-for="startDate-1">Arrivé</label>
-        <input id="startDate-1" type="date" v-model="consultant.startDate" placeholder="Date d'arrivé" />
-      </div>
+                <div class="element-block">
+                    <label id="input-email-1" label-for="email-1">Email</label>
+                    <input id="email-1" type="text" v-model="consultant.email" placeholder="Email" readonly="true" />
+                </div>
 
-      <div class="element-block">
-        <label id="input-endDate-1" label-for="endDate-1">Départ</label>
-        <input id="endDate-1" type="date" v-model="consultant.endDate" placeholder="Date de départ" />
-      </div>
-      
+                <div class="element-block">
+                    <label id="input-status-1" label-for="status-1">Status du consultant</label>
+                    <select id="status-1" v-model="consultant.status">
+                        <option
+                            v-bind:key="option.value"
+                            v-for="option in options"
+                            v-bind:value="option.value"
+                            v-bind:disabled="option.disabled"
+                        >
+                            {{ option.text }}
+                        </option>
+                    </select>
+                </div>
 
-      <div class="buttons">
-        <button class="primary-button" v-on:click="confirm">Confirmer</button>
-        <router-link class="secondary-button" v-bind:to="`/members/${expertiseName}`" tag="button">Cancel</router-link>
-      </div>
-    </form>
-  </loading>
-</div>
+                <div class="element-block">
+                    <label id="input-startDate-1" label-for="startDate-1">Arrivé</label>
+                    <input id="startDate-1" type="date" v-model="consultant.startDate" placeholder="Date d'arrivé" />
+                </div>
+
+                <div class="element-block">
+                    <label id="input-endDate-1" label-for="endDate-1">Départ</label>
+                    <input id="endDate-1" type="date" v-model="consultant.endDate" placeholder="Date de départ" />
+                </div>
+
+                <div class="buttons">
+                    <button class="primary-button" v-on:click="confirm">Confirmer</button>
+                    <router-link class="secondary-button" v-bind:to="`/members/${expertiseName}`" tag="button"
+                        >Cancel</router-link
+                    >
+                </div>
+            </form>
+        </loading>
+    </div>
 </template>
 
 <script lang="ts">
@@ -97,7 +95,7 @@ export default class ConsultantEdit extends ConsultantEditProps {
         super();
         this.consultantsService = new ConsultantsService(this.expertiseName);
         this.usersService = new UsersService();
-        
+
         for (const [key, value] of Object.entries(ConsultantStatus)) {
             if (isNaN(Number(key))) {
                 // .entries contains either the constant names and indexes
@@ -120,9 +118,11 @@ export default class ConsultantEdit extends ConsultantEditProps {
                 this.loading = true;
                 const consultantsInExpertise = await this.consultantsService.getConsultants();
                 const allUsers = await this.usersService.getUsers();
-                
-                this.usersNotAlreadyInExpertise = allUsers.filter(u => !consultantsInExpertise.find(u1 => u1.id === u.id));
-                this.consultant.startDate = new Date().toLocaleDateString('en-CA'); // the format should be YYYY-MM-DD
+
+                this.usersNotAlreadyInExpertise = allUsers.filter(
+                    u => !consultantsInExpertise.find(u1 => u1.id === u.id)
+                );
+                this.consultant.startDate = new Date().toLocaleDateString("en-CA"); // the format should be YYYY-MM-DD
                 this.consultant.status = ConsultantStatus.CONSULTANT_SENIOR_IN_ONBOARDING;
             }
         } catch (ex) {
@@ -146,14 +146,14 @@ export default class ConsultantEdit extends ConsultantEditProps {
         }
     }
 
-    @Watch('consultant.id')
+    @Watch("consultant.id")
     async onSelectedUserChanged(value: number) {
-        const selectedUser = this.usersNotAlreadyInExpertise.find(u=>u.id === value);
+        const selectedUser = this.usersNotAlreadyInExpertise.find(u => u.id === value);
         if (selectedUser) {
             this.consultant.user = selectedUser.user;
             this.consultant.fullName = selectedUser.fullName;
             this.consultant.email = selectedUser.email;
-        }            
+        }
     }
 }
 </script>
