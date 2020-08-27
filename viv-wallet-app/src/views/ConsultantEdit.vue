@@ -1,50 +1,45 @@
 <template>
-    <div class="consultantEdit">
-        <section v-if="errored">
-            <p>We're sorry, we're not able to retrieve this information at the moment, please try back later</p>
-        </section>
-        <section v-else>
-          <h2>Editer consultant</h2>
-          <loading v-bind:loading="loading" v-bind:errored="errored">
-            <form class="consultant-form">
-                <div class="element-block">
-                    <label id="input-fullname-1" for="fullname-1">Nom</label>
-                    <input
-                        id="fullname-1"
-                        type="text"
-                        v-model="consultant.fullname"
-                        placeholder="Nom"
-                        readonly="true"
-                    />
-                </div>
-
-                <div class="element-block">
-                    <label id="input-email-1" label-for="email-1">Email</label>
-                    <input id="email-1" type="text" v-model="consultant.email" placeholder="Email" readonly="true" />
-                </div>
-
-                <div class="element-block">
-                    <label id="input-status-1" label-for="status-1">Status du consultant</label>
-                    <select id="status-1" v-model="consultant.status">
-                        <option
-                            v-bind:key="option.value"
-                            v-for="option in options"
-                            v-bind:value="option.value"
-                            v-bind:disabled="option.disabled"
-                        >
-                            {{ option.text }}
-                        </option>
-                    </select>
-                </div>
-
-                <div class="buttons">
-                    <button class="primary-button" v-on:click="confirm">Confirmer</button>
-                    <router-link class="secondary-button" to="/consultants" tag="button">Cancel</router-link>
-                </div>
-            </form>
-            </loading>
-        </section>
-    </div>
+<div class="consultantEdit">
+  <h2>Editer consultant</h2>
+  <loading v-bind:loading="loading" v-bind:errored="errored">
+    <form class="consultant-form">
+      <div class="element-block">
+        <label id="input-fullname-1" for="fullname-1">Nom</label>
+        <input
+          id="fullname-1"
+          type="text"
+          v-model="consultant.fullname"
+          placeholder="Nom"
+          readonly="true"
+          />
+      </div>
+      
+      <div class="element-block">
+        <label id="input-email-1" label-for="email-1">Email</label>
+        <input id="email-1" type="text" v-model="consultant.email" placeholder="Email" readonly="true" />
+      </div>
+      
+      <div class="element-block">
+        <label id="input-status-1" label-for="status-1">Status du consultant</label>
+        <select id="status-1" v-model="consultant.status">
+          <option
+            v-bind:key="option.value"
+            v-for="option in options"
+            v-bind:value="option.value"
+            v-bind:disabled="option.disabled"
+            >
+            {{ option.text }}
+          </option>
+        </select>
+      </div>
+      
+      <div class="buttons">
+        <button class="primary-button" v-on:click="confirm">Confirmer</button>
+        <router-link class="secondary-button" to="/consultants" tag="button">Cancel</router-link>
+      </div>
+    </form>
+  </loading>
+</div>
 </template>
 
 <script lang="ts">
