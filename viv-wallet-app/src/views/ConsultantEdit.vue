@@ -66,7 +66,7 @@ export default class ConsultantEdit extends ConsultantEditProps {
     consultant: Consultant = { id: "", user: "", email: "", fullname: "", status: ConsultantStatus.MANAGER };
     loading = false;
     errored = false;
-    options: { text: string; value: string; disabled: bool }[] = [
+    options: { text: string; value: string; disabled: boolean }[] = [
         { text: "Choisissez une option", value: "", disabled: true }
     ];
 
