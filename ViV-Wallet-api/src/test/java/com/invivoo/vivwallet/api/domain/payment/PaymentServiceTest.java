@@ -23,7 +23,7 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class PaymentServiceTest {
 
-    private static final User TEST_USER = new User(2L, "Test user");
+    private static final User TEST_USER = new User(2L, "Test user", List.of());
 
     @Mock
     private UserRepository userRepository;

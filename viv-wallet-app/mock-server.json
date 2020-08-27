@@ -3,19 +3,19 @@
         {
             "id": "1",
             "user": "rleloup",
-            "fullname": "Roch Leloup",
+            "fullName": "Roch Leloup",
             "email": "roch.leloup@invivoo.com"
         },
         {
             "id": "2",
             "user": "dboudet",
-            "fullname": "Djeferson Boudet",
+            "fullName": "Djeferson Boudet",
             "email": "djeverson.boudet@invivoo.com"
         },
         {
             "id": "3",
             "user": "rflondin",
-            "fullname": "Roger Flodin",
+            "fullName": "Roger Flodin",
             "email": "roget.flondin@invivoo.com"
         }
     ],

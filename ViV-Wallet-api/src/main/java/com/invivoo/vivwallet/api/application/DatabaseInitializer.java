@@ -5,6 +5,8 @@ import com.invivoo.vivwallet.api.domain.action.Action;
 import com.invivoo.vivwallet.api.domain.action.ActionService;
 import com.invivoo.vivwallet.api.domain.payment.Payment;
 import com.invivoo.vivwallet.api.domain.payment.PaymentService;
+import com.invivoo.vivwallet.api.domain.role.Role;
+import com.invivoo.vivwallet.api.domain.role.RoleType;
 import com.invivoo.vivwallet.api.domain.user.User;
 import com.invivoo.vivwallet.api.domain.user.UserRepository;
 import com.invivoo.vivwallet.api.infrastructure.lynx.LynxConnector;
@@ -48,6 +50,11 @@ public class DatabaseInitializer implements CommandLineRunner {
                                        .fullName("Théophile MONTGOMERY")
                                        .id(1L)
                                        .build();
+        theophileMontgomery.setRoles(Arrays.asList(
+                new Role(theophileMontgomery, RoleType.EXPERTISE_MANAGER),
+                new Role(theophileMontgomery, RoleType.SENIOR_MANAGER),
+                new Role(theophileMontgomery, RoleType.COMPANY_ADMINISTRATOR)
+        ));
         userRepository.saveAll(Arrays.asList(theophileMontgomery,
                                              User.builder()
                                                  .fullName("Collaborateur Invivoo")
@@ -70,9 +77,9 @@ public class DatabaseInitializer implements CommandLineRunner {
 
         paymentService.save(payment);
         List<Action> paidActions = actions.subList(0, actions.size() / 2)
-                                      .stream()
-                                      .peek(action -> action.setPayment(payment))
-                                      .collect(Collectors.toList());
+                                          .stream()
+                                          .peek(action -> action.setPayment(payment))
+                                          .collect(Collectors.toList());
         actionService.saveAll(paidActions);
 
     }

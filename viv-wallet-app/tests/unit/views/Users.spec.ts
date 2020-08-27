@@ -18,7 +18,7 @@ describe("Users", () => {
     });
 
     it("should render a UserList when the users service returns a list of users", async () => {
-        const user: User = { id: "0", fullname: "myName", user: "login", email: "test@test" };
+        const user: User = { id: "0", fullName: "myName", user: "login", email: "test@test" };
 
         UsersService.prototype.getUsers = jest.fn().mockImplementation(() => {
             return [user];

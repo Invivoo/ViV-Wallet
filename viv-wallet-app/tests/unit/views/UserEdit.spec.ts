@@ -7,7 +7,7 @@ import { prototype } from "vue/types/umd";
 jest.mock("@/services/users");
 
 describe("UserEd", () => {
-    const user: User = { id: "0", fullname: "myName", user: "login", email: "test@test" };
+    const user: User = { id: "0", fullName: "myName", user: "login", email: "test@test" };
 
     beforeEach(() => {
         (UsersService as jest.Mock<UsersService>).mockClear();

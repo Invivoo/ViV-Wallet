@@ -3,6 +3,7 @@ package com.invivoo.vivwallet.api.interfaces.users;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.invivoo.vivwallet.api.application.security.JWTTokenProvider;
 import com.invivoo.vivwallet.api.domain.action.Action;
 import com.invivoo.vivwallet.api.domain.action.ActionService;
 import com.invivoo.vivwallet.api.domain.action.ActionType;
@@ -49,8 +50,8 @@ import static org.mockito.Mockito.when;
 public class UsersControllerTest {
 
     private static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(), MediaType.APPLICATION_JSON.getSubtype(), StandardCharsets.UTF_8);
-    private static final User TEST_USER_1 = new User(1L, "User 1");
-    private static final User TEST_USER_2 = new User(2L, "User 2");
+    private static final User TEST_USER_1 = new User(1L, "User 1", List.of());
+    private static final User TEST_USER_2 = new User(2L, "User 2", List.of());
     private static final List<User> TEST_USERS = Arrays.asList(TEST_USER_1, TEST_USER_2);
     private static final ObjectMapper mapper = new ObjectMapper();
 
@@ -72,6 +73,10 @@ public class UsersControllerTest {
     @MockBean
     private PaymentService paymentService;
 
+    @MockBean
+    private JWTTokenProvider jwtTokenProvider;
+
+
     public UsersControllerTest() {
     }
 
@@ -85,7 +90,7 @@ public class UsersControllerTest {
     public void whenGetUsers_shouldReturnUsers() throws Exception {
         //given
         when(userRepository.findAll())
-               .thenReturn(TEST_USERS);
+                .thenReturn(TEST_USERS);
         String jsonTestUsers = mapper.writeValueAsString(TEST_USERS);
         //when
         ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/users"))
@@ -101,8 +106,7 @@ public class UsersControllerTest {
     public void whenPostUser_shouldSaveAndReturnUser() throws Exception {
         //given
         User testUser = TEST_USER_1;
-        when(userRepository.save(testUser))
-               .thenReturn(testUser);
+        when(userRepository.save(Mockito.any(User.class))).thenReturn(testUser);
         String jsonTestUser = mapper.writeValueAsString(testUser);
 
         //when
@@ -121,7 +125,7 @@ public class UsersControllerTest {
         //given
         User testUser = TEST_USER_1;
         when(userRepository.findById(testUser.getId()))
-               .thenReturn(Optional.of(testUser));
+                .thenReturn(Optional.of(testUser));
         //when
         ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get(String.format("/api/v1/users/%s", testUser.getId())))
                                                   .andDo(MockMvcResultHandlers.print());
@@ -137,12 +141,12 @@ public class UsersControllerTest {
         User testUser = TEST_USER_1;
         UserUpdateDto userUpdate = new UserUpdateDto("newFullName");
         when(userRepository.findById(testUser.getId()))
-               .thenReturn(Optional.of(testUser));
+                .thenReturn(Optional.of(testUser));
         User expectedUser = testUser.toBuilder()
                                     .fullName(userUpdate.getFullName())
                                     .build();
         when(userRepository.save(expectedUser))
-               .thenReturn(expectedUser);
+                .thenReturn(expectedUser);
 
         String jsonUserUpdate = mapper.writeValueAsString(userUpdate);
 
@@ -163,7 +167,7 @@ public class UsersControllerTest {
         //given
         User testUser = TEST_USER_1;
         when(userRepository.findById(testUser.getId()))
-               .thenReturn(Optional.of(testUser));
+                .thenReturn(Optional.of(testUser));
 
         //when
         ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.delete(String.format("/api/v1/users/%s", TEST_USER_1.getId())))
@@ -182,12 +186,12 @@ public class UsersControllerTest {
 
         //When
         ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get(String.format("/api/v1/users/%s/balance", testUser.getId())))
-                .andDo(MockMvcResultHandlers.print());
+                                                  .andDo(MockMvcResultHandlers.print());
 
         //Then
         verify(userService).computeBalance(testUser.getId());
         resultActions.andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.value", Matchers.is(20)));
+                     .andExpect(MockMvcResultMatchers.jsonPath("$.value", Matchers.is(20)));
     }
 
     @Test
@@ -203,14 +207,14 @@ public class UsersControllerTest {
 
         Expertise testUserExpertise = Expertise.PROGRAMMATION_JAVA;
         ExpertiseMember testUserExpertiseMember = ExpertiseMember.builder()
-                .user(testUser)
-                .expertise(testUserExpertise).build();
+                                                                 .user(testUser)
+                                                                 .expertise(testUserExpertise).build();
         when(expertiseMemberRepository.findByUser(testUser))
                 .thenReturn(List.of(testUserExpertiseMember));
 
         //When
         ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get(String.format("/api/v1/users/%s/actions", testUser.getId())))
-                .andDo(MockMvcResultHandlers.print());
+                                                  .andDo(MockMvcResultHandlers.print());
 
         //Then
         List<ActionDto> expectedActionDtos = Arrays.asList(
@@ -220,7 +224,7 @@ public class UsersControllerTest {
 
         verify(actionService).findAllByAchiever(testUser);
         resultActions.andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string(expectedJson));
+                     .andExpect(MockMvcResultMatchers.content().string(expectedJson));
     }
 
     @Test
@@ -238,7 +242,7 @@ public class UsersControllerTest {
 
         //When
         ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get(String.format("/api/v1/users/%s/actions", testUser.getId())))
-                .andDo(MockMvcResultHandlers.print());
+                                                  .andDo(MockMvcResultHandlers.print());
 
         //Then
         List<ActionDto> expectedActionDtos = Arrays.asList(
@@ -248,30 +252,30 @@ public class UsersControllerTest {
 
         verify(actionService).findAllByAchiever(testUser);
         resultActions.andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string(expectedJson));
+                     .andExpect(MockMvcResultMatchers.content().string(expectedJson));
     }
 
     private Action anUnpaidAction(User user) {
         return Action.builder().id(1L)
-                .date(LocalDateTime.of(2020, Month.JANUARY, 1, 12, 0))
-                .type(ActionType.ARTICLE_PUBLICATION)
-                .viv(BigDecimal.valueOf(15))
-                .context("This is a comment")
-                .achiever(user)
-                .build();
+                     .date(LocalDateTime.of(2020, Month.JANUARY, 1, 12, 0))
+                     .type(ActionType.ARTICLE_PUBLICATION)
+                     .viv(BigDecimal.valueOf(15))
+                     .context("This is a comment")
+                     .achiever(user)
+                     .build();
     }
 
     private Action aPaidAction(User user) {
         return Action.builder().id(2L)
-                .date(LocalDateTime.of(2020, Month.JUNE, 1, 12, 0))
-                .type(ActionType.COACHING)
-                .viv(BigDecimal.valueOf(10))
-                .context("This is a comment")
-                .achiever(user)
-                .payment(Payment.builder()
-                        .id(1L)
-                        .date(LocalDateTime.of(2020, Month.JULY, 1, 12, 0)).build())
-                .build();
+                     .date(LocalDateTime.of(2020, Month.JUNE, 1, 12, 0))
+                     .type(ActionType.COACHING)
+                     .viv(BigDecimal.valueOf(10))
+                     .context("This is a comment")
+                     .achiever(user)
+                     .payment(Payment.builder()
+                                     .id(1L)
+                                     .date(LocalDateTime.of(2020, Month.JULY, 1, 12, 0)).build())
+                     .build();
     }
 
     private ActionDto buildActionDto(Action action, Expertise userExpertise) {
@@ -282,12 +286,12 @@ public class UsersControllerTest {
 
     private ActionDto buildActionDto(Action action) {
         ActionDto actionDto = ActionDto.builder()
-                .id(action.getId())
-                .userId(action.getAchiever().getId())
-                .type(action.getType().getName())
-                .comment(action.getContext())
-                .creationDate(action.getDate())
-                .payment(action.getViv()).build();
+                                       .id(action.getId())
+                                       .userId(action.getAchiever().getId())
+                                       .type(action.getType().getName())
+                                       .comment(action.getContext())
+                                       .creationDate(action.getDate())
+                                       .payment(action.getViv()).build();
         Optional.ofNullable(action.getPayment()).ifPresentOrElse(
                 payment -> {
                     actionDto.setStatus(ActionStatus.PAID.getLabel());
@@ -303,28 +307,28 @@ public class UsersControllerTest {
         //Given
         User testUser = TEST_USER_1;
         PaymentDto payment1 = PaymentDto.builder()
-                .id(1L)
-                .userId(testUser.getId())
-                .date(LocalDateTime.of(2020, Month.JANUARY, 1, 12, 0))
-                .viv(BigDecimal.valueOf(50))
-                .amount(BigDecimal.valueOf(250)).build();
+                                        .id(1L)
+                                        .userId(testUser.getId())
+                                        .date(LocalDateTime.of(2020, Month.JANUARY, 1, 12, 0))
+                                        .viv(BigDecimal.valueOf(50))
+                                        .amount(BigDecimal.valueOf(250)).build();
         PaymentDto payment2 = PaymentDto.builder()
-                .id(2L)
-                .userId(testUser.getId())
-                .date(LocalDateTime.of(2020, Month.JUNE, 1, 12, 0))
-                .viv(BigDecimal.valueOf(50))
-                .amount(BigDecimal.valueOf(250)).build();
+                                        .id(2L)
+                                        .userId(testUser.getId())
+                                        .date(LocalDateTime.of(2020, Month.JUNE, 1, 12, 0))
+                                        .viv(BigDecimal.valueOf(50))
+                                        .amount(BigDecimal.valueOf(250)).build();
         List<PaymentDto> expectedPayments = Arrays.asList(payment2, payment1);
         when(paymentService.findAllByReceiver(testUser.getId())).thenReturn(expectedPayments);
 
         //When
         ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get(String.format("/api/v1/users/%s/payments", testUser.getId())))
-                .andDo(MockMvcResultHandlers.print());
+                                                  .andDo(MockMvcResultHandlers.print());
 
         //Then
         verify(paymentService).findAllByReceiver(testUser.getId());
         String expectedJson = mapper.writeValueAsString(expectedPayments);
         resultActions.andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string(expectedJson));
+                     .andExpect(MockMvcResultMatchers.content().string(expectedJson));
     }
 }

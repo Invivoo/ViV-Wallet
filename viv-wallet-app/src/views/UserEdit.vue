@@ -9,7 +9,7 @@
             <form v-else class="user-form">
                 <div class="element-block">
                     <label id="input-fullname-1" for="fullname-1">Nom</label>
-                    <input id="fullname-1" type="text" v-model="user.fullname" placeholder="Nom" />
+                    <input id="fullname-1" type="text" v-model="user.fullName" placeholder="Nom" />
                 </div>
 
                 <div class="element-block">
@@ -47,7 +47,7 @@ const UserEditProps = Vue.extend({
     name: "user"
 })
 export default class UserEdit extends UserEditProps {
-    user: User | null = { id: "", fullname: "", user: "", email: "" };
+    user: User | null = { id: "", fullName: "", user: "", email: "" };
     loading = false;
     errored = false;
     usersService = new UsersService();

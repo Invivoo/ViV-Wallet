@@ -64,14 +64,14 @@ import { Role } from "../models/role";
 })
 export default class ActionsBlock extends Vue {
     @Prop({ default: [] }) actions!: Action[];
-    @Prop() userRole?: Role;
+    @Prop() userRoles?: Role[];
 
     isPaymentPaid(action: Action) {
         return action.status === PaymentStatus.Paid;
     }
 
     shouldDisplayPayButton() {
-        return this.userRole && this.userRole === Role.Admin;
+        return this.userRoles && this.userRoles.indexOf(Role.COMPANY_ADMINISTRATOR) !== -1;
     }
 
     formatPaymentStatus(status: PaymentStatus) {
