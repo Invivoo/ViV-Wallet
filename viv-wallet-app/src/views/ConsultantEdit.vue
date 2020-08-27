@@ -6,19 +6,19 @@
             <form class="consultant-form">
                 <div class="element-block">
                     <label id="input-fullName-1" for="fullName-1">Nom</label>
+                    <select v-if="consultantId == 'add'" id="fullName-1" v-model="consultant.id">
+                        <option v-for="user in usersNotAlreadyInExpertise" v-bind:key="user.id" v-bind:value="user.id">
+                            {{ user.fullName }}
+                        </option>
+                    </select>
                     <input
-                        v-if="consultantId != 'add'"
+                        v-else
                         id="fullName-1"
                         type="text"
                         v-model="consultant.fullName"
                         placeholder="Nom"
                         readonly="true"
                     />
-                    <select v-else id="fullName-1" v-model="consultant.id">
-                        <option v-for="user in usersNotAlreadyInExpertise" v-bind:key="user.id" v-bind:value="user.id">
-                            {{ user.fullName }}
-                        </option>
-                    </select>
                 </div>
 
                 <div class="element-block">
