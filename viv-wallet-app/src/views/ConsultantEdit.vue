@@ -9,7 +9,13 @@
             <form v-else class="consultant-form">
                 <div class="element-block">
                     <label id="input-fullname-1" for="fullname-1">Nom</label>
-                    <input id="fullname-1" type="text" v-model="consultant.fullname" placeholder="Nom" readonly="true"/>
+                    <input
+                        id="fullname-1"
+                        type="text"
+                        v-model="consultant.fullname"
+                        placeholder="Nom"
+                        readonly="true"
+                    />
                 </div>
 
                 <div class="element-block">
@@ -18,16 +24,17 @@
                 </div>
 
                 <div class="element-block">
-                  <label id="input-status-1" label-for="status-1">Status du consultant</label>
-                  <select id="status-1" v-model="consultant.status">
-                    <option
-                      v-bind:key="option.value"
-                      v-for="option in options"
-                      v-bind:value="option.value"
-                      v-bind:disabled="option.disabled">
-                      {{ option.text }}
-                    </option> 
-                  </select>
+                    <label id="input-status-1" label-for="status-1">Status du consultant</label>
+                    <select id="status-1" v-model="consultant.status">
+                        <option
+                            v-bind:key="option.value"
+                            v-for="option in options"
+                            v-bind:value="option.value"
+                            v-bind:disabled="option.disabled"
+                        >
+                            {{ option.text }}
+                        </option>
+                    </select>
                 </div>
 
                 <div class="buttons">
@@ -56,10 +63,10 @@ const ConsultantEditProps = Vue.extend({
 })
 export default class ConsultantEdit extends ConsultantEditProps {
     consultantsService;
-    consultant: Consultant = {id: '', user: '', email: '', fullname: '', status: ConsultantStatus.MANAGER};
+    consultant: Consultant = { id: "", user: "", email: "", fullname: "", status: ConsultantStatus.MANAGER };
     loading = false;
     errored = false;
-    options: {text: string, value: string, disabled: bool}[] = [
+    options: { text: string; value: string; disabled: bool }[] = [
         { text: "Choisissez une option", value: "", disabled: true }
     ];
 
@@ -67,18 +74,17 @@ export default class ConsultantEdit extends ConsultantEditProps {
         super();
         this.consultantsService = new ConsultantsService(this.expertiseName);
         for (const [key, value] of Object.entries(ConsultantStatus)) {
-            if (isNaN(Number(key))) { // .entries contains either the constant names and indexes
-                this.options.push(
-                    {
-                        text: toString(value as ConsultantStatus),
-                        value: value as string,
-                        disabled: false
-                    }
-                );
+            if (isNaN(Number(key))) {
+                // .entries contains either the constant names and indexes
+                this.options.push({
+                    text: toString(value as ConsultantStatus),
+                    value: value as string,
+                    disabled: false
+                });
             }
         }
     }
-    
+
     async mounted() {
         try {
             this.loading = true;
@@ -89,7 +95,7 @@ export default class ConsultantEdit extends ConsultantEditProps {
             this.loading = false;
         }
     }
-    
+
     async confirm() {
         try {
             this.loading = true;

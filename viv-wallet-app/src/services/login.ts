@@ -1,6 +1,6 @@
-import {Role} from '../models/role';
-import jwt_decode from 'jwt-decode';
-import {getToken, login} from 'x4b-ui';
+import { Role } from "../models/role";
+import jwt_decode from "jwt-decode";
+import { getToken, login } from "x4b-ui";
 
 export interface DecodedJwtTokenContent {
     exp: number;
