@@ -10,8 +10,6 @@
         >
             <div class="root">
                 <div class="menu">
-                    <Banner></Banner>
-                    <custom-router-link to="/">Home</custom-router-link>
                     <custom-router-link to="/users">Users</custom-router-link>
                     <custom-router-link to="/wallet">Wallet</custom-router-link>
                     <custom-router-link to="/members">Expertise</custom-router-link>
@@ -25,13 +23,12 @@
 </template>
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import Banner from "./components/Banner.vue";
 import "x4b-ui/dist/x4b-ui/x4b-ui.css";
 import { version } from "../package.json";
 import CustomRouterLink from "./components/CustomRouterLink.vue";
 import { LoginService } from "./services/login";
 
-@Component({ components: { Banner, CustomRouterLink } })
+@Component({ components: { CustomRouterLink } })
 export default class App extends Vue {
     private appsUrl: string = process.env.VUE_APP_APPS_URL;
     private appVersion: string = version;

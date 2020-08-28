@@ -44,7 +44,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import { Consultant, ConsultantStatus } from "../models/consultant";
+import { Consultant, ConsultantStatus, toString } from "../models/consultant";
 import StatusBadge from "../components/StatusBadge.vue";
 
 @Component({
@@ -56,16 +56,7 @@ export default class ConsultantList extends Vue {
     @Prop() expertise!: string;
 
     formatConsultantStatus(status: ConsultantStatus) {
-        switch (status) {
-            case ConsultantStatus.CONSULTANT_SENIOR:
-                return "Senior";
-            case ConsultantStatus.MANAGER:
-                return "Manager";
-            case ConsultantStatus.CONSULTANT_SENIOR_IN_ONBOARDING:
-                return "Onboarding";
-            default:
-                return "Inconnu";
-        }
+        return toString(status);
     }
 
     getConsultantStatusType(status: ConsultantStatus) {

@@ -20,7 +20,9 @@
                         </div>
                     </div>
                     <div class="spacer" />
-                    <router-link class="primary-button" to="/members/add" tag="button">Ajouter</router-link>
+                    <router-link class="primary-button" v-bind:to="`/members/${selectedExpertiseId}/add`" tag="button"
+                        >Ajouter</router-link
+                    >
                 </div>
                 <consultant-list v-bind:consultants="consultants" v-bind:expertise="selectedExpertiseId" />
             </section>
