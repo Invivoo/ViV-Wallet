@@ -16,17 +16,17 @@
                 <illustration />
             </div>
             <form class="payment-form">
-                <div class="element-block">
-                    <label id="input-date-1" label-for="lbl-date-1">Date</label>
-                    <vc-date-picker :mode="mode" v-model="date" />
+                <div class="element-block inline-bloc w33">
+                    <label id="input-date-1" label-for="lbl-date-1">DATE</label>
+                    <vc-date-picker :mode="mode" v-model="date" class="values" />
                 </div>
-                <div class="element-block inline-bloc w50">
-                    <label id="lbl-viv-1" label-for="p-viv-1">Total des VIVs</label>
-                    <div id="p-viv-1">{{ viv }}</div>
+                <div class="element-block inline-bloc w33">
+                    <label id="lbl-viv-1" label-for="p-viv-1">TOTAL VIVs</label>
+                    <div class="values" id="p-viv-1">{{ viv }}</div>
                 </div>
-                <div class="element-block inline-bloc w50">
-                    <label id="lbl-amount-1" label-for="p-amount-1">Montant</label>
-                    <div id="p-amount-1">{{ amount }} €</div>
+                <div class="element-block inline-bloc w33">
+                    <label id="lbl-amount-1" label-for="p-amount-1">MONTANT</label>
+                    <div class="values" id="p-amount-1">{{ amount }} €</div>
                 </div>
                 <actions-block v-bind:actions="actions" />
                 <div class="buttons">
@@ -42,7 +42,7 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 import { User } from "../models/user";
 import { UsersService } from "@/services/users";
-import { Payment, PaymentPost } from "../models/payment";
+import { PaymentPost } from "../models/payment";
 import { WalletService } from "../services/wallet";
 import { Action } from "@/models/action";
 import BalanceCard from "../components/BalanceCard.vue";
@@ -50,7 +50,7 @@ import Illustration from "../components/Illustration.vue";
 import ActionsBlock from "../components/ActionsBlock.vue";
 import Loading from "../components/Loading.vue";
 
-const PayementProps = Vue.extend({
+const PaymentProps = Vue.extend({
     props: {
         id: String
     }
@@ -60,7 +60,7 @@ const PayementProps = Vue.extend({
     name: "payment",
     components: { BalanceCard, Illustration, ActionsBlock, Loading }
 })
-export default class Payement extends PayementProps {
+export default class Payment extends PaymentProps {
     user: User | null = { id: "", fullName: "", user: "", email: "" };
     balance: number = 0;
     date: Date = new Date();
@@ -125,6 +125,9 @@ export default class Payement extends PayementProps {
 .w50 {
     width: 50%;
 }
+.w33 {
+    width: 33.3%;
+}
 .payment {
     width: 50%;
     margin: auto;
@@ -141,6 +144,9 @@ h2 {
     margin: $m-5 auto;
     padding: $m-5 $m-6;
 }
+.payment-form .element-block {
+    text-align: center;
+}
 .buttons {
     display: flex;
     margin-top: $m-5;
@@ -151,5 +157,9 @@ h2 {
     button:last-child {
         margin-right: 0;
     }
+}
+.payment .values {
+    font-weight: 600;
+    color: $gray-700;
 }
 </style>
