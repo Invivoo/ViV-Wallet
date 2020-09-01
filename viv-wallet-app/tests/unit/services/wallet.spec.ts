@@ -56,6 +56,43 @@ describe("BalanceService", () => {
         expect(mockedAxios.get).toHaveBeenCalledWith(`id1/actions`);
     });
 
+    it("should get only unpaied actions of a given user", async () => {
+        const actions = [{
+            id: "id1",
+            type: "Interview",
+            payment: 20,
+            status: PaymentStatus.Unpaid,
+            expertise: "Front-End"
+        },
+        {
+            id: "id1",
+            type: "Interview",
+            payment: 30,
+            status: PaymentStatus.Unpaid,
+            expertise: "Front-End"
+        },
+        {
+            id: "id1",
+            type: "Interview",
+            payment: 50,
+            status: PaymentStatus.Unpaid,
+            expertise: "Front-End"
+        }];
+        const response = {
+            data: actions
+        };
+        mockedAxios.get.mockReturnValue(Promise.resolve(response));
+
+        const returnedActions = await service.getUnpaidActions("id1");
+
+        expect(3).toEqual(returnedActions.length);
+        returnedActions.forEach(action => {
+            expect(PaymentStatus[PaymentStatus.Unpaid]).toEqual(action.status);
+        })
+
+        expect(mockedAxios.get).toHaveBeenCalledWith(`id1/actions`);
+    });
+
     it("should get the payments of a given user", async () => {
         const payment: Payment = {
             id: "id1",

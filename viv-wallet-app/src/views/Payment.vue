@@ -21,12 +21,12 @@
                     <vc-date-picker :mode="mode" v-model="date" />
                 </div>
                 <div class="element-block inline-bloc w50">
-                    <label id="lbl-amount-1" label-for="p-amount-1">Montant</label>
-                    <div id="p-amount-1">{{ viv }}</div>
+                    <label id="lbl-viv-1" label-for="p-viv-1">Total des VIVs</label>
+                    <div id="p-viv-1">{{ viv }}</div>
                 </div>
                 <div class="element-block inline-bloc w50">
-                    <label id="lbl-viv-1" label-for="p-viv-1">VIV</label>
-                    <div id="p-viv-1">{{ amount }}</div>
+                    <label id="lbl-amount-1" label-for="p-amount-1">Montant</label>
+                    <div id="p-amount-1">{{ amount }} €</div>
                 </div>
                 <actions-block v-bind:actions="actions" />
                 <div class="buttons">
@@ -66,7 +66,7 @@ export default class Payement extends PayementProps {
     date: Date = new Date();
     actions: Action[] = [];
 
-    coeff: number = 50;
+    coeff: number = 5;
     viv: number = 0;
 
     loading = false;
@@ -84,7 +84,11 @@ export default class Payement extends PayementProps {
         try {
             this.user = await this.usersService.getUser(this.id);
             this.balance = await this.walletService.getBalance(this.id);
-            this.actions = await this.walletService.getActions(this.id);
+            this.actions = await this.walletService.getUnpaidActions(this.id);
+
+            this.actions.forEach(action => {
+                this.viv += action.payment;
+            });
         } catch (ex) {
             this.errored = true;
         } finally {
@@ -125,7 +129,6 @@ export default class Payement extends PayementProps {
     width: 50%;
     margin: auto;
 }
-
 h2 {
     text-align: center;
     font-size: $text-2xl;
@@ -133,13 +136,11 @@ h2 {
     font-weight: 600;
     margin: $m-6 0 $m-3 0;
 }
-
 .payment-form {
     width: 100%;
     margin: $m-5 auto;
     padding: $m-5 $m-6;
 }
-
 .buttons {
     display: flex;
     margin-top: $m-5;

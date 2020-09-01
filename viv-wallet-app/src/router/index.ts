@@ -1,13 +1,13 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
-import VCalendar from 'v-calendar';
+import VCalendar from "v-calendar";
 require("focus-visible");
 
 Vue.use(VueRouter);
 Vue.use(VCalendar, {
-    componentPrefix: 'vc',  // Use <vc-calendar /> instead of <v-calendar />
-  });
+    componentPrefix: "vc"// Use <vc-calendar /> instead of <v-calendar />
+});
 
 const routes = [
     {
