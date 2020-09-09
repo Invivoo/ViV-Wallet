@@ -6,12 +6,17 @@
             <form class="consultant-form">
                 <div class="element-block">
                     <label id="input-fullName-1" for="fullName-1">Nom</label>
-                    <select v-if="consultantId == 'add'" id="fullName-1" v-model="consultant.id" required="true">
-                        <option value="" disabled="true">Choisissez une option</option>
-                        <option v-for="user in usersNotAlreadyInExpertise" v-bind:key="user.id" v-bind:value="user.id">
-                            {{ user.fullName }}
-                        </option>
-                    </select>
+                    <div v-if="consultantId == 'add'" class="select">
+                        <select id="fullName-1" v-model="consultant.id" required="true">
+                            <option value disabled="true">Choisissez une option</option>
+                            <option
+                                v-for="user in usersNotAlreadyInExpertise"
+                                v-bind:key="user.id"
+                                v-bind:value="user.id"
+                            >{{ user.fullName }}</option>
+                            <span class="select-focus"></span>
+                        </select>
+                    </div>
                     <input
                         v-else
                         id="fullName-1"
@@ -24,38 +29,61 @@
 
                 <div class="element-block">
                     <label id="input-email-1" label-for="email-1">Email</label>
-                    <input id="email-1" type="text" v-model="consultant.email" placeholder="Email" readonly="true" />
+                    <input
+                        id="email-1"
+                        type="text"
+                        v-model="consultant.email"
+                        placeholder="Email"
+                        readonly="true"
+                    />
                 </div>
 
                 <div class="element-block">
                     <label id="input-status-1" label-for="status-1">Status du consultant</label>
-                    <select id="status-1" v-model="consultant.status">
-                        <option
-                            v-bind:key="option.value"
-                            v-for="option in options"
-                            v-bind:value="option.value"
-                            v-bind:disabled="option.disabled"
-                        >
-                            {{ option.text }}
-                        </option>
-                    </select>
+                    <div class="select">
+                        <select id="status-1" v-model="consultant.status">
+                            <option
+                                v-bind:key="option.value"
+                                v-for="option in options"
+                                v-bind:value="option.value"
+                                v-bind:disabled="option.disabled"
+                            >{{ option.text }}</option>
+                        </select>
+                        <span class="select-focus"></span>
+                    </div>
                 </div>
 
                 <div class="element-block">
                     <label id="input-startDate-1" label-for="startDate-1">Arrivé</label>
-                    <input id="startDate-1" type="date" v-model="consultant.startDate" placeholder="Date d'arrivé" />
+                    <input
+                        id="startDate-1"
+                        type="date"
+                        v-model="consultant.startDate"
+                        placeholder="Date d'arrivé"
+                    />
                 </div>
 
                 <div class="element-block">
                     <label id="input-endDate-1" label-for="endDate-1">Départ</label>
-                    <input id="endDate-1" type="date" v-model="consultant.endDate" placeholder="Date de départ" />
+                    <input
+                        id="endDate-1"
+                        type="date"
+                        v-model="consultant.endDate"
+                        placeholder="Date de départ"
+                    />
                 </div>
 
                 <div class="buttons">
-                    <button class="primary-button" v-on:click="confirm" :disabled="submitButtonDisabled">Confirmer</button>
-                    <router-link class="secondary-button" v-bind:to="`/members/${expertiseName}`" tag="button"
-                        >Cancel</router-link
-                    >
+                    <button
+                        class="primary-button"
+                        v-on:click="confirm"
+                        :disabled="submitButtonDisabled"
+                    >Confirmer</button>
+                    <router-link
+                        class="secondary-button"
+                        v-bind:to="`/members/${expertiseName}`"
+                        tag="button"
+                    >Cancel</router-link>
                 </div>
             </form>
         </loading>
@@ -89,7 +117,7 @@ export default class ConsultantEdit extends ConsultantEditProps {
     loading = false;
     errored = false;
     submitButtonDisabled = true;
-    
+
     options: { text: string; value: string; disabled: boolean }[] = [
         { text: "Choisissez une option", value: "", disabled: true }
     ];
@@ -166,6 +194,7 @@ export default class ConsultantEdit extends ConsultantEditProps {
 
 <style scoped lang="scss">
 @import "../styles/form.scss";
+@import "../styles/select.scss";
 @import "../styles/buttons.scss";
 
 .consultantEdit {
@@ -200,6 +229,6 @@ h2 {
 }
 
 select:invalid {
-  border: 2px dashed red;
+    border: 2px dashed red;
 }
 </style>
