@@ -22,14 +22,19 @@ select {
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
     appearance: none;
     border: solid 1px $gray-300;
-    border-radius: $rounded-sm;
+    border-radius: $rounded;
     background-color: $gray-100;
     color: $gray-700;
+    font-size: $text-base;
+    font-family: "Open Sans", sans-serif;
     line-height: 1.25;
     width: 100%;
     padding: $m-2 $m-3;
     &:focus {
         outline: none;
         box-shadow: 0 0 0 2px $primary-400;
+    }
+    &::placeholder {
+        color: $gray-500;
     }
 }

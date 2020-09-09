@@ -70,6 +70,6 @@ h2 {
     font-size: $text-2xl;
     color: $gray-700;
     font-weight: 600;
-    margin: $m-6 0 $m-7 0;
+    margin: $m-6 0 $m-6 0;
 }
 </style>
