@@ -29,7 +29,7 @@ export class WalletService extends ServiceBase {
             action.paymentDate = new Date(action.paymentDate);
             action.status = PaymentStatus[action.status];
             return action;
-        }).filter(action => action.status === PaymentStatus.Unpaid);
+        }).filter(action => action.status === PaymentStatus[PaymentStatus.Unpaid]);
     }
 
     async getPayments(userId: string): Promise<Payment[]> {

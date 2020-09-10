@@ -68,7 +68,7 @@ describe("BalanceService", () => {
             id: "id1",
             type: "Interview",
             payment: 30,
-            status: PaymentStatus.Unpaid,
+            status: PaymentStatus.Paid,
             expertise: "Front-End"
         },
         {
@@ -85,7 +85,7 @@ describe("BalanceService", () => {
 
         const returnedActions = await service.getUnpaidActions("id1");
 
-        expect(3).toEqual(returnedActions.length);
+        expect(2).toEqual(returnedActions.length);
         returnedActions.forEach(action => {
             expect(PaymentStatus[PaymentStatus.Unpaid]).toEqual(action.status);
         })
