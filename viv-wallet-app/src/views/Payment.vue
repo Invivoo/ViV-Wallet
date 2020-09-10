@@ -28,9 +28,13 @@
                     <label id="lbl-amount-1" label-for="p-amount-1">MONTANT</label>
                     <div class="values" id="p-amount-1">{{ amount }} €</div>
                 </div>
-                <actions-block v-bind:actions="actions" />
+                <actions-block v-bind:actions="unpaidActions" />
                 <div class="buttons">
-                    <button class="primary-button" v-on:click="AddPayment">Valider</button>
+                    <button
+                        class="primary-button"
+                        :disabled="!hasUnpaidActions"
+                        v-on:click="AddPayment"
+                    >Valider</button>
                     <router-link class="secondary-button" to="/wallet" tag="button">Cancel</router-link>
                 </div>
             </form>
@@ -64,7 +68,7 @@ export default class Payment extends PaymentProps {
     user: User | null = { id: "", fullName: "", user: "", email: "" };
     balance: number = 0;
     date: Date = new Date();
-    actions: Action[] = [];
+    unpaidActions: Action[] = [];
 
     coeff: number = 5;
     viv: number = 0;
@@ -80,13 +84,16 @@ export default class Payment extends PaymentProps {
         return this.coeff * this.viv;
     }
 
+    get hasUnpaidActions(): boolean {
+        return this.unpaidActions && this.unpaidActions.length > 0;
+    }
+
     async mounted() {
         try {
             this.user = await this.usersService.getUser(this.id);
             this.balance = await this.walletService.getBalance(this.id);
-            this.actions = await this.walletService.getUnpaidActions(this.id);
-
-            this.actions.forEach(action => {
+            this.unpaidActions = await this.walletService.getUnpaidActions(this.id);
+            this.unpaidActions.forEach(action => {
                 this.viv += action.payment;
             });
         } catch (ex) {
@@ -98,11 +105,11 @@ export default class Payment extends PaymentProps {
     async AddPayment() {
         try {
             this.loading = true;
-            if (this.actions) {
+            if (this.hasUnpaidActions) {
                 let payment: PaymentPost = {
                     receiver: this.id,
-                    date: new Date(),
-                    actions: this.actions.map(({ id }) => id)
+                    date: this.date,
+                    actions: this.unpaidActions.map(({ id }) => id)
                 };
                 await this.walletService.savePayment(payment);
                 this.$router.push({ path: "/wallet" });
@@ -162,4 +169,10 @@ h2 {
     font-weight: 600;
     color: $gray-700;
 }
+button:disabled,
+button[disabled]{
+  cursor: not-allowed;
+  opacity : 0.7;
+}
+
 </style>
