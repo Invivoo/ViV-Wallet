@@ -6,8 +6,14 @@
     border-radius: $rounded-md;
     border: none;
     padding: $m-2 $m-4;
-    cursor: pointer;
-    &:hover {
+    &:enabled {
+        cursor: pointer;
+    }
+    &:disabled {
+        background: $white;
+        color: $primary-700;
+    }
+    &:hover:enabled {
         background: $primary-800;
     }
     &:focus {
