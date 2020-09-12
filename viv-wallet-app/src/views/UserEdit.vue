@@ -13,12 +13,12 @@
                     </div>
 
                     <div class="element-block">
-                        <label id="input-user-1" label-for="user-1">Identifiant</label>
+                        <label id="input-user-1" for="user-1">Identifiant</label>
                         <input id="user-1" type="text" v-model="user.user" placeholder="Identifiant" />
                     </div>
 
                     <div class="element-block">
-                        <label id="input-email-1" label-for="email-1">Email</label>
+                        <label id="input-email-1" for="email-1">Email</label>
                         <input id="email-1" type="text" v-model="user.email" placeholder="Email" />
                     </div>
 

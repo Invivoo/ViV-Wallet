@@ -29,12 +29,12 @@
                 </div>
 
                 <div class="element-block">
-                    <label id="input-email-1" label-for="email-1">Email</label>
+                    <label id="input-email-1" for="email-1">Email</label>
                     <input id="email-1" type="text" v-model="consultant.email" placeholder="Email" readonly="true" />
                 </div>
 
                 <div class="element-block">
-                    <label id="input-status-1" label-for="status-1">Status du consultant</label>
+                    <label id="input-status-1" for="status-1">Status du consultant</label>
                     <div class="select">
                         <select id="status-1" v-model="consultant.status">
                             <option
@@ -50,12 +50,12 @@
                 </div>
 
                 <div class="element-block">
-                    <label id="input-startDate-1" label-for="startDate-1">Arrivé</label>
+                    <label id="input-startDate-1" for="startDate-1">Arrivé</label>
                     <input id="startDate-1" type="date" v-model="consultant.startDate" placeholder="Date d'arrivé" />
                 </div>
 
                 <div class="element-block">
-                    <label id="input-endDate-1" label-for="endDate-1">Départ</label>
+                    <label id="input-endDate-1" for="endDate-1">Départ</label>
                     <input id="endDate-1" type="date" v-model="consultant.endDate" placeholder="Date de départ" />
                 </div>
 
