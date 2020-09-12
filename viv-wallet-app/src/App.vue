@@ -11,9 +11,9 @@
             <div class="root">
                 <div class="menu">
                     <custom-router-link to="/users">Users</custom-router-link>
-                    <custom-router-link to="/wallet">My wallet</custom-router-link>
-                    <custom-router-link to="/members">Expertise</custom-router-link>
-                    <custom-router-link to="/history">Historique</custom-router-link>
+                    <custom-router-link to="/wallet">Mon wallet</custom-router-link>
+                    <custom-router-link to="/members">Mon expertise</custom-router-link>
+                    <custom-router-link to="/actions">Mes actions</custom-router-link>
                 </div>
                 <div class="content">
                     <router-view />
@@ -84,7 +84,7 @@ body {
     flex-direction: column;
     color: $white;
     text-align: left;
-    width: 185px;
+    width: 230px;
     a {
         padding: $m-3 $m-7 $m-3 $m-6;
         color: $primary-200;

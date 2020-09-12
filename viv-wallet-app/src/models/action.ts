@@ -15,5 +15,5 @@ export interface Action {
 }
 
 export interface ActionForHistory extends Action {
-    userfullname?: string;
+    userFullName?: string;
 }

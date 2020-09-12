@@ -2,7 +2,7 @@
     <div class="history">
         <loading v-bind:loading="loading" v-bind:errored="errored">
             <section>
-                <h2>Historique</h2>
+                <h2>Mes actions</h2>
                 <action-history v-bind:actions="actions" />
             </section>
         </loading>
@@ -22,8 +22,8 @@ import ActionHistory from "../components/ActionHistory.vue";
     name: "history",
     components: { ActionHistory, Loading }
 })
-export default class history extends Vue {
-    // get the expertise of the current user
+export default class History extends Vue {
+    // TODO get the expertise of the current user
     expertise = "csharp";
     actions: ActionForHistory[] = [];
     loading = true;
@@ -40,7 +40,7 @@ export default class history extends Vue {
                     consultants.map(async consultant => {
                         return (await this.walletService.getActions(consultant.id!)).map(action => ({
                             ...action,
-                            userfullname: consultant.fullName
+                            userFullName: consultant.fullName
                         }));
                     })
                 )

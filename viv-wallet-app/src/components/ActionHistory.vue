@@ -34,7 +34,7 @@
                 <tr v-for="action in filteredActions" :key="action.id">
                     <td>
                         <div>
-                            <div class="user">{{ action.userfullname }}</div>
+                            <div class="user">{{ action.userFullName }}</div>
                             <div class="creation-date">{{ action.creationDate.toDateString() }}</div>
                         </div>
                     </td>
@@ -48,9 +48,9 @@
                     <td>
                         <div>
                             <div>
-                                <status-badge :type="getPaymentStatusType(action.status)">
-                                    {{ formatPaymentStatus(action.status) }}
-                                </status-badge>
+                                <status-badge :type="getPaymentStatusType(action.status)">{{
+                                    formatPaymentStatus(action.status)
+                                }}</status-badge>
                             </div>
                             <div v-if="isPaymentPaid(action)" class="payment-date">
                                 {{ action.paymentDate ? action.paymentDate.toDateString() : "" }}
@@ -105,7 +105,7 @@ export default class ActionsHistory extends Vue {
     @Watch("filterValue")
     filterChanged() {
         this.filteredActions = this.actions.filter(action =>
-            action.userfullname!.toLowerCase().includes(this.filterValue.toLowerCase())
+            action.userFullName!.toLowerCase().includes(this.filterValue.toLowerCase())
         );
     }
 }
