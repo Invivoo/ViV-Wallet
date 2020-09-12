@@ -8,26 +8,26 @@ export class ConsultantsService extends ServiceBase {
     }
 
     async getConsultants(): Promise<Consultant[]> {
-        const rawData = (await this.http.get("")).data;
-        return rawData.map(consultant => {
-            consultant.status = ConsultantStatus[consultant.status || ConsultantStatus.CONSULTANT_SENIOR];
-            return consultant;
-        });
+        return (await this.http.get("")).data.map(normalizeRawConsultant);
     }
 
     async saveConsultant(consultant: Consultant): Promise<Object> {
-        consultant.status = (ConsultantStatus[
-            consultant.status || ConsultantStatus.CONSULTANT_SENIOR
-        ] as unknown) as ConsultantStatus;
-        if (!consultant.id) {
-            return (await this.http.post<Consultant>("", consultant)).data;
-        }
-        return (await this.http.put<Consultant>(`${consultant.id}`, consultant)).data;
+        return (await this.http.put<Consultant>(`${consultant.id}`, consultantToRaw(consultant))).data;
     }
 
     async getConsultant(id: string): Promise<Consultant> {
-        const consultant = (await this.http.get(`${id}`)).data;
-        consultant.status = ConsultantStatus[consultant.status];
-        return consultant;
+        return normalizeRawConsultant((await this.http.get(`${id}`)).data);
     }
+}
+
+export function normalizeRawConsultant(consultant: any): Consultant {
+    consultant.status = ConsultantStatus[consultant.status || ConsultantStatus.CONSULTANT_SENIOR];
+    return consultant;
+}
+
+export function consultantToRaw(consultant: Consultant): any {
+    consultant.status = (ConsultantStatus[
+        consultant.status || ConsultantStatus.CONSULTANT_SENIOR
+    ] as unknown) as ConsultantStatus;
+    return consultant;
 }
