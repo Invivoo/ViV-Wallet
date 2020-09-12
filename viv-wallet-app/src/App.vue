@@ -13,7 +13,7 @@
                     <custom-router-link to="/users">Users</custom-router-link>
                     <custom-router-link to="/wallet">Mon wallet</custom-router-link>
                     <custom-router-link to="/members">Mon expertise</custom-router-link>
-                    <custom-router-link to="/actions">Mes actions</custom-router-link>
+                    <custom-router-link to="/actions">Historique des actions</custom-router-link>
                 </div>
                 <div class="content">
                     <router-view />
@@ -84,9 +84,9 @@ body {
     flex-direction: column;
     color: $white;
     text-align: left;
-    width: 230px;
+    width: 270px;
     a {
-        padding: $m-3 $m-7 $m-3 $m-6;
+        padding: $m-3 $m-5 $m-3 $m-6;
         color: $primary-200;
         outline: none;
         text-decoration: none;

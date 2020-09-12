@@ -2,7 +2,7 @@
     <div class="history">
         <loading v-bind:loading="loading" v-bind:errored="errored">
             <section>
-                <h2>Mes actions</h2>
+                <h2>Historique des actions</h2>
                 <action-history v-bind:actions="actions" />
             </section>
         </loading>
