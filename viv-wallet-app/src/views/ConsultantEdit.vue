@@ -6,12 +6,18 @@
             <form class="consultant-form">
                 <div class="element-block">
                     <label id="input-fullName-1" for="fullName-1">Nom</label>
-                    <select v-if="consultantId == 'add'" id="fullName-1" v-model="consultant.id" required="true">
-                        <option value="" disabled="true">Choisissez une option</option>
-                        <option v-for="user in usersNotAlreadyInExpertise" v-bind:key="user.id" v-bind:value="user.id">
-                            {{ user.fullName }}
-                        </option>
-                    </select>
+                    <div v-if="consultantId == 'add'" v-bind:class="`select ${consultant.id ? '' : 'select-error'}`">
+                        <select id="fullName-1" v-model="consultant.id" required="true">
+                            <option value disabled="true">Choisissez une option</option>
+                            <option
+                                v-for="user in usersNotAlreadyInExpertise"
+                                v-bind:key="user.id"
+                                v-bind:value="user.id"
+                                >{{ user.fullName }}</option
+                            >
+                            <span class="select-focus"></span>
+                        </select>
+                    </div>
                     <input
                         v-else
                         id="fullName-1"
@@ -29,16 +35,18 @@
 
                 <div class="element-block">
                     <label id="input-status-1" label-for="status-1">Status du consultant</label>
-                    <select id="status-1" v-model="consultant.status">
-                        <option
-                            v-bind:key="option.value"
-                            v-for="option in options"
-                            v-bind:value="option.value"
-                            v-bind:disabled="option.disabled"
-                        >
-                            {{ option.text }}
-                        </option>
-                    </select>
+                    <div class="select">
+                        <select id="status-1" v-model="consultant.status">
+                            <option
+                                v-bind:key="option.value"
+                                v-for="option in options"
+                                v-bind:value="option.value"
+                                v-bind:disabled="option.disabled"
+                                >{{ option.text }}</option
+                            >
+                        </select>
+                        <span class="select-focus"></span>
+                    </div>
                 </div>
 
                 <div class="element-block">
@@ -52,7 +60,9 @@
                 </div>
 
                 <div class="buttons">
-                    <button class="primary-button" v-on:click="confirm" :disabled="submitButtonDisabled">Confirmer</button>
+                    <button class="primary-button" v-on:click="confirm" :disabled="submitButtonDisabled">
+                        Confirmer
+                    </button>
                     <router-link class="secondary-button" v-bind:to="`/members/${expertiseName}`" tag="button"
                         >Cancel</router-link
                     >
@@ -89,7 +99,7 @@ export default class ConsultantEdit extends ConsultantEditProps {
     loading = false;
     errored = false;
     submitButtonDisabled = true;
-    
+
     options: { text: string; value: string; disabled: boolean }[] = [
         { text: "Choisissez une option", value: "", disabled: true }
     ];
@@ -166,6 +176,7 @@ export default class ConsultantEdit extends ConsultantEditProps {
 
 <style scoped lang="scss">
 @import "../styles/form.scss";
+@import "../styles/select.scss";
 @import "../styles/buttons.scss";
 
 .consultantEdit {
@@ -199,7 +210,12 @@ h2 {
     }
 }
 
-select:invalid {
-  border: 2px dashed red;
+div.select {
+    background: $gray-100;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.select-error {
+    border: solid 1px $red-400;
 }
 </style>

@@ -13,3 +13,7 @@ export interface Action {
     paymentDate?: Date;
     expertise: string;
 }
+
+export interface ActionForHistory extends Action {
+    userFullName?: string;
+}
