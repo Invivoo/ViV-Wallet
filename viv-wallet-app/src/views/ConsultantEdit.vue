@@ -6,7 +6,8 @@
             <form class="consultant-form">
                 <div class="element-block">
                     <label id="input-fullName-1" for="fullName-1">Nom</label>
-                    <select v-if="consultantId == 'add'" id="fullName-1" v-model="consultant.id">
+                    <select v-if="consultantId == 'add'" id="fullName-1" v-model="consultant.id" required="true">
+                        <option value="" disabled="true">Choisissez une option</option>
                         <option v-for="user in usersNotAlreadyInExpertise" v-bind:key="user.id" v-bind:value="user.id">
                             {{ user.fullName }}
                         </option>
@@ -51,7 +52,7 @@
                 </div>
 
                 <div class="buttons">
-                    <button class="primary-button" v-on:click="confirm">Confirmer</button>
+                    <button class="primary-button" v-on:click="confirm" :disabled="submitButtonDisabled">Confirmer</button>
                     <router-link class="secondary-button" v-bind:to="`/members/${expertiseName}`" tag="button"
                         >Cancel</router-link
                     >
@@ -87,6 +88,8 @@ export default class ConsultantEdit extends ConsultantEditProps {
     usersNotAlreadyInExpertise: User[] = [];
     loading = false;
     errored = false;
+    submitButtonDisabled = true;
+    
     options: { text: string; value: string; disabled: boolean }[] = [
         { text: "Choisissez une option", value: "", disabled: true }
     ];
@@ -114,7 +117,9 @@ export default class ConsultantEdit extends ConsultantEditProps {
             if (this.consultantId !== "add") {
                 this.loading = true;
                 this.consultant = await this.consultantsService.getConsultant(this.consultantId);
+                this.submitButtonDisabled = false;
             } else {
+                this.submitButtonDisabled = true;
                 this.loading = true;
                 const consultantsInExpertise = await this.consultantsService.getConsultants();
                 const allUsers = await this.usersService.getUsers();
@@ -153,6 +158,7 @@ export default class ConsultantEdit extends ConsultantEditProps {
             this.consultant.user = selectedUser.user;
             this.consultant.fullName = selectedUser.fullName;
             this.consultant.email = selectedUser.email;
+            this.submitButtonDisabled = false;
         }
     }
 }
@@ -191,5 +197,9 @@ h2 {
     button:last-child {
         margin-right: 0;
     }
+}
+
+select:invalid {
+  border: 2px dashed red;
 }
 </style>
