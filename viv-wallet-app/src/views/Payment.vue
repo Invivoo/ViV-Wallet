@@ -1,44 +1,47 @@
 <template>
     <div class="payment">
-        <section v-if="errored">
-            <p>We're sorry, we're not able to retrieve this information at the moment, please try back later</p>
-        </section>
-        <section v-else>
-            <h2>Payment</h2>
-            <div v-if="loading">Loading...</div>
-            <div class="header">
-                <balance-card
-                    fullName="Théophile Montgommery"
-                    expertise="Expertise front-end"
-                    consultantStatus="Consultant sénior"
-                    v-bind:vivBalance="balance"
-                />
-                <illustration />
-            </div>
-            <form class="payment-form">
-                <div class="element-block inline-bloc w33">
-                    <label id="input-date-1" label-for="lbl-date-1">DATE</label>
-                    <vc-date-picker :mode="mode" v-model="date" class="values" />
+        <loading v-bind:loading="loading" v-bind:errored="errored">
+            <section>
+                <h2>Paiement</h2>
+                <div class="header">
+                    <balance-card
+                        :fullName="user.fullName"
+                        expertise="Expertise front-end"
+                        consultantStatus="Consultant sénior"
+                        v-bind:vivBalance="balance"
+                    />
+                    <illustration />
                 </div>
-                <div class="element-block inline-bloc w33">
-                    <label id="lbl-viv-1" label-for="p-viv-1">TOTAL VIVs</label>
-                    <div class="values" id="p-viv-1">{{ viv }}</div>
-                </div>
-                <div class="element-block inline-bloc w33">
-                    <label id="lbl-amount-1" label-for="p-amount-1">MONTANT</label>
-                    <div class="values" id="p-amount-1">{{ amount }} €</div>
-                </div>
-                <actions-block v-bind:actions="unpaidActions" />
-                <div class="buttons">
-                    <button
-                        class="primary-button"
-                        :disabled="!hasUnpaidActions"
-                        v-on:click="AddPayment"
-                    >Valider</button>
-                    <router-link class="secondary-button" to="/wallet" tag="button">Cancel</router-link>
-                </div>
-            </form>
-        </section>
+                <form class="payment-form">
+                    <div class="element-block inline-bloc w33">
+                        <label id="lbl-date" for="payment-date">DATE</label>
+                        <vc-date-picker
+                            mode="single"
+                            id="payment-date"
+                            v-model="date"
+                            class="values"
+                        />
+                    </div>
+                    <div class="element-block inline-bloc w33">
+                        <label id="lbl-viv">TOTAL VIVs</label>
+                        <div class="values">{{ viv }}</div>
+                    </div>
+                    <div class="element-block inline-bloc w33">
+                        <label id="lbl-amount">MONTANT</label>
+                        <div class="values">{{ amount }} €</div>
+                    </div>
+                    <actions-block v-bind:actions="unpaidActions" />
+                    <div class="buttons">
+                        <button
+                            class="primary-button"
+                            :disabled="!hasUnpaidActions"
+                            v-on:click="AddPayment"
+                        >Valider</button>
+                        <router-link class="secondary-button" to="/wallet" tag="button">Cancel</router-link>
+                    </div>
+                </form>
+            </section>
+        </loading>
     </div>
 </template>
 
@@ -75,7 +78,6 @@ export default class Payment extends PaymentProps {
 
     loading = false;
     errored = false;
-    mode = "single";
 
     usersService = new UsersService();
     walletService = new WalletService();
@@ -90,9 +92,12 @@ export default class Payment extends PaymentProps {
 
     async mounted() {
         try {
-            this.user = await this.usersService.getUser(this.id);
-            this.balance = await this.walletService.getBalance(this.id);
-            this.unpaidActions = await this.walletService.getUnpaidActions(this.id);
+            [this.user, this.balance, this.unpaidActions] = await Promise.all([
+                this.usersService.getUser(this.id),
+                this.walletService.getBalance(this.id),
+                this.walletService.getUnpaidActions(this.id)
+            ]);
+
             this.unpaidActions.forEach(action => {
                 this.viv += action.payment;
             });
@@ -170,9 +175,8 @@ h2 {
     color: $gray-700;
 }
 button:disabled,
-button[disabled]{
-  cursor: not-allowed;
-  opacity : 0.7;
+button[disabled] {
+    cursor: not-allowed;
+    opacity: 0.7;
 }
-
 </style>
