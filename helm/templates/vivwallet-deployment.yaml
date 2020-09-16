@@ -1,11 +1,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-    name: {{ .Release.Name }}-{{ .Values.login.name }}
-{{- $labelData := dict "Chart" .Chart "Release" .Release "Name" .Values.login.name }}
+    name: {{ .Release.Name }}-{{ .Values.vivwallet.name }}
+{{- $labelData := dict "Chart" .Chart "Release" .Release "Name" .Values.vivwallet.name }}
 spec:
-    replicas: {{ .Values.login.replicaCount }} 
-    minReadySeconds: {{ .Values.login.minReadySeconds }}
+    replicas: {{ .Values.vivwallet.replicaCount }} 
+    minReadySeconds: {{ .Values.vivwallet.minReadySeconds }}
     {{- include "strategy.rolling" . | nindent 4 }}
     selector:
         matchLabels:
@@ -16,8 +16,8 @@ spec:
                 {{- include "labels" $labelData | nindent 16 }}
         spec:
             containers:
-            - name: {{ .Release.Name }}-{{ .Values.login.name }}-pod
-              image: {{ tpl .Values.login.image . }}
+            - name: {{ .Release.Name }}-{{ .Values.vivwallet.name }}-pod
+              image: {{ tpl .Values.vivwallet.image . }}
               env:
               - name: AuthenticationEndPoint
                 value: "http://{{ .Release.Name }}-{{ .Values.authentication.name }}-svc.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.authentication.port }}"
@@ -26,7 +26,7 @@ spec:
               {{- include "resources.small" . | nindent 14 }}
               imagePullPolicy: Always
               ports:
-              - containerPort: {{ .Values.login.port }}
+              - containerPort: {{ .Values.vivwallet.port }}
             imagePullSecrets:
             - name: {{ .Values.global.pullSecretName }}
 

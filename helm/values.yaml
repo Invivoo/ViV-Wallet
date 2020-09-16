@@ -5,9 +5,7 @@
 global:
     pullSecretName: regcred
     clusterSpecificDnszone: "496a8aa9ae8c48329209.northeurope.aksapp.io"
-    loginSpecificDnszone: "login.test.com"
-    appsSpecificDnszone: "app.test.com"
-    idpSpecificDnszone: "idp.test.com"
+    vivwalletSpecificDnszone: "vivwallet.test.com"
     useLocalhost: false
     traceEnabled: true
     prometheusCollectEnabled: false
@@ -42,7 +40,7 @@ resources:
 
 vivwallet:
     name: ViV-Wallet
-    image: "xcomponent/x4b-login:1.3"
+    image: "xcomponent/viv-wallet:dev-viv-feature-18"
     port: 443
     replicaCount: 1
     minReadySeconds: 10

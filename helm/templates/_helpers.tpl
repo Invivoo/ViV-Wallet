@@ -16,20 +16,6 @@ app.kubernetes.io/component: {{ .Name | quote }}
 {{- end -}}
 
 {{/*
-Default liveness probe strategy
-*/}}
-{{- define "livenessProbe" -}}
-livenessProbe:
-  httpGet:
-    path: /api/ServiceStatus
-    port: 8080
-  failureThreshold: 3
-  periodSeconds: 10
-  initialDelaySeconds: 10
-  timeoutSeconds: 5
-{{- end -}}
-
-{{/*
 Rolling strategy
 */}}
 {{- define "strategy.rolling" -}}
@@ -89,27 +75,16 @@ Endpoint env variables
 {{- if .Values.ingress.tls }}{{ print "https" }}{{- else }}{{ print "http" }}{{- end -}}
 {{- end -}}
 
-{{- define "login.url" -}}
-{{- if eq .Values.ingress.class "addon-http-application-routing" }}{{ print "login." (default .Release.Name .Values.global.devSubDomain) "." .Values.global.clusterSpecificDnszone }}{{- else }}{{ print .Values.global.loginSpecificDnszone }}{{- end -}}
-{{- end -}}
-
-{{- define "apps.url" -}}
-{{- if eq .Values.ingress.class "addon-http-application-routing" }}{{ print "apps." (default .Release.Name .Values.global.devSubDomain) "." .Values.global.clusterSpecificDnszone }}{{- else }}{{ print .Values.global.appsSpecificDnszone }}{{- end -}}
-{{- end -}}
-
-{{- define "idp.url" -}}
-{{- if eq .Values.ingress.class "addon-http-application-routing" }}{{ print "idp." (default .Release.Name .Values.global.devSubDomain) "." .Values.global.clusterSpecificDnszone }}{{- else }}{{ print .Values.global.idpSpecificDnszone }}{{- end -}}
+{{- define "vivwallet.url" -}}
+{{- if eq .Values.ingress.class "addon-http-application-routing" }}{{ print "vivwallet." (default .Release.Name .Values.global.devSubDomain) "." .Values.global.clusterSpecificDnszone }}{{- else }}{{ print .Values.global.vivwalletSpecificDnszone }}{{- end -}}
 {{- end -}}
 
 {{- define "ingress.tls" -}}
 {{- if .Values.ingress.tls -}}
 tls:
 - hosts:
-  - {{ include "login.url" .}}
-  secretName: login-tls-secret
-- hosts:
-  - {{ include "apps.url" .}}
-  secretName: apps-tls-secret
+  - {{ include "vivwallet.url" .}}
+  secretName: vivwallet-tls-secret
 {{- print "\n" -}}
 {{- end -}}
 {{- end -}}

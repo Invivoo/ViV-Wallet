@@ -13,24 +13,10 @@ metadata:
 spec:
   {{- include "ingress.tls" . | nindent 2 -}}
   rules:
-  - host: {{ include "idp.url" . }}
+  - host: {{ include "vivwallet.url" . }}
     http:
       paths:
       - path: /
         backend:
-          serviceName: {{ .Release.Name }}-{{ .Values.idp.name }}-svc
-          servicePort: {{ .Values.idp.port }}
-  - host: {{ include "login.url" . }}
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: {{ .Release.Name }}-{{ .Values.login.name }}-svc
-          servicePort: {{ .Values.login.service.externalPort }}
-  - host: {{ include "apps.url" . }}
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: {{ .Release.Name }}-{{ .Values.apps.name }}-svc
-          servicePort: {{ .Values.apps.service.externalPort }}
+          serviceName: {{ .Release.Name }}-{{ .Values.vivwallet.name }}-svc
+          servicePort: {{ .Values.vivwallet.service.externalPort }}

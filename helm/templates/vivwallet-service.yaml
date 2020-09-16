@@ -1,16 +1,16 @@
 apiVersion: v1
 kind: Service
-{{$labelData := dict "Chart" .Chart "Release" .Release "Name" .Values.login.name }}
+{{$labelData := dict "Chart" .Chart "Release" .Release "Name" .Values.vivwallet.name }}
 metadata:
-    name: {{ .Release.Name }}-{{ .Values.login.name }}-svc
+    name: {{ .Release.Name }}-{{ .Values.vivwallet.name }}-svc
     labels:
         {{- include "labels" $labelData | nindent 8 }}
 spec:
     selector:
         {{- include "labels.noversion" $labelData | nindent 8 }}
     ports:
-    - port: {{ .Values.login.service.externalPort }}
-      targetPort: {{ .Values.login.port }}
+    - port: {{ .Values.vivwallet.service.externalPort }}
+      targetPort: {{ .Values.vivwallet.port }}
       protocol: TCP
 
 
