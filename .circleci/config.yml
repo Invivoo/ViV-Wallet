@@ -184,14 +184,14 @@ jobs:
                         # if the package version exists do not force the push
                         # we don't want to override any deployed version
                         az acr helm push --name "$CONTAINER_REGISTRY" *.tgz
-                      elif [[ "${CIRCLE_BRANCH}" == "master" ]]
+                      elif [[ "${CIRCLE_BRANCH}" == "develop" ]]
                       then
-                        # on a master branch push dummy version '0.0.0' of the
-                        # package, they will have an app version like 'dev-master'
+                        # on a develop branch push dummy version '0.0.0' of the
+                        # package, they will have an app version like 'dev-develop'
                         # if the package version exists we force the push
                         az acr helm push --force --name "$CONTAINER_REGISTRY" *.tgz || true
                       else
-                        echo No need to publish a chart, this is not a tag or the master branch
+                        echo No need to publish a chart, this is not a tag or the develop branch
                       fi
 
 workflows:
