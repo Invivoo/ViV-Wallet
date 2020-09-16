@@ -21,7 +21,7 @@ spec:
               env:
               - name: DNS
                 value: "kube-dns.kube-system"
-              {{- include "resources.small" . | nindent 14 }}
+              {{- include "resources.large" . | nindent 14 }}
               imagePullPolicy: Always
               ports:
               - containerPort: {{ .Values.vivwallet.port }}
