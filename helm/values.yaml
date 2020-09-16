@@ -41,7 +41,7 @@ resources:
 vivwallet:
     name: viv-wallet
     image: "xcomponent/viv-wallet:dev-develop"
-    port: 443
+    port: 8080
     replicaCount: 1
     minReadySeconds: 10
     localUsersEnabled: true
