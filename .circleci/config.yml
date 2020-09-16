@@ -186,7 +186,7 @@ jobs:
                         az acr helm push --name "$CONTAINER_REGISTRY" *.tgz
                       elif [[ "${CIRCLE_BRANCH}" == "develop" ]]
                       then
-                        # on a develop branch push dummy version '0.0.0' of the
+                        # on a develop branch push dummy version '0.0.1' of the
                         # package, they will have an app version like 'dev-develop'
                         # if the package version exists we force the push
                         az acr helm push --force --name "$CONTAINER_REGISTRY" *.tgz || true
