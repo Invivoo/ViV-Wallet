@@ -39,7 +39,7 @@ resources:
             request: 20Mi
 
 vivwallet:
-    name: ViV-Wallet
+    name: viv-wallet
     image: "xcomponent/viv-wallet:dev-develop"
     port: 443
     replicaCount: 1
