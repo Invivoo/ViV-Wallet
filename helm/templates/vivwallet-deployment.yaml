@@ -19,8 +19,6 @@ spec:
             - name: {{ .Release.Name }}-{{ .Values.vivwallet.name }}-pod
               image: {{ tpl .Values.vivwallet.image . }}
               env:
-              - name: AuthenticationEndPoint
-                value: "http://{{ .Release.Name }}-{{ .Values.authentication.name }}-svc.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.authentication.port }}"
               - name: DNS
                 value: "kube-dns.kube-system"
               {{- include "resources.small" . | nindent 14 }}
