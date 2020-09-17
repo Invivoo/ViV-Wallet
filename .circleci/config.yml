@@ -11,6 +11,13 @@ references:
             only: /^[0-9]++\.[0-9]++/
         branches:
             only: /.*/
+    job_filters_tags_and_master_and_develop: &job_filters_tags_and_master_and_develop
+        tags:
+            only: /^[0-9]++\.[0-9]++/
+        branches:
+            only:
+                - master
+                - develop
     job_filters_branches_only: &job_filters_branches_only
         branches:
             only: /.*/
@@ -199,7 +206,7 @@ workflows:
         jobs:
             - build
             - helm_chart:
-                  filters: *job_filters_tags_and_branches
+                  filters: *job_filters_tags_and_master_and_develop
             - build-vuejs:
                   filters: *job_filters_branches_only
             - package:
