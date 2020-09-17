@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -22,5 +23,11 @@ public class ExpertiseMember {
 
     @Enumerated(EnumType.STRING)
     private Expertise expertise;
+
+    @Enumerated(EnumType.STRING)
+    private ExpertiseMemberStatus status;
+
+    private LocalDate startDate;
+    private LocalDate endDate;
 
 }

@@ -1,147 +1,215 @@
 version: 2.1
+
+orbs:
+    azure-aks: circleci/azure-aks@0.2.0
+    azure-cli: circleci/azure-cli@1.1.0
+    helm: circleci/helm@0.2.3
+
 references:
-  job_filters_tags_and_branches: &job_filters_tags_and_branches
-    tags:
-      only: /^[0-9]++\.[0-9]++/
-    branches:
-      only: /.*/
-  job_filters_branches_only: &job_filters_branches_only
-    branches:
-      only: /.*/
+    job_filters_tags_and_branches: &job_filters_tags_and_branches
+        tags:
+            only: /^[0-9]++\.[0-9]++/
+        branches:
+            only: /.*/
+    job_filters_tags_and_master_and_develop: &job_filters_tags_and_master_and_develop
+        tags:
+            only: /^[0-9]++\.[0-9]++/
+        branches:
+            only:
+                - master
+                - develop
+    job_filters_branches_only: &job_filters_branches_only
+        branches:
+            only: /.*/
 
-  build_version_variables: &build_version_variables
-    run:
-      name: Define Build Version Variables
-      command: |
-        CIRCLE_BRANCH=${CIRCLE_BRANCH////-}
-        if [[ -z "${CIRCLE_TAG}" ]]
-        then
-          BUILD_VERSION_TAG="dev-${CIRCLE_BRANCH}"
-          BUILD_NUMBER=${CIRCLE_SHA1}
-        else
-          BUILD_VERSION_TAG="${CIRCLE_TAG}"
-          BUILD_NUMBER=""
-        fi
-        echo "export BUILD_VERSION_TAG=$BUILD_VERSION_TAG" >> $BASH_ENV
-        echo "export BUILD_NUMBER=$BUILD_NUMBER" >> $BASH_ENV
-        source $BASH_ENV
+    build_version_variables: &build_version_variables
+        run:
+            name: Define Build Version Variables
+            command: |
+                CIRCLE_BRANCH=${CIRCLE_BRANCH////-}
+                if [[ -z "${CIRCLE_TAG}" ]]
+                then
+                  BUILD_VERSION_TAG="dev-${CIRCLE_BRANCH}"
+                  BUILD_NUMBER=${CIRCLE_SHA1}
+                else
+                  BUILD_VERSION_TAG="${CIRCLE_TAG}"
+                  BUILD_NUMBER=""
+                fi
+                echo "export BUILD_VERSION_TAG=$BUILD_VERSION_TAG" >> $BASH_ENV
+                echo "export BUILD_NUMBER=$BUILD_NUMBER" >> $BASH_ENV
+                source $BASH_ENV
 
-  save_node: &save_node
-    save_cache:
-      name: Save node_modules for vuejs app
-      key: v2-viv-wallet-app-{{ .Branch }}-{{ checksum "viv-wallet-app/package-lock.json" }}
-      paths:
-        - viv-wallet-app/node_modules
-        - /home/circleci/.cache/Cypress
+    save_node: &save_node
+        save_cache:
+            name: Save node_modules for vuejs app
+            key: v2-viv-wallet-app-{{ .Branch }}-{{ checksum "viv-wallet-app/package-lock.json" }}
+            paths:
+                - viv-wallet-app/node_modules
+                - /home/circleci/.cache/Cypress
 
-  restore_node: &restore_node
-    restore_cache:
-      name: Restore node_modules for vuejs app
-      keys:
-        - v2-viv-wallet-app-{{ .Branch }}-{{ checksum "viv-wallet-app/package-lock.json" }}
-        - v2-viv-wallet-app-{{ .Branch }}-
-        - v2-viv-wallet-app-
+    restore_node: &restore_node
+        restore_cache:
+            name: Restore node_modules for vuejs app
+            keys:
+                - v2-viv-wallet-app-{{ .Branch }}-{{ checksum "viv-wallet-app/package-lock.json" }}
+                - v2-viv-wallet-app-{{ .Branch }}-
+                - v2-viv-wallet-app-
 jobs:
-  build-vuejs:
-    docker:
-      - image: circleci/node:12.13.0-browsers
-    working_directory: ~/repo
-    steps:
-      - checkout
-      - *restore_node
-      - run:
-          name: Prepare
-          working_directory: viv-wallet-app
-          command: npm install
-      - run:
-          name: Lint
-          working_directory: viv-wallet-app
-          command: npm run lint
-      - run:
-          name: Build
-          working_directory: viv-wallet-app
-          command: npm run build
-      - run:
-          name: Unit Test
-          working_directory: viv-wallet-app
-          command: npm run test:unit
-      - run:
-          name: E2E Test
-          working_directory: viv-wallet-app
-          command: npm run test:e2e
-      - *save_node
-      - store_artifacts:
-          path: ~/repo/viv-wallet-app/tests/e2e/videos
+    build-vuejs:
+        docker:
+            - image: circleci/node:12.13.0-browsers
+        working_directory: ~/repo
+        steps:
+            - checkout
+            - *restore_node
+            - run:
+                  name: Prepare
+                  working_directory: viv-wallet-app
+                  command: npm install
+            - run:
+                  name: Lint
+                  working_directory: viv-wallet-app
+                  command: npm run lint
+            - run:
+                  name: Build
+                  working_directory: viv-wallet-app
+                  command: npm run build
+            - run:
+                  name: Unit Test
+                  working_directory: viv-wallet-app
+                  command: npm run test:unit
+            - run:
+                  name: E2E Test
+                  working_directory: viv-wallet-app
+                  command: npm run test:e2e
+            - *save_node
+            - store_artifacts:
+                  path: ~/repo/viv-wallet-app/tests/e2e/videos
 
-  build:
-    docker:
-      - image: circleci/openjdk:11-jdk-browsers
-    working_directory: ~/repo
-    environment:
-      MAVEN_OPTS: -Xmx3200m
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "pom.xml" }}
-            - v1-dependencies-
-      - run: mvn dependency:go-offline
-      - save_cache:
-          paths:
-            - ~/.m2
-          key: v1-dependencies-{{ checksum "pom.xml" }}
-      - run:
-          name: Install Chrome latest version
-          command: |
-            wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-            sudo apt install ./google-chrome-stable_current_amd64.deb
-            rm ./google-chrome-stable_current_amd64.deb
-      - run:
-          command: mvn clean install
-          no_output_timeout: 20m
-      - persist_to_workspace:
-          root: ~/repo
-          paths:
-            - ViV-Wallet-api/target
-      - store_artifacts:
-          path: /home/circleci/.npm/_logs/
+    build:
+        docker:
+            - image: circleci/openjdk:11-jdk-browsers
+        working_directory: ~/repo
+        environment:
+            MAVEN_OPTS: -Xmx3200m
+        steps:
+            - checkout
+            - restore_cache:
+                  keys:
+                      - v1-dependencies-{{ checksum "pom.xml" }}
+                      - v1-dependencies-
+            - run: mvn dependency:go-offline
+            - save_cache:
+                  paths:
+                      - ~/.m2
+                  key: v1-dependencies-{{ checksum "pom.xml" }}
+            - run:
+                  name: Install Chrome latest version
+                  command: |
+                      wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+                      sudo apt install ./google-chrome-stable_current_amd64.deb
+                      rm ./google-chrome-stable_current_amd64.deb
+            - run:
+                  command: mvn clean install
+                  no_output_timeout: 20m
+            - persist_to_workspace:
+                  root: ~/repo
+                  paths:
+                      - ViV-Wallet-api/target
+            - store_artifacts:
+                  path: /home/circleci/.npm/_logs/
 
-  package:
-    docker:
-      - image: circleci/node:12.1
-    working_directory: ~/repo
-    steps:
-      - checkout
-      - attach_workspace:
-          at: ~/repo
-      - *build_version_variables
-      - setup_remote_docker:
-          docker_layer_caching: false
-      - run:
-          name: Build docker image
-          working_directory: ViV-Wallet-api
-          command: |
-            docker build . --tag xcomponent/viv-wallet:${CIRCLE_SHA1} --tag xcomponent/viv-wallet:${BUILD_VERSION_TAG}
-      - run:
-          name: Push image to DockerHub
-          working_directory: ViV-Wallet-api
-          command: |
-            if [ -z "$DOCKERHUB_PASSWORD" ]
-            then
-                echo "No dockerhub token"
-            else
-                echo $DOCKERHUB_PASSWORD | docker login -u xcomponentteam --password-stdin
-                docker push xcomponent/viv-wallet:${CIRCLE_SHA1}
-                docker push xcomponent/viv-wallet:${BUILD_VERSION_TAG}
-            fi
+    package:
+        docker:
+            - image: circleci/node:12.1
+        working_directory: ~/repo
+        steps:
+            - checkout
+            - attach_workspace:
+                  at: ~/repo
+            - *build_version_variables
+            - setup_remote_docker:
+                  docker_layer_caching: false
+            - run:
+                  name: Build docker image
+                  working_directory: ViV-Wallet-api
+                  command: |
+                      docker build . --tag xcomponent/viv-wallet:${CIRCLE_SHA1} --tag xcomponent/viv-wallet:${BUILD_VERSION_TAG}
+            - run:
+                  name: Push image to DockerHub
+                  working_directory: ViV-Wallet-api
+                  command: |
+                      if [ -z "$DOCKERHUB_PASSWORD" ]
+                      then
+                          echo "No dockerhub token"
+                      else
+                          echo $DOCKERHUB_PASSWORD | docker login -u xcomponentteam --password-stdin
+                          docker push xcomponent/viv-wallet:${CIRCLE_SHA1}
+                          docker push xcomponent/viv-wallet:${BUILD_VERSION_TAG}
+                      fi
+
+    helm_chart:
+        executor: azure-aks/default
+        resource_class: small
+        steps:
+            - checkout
+            - attach_workspace:
+                  at: /home/circleci/project
+            - helm/install-helm-client:
+                  version: v3.1.1
+            - *build_version_variables
+            - run:
+                  name: Test
+                  working_directory: /home/circleci/project/helm
+                  command: |
+                      helm lint -f values.yaml
+            - run:
+                  name: Package
+                  working_directory: /home/circleci/project/helm
+                  command: |
+                      if [[ -n "${CIRCLE_TAG}" ]]
+                      then
+                        helm package . --app-version="${BUILD_VERSION_TAG}" --version="${CIRCLE_TAG}.0"
+                      else
+                        helm package . --app-version="${BUILD_VERSION_TAG}"
+                      fi
+            - setup_remote_docker:
+                  docker_layer_caching: false
+            - azure-cli/install
+            - azure-cli/login-with-user-or-service-principal
+            - run:
+                  name: Publish chart
+                  working_directory: /home/circleci/project/helm
+                  command: |
+                      CONTAINER_REGISTRY=x4bcontainerregistry
+                      az acr login --name "$CONTAINER_REGISTRY"
+                      az acr helm repo add --name "$CONTAINER_REGISTRY"
+
+                      if [[ -n "${CIRCLE_TAG}" ]]
+                      then
+                        # this is a tag, the version we push here is the `official` one for this chart
+                        # if the package version exists do not force the push
+                        # we don't want to override any deployed version
+                        az acr helm push --name "$CONTAINER_REGISTRY" *.tgz
+                      elif [[ "${CIRCLE_BRANCH}" == "develop" ]]
+                      then
+                        # on a develop branch push dummy version '0.0.1' of the
+                        # package, they will have an app version like 'dev-develop'
+                        # if the package version exists we force the push
+                        az acr helm push --force --name "$CONTAINER_REGISTRY" *.tgz || true
+                      else
+                        echo No need to publish a chart, this is not a tag or the develop branch
+                      fi
 
 workflows:
-  viv_wallet:
-    jobs:
-      - build
-      - build-vuejs:
-          filters: *job_filters_branches_only
-      - package:
-          filters: *job_filters_tags_and_branches
-          requires:
+    viv_wallet:
+        jobs:
             - build
+            - helm_chart:
+                  filters: *job_filters_tags_and_master_and_develop
+            - build-vuejs:
+                  filters: *job_filters_branches_only
+            - package:
+                  filters: *job_filters_tags_and_branches
+                  requires:
+                      - build

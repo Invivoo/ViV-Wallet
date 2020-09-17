@@ -16,15 +16,14 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Component
@@ -61,11 +60,8 @@ public class DatabaseInitializer implements CommandLineRunner {
                                                  .id(2L)
                                                  .build()));
 
-
-        Path lynxResponse = Paths.get(Objects.requireNonNull(getClass().getResource(String.format("/%s", "lynx-dev-data.json"))).toURI());
-        String lynxResponseFromFile = Files.lines(lynxResponse).collect(Collectors.joining());
-
-        Activities activities = objectMapper.readValue(lynxResponseFromFile, Activities.class);
+        String lynxResponse = readFromInputStream(getClass().getResourceAsStream(String.format("/%s", "lynx-dev-data.json")));
+        Activities activities = objectMapper.readValue(lynxResponse, Activities.class);
         List<Action> actions = lynxConnector.getActionsFromActivities(activities.getActivities());
         actionService.saveAll(actions);
 
@@ -82,6 +78,19 @@ public class DatabaseInitializer implements CommandLineRunner {
                                           .collect(Collectors.toList());
         actionService.saveAll(paidActions);
 
+    }
+
+    private String readFromInputStream(InputStream inputStream)
+            throws IOException {
+        StringBuilder resultStringBuilder = new StringBuilder();
+        try (BufferedReader br
+                     = new BufferedReader(new InputStreamReader(inputStream))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                resultStringBuilder.append(line).append("\n");
+            }
+        }
+        return resultStringBuilder.toString();
     }
 
 }

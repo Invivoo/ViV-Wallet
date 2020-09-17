@@ -1,0 +1,60 @@
+# Default values for koordinator.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+global:
+    pullSecretName: regcred
+    clusterSpecificDnszone: "496a8aa9ae8c48329209.northeurope.aksapp.io"
+    vivwalletSpecificDnszone: "vivwallet.test.com"
+    useLocalhost: false
+    traceEnabled: true
+    prometheusCollectEnabled: false
+
+strategy:
+    rollingUpdate:
+        maxSurge: 1
+        maxUnavailable: 1
+
+resources:
+    large:
+        cpu:
+            limit: 1
+            request: 35m
+        memory:
+            limit: 1Gi
+            request: 200Mi
+    medium:
+        cpu:
+            limit: 0.8
+            request: 35m
+        memory:
+            limit: 600Mi
+            request: 100Mi
+    small:
+        cpu:
+            limit: 0.5
+            request: 5m
+        memory:
+            limit: 200Mi
+            request: 20Mi
+
+vivwallet:
+    name: viv-wallet
+    image: "xcomponent/viv-wallet:dev-develop"
+    port: 8080
+    replicaCount: 1
+    minReadySeconds: 10
+    localUsersEnabled: true
+    ldapEnabled: false
+    saml2Enabled: false
+    googleEnabled: false
+    microsoftEnabled: false
+    linkedInEnabled: false
+    service:
+        externalPort: 80
+
+ingress:
+    name: ingress
+    class: addon-http-application-routing
+    sslredirect: false
+    tls: false

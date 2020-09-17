@@ -22,7 +22,9 @@ export class LoginService {
     constructor() {
         this.token = process.env.NODE_ENV === "production" ? getToken() : process.env.VUE_APP_DEV_JWT;
         this.decodedToken = this.token && jwt_decode<DecodedJwtTokenContent>(this.token);
-        this.authorizations = JSON.parse(this.decodedToken["viv-wallet"]) as Authorizations;
+        this.authorizations = (this.decodedToken &&
+            this.decodedToken["viv-wallet"] &&
+            JSON.parse(this.decodedToken["viv-wallet"])) as Authorizations;
     }
 
     getRoles(): Role[] {

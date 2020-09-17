@@ -132,17 +132,17 @@
             "expertise": "Front-End"
         },
         {
-      "userId": "1",
-      "id": "4",
-      "type": "Article",
-      "comment": "This is another comment with much details",
-      "creationDate": "2020-07-15T15:00:00",
-      "payment": 50,
-      "status": "Unpaid",
-      "paymentDate": "2020-07-12T15:00:00",
-      "expertise": "Front-End"
-    },
-    {
+            "userId": "1",
+            "id": "4",
+            "type": "Article",
+            "comment": "This is another comment with much details",
+            "creationDate": "2020-07-15T15:00:00",
+            "payment": 50,
+            "status": "Unpaid",
+            "paymentDate": "2020-07-12T15:00:00",
+            "expertise": "Front-End"
+        },
+        {
             "userId": "2",
             "id": "4",
             "type": "Interview",
