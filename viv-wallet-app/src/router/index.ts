@@ -1,9 +1,13 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
+import VCalendar from "v-calendar";
 require("focus-visible");
 
 Vue.use(VueRouter);
+Vue.use(VCalendar, {
+    componentPrefix: "vc"// Use <vc-calendar /> instead of <v-calendar />
+});
 
 const routes = [
     {
@@ -46,6 +50,12 @@ const routes = [
         path: "/users/:id",
         name: "userEdit",
         component: () => import(/* webpackChunkName: "users" */ "../views/UserEdit.vue"),
+        props: true
+    },
+    {
+        path: "/payment/:id",
+        name: "payment",
+        component: () => import(/* webpackChunkName: "user" */ "../views/Payment.vue"),
         props: true
     }
 ];

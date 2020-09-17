@@ -1,7 +1,7 @@
 import axios from "axios";
 import { WalletService } from "@/services/wallet";
 import { Action, PaymentStatus } from "@/models/action";
-import { Payment } from "@/models/payment";
+import { Payment, PaymentPost } from "@/models/payment";
 
 jest.mock("axios");
 const mockedAxios = axios as jest.Mocked<typeof axios>;
@@ -56,6 +56,43 @@ describe("BalanceService", () => {
         expect(mockedAxios.get).toHaveBeenCalledWith(`id1/actions`);
     });
 
+    it("should get only unpaied actions of a given user", async () => {
+        const actions = [{
+            id: "id1",
+            type: "Interview",
+            payment: 20,
+            status: PaymentStatus[PaymentStatus.Unpaid],
+            expertise: "Front-End"
+        },
+        {
+            id: "id1",
+            type: "Interview",
+            payment: 30,
+            status: PaymentStatus[PaymentStatus.Paid],
+            expertise: "Front-End"
+        },
+        {
+            id: "id1",
+            type: "Interview",
+            payment: 50,
+            status: PaymentStatus[PaymentStatus.Unpaid],
+            expertise: "Front-End"
+        }];
+        const response = {
+            data: actions
+        };
+        mockedAxios.get.mockReturnValue(Promise.resolve(response));
+
+        const returnedActions = await service.getUnpaidActions("id1");
+
+        expect(2).toEqual(returnedActions.length);
+        returnedActions.forEach(action => {
+            expect(PaymentStatus.Unpaid).toEqual(action.status);
+        })
+
+        expect(mockedAxios.get).toHaveBeenCalledWith(`id1/actions`);
+    });
+
     it("should get the payments of a given user", async () => {
         const payment: Payment = {
             id: "id1",
@@ -74,4 +111,23 @@ describe("BalanceService", () => {
 
         expect(mockedAxios.get).toHaveBeenCalledWith(`id1/payments`);
     });
+
+    it("should post payment of a given user", async () => {
+        const postedPayment: PaymentPost = {
+            receiver: "userId",
+            date: new Date(2020,1,1),
+            actions: ['1', '2', '3']
+        };
+        const result = true;
+        const response = {
+            data: result
+        };
+
+        mockedAxios.post.mockReturnValue(Promise.resolve(response));
+
+        expect(await service.savePayment(postedPayment)).toEqual(result);
+
+        expect(mockedAxios.post).toHaveBeenCalledWith(`payments`, postedPayment);
+    });
+
 });

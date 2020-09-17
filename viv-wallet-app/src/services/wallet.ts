@@ -1,7 +1,7 @@
 import { AxiosInstance } from "axios";
 import { ServiceBase } from "./serviceBase";
 import { Action, PaymentStatus } from "@/models/action";
-import { Payment } from "@/models/payment";
+import { Payment, PaymentPost } from "@/models/payment";
 
 export class WalletService extends ServiceBase {
     constructor(http?: AxiosInstance) {
@@ -22,11 +22,20 @@ export class WalletService extends ServiceBase {
         });
     }
 
+    async getUnpaidActions(userId: string): Promise<Action[]> {
+        const actions = await this.getActions(userId);
+        return actions.filter(action => action.status === PaymentStatus.Unpaid);
+    }
+
     async getPayments(userId: string): Promise<Payment[]> {
         const rawData = (await this.http.get(`${userId}/payments`)).data;
         return rawData.map(action => {
             action.date = new Date(action.date);
             return action;
         });
+    }
+
+    async savePayment(payment: PaymentPost): Promise<Object> {
+        return (await this.http.post<boolean>("payments", payment)).data;
     }
 }
