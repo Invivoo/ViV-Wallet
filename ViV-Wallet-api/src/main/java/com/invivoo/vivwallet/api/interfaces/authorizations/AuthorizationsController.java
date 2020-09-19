@@ -35,15 +35,19 @@ public class AuthorizationsController {
         String token = jwtTokenProvider.resolveToken(httpServletRequest);
         DecodedJWT verify = jwtTokenProvider.verify(token);
         String userName = verify.getClaim("user").asString();
-        Optional<User> userOpt = userRepository.findByFullName(userName);
-        if (userOpt.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        User user = userOpt.get();
+        User user = userRepository.findByFullName(userName)
+                .orElseGet(() -> createUser(userName));
         return ResponseEntity.ok(AuthorizationsResponse.builder()
                                                        .userId(user.getId())
                                                        .roles(getRolesAsString(user.getRoles()))
                                                        .build());
+    }
+
+    private User createUser(String userName) {
+        User user = User.builder()
+                        .fullName(userName)
+                        .build();
+        return userRepository.save(user);
     }
 
     private List<String> getRolesAsString(List<Role> roles) {
