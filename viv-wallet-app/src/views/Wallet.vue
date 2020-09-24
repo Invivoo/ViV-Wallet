@@ -10,7 +10,15 @@
                 />
                 <illustration />
             </div>
-            <actions-block v-bind:actions="actions" v-bind:user-roles="userRoles" />
+            <div>
+                <router-link
+                    class="primary-button payment-btn"
+                    v-bind:to="{ path: '/payment/2'}"
+                    v-if="shouldDisplayPayButton()"
+                    tag="button"
+                >Payer maintenant</router-link>
+            </div>
+            <actions-block v-bind:actions="actions" />
             <payment-history-block v-bind:payments="payments" />
         </loading>
     </div>
@@ -46,6 +54,10 @@ export default class wallet extends Vue {
     userId = "1";
     userFullName = "Théophile Montgommery";
 
+    shouldDisplayPayButton() {
+        return this.userRoles && this.userRoles.indexOf(Role.COMPANY_ADMINISTRATOR) !== -1;
+    }
+
     async mounted() {
         try {
             [
@@ -73,6 +85,7 @@ export default class wallet extends Vue {
 </script>
 
 <style lang="scss" scoped>
+@import "../styles/buttons.scss";
 .main {
     max-width: 900px;
     margin: 0 auto;
@@ -82,5 +95,10 @@ export default class wallet extends Vue {
 .header {
     display: flex;
     justify-content: space-between;
+}
+
+.payment-btn {
+    float: right;
+    margin-top: $m-6;
 }
 </style>

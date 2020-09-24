@@ -38,11 +38,6 @@
                             <div v-if="isPaymentPaid(action)" class="payment-date">
                                 {{ action.paymentDate ? action.paymentDate.toDateString() : "" }}
                             </div>
-                            <div v-else>
-                                <button v-if="shouldDisplayPayButton()" class="tertiary-button pay-button">
-                                    Payer maintenant
-                                </button>
-                            </div>
                         </div>
                     </td>
                 </tr>
@@ -64,14 +59,9 @@ import { Role } from "../models/role";
 })
 export default class ActionsBlock extends Vue {
     @Prop({ default: [] }) actions!: Action[];
-    @Prop() userRoles?: Role[];
 
     isPaymentPaid(action: Action) {
         return action.status === PaymentStatus.Paid;
-    }
-
-    shouldDisplayPayButton() {
-        return this.userRoles && this.userRoles.indexOf(Role.COMPANY_ADMINISTRATOR) !== -1;
     }
 
     formatPaymentStatus(status: PaymentStatus) {
@@ -128,10 +118,5 @@ export default class ActionsBlock extends Vue {
 .type {
     font-weight: 600;
     color: $gray-700;
-}
-
-.pay-button {
-    margin-top: $m-3;
-    margin-left: $m-3;
 }
 </style>
