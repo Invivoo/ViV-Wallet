@@ -10,9 +10,10 @@
         >
             <div class="root">
                 <div class="menu">
-                    <custom-router-link to="/users">Users</custom-router-link>
+                    <custom-router-link to="/users">Utilisateurs</custom-router-link>
                     <custom-router-link to="/wallet">Mon wallet</custom-router-link>
                     <custom-router-link to="/members">Mon expertise</custom-router-link>
+                    <custom-router-link to="/wallets">Wallets</custom-router-link>
                     <custom-router-link to="/actions">Historique des actions</custom-router-link>
                 </div>
                 <div class="content">

@@ -3,7 +3,7 @@
         <loading v-bind:loading="loading" v-bind:errored="errored">
             <div class="header">
                 <balance-card
-                    v-bind:fullName="userFullName"
+                    v-bind:fullName="user.fullName"
                     expertise="Expertise front-end"
                     consultantStatus="Consultant sénior"
                     v-bind:vivBalance="balance"
@@ -28,6 +28,7 @@ import { WalletService } from "../services/wallet";
 import Loading from "../components/Loading.vue";
 import { Role } from "../models/role";
 import { LoginService } from "../services/login";
+import { UsersService } from "../services/users";
 
 @Component({
     name: "wallet",
@@ -41,27 +42,26 @@ export default class wallet extends Vue {
     errored = false;
     walletService = new WalletService();
     loginService = new LoginService();
+    usersService = new UsersService();
 
     balance = 0;
-    userId = "1";
-    userFullName = "Théophile Montgommery";
+    userId = "";
+    user = {};
 
     async mounted() {
         try {
-            [
-                this.balance,
-                this.actions,
-                this.payments,
-                this.userRoles,
-                this.userId,
-                this.userFullName
-            ] = await Promise.all([
+            if (this.$route.params.consultantId) {
+                this.userId = this.$route.params.consultantId;
+            } else {
+                this.userId = await this.loginService.getUserId();
+            }
+
+            [this.balance, this.actions, this.payments, this.userRoles, this.user] = await Promise.all([
                 this.walletService.getBalance(this.userId),
                 this.walletService.getActions(this.userId),
                 this.walletService.getPayments(this.userId),
                 this.loginService.getRoles(),
-                this.loginService.getUserId(),
-                this.loginService.getUserFullName()
+                this.usersService.getUser(this.userId)
             ]);
         } catch (ex) {
             this.errored = true;

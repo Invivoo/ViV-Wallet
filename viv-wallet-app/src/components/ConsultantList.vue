@@ -24,17 +24,12 @@
                 </td>
                 <td class="email">{{ consultant.email }}</td>
                 <td>
-                    <status-badge :type="getConsultantStatusType(consultant.status)">
-                        {{ formatConsultantStatus(consultant.status) }}
-                    </status-badge>
+                    <status-badge
+                        :type="getConsultantStatusType(consultant.status)"
+                    >{{ formatConsultantStatus(consultant.status) }}</status-badge>
                 </td>
                 <td class="no-padding">
-                    <router-link
-                        v-bind:to="`/members/${expertise}/${consultant.id}`"
-                        class="tertiary-button update-button"
-                        tag="button"
-                        >Mettre à jour</router-link
-                    >
+                    <slot v-bind:consultantId="consultant.id"></slot>
                 </td>
             </tr>
         </tbody>

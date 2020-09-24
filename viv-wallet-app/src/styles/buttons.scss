@@ -1,7 +1,8 @@
 .primary-button {
+    font-family: "Open Sans", sans-serif;
     background: $primary-700;
     color: $white;
-    font-weight: bold;
+    font-weight: 700;
     font-size: $text-sm;
     border-radius: $rounded-md;
     border: none;
@@ -23,9 +24,10 @@
 }
 
 .secondary-button {
+    font-family: "Open Sans", sans-serif;
     background: transparent;
     color: $primary-700;
-    font-weight: 600;
+    font-weight: 700;
     font-size: $text-sm;
     border-radius: $rounded-md;
     border: solid 1px $primary-700;
@@ -42,9 +44,11 @@
 }
 
 .tertiary-button {
+    font-family: "Open Sans", sans-serif;
+    text-decoration: none;
     background: none;
     color: $primary-700;
-    font-weight: 600;
+    font-weight: 700;
     font-size: $text-base;
     border-radius: none;
     padding: 0;
