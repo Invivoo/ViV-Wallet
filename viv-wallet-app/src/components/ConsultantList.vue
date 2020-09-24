@@ -24,9 +24,9 @@
                 </td>
                 <td class="email">{{ consultant.email }}</td>
                 <td>
-                    <status-badge
-                        :type="getConsultantStatusType(consultant.status)"
-                    >{{ formatConsultantStatus(consultant.status) }}</status-badge>
+                    <status-badge :type="getConsultantStatusType(consultant.status)">{{
+                        formatConsultantStatus(consultant.status)
+                    }}</status-badge>
                 </td>
                 <td class="no-padding">
                     <slot v-bind:consultantId="consultant.id"></slot>

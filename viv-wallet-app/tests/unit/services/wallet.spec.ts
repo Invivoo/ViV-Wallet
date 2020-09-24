@@ -57,27 +57,29 @@ describe("BalanceService", () => {
     });
 
     it("should get only unpaied actions of a given user", async () => {
-        const actions = [{
-            id: "id1",
-            type: "Interview",
-            payment: 20,
-            status: PaymentStatus[PaymentStatus.Unpaid],
-            expertise: "Front-End"
-        },
-        {
-            id: "id1",
-            type: "Interview",
-            payment: 30,
-            status: PaymentStatus[PaymentStatus.Paid],
-            expertise: "Front-End"
-        },
-        {
-            id: "id1",
-            type: "Interview",
-            payment: 50,
-            status: PaymentStatus[PaymentStatus.Unpaid],
-            expertise: "Front-End"
-        }];
+        const actions = [
+            {
+                id: "id1",
+                type: "Interview",
+                payment: 20,
+                status: PaymentStatus[PaymentStatus.Unpaid],
+                expertise: "Front-End"
+            },
+            {
+                id: "id1",
+                type: "Interview",
+                payment: 30,
+                status: PaymentStatus[PaymentStatus.Paid],
+                expertise: "Front-End"
+            },
+            {
+                id: "id1",
+                type: "Interview",
+                payment: 50,
+                status: PaymentStatus[PaymentStatus.Unpaid],
+                expertise: "Front-End"
+            }
+        ];
         const response = {
             data: actions
         };
@@ -88,7 +90,7 @@ describe("BalanceService", () => {
         expect(2).toEqual(returnedActions.length);
         returnedActions.forEach(action => {
             expect(PaymentStatus.Unpaid).toEqual(action.status);
-        })
+        });
 
         expect(mockedAxios.get).toHaveBeenCalledWith(`id1/actions`);
     });
@@ -115,8 +117,8 @@ describe("BalanceService", () => {
     it("should post payment of a given user", async () => {
         const postedPayment: PaymentPost = {
             receiver: "userId",
-            date: new Date(2020,1,1),
-            actions: ['1', '2', '3']
+            date: new Date(2020, 1, 1),
+            actions: ["1", "2", "3"]
         };
         const result = true;
         const response = {
@@ -129,5 +131,4 @@ describe("BalanceService", () => {
 
         expect(mockedAxios.post).toHaveBeenCalledWith(`payments`, postedPayment);
     });
-
 });

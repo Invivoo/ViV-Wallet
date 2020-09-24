@@ -53,7 +53,7 @@ export default class wallet extends Vue {
             if (this.$route.params.consultantId) {
                 this.userId = this.$route.params.consultantId;
             } else {
-                this.userId = await this.loginService.getUserId();
+                this.userId = (await this.loginService.getUserId()) || "1"; // to avoid crash (no authorization service yet)
             }
 
             [this.balance, this.actions, this.payments, this.userRoles, this.user] = await Promise.all([

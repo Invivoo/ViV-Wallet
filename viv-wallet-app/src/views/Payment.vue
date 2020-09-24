@@ -15,12 +15,7 @@
                 <form class="payment-form">
                     <div class="element-block inline-bloc w33">
                         <label id="lbl-date" for="payment-date">DATE</label>
-                        <vc-date-picker
-                            mode="single"
-                            id="payment-date"
-                            v-model="date"
-                            class="values"
-                        />
+                        <vc-date-picker mode="single" id="payment-date" v-model="date" class="values" />
                     </div>
                     <div class="element-block inline-bloc w33">
                         <label id="lbl-viv">TOTAL VIVs</label>
@@ -32,11 +27,9 @@
                     </div>
                     <actions-block v-bind:actions="unpaidActions" />
                     <div class="buttons">
-                        <button
-                            class="primary-button"
-                            :disabled="!hasUnpaidActions"
-                            v-on:click="AddPayment"
-                        >Valider</button>
+                        <button class="primary-button" :disabled="!hasUnpaidActions" v-on:click="AddPayment">
+                            Valider
+                        </button>
                         <router-link class="secondary-button" to="/wallet" tag="button">Cancel</router-link>
                     </div>
                 </form>

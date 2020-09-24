@@ -7,32 +7,27 @@
                     <div class="selector-container">
                         <label class="expertise-label" for="select-expertise">Expertise :</label>
                         <div class="select">
-                            <select
-                                id="select-expertise"
-                                v-model="selectedExpertiseId"
-                                v-on:change="expertiseChanged"
-                            >
+                            <select id="select-expertise" v-model="selectedExpertiseId" v-on:change="expertiseChanged">
                                 <option disabled value>Choisissez</option>
                                 <option
                                     v-for="expertise in expertises"
                                     :key="expertise.id"
                                     v-bind:value="expertise.id"
-                                >{{ expertise.expertiseName }}</option>
+                                    >{{ expertise.expertiseName }}</option
+                                >
                             </select>
                             <span class="select-focus"></span>
                         </div>
                     </div>
                 </div>
-                <consultant-list
-                    v-bind:consultants="consultants"
-                    v-bind:expertise="selectedExpertiseId"
-                >
+                <consultant-list v-bind:consultants="consultants" v-bind:expertise="selectedExpertiseId">
                     <template v-slot="{ consultantId }">
                         <router-link
                             v-bind:to="`/wallets/${selectedExpertiseId}/${consultantId}`"
                             class="tertiary-button update-button"
                             tag="a"
-                        >Voir le wallet</router-link>
+                            >Voir le wallet</router-link
+                        >
                     </template>
                 </consultant-list>
             </section>
@@ -143,4 +138,3 @@ h2 {
     flex: 1 1 auto;
 }
 </style>
-

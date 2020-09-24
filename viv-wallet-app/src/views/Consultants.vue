@@ -7,38 +7,31 @@
                     <div class="selector-container">
                         <label class="expertise-label" for="select-expertise">Expertise :</label>
                         <div class="select">
-                            <select
-                                id="select-expertise"
-                                v-model="selectedExpertiseId"
-                                v-on:change="expertiseChanged"
-                            >
+                            <select id="select-expertise" v-model="selectedExpertiseId" v-on:change="expertiseChanged">
                                 <option disabled value>Choisissez</option>
                                 <option
                                     v-for="expertise in expertises"
                                     :key="expertise.id"
                                     v-bind:value="expertise.id"
-                                >{{ expertise.expertiseName }}</option>
+                                    >{{ expertise.expertiseName }}</option
+                                >
                             </select>
                             <span class="select-focus"></span>
                         </div>
                     </div>
                     <div class="spacer" />
-                    <router-link
-                        class="primary-button"
-                        v-bind:to="`/members/${selectedExpertiseId}/add`"
-                        tag="button"
-                    >Ajouter</router-link>
+                    <router-link class="primary-button" v-bind:to="`/members/${selectedExpertiseId}/add`" tag="button"
+                        >Ajouter</router-link
+                    >
                 </div>
-                <consultant-list
-                    v-bind:consultants="consultants"
-                    v-bind:expertise="selectedExpertiseId"
-                >
+                <consultant-list v-bind:consultants="consultants" v-bind:expertise="selectedExpertiseId">
                     <template v-slot="{ consultantId }">
                         <router-link
                             v-bind:to="`/members/${selectedExpertiseId}/${consultantId}`"
                             class="tertiary-button update-button"
                             tag="button"
-                        >Mettre à jour</router-link>
+                            >Mettre à jour</router-link
+                        >
                     </template>
                 </consultant-list>
             </section>
