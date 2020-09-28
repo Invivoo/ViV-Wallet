@@ -6,7 +6,7 @@ require("focus-visible");
 
 Vue.use(VueRouter);
 Vue.use(VCalendar, {
-    componentPrefix: "vc"// Use <vc-calendar /> instead of <v-calendar />
+    componentPrefix: "vc" // Use <vc-calendar /> instead of <v-calendar />
 });
 
 const routes = [
@@ -56,6 +56,22 @@ const routes = [
         path: "/payment/:id",
         name: "payment",
         component: () => import(/* webpackChunkName: "user" */ "../views/Payment.vue"),
+        props: true
+    },
+    {
+        path: "/wallets",
+        name: "wallets",
+        component: () => import(/* webpackChunkName: "wallets" */ "../views/Wallets.vue")
+    },
+    {
+        path: "/wallets/:id",
+        name: "walletsByExpertise",
+        component: () => import(/* webpackChunkName: "wallets" */ "../views/Wallets.vue")
+    },
+    {
+        path: "/wallets/:expertiseName/:consultantId",
+        name: "walletView",
+        component: () => import(/* webpackChunkName: "wallets" */ "../views/Wallet.vue"),
         props: true
     }
 ];

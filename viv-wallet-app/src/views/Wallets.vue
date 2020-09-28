@@ -1,8 +1,8 @@
 <template>
-    <div class="consultants">
+    <div class="wallets">
         <loading v-bind:loading="loading" v-bind:errored="errored">
             <section>
-                <h2>Consultants</h2>
+                <h2>Wallets</h2>
                 <div class="buttons-container">
                     <div class="selector-container">
                         <label class="expertise-label" for="select-expertise">Expertise :</label>
@@ -19,18 +19,14 @@
                             <span class="select-focus"></span>
                         </div>
                     </div>
-                    <div class="spacer" />
-                    <router-link class="primary-button" v-bind:to="`/members/${selectedExpertiseId}/add`" tag="button"
-                        >Ajouter</router-link
-                    >
                 </div>
                 <consultant-list v-bind:consultants="consultants" v-bind:expertise="selectedExpertiseId">
                     <template v-slot="{ consultantId }">
                         <router-link
-                            v-bind:to="`/members/${selectedExpertiseId}/${consultantId}`"
+                            v-bind:to="`/wallets/${selectedExpertiseId}/${consultantId}`"
                             class="tertiary-button update-button"
-                            tag="button"
-                            >Mettre à jour</router-link
+                            tag="a"
+                            >Voir le wallet</router-link
                         >
                     </template>
                 </consultant-list>
@@ -50,10 +46,10 @@ import Loading from "../components/Loading.vue";
 import ConsultantList from "@/components/ConsultantList.vue";
 
 @Component({
-    name: "members",
+    name: "wallets",
     components: { ConsultantList, Loading }
 })
-export default class Consultants extends Vue {
+export default class Wallets extends Vue {
     consultants: Consultant[] = [];
     expertises: Expertise[] = [];
     selectedExpertiseId = "";
@@ -70,7 +66,7 @@ export default class Consultants extends Vue {
                 await this.updateConsultants();
             } else {
                 if (this.expertises.length > 0) {
-                    this.$router.push(`/members/${this.expertises[0].id}`);
+                    this.$router.push(`/wallets/${this.expertises[0].id}`);
                 }
             }
         } catch (ex) {
@@ -91,7 +87,7 @@ export default class Consultants extends Vue {
     }
 
     expertiseChanged() {
-        this.$router.push(`/members/${this.selectedExpertiseId}`);
+        this.$router.push(`/wallets/${this.selectedExpertiseId}`);
     }
 
     async updateConsultants() {
@@ -105,7 +101,7 @@ export default class Consultants extends Vue {
 @import "../styles/buttons.scss";
 @import "../styles/select.scss";
 
-.consultants {
+.wallets {
     max-width: 900px;
     margin: 0 auto;
     padding: $m-3 $m-5;
