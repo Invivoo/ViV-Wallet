@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -73,7 +72,7 @@ public class DatabaseInitializer implements CommandLineRunner {
 
         Payment payment = Payment.builder()
                                  .id(1L)
-                                 .date(LocalDateTime.of(2020, 7, 29, 0, 0))
+                                 .date(LocalDate.of(2020, 7, 29))
                                  .receiver(theophileMontgomery)
                                  .build();
 

@@ -2,6 +2,7 @@ package com.invivoo.vivwallet.api.application.security;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.invivoo.vivwallet.api.domain.user.UserService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -18,10 +19,12 @@ public class JWTAuthenticationFilter extends GenericFilterBean {
 
     private final JWTTokenProvider jwtTokenProvider;
     private final ObjectMapper objectMapper;
+    private final UserService userService;
 
-    public JWTAuthenticationFilter(JWTTokenProvider jwtTokenProvider, ObjectMapper objectMapper) {
+    public JWTAuthenticationFilter(JWTTokenProvider jwtTokenProvider, ObjectMapper objectMapper, UserService userService) {
         this.jwtTokenProvider = jwtTokenProvider;
         this.objectMapper = objectMapper;
+        this.userService = userService;
     }
 
     @Override

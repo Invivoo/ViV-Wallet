@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.invivoo.vivwallet.api.application.security.JWTTokenProvider;
 import com.invivoo.vivwallet.api.domain.user.User;
 import com.invivoo.vivwallet.api.domain.user.UserRepository;
+import com.invivoo.vivwallet.api.domain.user.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -34,7 +35,7 @@ public class AuthorizationsControllerTest {
     @MockBean
     private JWTTokenProvider jwtTokenProvider;
     @MockBean
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Test
     public void shouldGetAuthorizations_whenAuthorize() throws Exception {
@@ -47,8 +48,8 @@ public class AuthorizationsControllerTest {
         Mockito.when(decodedJWT.getClaim("user")).thenReturn(userClaim);
 
         Mockito.when(jwtTokenProvider.verify("jwt")).thenReturn(decodedJWT);
-        Mockito.when(userRepository.findByFullName("John DOE"))
-               .thenReturn(Optional.of(User.builder().build()));
+        Mockito.when(userService.findByX4bIdOrCreateIfNotExists("John DOE"))
+               .thenReturn(User.builder().build());
 
         //when
         ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/api/Authorizations")

@@ -2,23 +2,20 @@ package com.invivoo.vivwallet.api.interfaces.actions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.invivoo.vivwallet.api.ViVWalletApiApplication;
+import com.invivoo.vivwallet.api.application.security.JWTTokenProvider;
 import com.invivoo.vivwallet.api.domain.action.Action;
-import com.invivoo.vivwallet.api.domain.action.ActionRepository;
+import com.invivoo.vivwallet.api.domain.action.ActionService;
 import com.invivoo.vivwallet.api.domain.action.ActionType;
 import com.invivoo.vivwallet.api.domain.expertise.Expertise;
 import com.invivoo.vivwallet.api.domain.expertise.UserExpertise;
 import com.invivoo.vivwallet.api.domain.user.User;
-import org.assertj.core.api.AbstractThrowableAssert;
-import org.assertj.core.api.Assertions;
-import org.assertj.core.api.ThrowableAssert;
-import org.junit.Before;
+import com.invivoo.vivwallet.api.domain.user.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -27,22 +24,19 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
-
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = {ViVWalletApiApplication.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@WebMvcTest(ActionsController.class)
 public class ActionsControllerTest {
 
     public static final User TEST_ACHIEVER = User.builder()
                                                  .expertises(List.of(UserExpertise.builder().expertise(Expertise.PROGRAMMATION_JAVA)
-                                                 .build()))
+                                                                                  .build()))
                                                  .roles(List.of()).build();
     private static final Action ACTION1 = Action.builder()
                                                 .id(1L)
@@ -67,21 +61,22 @@ public class ActionsControllerTest {
     private static final ObjectMapper mapper = new ViVWalletApiApplication().objectMapper();
 
     @Autowired
-    private WebApplicationContext webApplicationContext;
-    @MockBean
-    private ActionRepository actionRepository;
     private MockMvc mockMvc;
 
-    @Before
-    public void setup() {
-        this.mockMvc = webAppContextSetup(webApplicationContext).build();
-    }
+    @MockBean
+    private ActionService actionService;
+
+    @MockBean
+    private UserService userService;
+
+    @MockBean
+    private JWTTokenProvider jwtTokenProvider;
 
     @Test
     @WithMockUser(username = "Théophile MONTGOMERY", authorities = {"EXPERTISE_MANAGER", "SENIOR_MANAGER", "COMPANY_ADMINISTRATOR"})
     public void given_manager_when_calling_getActionsOrderedByDateDesc_then_return_sorted_actions() throws Exception {
         //given
-        Mockito.when(actionRepository.findAllByOrderByDateDesc())
+        Mockito.when(actionService.findAllByOrderByDateDesc())
                .thenReturn(TEST_ACTIONS);
 
         //when
@@ -94,33 +89,17 @@ public class ActionsControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "Marouane SALIM", authorities = {"CONSULTANT"})
-    public void given_user_with_only_role_consultant_when_calling_getActionsOrderedByDateDesc_then_should_throw_exception() throws Exception {
-        //given
-        Mockito.when(actionRepository.findAllByOrderByDateDesc())
-               .thenReturn(TEST_ACTIONS);
-        //when
-        ThrowableAssert.ThrowingCallable throwingCallable = () -> this.mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/actions"))
-                                                                              .andExpect(MockMvcResultMatchers.status().isOk());
-
-        AbstractThrowableAssert abstractThrowableAssert = Assertions.assertThatThrownBy(throwingCallable);
-        //then
-        abstractThrowableAssert.hasCause(new AccessDeniedException("Access is denied"));
-    }
-
-    @Test
     @WithAnonymousUser
     public void given_anonymous_user_when_calling_getActionsOrderedByDateDesc_then_should_throw_exception() throws Exception {
         //given
-        Mockito.when(actionRepository.findAllByOrderByDateDesc())
+        Mockito.when(actionService.findAllByOrderByDateDesc())
                .thenReturn(TEST_ACTIONS);
         //when
-        ThrowableAssert.ThrowingCallable throwingCallable = () -> this.mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/actions"))
-                                                                              .andExpect(MockMvcResultMatchers.status().isOk());
+        ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/actions"))
+                                                  .andDo(MockMvcResultHandlers.print());
 
-        AbstractThrowableAssert abstractThrowableAssert = Assertions.assertThatThrownBy(throwingCallable);
         //then
-        abstractThrowableAssert.hasCause(new AccessDeniedException("Access is denied"));
+        resultActions.andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
 }

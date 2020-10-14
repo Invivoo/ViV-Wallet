@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -24,7 +25,7 @@ public class ActionDto {
     private LocalDateTime creationDate;
     private BigDecimal payment;
     private String status;
-    private LocalDateTime paymentDate;
+    private LocalDate paymentDate;
     private UserDto achiever;
 
     public static ActionDto createFromAction(Action action) {

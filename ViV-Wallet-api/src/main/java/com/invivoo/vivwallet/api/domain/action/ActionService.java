@@ -4,6 +4,7 @@ import com.invivoo.vivwallet.api.domain.user.User;
 import com.invivoo.vivwallet.api.infrastructure.lynx.LynxConnector;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,12 +19,12 @@ public class ActionService {
         this.lynxConnector = lynxConnector;
     }
 
-    public List<Action> getActionsOrderedByDateDesc() {
-       return actionRepository.findAllByOrderByDateDesc();
+    public List<Action> findAllById(Collection<Long> actionIds) {
+        return actionRepository.findAllById(actionIds);
     }
 
-    public List<Action> findAll(){
-        return actionRepository.findAll();
+    public List<Action> findAllByOrderByDateDesc() {
+        return actionRepository.findAllByOrderByDateDesc();
     }
 
     public List<Action> findAllByAchiever(User achiever) {
@@ -58,5 +59,4 @@ public class ActionService {
         action.setAchiever(actionFromLynx.getAchiever());
         action.setCreator(actionFromLynx.getCreator());
     }
-
 }

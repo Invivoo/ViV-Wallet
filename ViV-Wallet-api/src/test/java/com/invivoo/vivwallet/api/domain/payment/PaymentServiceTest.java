@@ -11,7 +11,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.Month;
 import java.util.Arrays;
 import java.util.Collections;
@@ -25,7 +25,7 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class PaymentServiceTest {
 
-    private static final User TEST_USER = new User(2L, "Test user", List.of(), List.of());
+    private static final User TEST_USER = new User(2L, "Test user","Test user", List.of(), List.of());
 
     @Mock
     private UserRepository userRepository;
@@ -42,10 +42,10 @@ public class PaymentServiceTest {
         User creator = User.builder().id((long) 1).build();
         User receiver1 = User.builder().id((long) 1).build();
         User receiver2 = User.builder().id((long) 1).build();
-        Payment payment1 = Payment.builder().id((long) 1).date(LocalDateTime.now()).creator(creator).receiver(receiver1).build();
-        Payment payment2 = Payment.builder().id((long) 2).date(LocalDateTime.now()).creator(creator).receiver(receiver1).build();
-        Payment payment3 = Payment.builder().id((long) 3).date(LocalDateTime.now()).creator(creator).receiver(receiver2).build();
-        Payment payment4 = Payment.builder().id((long) 4).date(LocalDateTime.now()).creator(creator).receiver(receiver2).build();
+        Payment payment1 = Payment.builder().id((long) 1).date(LocalDate.now()).creator(creator).receiver(receiver1).build();
+        Payment payment2 = Payment.builder().id((long) 2).date(LocalDate.now()).creator(creator).receiver(receiver1).build();
+        Payment payment3 = Payment.builder().id((long) 3).date(LocalDate.now()).creator(creator).receiver(receiver2).build();
+        Payment payment4 = Payment.builder().id((long) 4).date(LocalDate.now()).creator(creator).receiver(receiver2).build();
         List<Payment> payments = Arrays.asList(payment1, payment2, payment3, payment4);
         when(paymentRepository.getAllByOrderByDateDesc()).thenReturn(payments);
         PaymentService paymentService = new PaymentService(userRepository, paymentRepository, actionRepository);
@@ -97,7 +97,7 @@ public class PaymentServiceTest {
         BigDecimal actionViv = BigDecimal.valueOf(50);
         Payment payment = Payment.builder()
                 .id(1L)
-                .date(LocalDateTime.of(2020, Month.JULY, 1, 12, 0))
+                .date(LocalDate.of(2020, Month.JULY, 1))
                 .receiver(testUser)
                 .actions(List.of(Action.builder().id(1L).viv(actionViv).build())).build();
         when(paymentRepository.findAllByReceiverOrderByDateDesc(testUser)).thenReturn(List.of(payment));
@@ -125,7 +125,7 @@ public class PaymentServiceTest {
         when(userRepository.findById(testUser.getId())).thenReturn(Optional.of(testUser));
         Payment payment = Payment.builder()
                 .id(1L)
-                .date(LocalDateTime.of(2020, Month.JULY, 1, 12, 0))
+                .date(LocalDate.of(2020, Month.JULY, 1))
                 .receiver(testUser)
                 .actions(List.of(
                         Action.builder().id(1L).viv(BigDecimal.valueOf(50)).build(),
@@ -155,12 +155,12 @@ public class PaymentServiceTest {
         when(userRepository.findById(testUser.getId())).thenReturn(Optional.of(testUser));
         Payment payment1 = Payment.builder()
                 .id(1L)
-                .date(LocalDateTime.of(2020, Month.JANUARY, 1, 12, 0))
+                .date(LocalDate.of(2020, Month.JANUARY, 1))
                 .receiver(testUser)
                 .actions(List.of(Action.builder().id(1L).viv(BigDecimal.valueOf(50)).build())).build();
         Payment payment2 = Payment.builder()
                 .id(1L)
-                .date(LocalDateTime.of(2020, Month.JULY, 1, 12, 0))
+                .date(LocalDate.of(2020, Month.JULY, 1))
                 .receiver(testUser)
                 .actions(List.of(Action.builder().id(2L).viv(BigDecimal.valueOf(50)).build())).build();
         when(paymentRepository.findAllByReceiverOrderByDateDesc(testUser)).thenReturn(List.of(payment2, payment1));
