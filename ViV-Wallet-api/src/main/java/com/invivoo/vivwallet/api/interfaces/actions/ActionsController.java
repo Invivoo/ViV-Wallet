@@ -23,10 +23,10 @@ public class ActionsController {
         this.actionService = actionService;
     }
 
-    @PreAuthorize("hasAnyAuthority('EXPERTISE_MANAGER','SENIOR_MANAGER', 'COMPANY_ADMINISTRATOR')")
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('EXPERTISE_MANAGER','SENIOR_MANAGER', 'COMPANY_ADMINISTRATOR')")
     public ResponseEntity<List<ActionDto>> getActionsOrderedByDateDesc() {
-        List<ActionDto> actions = actionService.getActionsOrderedByDateDesc()
+        List<ActionDto> actions = actionService.findAllByOrderByDateDesc()
                                                .stream()
                                                .map(ActionDto::createFromAction)
                                                .collect(Collectors.toList());

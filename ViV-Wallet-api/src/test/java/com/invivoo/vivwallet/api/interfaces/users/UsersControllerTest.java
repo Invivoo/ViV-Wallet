@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.invivoo.vivwallet.api.application.security.JWTTokenProvider;
+import com.invivoo.vivwallet.api.application.security.SecurityService;
 import com.invivoo.vivwallet.api.domain.action.Action;
 import com.invivoo.vivwallet.api.domain.action.ActionService;
 import com.invivoo.vivwallet.api.domain.action.ActionType;
@@ -14,7 +15,6 @@ import com.invivoo.vivwallet.api.domain.payment.PaymentService;
 import com.invivoo.vivwallet.api.domain.user.User;
 import com.invivoo.vivwallet.api.domain.user.UserService;
 import com.invivoo.vivwallet.api.interfaces.actions.ActionDto;
-import com.invivoo.vivwallet.api.interfaces.actions.ActionStatus;
 import com.invivoo.vivwallet.api.interfaces.payments.PaymentDto;
 import org.hamcrest.Matchers;
 import org.junit.BeforeClass;
@@ -34,6 +34,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Arrays;
@@ -49,8 +50,8 @@ import static org.mockito.Mockito.when;
 public class UsersControllerTest {
 
     private static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(), MediaType.APPLICATION_JSON.getSubtype(), StandardCharsets.UTF_8);
-    private static final User TEST_USER_1 = new User(1L, "User 1", List.of(UserExpertise.builder().expertise(Expertise.PROGRAMMATION_JAVA).build()), List.of());
-    private static final User TEST_USER_2 = new User(2L, "User 2",List.of(UserExpertise.builder().expertise(Expertise.PROGRAMMATION_JAVA).build()), List.of());
+    private static final User TEST_USER_1 = new User(1L,"User 1", "User 1", List.of(UserExpertise.builder().expertise(Expertise.PROGRAMMATION_JAVA).build()), List.of());
+    private static final User TEST_USER_2 = new User(2L, "User 2", "User 2",List.of(UserExpertise.builder().expertise(Expertise.PROGRAMMATION_JAVA).build()), List.of());
     private static final List<User> TEST_USERS = Arrays.asList(TEST_USER_1, TEST_USER_2);
     private static final ObjectMapper mapper = new ObjectMapper();
 
@@ -59,6 +60,9 @@ public class UsersControllerTest {
 
     @MockBean
     private UserService userService;
+
+    @MockBean
+    private SecurityService securityService;
 
     @MockBean
     private ActionService actionService;
@@ -97,6 +101,8 @@ public class UsersControllerTest {
     public void whenPostUser_shouldSaveAndReturnUser() throws Exception {
         //given
         User testUser = TEST_USER_1;
+        when(userService.save(Mockito.any(User.class))).thenReturn(testUser);
+        when(userService.save(Mockito.any(User.class))).thenReturn(testUser);
         when(userService.save(Mockito.any(User.class))).thenReturn(testUser);
 
         //when
@@ -231,29 +237,6 @@ public class UsersControllerTest {
                      .andExpect(MockMvcResultMatchers.content().string(expectedJson));
     }
 
-    private Action anUnpaidAction(User user) {
-        return Action.builder().id(1L)
-                     .date(LocalDateTime.of(2020, Month.JANUARY, 1, 12, 0))
-                     .type(ActionType.ARTICLE_PUBLICATION)
-                     .viv(BigDecimal.valueOf(15))
-                     .context("This is a comment")
-                     .achiever(user)
-                     .build();
-    }
-
-    private Action aPaidAction(User user) {
-        return Action.builder().id(2L)
-                     .date(LocalDateTime.of(2020, Month.JUNE, 1, 12, 0))
-                     .type(ActionType.COACHING)
-                     .viv(BigDecimal.valueOf(10))
-                     .context("This is a comment")
-                     .achiever(user)
-                     .payment(Payment.builder()
-                                     .id(1L)
-                                     .date(LocalDateTime.of(2020, Month.JULY, 1, 12, 0)).build())
-                     .build();
-    }
-
     @Test
     public void whenGetListOfPaymentsForUser_shouldReturnListOfPayments() throws Exception {
         //Given
@@ -261,13 +244,13 @@ public class UsersControllerTest {
         PaymentDto payment1 = PaymentDto.builder()
                                         .id(1L)
                                         .userId(testUser.getId())
-                                        .date(LocalDateTime.of(2020, Month.JANUARY, 1, 12, 0))
+                                        .date(LocalDate.of(2020, Month.JANUARY, 1))
                                         .viv(BigDecimal.valueOf(50))
                                         .amount(BigDecimal.valueOf(250)).build();
         PaymentDto payment2 = PaymentDto.builder()
                                         .id(2L)
                                         .userId(testUser.getId())
-                                        .date(LocalDateTime.of(2020, Month.JUNE, 1, 12, 0))
+                                        .date(LocalDate.of(2020, Month.JUNE, 1))
                                         .viv(BigDecimal.valueOf(50))
                                         .amount(BigDecimal.valueOf(250)).build();
         List<PaymentDto> expectedPayments = Arrays.asList(payment2, payment1);
@@ -282,5 +265,28 @@ public class UsersControllerTest {
         String expectedJson = mapper.writeValueAsString(expectedPayments);
         resultActions.andExpect(MockMvcResultMatchers.status().isOk())
                      .andExpect(MockMvcResultMatchers.content().string(expectedJson));
+    }
+
+    private Action anUnpaidAction(User user) {
+        return Action.builder().id(1L)
+                     .date(LocalDateTime.of(2020, Month.JANUARY, 1, 12, 0))
+                     .type(ActionType.ARTICLE_PUBLICATION)
+                     .viv(BigDecimal.valueOf(15))
+                     .context("This is a comment")
+                     .achiever(user)
+                     .build();
+    }
+
+    private Action aPaidAction(User user) {
+        return Action.builder().id(2L)
+                     .date(LocalDateTime.of(2020, Month.JUNE, 1, 12,0))
+                     .type(ActionType.COACHING)
+                     .viv(BigDecimal.valueOf(10))
+                     .context("This is a comment")
+                     .achiever(user)
+                     .payment(Payment.builder()
+                                     .id(1L)
+                                     .date(LocalDate.of(2020, Month.JULY, 1)).build())
+                     .build();
     }
 }
