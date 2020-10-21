@@ -7,9 +7,10 @@
             disable-fake-elements="true"
             languages="fr"
             :color="primaryColor"
+            @menuToggleButtonClicked="handleMenuToggleButtonClicked"
         >
             <div class="root">
-                <div class="menu">
+                <div v-bind:class="['menu', isMenuOpen ? '' : 'hidden']">
                     <custom-router-link to="/users">Utilisateurs</custom-router-link>
                     <custom-router-link to="/wallet">Mon wallet</custom-router-link>
                     <custom-router-link to="/members">Mon expertise</custom-router-link>
@@ -36,15 +37,14 @@ export default class App extends Vue {
     private appVersion: string = version;
     private primaryColor: string = require("./styles/index.scss").primaryColor;
     private loginService: LoginService = new LoginService();
+    isMenuOpen = false;
+
+    handleMenuToggleButtonClicked(evt) {
+        this.isMenuOpen = evt.detail;
+    }
 
     mounted() {
         const ui = document.querySelector("x4b-ui");
-        ui &&
-            ui.addEventListener("menuToggleButtonClicked", () => {
-                const menu = document.querySelector(".menu");
-                menu && menu.classList.toggle("hidden");
-            });
-
         this.loginService.ensureLoggedIn();
     }
 }
