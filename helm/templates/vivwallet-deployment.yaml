@@ -24,7 +24,7 @@ spec:
               - name: JwtAuthenticationSecret
                 valueFrom:
                     secretKeyRef:
-                    name: {{ .Values.global.jwtSecretName }}
+                    name: {{ .Release.Name }}-shared-secret
                     key: jwtSecret 
               {{- include "resources.large" . | nindent 14 }}
               imagePullPolicy: Always

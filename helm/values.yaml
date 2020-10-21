@@ -6,7 +6,7 @@ global:
     pullSecretName: regcred
     clusterSpecificDnszone: "496a8aa9ae8c48329209.northeurope.aksapp.io"
     vivwalletSpecificDnszone: "vivwallet.test.com"
-    jwtSecretName: "test-shared-secret"
+    jwtSecret: "Your secret"
     useLocalhost: false
     traceEnabled: true
     prometheusCollectEnabled: false
