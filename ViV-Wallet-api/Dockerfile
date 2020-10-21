@@ -4,6 +4,8 @@ WORKDIR /
 
 ADD target/ViV-Wallet-api-0.0.1-SNAPSHOT.jar ViV-Wallet-api-0.0.1-SNAPSHOT.jar
 
+ENV JwtAuthenticationSecret=""
+
 EXPOSE 8080
 
-CMD java -jar ViV-Wallet-api-0.0.1-SNAPSHOT.jar
+CMD java -jar ViV-Wallet-api-0.0.1-SNAPSHOT.jar --x4b.auth.secret=$JwtAuthenticationSecret
