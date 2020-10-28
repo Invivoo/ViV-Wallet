@@ -9,12 +9,9 @@
                         <div class="select">
                             <select id="select-expertise" v-model="selectedExpertiseId" v-on:change="expertiseChanged">
                                 <option disabled value>Choisissez</option>
-                                <option
-                                    v-for="expertise in expertises"
-                                    :key="expertise.id"
-                                    v-bind:value="expertise.id"
-                                    >{{ expertise.expertiseName }}</option
-                                >
+                                <option v-for="expertise in expertises" :key="expertise.id" v-bind:value="expertise.id">
+                                    {{ expertise.expertiseName }}
+                                </option>
                             </select>
                             <span class="select-focus"></span>
                         </div>
@@ -51,7 +48,7 @@ import ConsultantList from "@/components/ConsultantList.vue";
 
 @Component({
     name: "members",
-    components: { ConsultantList, Loading }
+    components: { ConsultantList, Loading },
 })
 export default class Consultants extends Vue {
     consultants: Consultant[] = [];

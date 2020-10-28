@@ -5,10 +5,10 @@
             <router-link class="primary-button" to="/users/add" tag="button">Ajouter</router-link>
             <table>
                 <colgroup>
-                    <col style="width:8%" />
-                    <col style="width:20%" />
-                    <col style="width:30%" />
-                    <col style="width:42%" />
+                    <col style="width: 8%" />
+                    <col style="width: 20%" />
+                    <col style="width: 30%" />
+                    <col style="width: 42%" />
                 </colgroup>
                 <thead>
                     <tr>

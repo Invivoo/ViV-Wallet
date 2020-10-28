@@ -14,7 +14,7 @@ export class WalletService extends ServiceBase {
 
     async getActions(userId: string): Promise<Action[]> {
         const rawData = (await this.http.get(`${userId}/actions`)).data;
-        return rawData.map(action => {
+        return rawData.map((action) => {
             action.creationDate = new Date(action.creationDate);
             action.paymentDate = new Date(action.paymentDate);
             action.status = PaymentStatus[action.status];
@@ -24,12 +24,12 @@ export class WalletService extends ServiceBase {
 
     async getUnpaidActions(userId: string): Promise<Action[]> {
         const actions = await this.getActions(userId);
-        return actions.filter(action => action.status === PaymentStatus.Unpaid);
+        return actions.filter((action) => action.status === PaymentStatus.Unpaid);
     }
 
     async getPayments(userId: string): Promise<Payment[]> {
         const rawData = (await this.http.get(`${userId}/payments`)).data;
-        return rawData.map(action => {
+        return rawData.map((action) => {
             action.date = new Date(action.date);
             return action;
         });

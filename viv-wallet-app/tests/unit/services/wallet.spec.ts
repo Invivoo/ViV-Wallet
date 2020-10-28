@@ -23,7 +23,7 @@ describe("BalanceService", () => {
     it("should get the viv balance of a given user", async () => {
         const balance = 200;
         const response = {
-            data: { value: balance }
+            data: { value: balance },
         };
         mockedAxios.get.mockReturnValue(Promise.resolve(response));
 
@@ -42,10 +42,10 @@ describe("BalanceService", () => {
             payment: 20,
             status: PaymentStatus.Paid,
             paymentDate: new Date("2020-07-15T15:00:00"),
-            expertise: "Front-End"
+            expertise: "Front-End",
         };
         const response = {
-            data: [action]
+            data: [action],
         };
         mockedAxios.get.mockReturnValue(Promise.resolve(response));
 
@@ -63,32 +63,32 @@ describe("BalanceService", () => {
                 type: "Interview",
                 payment: 20,
                 status: PaymentStatus[PaymentStatus.Unpaid],
-                expertise: "Front-End"
+                expertise: "Front-End",
             },
             {
                 id: "id1",
                 type: "Interview",
                 payment: 30,
                 status: PaymentStatus[PaymentStatus.Paid],
-                expertise: "Front-End"
+                expertise: "Front-End",
             },
             {
                 id: "id1",
                 type: "Interview",
                 payment: 50,
                 status: PaymentStatus[PaymentStatus.Unpaid],
-                expertise: "Front-End"
-            }
+                expertise: "Front-End",
+            },
         ];
         const response = {
-            data: actions
+            data: actions,
         };
         mockedAxios.get.mockReturnValue(Promise.resolve(response));
 
         const returnedActions = await service.getUnpaidActions("id1");
 
         expect(2).toEqual(returnedActions.length);
-        returnedActions.forEach(action => {
+        returnedActions.forEach((action) => {
             expect(PaymentStatus.Unpaid).toEqual(action.status);
         });
 
@@ -100,10 +100,10 @@ describe("BalanceService", () => {
             id: "id1",
             date: new Date(),
             viv: 1000,
-            amount: 2200
+            amount: 2200,
         };
         const response = {
-            data: [payment]
+            data: [payment],
         };
         mockedAxios.get.mockReturnValue(Promise.resolve(response));
 
@@ -118,11 +118,11 @@ describe("BalanceService", () => {
         const postedPayment: PaymentPost = {
             receiver: "userId",
             date: new Date(2020, 1, 1),
-            actions: ["1", "2", "3"]
+            actions: ["1", "2", "3"],
         };
         const result = true;
         const response = {
-            data: result
+            data: result,
         };
 
         mockedAxios.post.mockReturnValue(Promise.resolve(response));

@@ -19,7 +19,7 @@ describe("UsersService", () => {
         id: "123",
         user: "mylogin",
         fullName: "My LOGIN",
-        email: "my.login@invivoo.com"
+        email: "my.login@invivoo.com",
     };
 
     it("should be created", () => {
@@ -28,7 +28,7 @@ describe("UsersService", () => {
 
     it("should get all users", async () => {
         const response = {
-            data: [prototypeUser]
+            data: [prototypeUser],
         };
         mockedAxios.get.mockReturnValue(Promise.resolve(response));
 
@@ -39,7 +39,7 @@ describe("UsersService", () => {
 
     it("should get user by id", async () => {
         const response = {
-            data: { ...prototypeUser, id: "id1", user: "lid1" }
+            data: { ...prototypeUser, id: "id1", user: "lid1" },
         };
         mockedAxios.get.mockReturnValue(Promise.resolve(response));
 
@@ -60,7 +60,7 @@ describe("UsersService", () => {
 
     it("should post user if there's no id", async () => {
         const response = {
-            data: prototypeUser
+            data: prototypeUser,
         };
         mockedAxios.post.mockReturnValue(Promise.resolve(response));
 
@@ -72,7 +72,7 @@ describe("UsersService", () => {
 
     it("should update user if there's an id", async () => {
         const response = {
-            data: prototypeUser
+            data: prototypeUser,
         };
         mockedAxios.put.mockReturnValue(Promise.resolve(response));
 

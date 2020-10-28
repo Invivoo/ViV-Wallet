@@ -4,9 +4,9 @@
         <div v-if="payments.length > 0" class="wrapper">
             <table>
                 <colgroup>
-                    <col style="width:45%" />
-                    <col style="width:20%" />
-                    <col style="width:35%" />
+                    <col style="width: 45%" />
+                    <col style="width: 20%" />
+                    <col style="width: 35%" />
                 </colgroup>
                 <thead>
                     <tr>
@@ -111,7 +111,7 @@ export default class PaymentHistoryBlock extends Vue {
     formatWithCurrency(value: number) {
         const formatter = new Intl.NumberFormat("fr", {
             style: "currency",
-            currency: "EUR"
+            currency: "EUR",
         });
 
         return formatter.format(value);

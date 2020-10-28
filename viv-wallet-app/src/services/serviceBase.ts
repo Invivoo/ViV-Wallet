@@ -13,7 +13,7 @@ export class ServiceBase {
                 baseURL: `${process.env.VUE_APP_BACKEND_BASE_URL}${route}`,
                 timeout: process.env.VUE_APP_REQUEST_TIMEOUT_MS,
                 headers: { Authorization: `Bearer ${this.loginService.getJwtToken()}` },
-                withCredentials: true
+                withCredentials: true,
             });
     }
 }

@@ -1,6 +1,6 @@
 export enum PaymentStatus {
     Unpaid,
-    Paid
+    Paid,
 }
 
 export interface Action {

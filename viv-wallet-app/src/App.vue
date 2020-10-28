@@ -3,6 +3,7 @@
         <x4b-ui
             application="viv-wallet"
             :apps-service-url="appsUrl"
+            :login-service-url="loginUrl"
             :version="appVersion"
             disable-fake-elements="true"
             languages="fr"
@@ -34,6 +35,7 @@ import { LoginService } from "./services/login";
 @Component({ components: { CustomRouterLink } })
 export default class App extends Vue {
     private appsUrl: string = process.env.VUE_APP_APPS_URL;
+    private loginUrl: string = process.env.VUE_APP_LOGIN_URL;
     private appVersion: string = version;
     private primaryColor: string = require("./styles/index.scss").primaryColor;
     private loginService: LoginService = new LoginService();

@@ -12,7 +12,7 @@ export const factory = (component: VueConstructor<Vue>) => (values = {}) => {
         localVue,
         router,
         propsData: {
-            ...values
-        }
+            ...values,
+        },
     });
 };
