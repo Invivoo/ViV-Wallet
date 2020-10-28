@@ -41,13 +41,13 @@ import Loading from "../components/Loading.vue";
 
 const UserEditProps = Vue.extend({
     props: {
-        id: String
-    }
+        id: String,
+    },
 });
 
 @Component({
     name: "user",
-    components: { Loading }
+    components: { Loading },
 })
 export default class UserEdit extends UserEditProps {
     user: User | null = { id: "", fullName: "", user: "", email: "" };

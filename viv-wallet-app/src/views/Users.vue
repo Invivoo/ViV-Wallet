@@ -16,7 +16,7 @@ import UserList from "@/components/UserList.vue";
 
 @Component({
     name: "users",
-    components: { UserList, Loading }
+    components: { UserList, Loading },
 })
 export default class Users extends Vue {
     users: User[] = [];

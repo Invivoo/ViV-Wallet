@@ -20,7 +20,7 @@ import ActionHistory from "../components/ActionHistory.vue";
 
 @Component({
     name: "history",
-    components: { ActionHistory, Loading }
+    components: { ActionHistory, Loading },
 })
 export default class History extends Vue {
     // TODO get the expertise of the current user
@@ -37,10 +37,10 @@ export default class History extends Vue {
             const consultants = await consultantsService.getConsultants();
             this.actions = (
                 await Promise.all(
-                    consultants.map(async consultant => {
-                        return (await this.walletService.getActions(consultant.id!)).map(action => ({
+                    consultants.map(async (consultant) => {
+                        return (await this.walletService.getActions(consultant.id!)).map((action) => ({
                             ...action,
-                            userFullName: consultant.fullName
+                            userFullName: consultant.fullName,
                         }));
                     })
                 )

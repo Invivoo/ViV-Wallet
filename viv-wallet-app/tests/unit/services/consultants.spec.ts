@@ -10,7 +10,7 @@ describe("ConsultantsService helper functions", () => {
                 id: "4",
                 user: "rflondingjava",
                 fullName: "Roger Flodin Java",
-                email: "roget.flondin.java@invivoo.com"
+                email: "roget.flondin.java@invivoo.com",
             } as Consultant).status
         ).toBe("CONSULTANT_SENIOR_IN_ONBOARDING");
     });
@@ -23,7 +23,7 @@ describe("ConsultantsService helper functions", () => {
                 id: "4",
                 user: "rflondingjava",
                 fullName: "Roger Flodin Java",
-                email: "roget.flondin.java@invivoo.com"
+                email: "roget.flondin.java@invivoo.com",
             }).status
         ).toBe(ConsultantStatus.CONSULTANT_SENIOR_IN_ONBOARDING);
     });

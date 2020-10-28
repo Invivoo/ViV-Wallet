@@ -13,10 +13,11 @@
             <div>
                 <router-link
                     class="primary-button payment-btn"
-                    v-bind:to="{ path: '/payment/2'}"
+                    v-bind:to="{ path: '/payment/2' }"
                     v-if="shouldDisplayPayButton()"
                     tag="button"
-                >Payer maintenant</router-link>
+                    >Payer maintenant</router-link
+                >
             </div>
             <actions-block v-bind:actions="actions" />
             <payment-history-block v-bind:payments="payments" />
@@ -40,7 +41,7 @@ import { UsersService } from "../services/users";
 
 @Component({
     name: "wallet",
-    components: { BalanceCard, Illustration, ActionsBlock, PaymentHistoryBlock, Loading }
+    components: { BalanceCard, Illustration, ActionsBlock, PaymentHistoryBlock, Loading },
 })
 export default class wallet extends Vue {
     userRoles: Role[] | null | undefined = null;
@@ -73,7 +74,7 @@ export default class wallet extends Vue {
                 this.walletService.getActions(this.userId),
                 this.walletService.getPayments(this.userId),
                 this.loginService.getRoles(),
-                this.usersService.getUser(this.userId)
+                this.usersService.getUser(this.userId),
             ]);
         } catch (ex) {
             this.errored = true;

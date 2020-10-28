@@ -1,10 +1,10 @@
 <template>
     <table v-if="consultants.length > 0">
         <colgroup>
-            <col style="width:28%" />
-            <col style="width:35%" />
-            <col style="width:22%" />
-            <col style="width:15%" />
+            <col style="width: 28%" />
+            <col style="width: 35%" />
+            <col style="width: 22%" />
+            <col style="width: 15%" />
         </colgroup>
         <thead>
             <tr>
@@ -44,7 +44,7 @@ import StatusBadge from "../components/StatusBadge.vue";
 
 @Component({
     name: "consultant-list",
-    components: { StatusBadge }
+    components: { StatusBadge },
 })
 export default class ConsultantList extends Vue {
     @Prop() consultants!: Consultant[];

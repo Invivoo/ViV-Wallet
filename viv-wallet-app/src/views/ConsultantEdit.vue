@@ -13,8 +13,9 @@
                                 v-for="user in usersNotAlreadyInExpertise"
                                 v-bind:key="user.id"
                                 v-bind:value="user.id"
-                                >{{ user.fullName }}</option
                             >
+                                {{ user.fullName }}
+                            </option>
                             <span class="select-focus"></span>
                         </select>
                     </div>
@@ -42,8 +43,9 @@
                                 v-for="option in options"
                                 v-bind:value="option.value"
                                 v-bind:disabled="option.disabled"
-                                >{{ option.text }}</option
                             >
+                                {{ option.text }}
+                            </option>
                         </select>
                         <span class="select-focus"></span>
                     </div>
@@ -83,13 +85,13 @@ import Loading from "../components/Loading.vue";
 const ConsultantEditProps = Vue.extend({
     props: {
         expertiseName: String,
-        consultantId: String
-    }
+        consultantId: String,
+    },
 });
 
 @Component({
     name: "consultant",
-    components: { Loading }
+    components: { Loading },
 })
 export default class ConsultantEdit extends ConsultantEditProps {
     consultantsService;
@@ -101,7 +103,7 @@ export default class ConsultantEdit extends ConsultantEditProps {
     submitButtonDisabled = true;
 
     options: { text: string; value: string; disabled: boolean }[] = [
-        { text: "Choisissez une option", value: "", disabled: true }
+        { text: "Choisissez une option", value: "", disabled: true },
     ];
 
     constructor() {
@@ -115,7 +117,7 @@ export default class ConsultantEdit extends ConsultantEditProps {
                 this.options.push({
                     text: toString(value as ConsultantStatus),
                     value: value as string,
-                    disabled: false
+                    disabled: false,
                 });
             }
         }
@@ -135,7 +137,7 @@ export default class ConsultantEdit extends ConsultantEditProps {
                 const allUsers = await this.usersService.getUsers();
 
                 this.usersNotAlreadyInExpertise = allUsers.filter(
-                    u => !consultantsInExpertise.find(u1 => u1.id === u.id)
+                    (u) => !consultantsInExpertise.find((u1) => u1.id === u.id)
                 );
                 this.consultant.startDate = new Date().toLocaleDateString("en-CA"); // the format should be YYYY-MM-DD
                 this.consultant.status = ConsultantStatus.CONSULTANT_SENIOR_IN_ONBOARDING;
@@ -163,7 +165,7 @@ export default class ConsultantEdit extends ConsultantEditProps {
 
     @Watch("consultant.id")
     async onSelectedUserChanged(value: string) {
-        const selectedUser = this.usersNotAlreadyInExpertise.find(u => u.id === value);
+        const selectedUser = this.usersNotAlreadyInExpertise.find((u) => u.id === value);
         if (selectedUser) {
             this.consultant.user = selectedUser.user;
             this.consultant.fullName = selectedUser.fullName;
