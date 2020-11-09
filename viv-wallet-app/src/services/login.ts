@@ -1,6 +1,6 @@
 import { Role } from "../models/role";
 import jwt_decode from "jwt-decode";
-import { getToken, login } from "x4b-ui";
+import { getToken } from "x4b-ui";
 
 export interface DecodedJwtTokenContent {
     exp: number;
@@ -41,11 +41,5 @@ export class LoginService {
 
     getJwtToken(): string | undefined {
         return this.token;
-    }
-
-    ensureLoggedIn() {
-        if (!this.token) {
-            login(process.env.VUE_APP_LOGIN_URL);
-        }
     }
 }

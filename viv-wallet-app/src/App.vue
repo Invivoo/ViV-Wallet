@@ -3,14 +3,14 @@
         <x4b-ui
             application="viv-wallet"
             :apps-service-url="appsUrl"
-            :login-service-url="loginUrl"
             :version="appVersion"
             disable-fake-elements="true"
             languages="fr"
             :color="primaryColor"
             @menuToggleButtonClicked="handleMenuToggleButtonClicked"
+            @startupFinished="handleStartupFinished"
         >
-            <div class="root">
+            <div v-if="isBannerInitialized" class="root">
                 <div v-bind:class="['menu', isMenuOpen ? '' : 'hidden']">
                     <custom-router-link to="/users">Utilisateurs</custom-router-link>
                     <custom-router-link to="/wallet">Mon wallet</custom-router-link>
@@ -22,6 +22,7 @@
                     <router-view />
                 </div>
             </div>
+            <div v-else />
         </x4b-ui>
     </div>
 </template>
@@ -30,24 +31,21 @@ import { Component, Vue } from "vue-property-decorator";
 import "x4b-ui/dist/x4b-ui/x4b-ui.css";
 import { version } from "../package.json";
 import CustomRouterLink from "./components/CustomRouterLink.vue";
-import { LoginService } from "./services/login";
 
 @Component({ components: { CustomRouterLink } })
 export default class App extends Vue {
     private appsUrl: string = process.env.VUE_APP_APPS_URL;
-    private loginUrl: string = process.env.VUE_APP_LOGIN_URL;
     private appVersion: string = version;
     private primaryColor: string = require("./styles/index.scss").primaryColor;
-    private loginService: LoginService = new LoginService();
     isMenuOpen = false;
+    isBannerInitialized = false;
 
     handleMenuToggleButtonClicked(evt) {
         this.isMenuOpen = evt.detail;
     }
 
-    mounted() {
-        const ui = document.querySelector("x4b-ui");
-        this.loginService.ensureLoggedIn();
+    handleStartupFinished() {
+        this.isBannerInitialized = true;
     }
 }
 </script>
