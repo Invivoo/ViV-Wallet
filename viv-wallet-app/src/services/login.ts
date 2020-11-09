@@ -1,6 +1,6 @@
 import { Role } from "../models/role";
 import jwt_decode from "jwt-decode";
-import { getToken, login } from "x4b-ui";
+import { getToken } from "x4b-ui";
 
 export interface DecodedJwtTokenContent {
     exp: number;
@@ -14,14 +14,17 @@ export interface Authorizations {
     userId: string;
 }
 
+const getCurrentToken = () => {
+    return process.env.NODE_ENV === "production" ? getToken() : process.env.VUE_APP_DEV_JWT;
+};
+
 export class LoginService {
-    private token: string | undefined;
     private decodedToken: DecodedJwtTokenContent;
     private authorizations: Authorizations;
 
     constructor() {
-        this.token = process.env.NODE_ENV === "production" ? getToken() : process.env.VUE_APP_DEV_JWT;
-        this.decodedToken = this.token && jwt_decode<DecodedJwtTokenContent>(this.token);
+        const token = getCurrentToken();
+        this.decodedToken = token && jwt_decode<DecodedJwtTokenContent>(token);
         this.authorizations = (this.decodedToken &&
             this.decodedToken["viv-wallet"] &&
             JSON.parse(this.decodedToken["viv-wallet"])) as Authorizations;
@@ -39,13 +42,7 @@ export class LoginService {
         return this.decodedToken.user;
     }
 
-    getJwtToken(): string | undefined {
-        return this.token;
-    }
-
-    ensureLoggedIn() {
-        if (!this.token) {
-            login(process.env.VUE_APP_LOGIN_URL);
-        }
+    getJwtToken(): string {
+        return getCurrentToken();
     }
 }
