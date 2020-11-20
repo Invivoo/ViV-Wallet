@@ -3,18 +3,22 @@ package com.invivoo.vivwallet.api.interfaces.users;
 import com.invivoo.vivwallet.api.domain.action.Action;
 import com.invivoo.vivwallet.api.domain.action.ActionService;
 import com.invivoo.vivwallet.api.domain.expertise.Expertise;
-import com.invivoo.vivwallet.api.domain.expertise.ExpertiseMember;
-import com.invivoo.vivwallet.api.domain.expertise.ExpertiseMemberRepository;
 import com.invivoo.vivwallet.api.domain.payment.PaymentService;
 import com.invivoo.vivwallet.api.domain.user.User;
-import com.invivoo.vivwallet.api.domain.user.UserRepository;
 import com.invivoo.vivwallet.api.domain.user.UserService;
 import com.invivoo.vivwallet.api.interfaces.actions.ActionDto;
-import com.invivoo.vivwallet.api.interfaces.actions.ActionStatus;
 import com.invivoo.vivwallet.api.interfaces.payments.PaymentDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 import java.util.List;
@@ -26,75 +30,62 @@ import java.util.stream.Collectors;
 public class UsersController {
 
     static final String API_V_1_USERS = "/api/v1/users";
-    private final UserRepository userRepository;
     private final UserService userService;
     private final ActionService actionService;
-    private final ExpertiseMemberRepository expertiseMemberRepository;
     private final PaymentService paymentService;
 
     @Autowired
-    public UsersController(UserRepository userRepository, UserService userService,
-                           ActionService actionService, ExpertiseMemberRepository expertiseMemberRepository,
+    public UsersController(UserService userService,
+                           ActionService actionService,
                            PaymentService paymentService) {
-        this.userRepository = userRepository;
         this.userService = userService;
         this.actionService = actionService;
-        this.expertiseMemberRepository = expertiseMemberRepository;
         this.paymentService = paymentService;
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> getUsers() {
-        List<User> users = userRepository.findAll();
-        return ResponseEntity.ok(users);
+    public ResponseEntity<List<UserDto>> getUsers(@RequestParam(required = false) Expertise expertise) {
+        List<User> users = expertise == null ? userService.findAll() : userService.findByExpertise(expertise);
+        return ResponseEntity.ok(users.stream()
+                                      .map(UserDto::createFromUser)
+                                      .collect(Collectors.toList()));
     }
 
     @PostMapping
-    public ResponseEntity<User> postUser(@RequestBody User user) {
-        User savedUser = userRepository.save(user);
+    public ResponseEntity<UserDto> postUser(@RequestBody User user) {
+        User savedUser = userService.save(user);
         return ResponseEntity.created(getLocation(savedUser))
-                .body(user);
-    }
-
-    private URI getLocation(User savedUser) {
-        return URI.create(String.format("%s/%s", API_V_1_USERS, savedUser.getId()));
+                             .body(UserDto.createFromUser(savedUser));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUser(@PathVariable("id") Long userId) {
-        return userRepository.findById(userId)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound()
-                        .build());
+    public ResponseEntity<UserDto> getUser(@PathVariable("id") Long userId) {
+        return userService.findById(userId)
+                          .map(UserDto::createFromUser)
+                          .map(ResponseEntity::ok)
+                          .orElse(ResponseEntity.notFound()
+                                                .build());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> putUser(@PathVariable("id") Long userId, @RequestBody UserUpdateDto userUpdate) {
-        return userRepository.findById(userId)
-                .map(user -> updateUser(user, userUpdate))
-                .map(userRepository::save)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound()
-                        .build());
-    }
-
-    private User updateUser(User user, UserUpdateDto userUpdate) {
-        user.setFullName(userUpdate.getFullName());
-        return user;
+    public ResponseEntity<UserDto> putUser(@PathVariable("id") Long userId, @RequestBody UserUpdateDto userUpdate) {
+        return userService.findById(userId)
+                          .map(user -> updateUser(user, userUpdate))
+                          .map(userService::save)
+                          .map(UserDto::createFromUser)
+                          .map(ResponseEntity::ok)
+                          .orElse(ResponseEntity.notFound()
+                                                .build());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<User> deleteUser(@PathVariable("id") Long userId) {
-        return userRepository.findById(userId)
-                .map(this::deleteUser)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound()
-                        .build());
-    }
-
-    private User deleteUser(User user) {
-        userRepository.delete(user);
-        return user;
+    public ResponseEntity<UserDto> deleteUser(@PathVariable("id") Long userId) {
+        return userService.findById(userId)
+                          .map(this::deleteUser)
+                          .map(UserDto::createFromUser)
+                          .map(ResponseEntity::ok)
+                          .orElse(ResponseEntity.notFound()
+                                                .build());
     }
 
     @GetMapping("/{id}/balance")
@@ -105,20 +96,15 @@ public class UsersController {
 
     @GetMapping("/{id}/actions")
     public ResponseEntity<List<ActionDto>> getActions(@PathVariable("id") Long userId) {
-        Optional<User> userOpt = userRepository.findById(userId);
-        if(userOpt.isEmpty()){
+        Optional<User> userOpt = userService.findById(userId);
+        if (userOpt.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
         User user = userOpt.get();
-        Expertise expertise = expertiseMemberRepository.findByUser(user).stream()
-                                                       .findFirst()
-                                                       .map(ExpertiseMember::getExpertise)
-                                                       .orElse(null);
-
         List<Action> userActions = actionService.findAllByAchiever(user);
         List<ActionDto> userActionDtos = userActions.stream()
-                .map(action -> convertToGetDto(action, expertise))
-                .collect(Collectors.toList());
+                                                    .map(ActionDto::createFromAction)
+                                                    .collect(Collectors.toList());
 
         return ResponseEntity.ok(userActionDtos);
     }
@@ -128,23 +114,17 @@ public class UsersController {
         return ResponseEntity.ok(paymentService.findAllByReceiver(userId));
     }
 
-    private ActionDto convertToGetDto(Action action, Expertise userExpertise) {
-        ActionDto actionDto = ActionDto.builder()
-                                       .id(action.getId())
-                                       .userId(action.getAchiever().getId())
-                                       .type(action.getType().getName())
-                                       .comment(action.getContext())
-                                       .creationDate(action.getDate())
-                                       .payment(action.getViv()).build();
-        Optional.ofNullable(userExpertise).ifPresent(expertise -> actionDto.setExpertise(expertise.getExpertiseName()));
-        Optional.ofNullable(action.getPayment()).ifPresentOrElse(
-                payment -> {
-                    actionDto.setStatus(ActionStatus.PAID.getLabel());
-                    actionDto.setPaymentDate(payment.getDate());
-                },
-                () -> actionDto.setStatus(ActionStatus.UNPAID.getLabel())
-        );
+    private URI getLocation(User savedUser) {
+        return URI.create(String.format("%s/%s", API_V_1_USERS, savedUser.getId()));
+    }
 
-        return actionDto;
+    private User updateUser(User user, UserUpdateDto userUpdate) {
+        user.setFullName(userUpdate.getFullName());
+        return user;
+    }
+
+    private User deleteUser(User user) {
+        userService.delete(user);
+        return user;
     }
 }

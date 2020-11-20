@@ -3,6 +3,8 @@ package com.invivoo.vivwallet.api.application;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.invivoo.vivwallet.api.domain.action.Action;
 import com.invivoo.vivwallet.api.domain.action.ActionService;
+import com.invivoo.vivwallet.api.domain.expertise.Expertise;
+import com.invivoo.vivwallet.api.domain.expertise.UserExpertise;
 import com.invivoo.vivwallet.api.domain.payment.Payment;
 import com.invivoo.vivwallet.api.domain.payment.PaymentService;
 import com.invivoo.vivwallet.api.domain.role.Role;
@@ -20,7 +22,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URISyntaxException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -44,12 +46,16 @@ public class DatabaseInitializer implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws IOException, URISyntaxException {
+    public void run(String... args) throws Exception {
         User theophileMontgomery = User.builder()
                                        .fullName("Théophile MONTGOMERY")
                                        .id(1L)
+                                       .expertises(List.of(UserExpertise.builder()
+                                                                        .expertise(Expertise.PROGRAMMATION_JAVA)
+                                                                        .startDate(LocalDate.of(2017, 6, 1))
+                                                                        .build()))
                                        .build();
-        theophileMontgomery.setRoles(Arrays.asList(
+        theophileMontgomery.setRoles(List.of(
                 new Role(theophileMontgomery, RoleType.EXPERTISE_MANAGER),
                 new Role(theophileMontgomery, RoleType.SENIOR_MANAGER),
                 new Role(theophileMontgomery, RoleType.COMPANY_ADMINISTRATOR)

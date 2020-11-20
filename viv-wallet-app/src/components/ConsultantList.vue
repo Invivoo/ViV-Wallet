@@ -19,7 +19,7 @@
         <tbody>
             <tr v-for="consultant in consultants" :key="consultant.id">
                 <td>
-                    <div>{{ consultant.fullname }}</div>
+                    <div>{{ consultant.fullName }}</div>
                     <div class="username">{{ consultant.user }}</div>
                 </td>
                 <td class="email">{{ consultant.email }}</td>

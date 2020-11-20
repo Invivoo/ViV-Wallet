@@ -88,8 +88,8 @@ export default class Wallets extends Vue {
     }
 
     async updateConsultants() {
-        const consultantsService = new ConsultantsService(this.selectedExpertiseId);
-        this.consultants = await consultantsService.getConsultants();
+        const consultantsService = new ConsultantsService();
+        this.consultants = await consultantsService.getConsultants(this.selectedExpertiseId);
     }
 }
 </script>

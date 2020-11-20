@@ -1,5 +1,8 @@
 package com.invivoo.vivwallet.api.domain.expertise;
 
+import java.util.Optional;
+import java.util.stream.Stream;
+
 public enum Expertise {
     PROGRAMMATION_C_PLUS_PLUS("Programmation C++"),
     PROGRAMMATION_PYTHON("Programmation Python"),
@@ -16,11 +19,17 @@ public enum Expertise {
 
     private String expertiseName;
 
-    private Expertise(String expertiseName) {
+    Expertise(String expertiseName) {
         this.expertiseName = expertiseName;
     }
 
     public String getExpertiseName() {
         return this.expertiseName;
+    }
+
+    public static Optional<Expertise> forName(String name) {
+        return Stream.of(Expertise.values())
+                     .filter(e -> e.name().equals(name))
+                     .findFirst();
     }
 }

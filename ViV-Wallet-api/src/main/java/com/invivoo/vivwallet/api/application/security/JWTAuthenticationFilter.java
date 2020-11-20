@@ -1,6 +1,7 @@
 package com.invivoo.vivwallet.api.application.security;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -16,9 +17,11 @@ import java.io.IOException;
 public class JWTAuthenticationFilter extends GenericFilterBean {
 
     private final JWTTokenProvider jwtTokenProvider;
+    private final ObjectMapper objectMapper;
 
-    public JWTAuthenticationFilter(JWTTokenProvider jwtTokenProvider) {
+    public JWTAuthenticationFilter(JWTTokenProvider jwtTokenProvider, ObjectMapper objectMapper) {
         this.jwtTokenProvider = jwtTokenProvider;
+        this.objectMapper = objectMapper;
     }
 
     @Override
@@ -30,7 +33,7 @@ public class JWTAuthenticationFilter extends GenericFilterBean {
         if (token != null) {
             try {
                 DecodedJWT decodedJWT = jwtTokenProvider.verify(token);
-                JWTUserDetails jwtUserDetails = JWTUserDetails.fromDecodedJWT(decodedJWT);
+                JWTUserDetails jwtUserDetails = JWTUserDetails.fromDecodedJWT(decodedJWT, objectMapper);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(jwtUserDetails, null, jwtUserDetails.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);

@@ -80,6 +80,7 @@ import { Consultant, ConsultantStatus, toString } from "../models/consultant";
 import { ConsultantsService } from "../services/consultants";
 import { UsersService } from "../services/users";
 import { User } from "../models/user";
+import { Expertise } from "@/models/expertise";
 import Loading from "../components/Loading.vue";
 
 const ConsultantEditProps = Vue.extend({
@@ -94,7 +95,7 @@ const ConsultantEditProps = Vue.extend({
     components: { Loading },
 })
 export default class ConsultantEdit extends ConsultantEditProps {
-    consultantsService;
+    consultantsService: ConsultantsService;
     usersService;
     consultant: Consultant = {};
     usersNotAlreadyInExpertise: User[] = [];
@@ -108,7 +109,7 @@ export default class ConsultantEdit extends ConsultantEditProps {
 
     constructor() {
         super();
-        this.consultantsService = new ConsultantsService(this.expertiseName);
+        this.consultantsService = new ConsultantsService();
         this.usersService = new UsersService();
 
         for (const [key, value] of Object.entries(ConsultantStatus)) {
@@ -133,7 +134,7 @@ export default class ConsultantEdit extends ConsultantEditProps {
             } else {
                 this.submitButtonDisabled = true;
                 this.loading = true;
-                const consultantsInExpertise = await this.consultantsService.getConsultants();
+                const consultantsInExpertise = await this.consultantsService.getConsultants(this.expertiseName);
                 const allUsers = await this.usersService.getUsers();
 
                 this.usersNotAlreadyInExpertise = allUsers.filter(
@@ -153,7 +154,8 @@ export default class ConsultantEdit extends ConsultantEditProps {
         try {
             this.loading = true;
             if (this.consultant) {
-                await this.consultantsService.saveConsultant(this.consultant);
+                this.consultant.expertise = new Expertise(this.expertiseName, "");
+                await this.consultantsService.saveExpertise(this.consultant);
                 this.$router.push({ path: `/members/${this.expertiseName}` });
             }
         } catch (ex) {

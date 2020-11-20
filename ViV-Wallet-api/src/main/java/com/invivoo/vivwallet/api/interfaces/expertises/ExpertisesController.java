@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -17,9 +18,12 @@ public class ExpertisesController {
     static final String API_V1_EXPERTISES = "/api/v1/expertises";
 
     @GetMapping
-    public ResponseEntity<List<Expertise>> getAllExpertises() {
-        List<Expertise> expertises = Stream.of(Expertise.values()).collect(Collectors.toList());
-        return ResponseEntity.ok(expertises);
+    public ResponseEntity<List<ExpertiseDto>> getAllExpertises() {
+        return ResponseEntity.ok(Stream.of(Expertise.values())
+                                       .map(ExpertiseDto::fromExpertise)
+                                       .sorted(Comparator.comparing(ExpertiseDto::getExpertiseName))
+                                       .collect(Collectors.toList()));
     }
+
 }
 

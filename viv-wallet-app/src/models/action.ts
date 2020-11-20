@@ -1,3 +1,5 @@
+import { Consultant } from "@/models/consultant";
+
 export enum PaymentStatus {
     Unpaid,
     Paid,
@@ -15,5 +17,5 @@ export interface Action {
 }
 
 export interface ActionForHistory extends Action {
-    userFullName?: string;
+    achiever?: Consultant;
 }

@@ -34,7 +34,7 @@
                 <tr v-for="action in filteredActions" :key="action.id">
                     <td>
                         <div>
-                            <div class="user">{{ action.userFullName }}</div>
+                            <div class="user">{{ action.achiever.fullName }}</div>
                             <div class="creation-date">{{ action.creationDate.toDateString() }}</div>
                         </div>
                     </td>
@@ -105,7 +105,7 @@ export default class ActionsHistory extends Vue {
     @Watch("filterValue")
     filterChanged() {
         this.filteredActions = this.actions.filter((action) =>
-            action.userFullName!.toLowerCase().includes(this.filterValue.toLowerCase())
+            action.achiever?.fullName!.toLowerCase().includes(this.filterValue.toLowerCase())
         );
     }
 }

@@ -4,7 +4,7 @@ import { ServiceBase } from "./serviceBase";
 
 export class UsersService extends ServiceBase {
     constructor(http?: AxiosInstance) {
-        super(http);
+        super(http, "/users");
     }
 
     async getUsers(): Promise<User[]> {

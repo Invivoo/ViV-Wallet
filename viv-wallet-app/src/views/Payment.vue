@@ -52,13 +52,13 @@ import Loading from "../components/Loading.vue";
 
 const PaymentProps = Vue.extend({
     props: {
-        id: String,
-    },
+        id: String
+    }
 });
 
 @Component({
     name: "payment",
-    components: { BalanceCard, Illustration, ActionsBlock, Loading },
+    components: { BalanceCard, Illustration, ActionsBlock, Loading }
 })
 export default class Payment extends PaymentProps {
     user: User | null = { id: "", fullName: "", user: "", email: "" };
@@ -87,8 +87,8 @@ export default class Payment extends PaymentProps {
         try {
             [this.user, this.balance, this.unpaidActions] = await Promise.all([
                 this.usersService.getUser(this.id),
-                this.walletService.getBalance(this.id),
-                this.walletService.getUnpaidActions(this.id),
+                this.walletService.getUserBalance(this.id),
+                this.walletService.getUserUnpaidActions(this.id)
             ]);
 
             this.unpaidActions.forEach((action) => {
@@ -107,9 +107,9 @@ export default class Payment extends PaymentProps {
                 let payment: PaymentPost = {
                     receiver: this.id,
                     date: this.date,
-                    actions: this.unpaidActions.map(({ id }) => id),
+                    actions: this.unpaidActions.map(({ id }) => id)
                 };
-                await this.walletService.savePayment(payment);
+                await this.walletService.saveUserPayment(payment);
                 this.$router.push({ path: "/wallet" });
             }
         } catch (ex) {

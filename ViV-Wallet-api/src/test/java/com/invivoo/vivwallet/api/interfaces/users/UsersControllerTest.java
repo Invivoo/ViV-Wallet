@@ -8,12 +8,10 @@ import com.invivoo.vivwallet.api.domain.action.Action;
 import com.invivoo.vivwallet.api.domain.action.ActionService;
 import com.invivoo.vivwallet.api.domain.action.ActionType;
 import com.invivoo.vivwallet.api.domain.expertise.Expertise;
-import com.invivoo.vivwallet.api.domain.expertise.ExpertiseMember;
-import com.invivoo.vivwallet.api.domain.expertise.ExpertiseMemberRepository;
+import com.invivoo.vivwallet.api.domain.expertise.UserExpertise;
 import com.invivoo.vivwallet.api.domain.payment.Payment;
 import com.invivoo.vivwallet.api.domain.payment.PaymentService;
 import com.invivoo.vivwallet.api.domain.user.User;
-import com.invivoo.vivwallet.api.domain.user.UserRepository;
 import com.invivoo.vivwallet.api.domain.user.UserService;
 import com.invivoo.vivwallet.api.interfaces.actions.ActionDto;
 import com.invivoo.vivwallet.api.interfaces.actions.ActionStatus;
@@ -41,6 +39,7 @@ import java.time.Month;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -50,8 +49,8 @@ import static org.mockito.Mockito.when;
 public class UsersControllerTest {
 
     private static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(), MediaType.APPLICATION_JSON.getSubtype(), StandardCharsets.UTF_8);
-    private static final User TEST_USER_1 = new User(1L, "User 1", List.of());
-    private static final User TEST_USER_2 = new User(2L, "User 2", List.of());
+    private static final User TEST_USER_1 = new User(1L, "User 1", List.of(UserExpertise.builder().expertise(Expertise.PROGRAMMATION_JAVA).build()), List.of());
+    private static final User TEST_USER_2 = new User(2L, "User 2",List.of(UserExpertise.builder().expertise(Expertise.PROGRAMMATION_JAVA).build()), List.of());
     private static final List<User> TEST_USERS = Arrays.asList(TEST_USER_1, TEST_USER_2);
     private static final ObjectMapper mapper = new ObjectMapper();
 
@@ -59,16 +58,10 @@ public class UsersControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private UserRepository userRepository;
-
-    @MockBean
     private UserService userService;
 
     @MockBean
     private ActionService actionService;
-
-    @MockBean
-    private ExpertiseMemberRepository expertiseMemberRepository;
 
     @MockBean
     private PaymentService paymentService;
@@ -89,15 +82,13 @@ public class UsersControllerTest {
     @Test
     public void whenGetUsers_shouldReturnUsers() throws Exception {
         //given
-        when(userRepository.findAll())
-                .thenReturn(TEST_USERS);
-        String jsonTestUsers = mapper.writeValueAsString(TEST_USERS);
+        when(userService.findAll()).thenReturn(TEST_USERS);
         //when
         ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/users"))
                                                   .andDo(MockMvcResultHandlers.print());
         //then
         resultActions.andExpect(MockMvcResultMatchers.status().isOk())
-                     .andExpect(MockMvcResultMatchers.content().string(jsonTestUsers))
+                     .andExpect(MockMvcResultMatchers.content().string(mapper.writeValueAsString(TEST_USERS.stream().map(UserDto::createFromUser).collect(Collectors.toList()))))
                      .andExpect(MockMvcResultMatchers.jsonPath("$[0].fullName").value(TEST_USERS.get(0).getFullName()))
                      .andExpect(MockMvcResultMatchers.jsonPath("$[1].fullName").value(TEST_USERS.get(1).getFullName()));
     }
@@ -106,31 +97,30 @@ public class UsersControllerTest {
     public void whenPostUser_shouldSaveAndReturnUser() throws Exception {
         //given
         User testUser = TEST_USER_1;
-        when(userRepository.save(Mockito.any(User.class))).thenReturn(testUser);
-        String jsonTestUser = mapper.writeValueAsString(testUser);
+        when(userService.save(Mockito.any(User.class))).thenReturn(testUser);
 
         //when
         ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/users").contentType(APPLICATION_JSON_UTF8)
-                                                                                 .content(jsonTestUser))
+                                                                                 .content(mapper.writeValueAsString(testUser)))
                                                   .andDo(MockMvcResultHandlers.print());
         //then
-        verify(userRepository, Mockito.times(1)).save(testUser);
+        verify(userService, Mockito.times(1)).save(testUser);
         resultActions.andExpect(MockMvcResultMatchers.status().isCreated())
                      .andExpect(MockMvcResultMatchers.redirectedUrl(String.format("/api/v1/users/%s", testUser.getId())))
-                     .andExpect(MockMvcResultMatchers.content().string(jsonTestUser));
+                     .andExpect(MockMvcResultMatchers.content().string(mapper.writeValueAsString(UserDto.createFromUser(testUser))));
     }
 
     @Test
     public void whenGetUser_shouldReturnUser() throws Exception {
         //given
         User testUser = TEST_USER_1;
-        when(userRepository.findById(testUser.getId()))
+        when(userService.findById(testUser.getId()))
                 .thenReturn(Optional.of(testUser));
         //when
         ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get(String.format("/api/v1/users/%s", testUser.getId())))
                                                   .andDo(MockMvcResultHandlers.print());
         //then
-        String expectedJsonUser = mapper.writeValueAsString(testUser);
+        String expectedJsonUser = mapper.writeValueAsString(UserDto.createFromUser(testUser));
         resultActions.andExpect(MockMvcResultMatchers.status().isOk())
                      .andExpect(MockMvcResultMatchers.content().string(expectedJsonUser));
     }
@@ -140,12 +130,12 @@ public class UsersControllerTest {
         //given
         User testUser = TEST_USER_1;
         UserUpdateDto userUpdate = new UserUpdateDto("newFullName");
-        when(userRepository.findById(testUser.getId()))
+        when(userService.findById(testUser.getId()))
                 .thenReturn(Optional.of(testUser));
         User expectedUser = testUser.toBuilder()
                                     .fullName(userUpdate.getFullName())
                                     .build();
-        when(userRepository.save(expectedUser))
+        when(userService.save(expectedUser))
                 .thenReturn(expectedUser);
 
         String jsonUserUpdate = mapper.writeValueAsString(userUpdate);
@@ -156,24 +146,25 @@ public class UsersControllerTest {
                                                                                  .content(jsonUserUpdate))
                                                   .andDo(MockMvcResultHandlers.print());
         //then
-        String expectedJsonUpdatedUser = mapper.writeValueAsString(expectedUser);
-        verify(userRepository, Mockito.times(1)).save(expectedUser);
+        verify(userService, Mockito.times(1)).save(expectedUser);
         resultActions.andExpect(MockMvcResultMatchers.status().isOk())
-                     .andExpect(MockMvcResultMatchers.content().string(expectedJsonUpdatedUser));
+                     .andExpect(MockMvcResultMatchers.content().string(mapper.writeValueAsString(UserDto.createFromUser(TEST_USER_1.toBuilder()
+                                                                                                                                   .fullName(userUpdate.getFullName())
+                                                                                                                                   .build()))));
     }
 
     @Test
     public void whenDeleteUser_shouldDeleteAndReturnOk() throws Exception {
         //given
         User testUser = TEST_USER_1;
-        when(userRepository.findById(testUser.getId()))
+        when(userService.findById(testUser.getId()))
                 .thenReturn(Optional.of(testUser));
 
         //when
         ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.delete(String.format("/api/v1/users/%s", TEST_USER_1.getId())))
                                                   .andDo(MockMvcResultHandlers.print());
         //then
-        verify(userRepository, Mockito.times(1)).delete(testUser);
+        verify(userService, Mockito.times(1)).delete(testUser);
         resultActions.andExpect(MockMvcResultMatchers.status().isOk());
     }
 
@@ -203,23 +194,14 @@ public class UsersControllerTest {
         List<Action> expectedActions = Arrays.asList(action2, action1);
         when(actionService.findAllByAchiever(testUser)).thenReturn(expectedActions);
 
-        when(userRepository.findById(testUser.getId())).thenReturn(Optional.of(testUser));
-
-        Expertise testUserExpertise = Expertise.PROGRAMMATION_JAVA;
-        ExpertiseMember testUserExpertiseMember = ExpertiseMember.builder()
-                                                                 .user(testUser)
-                                                                 .expertise(testUserExpertise).build();
-        when(expertiseMemberRepository.findByUser(testUser))
-                .thenReturn(List.of(testUserExpertiseMember));
+        when(userService.findById(testUser.getId())).thenReturn(Optional.of(testUser));
 
         //When
         ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get(String.format("/api/v1/users/%s/actions", testUser.getId())))
                                                   .andDo(MockMvcResultHandlers.print());
 
         //Then
-        List<ActionDto> expectedActionDtos = Arrays.asList(
-                buildActionDto(action2, testUserExpertise),
-                buildActionDto(action1, testUserExpertise));
+        List<ActionDto> expectedActionDtos = Arrays.asList(ActionDto.createFromAction(action2), ActionDto.createFromAction(action1));
         String expectedJson = mapper.writeValueAsString(expectedActionDtos);
 
         verify(actionService).findAllByAchiever(testUser);
@@ -230,27 +212,21 @@ public class UsersControllerTest {
     @Test
     public void whenGetListOfActionsForUserNotInAnExpertise_shouldReturnListOfActions() throws Exception {
         //Given
-        User testUser = TEST_USER_1;
-        Action action1 = anUnpaidAction(testUser);
-        Action action2 = aPaidAction(testUser);
+        Action action1 = anUnpaidAction(TEST_USER_1);
+        Action action2 = aPaidAction(TEST_USER_1);
         List<Action> expectedActions = Arrays.asList(action2, action1);
-        when(userRepository.findById(testUser.getId())).thenReturn(Optional.of(testUser));
-        when(actionService.findAllByAchiever(testUser)).thenReturn(expectedActions);
-
-        when(expertiseMemberRepository.findByUser(testUser))
-                .thenReturn(List.of());
+        when(userService.findById(TEST_USER_1.getId())).thenReturn(Optional.of(TEST_USER_1));
+        when(actionService.findAllByAchiever(TEST_USER_1)).thenReturn(expectedActions);
 
         //When
-        ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get(String.format("/api/v1/users/%s/actions", testUser.getId())))
+        ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get(String.format("/api/v1/users/%s/actions", TEST_USER_1.getId())))
                                                   .andDo(MockMvcResultHandlers.print());
 
         //Then
-        List<ActionDto> expectedActionDtos = Arrays.asList(
-                buildActionDto(action2),
-                buildActionDto(action1));
+        List<ActionDto> expectedActionDtos = Arrays.asList(ActionDto.createFromAction(action2), ActionDto.createFromAction(action1));
         String expectedJson = mapper.writeValueAsString(expectedActionDtos);
 
-        verify(actionService).findAllByAchiever(testUser);
+        verify(actionService).findAllByAchiever(TEST_USER_1);
         resultActions.andExpect(MockMvcResultMatchers.status().isOk())
                      .andExpect(MockMvcResultMatchers.content().string(expectedJson));
     }
@@ -276,30 +252,6 @@ public class UsersControllerTest {
                                      .id(1L)
                                      .date(LocalDateTime.of(2020, Month.JULY, 1, 12, 0)).build())
                      .build();
-    }
-
-    private ActionDto buildActionDto(Action action, Expertise userExpertise) {
-        ActionDto actionDto = buildActionDto(action);
-        actionDto.setExpertise(userExpertise.getExpertiseName());
-        return actionDto;
-    }
-
-    private ActionDto buildActionDto(Action action) {
-        ActionDto actionDto = ActionDto.builder()
-                                       .id(action.getId())
-                                       .userId(action.getAchiever().getId())
-                                       .type(action.getType().getName())
-                                       .comment(action.getContext())
-                                       .creationDate(action.getDate())
-                                       .payment(action.getViv()).build();
-        Optional.ofNullable(action.getPayment()).ifPresentOrElse(
-                payment -> {
-                    actionDto.setStatus(ActionStatus.PAID.getLabel());
-                    actionDto.setPaymentDate(payment.getDate());
-                },
-                () -> actionDto.setStatus(ActionStatus.UNPAID.getLabel())
-        );
-        return actionDto;
     }
 
     @Test

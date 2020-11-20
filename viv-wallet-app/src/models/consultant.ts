@@ -1,11 +1,15 @@
+import { Expertise } from "@/models/expertise";
+
 export interface Consultant {
     id?: string;
     user?: string;
     email?: string;
     fullName?: string;
+    expertise?: Expertise;
     status?: ConsultantStatus;
     startDate?: string;
     endDate?: string;
+    roles?: string[];
 }
 
 export enum ConsultantStatus {

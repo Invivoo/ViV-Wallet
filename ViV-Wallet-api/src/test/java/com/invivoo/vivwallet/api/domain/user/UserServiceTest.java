@@ -18,6 +18,9 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class UserServiceTest {
 
+
+    @Mock
+    private UserRepository userRepository;
     @Mock
     private ActionRepository actionRepository;
 
@@ -29,7 +32,7 @@ public class UserServiceTest {
         Action action2 = Action.builder().id((long) 2).viv(new BigDecimal(10)).achiever(user).build();
         List<Action> notPaidActions = Arrays.asList(action1, action2);
         when(actionRepository.findAllByPaymentIsNull()).thenReturn(notPaidActions);
-        UserService userService = new UserService(actionRepository);
+        UserService userService = new UserService(userRepository, actionRepository);
 
         //When
         long balance = userService.computeBalance(user.getId());
@@ -48,7 +51,7 @@ public class UserServiceTest {
         Action action3 = Action.builder().id((long) 3).viv(new BigDecimal(5)).achiever(user2).build();
         List<Action> notPaidActions = Arrays.asList(action1, action2, action3);
         when(actionRepository.findAllByPaymentIsNull()).thenReturn(notPaidActions);
-        UserService userService = new UserService(actionRepository);
+        UserService userService = new UserService(userRepository, actionRepository);
 
         //When
         long balance = userService.computeBalance(user1.getId());
@@ -62,7 +65,7 @@ public class UserServiceTest {
         //Given
         User user = User.builder().id((long) 1).build();
         when(actionRepository.findAllByPaymentIsNull()).thenReturn(Collections.emptyList());
-        UserService userService = new UserService(actionRepository);
+        UserService userService = new UserService(userRepository, actionRepository);
 
         //When
         long balance = userService.computeBalance(user.getId());

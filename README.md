@@ -72,7 +72,7 @@ Pour installer l'extension VSCode pour le remote development, suivre la procédu
 ### Pour travailler sur le backend avec le front
 
 Run `mvn clean install` from the project root to build ViV-Wallet-app and move it to ViV-Wallet-api resources.
-Run it in sudo mode the first time to install the version of node used by the frontend-maven-plugin.
+Run it in sudo mode the first time to install the version of node used by the frontend-maven-plugin.cd
 Move to `ViV-Wallet-api/` folder and run `mvn spring-boot:run` for a dev server.
 As we are using spring dev tools, you just have to compile to see your changes. If the hot swap failed, just restart the api.
 

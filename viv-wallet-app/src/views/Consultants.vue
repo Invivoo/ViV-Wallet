@@ -92,8 +92,8 @@ export default class Consultants extends Vue {
     }
 
     async updateConsultants() {
-        const consultantsService = new ConsultantsService(this.selectedExpertiseId);
-        this.consultants = await consultantsService.getConsultants();
+        const consultantsService = new ConsultantsService();
+        this.consultants = await consultantsService.getConsultants(this.selectedExpertiseId);
     }
 }
 </script>

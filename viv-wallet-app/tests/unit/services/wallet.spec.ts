@@ -27,10 +27,10 @@ describe("BalanceService", () => {
         };
         mockedAxios.get.mockReturnValue(Promise.resolve(response));
 
-        const returnedBalance = await service.getBalance("id1");
+        const returnedBalance = await service.getUserBalance("id1");
         expect(returnedBalance).toEqual(balance);
 
-        expect(mockedAxios.get).toHaveBeenCalledWith(`id1/balance`);
+        expect(mockedAxios.get).toHaveBeenCalledWith(`/users/id1/balance`);
     });
 
     it("should get the actions of a given user", async () => {
@@ -49,11 +49,11 @@ describe("BalanceService", () => {
         };
         mockedAxios.get.mockReturnValue(Promise.resolve(response));
 
-        const returnedActions = await service.getActions("id1");
+        const returnedActions = await service.getUserActions("id1");
         expect(1).toEqual(returnedActions.length);
         expect(action).toEqual(returnedActions[0]);
 
-        expect(mockedAxios.get).toHaveBeenCalledWith(`id1/actions`);
+        expect(mockedAxios.get).toHaveBeenCalledWith(`/users/id1/actions`);
     });
 
     it("should get only unpaied actions of a given user", async () => {
@@ -85,14 +85,14 @@ describe("BalanceService", () => {
         };
         mockedAxios.get.mockReturnValue(Promise.resolve(response));
 
-        const returnedActions = await service.getUnpaidActions("id1");
+        const returnedActions = await service.getUserUnpaidActions("id1");
 
         expect(2).toEqual(returnedActions.length);
         returnedActions.forEach((action) => {
             expect(PaymentStatus.Unpaid).toEqual(action.status);
         });
 
-        expect(mockedAxios.get).toHaveBeenCalledWith(`id1/actions`);
+        expect(mockedAxios.get).toHaveBeenCalledWith(`/users/id1/actions`);
     });
 
     it("should get the payments of a given user", async () => {
@@ -107,11 +107,11 @@ describe("BalanceService", () => {
         };
         mockedAxios.get.mockReturnValue(Promise.resolve(response));
 
-        const returnedPayments = await service.getPayments("id1");
+        const returnedPayments = await service.getUserPayments("id1");
         expect(1).toEqual(returnedPayments.length);
         expect(payment).toEqual(returnedPayments[0]);
 
-        expect(mockedAxios.get).toHaveBeenCalledWith(`id1/payments`);
+        expect(mockedAxios.get).toHaveBeenCalledWith(`/users/id1/payments`);
     });
 
     it("should post payment of a given user", async () => {
@@ -127,7 +127,7 @@ describe("BalanceService", () => {
 
         mockedAxios.post.mockReturnValue(Promise.resolve(response));
 
-        expect(await service.savePayment(postedPayment)).toEqual(result);
+        expect(await service.saveUserPayment(postedPayment)).toEqual(result);
 
         expect(mockedAxios.post).toHaveBeenCalledWith(`payments`, postedPayment);
     });

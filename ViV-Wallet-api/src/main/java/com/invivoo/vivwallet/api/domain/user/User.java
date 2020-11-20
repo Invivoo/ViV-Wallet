@@ -1,6 +1,7 @@
 package com.invivoo.vivwallet.api.domain.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.invivoo.vivwallet.api.domain.expertise.UserExpertise;
 import com.invivoo.vivwallet.api.domain.role.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,6 +29,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String fullName;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private List<UserExpertise> expertises = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL)
     @JsonIgnore
     @JoinColumn(name = "user_id")

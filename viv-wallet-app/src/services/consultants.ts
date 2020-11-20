@@ -3,16 +3,20 @@ import { Consultant, ConsultantStatus } from "../models/consultant";
 import { ServiceBase } from "./serviceBase";
 
 export class ConsultantsService extends ServiceBase {
-    constructor(expertiseName: string, http?: AxiosInstance) {
-        super(http, `/expertises/${expertiseName}/members`);
+    constructor(http?: AxiosInstance) {
+        super(http);
     }
 
-    async getConsultants(): Promise<Consultant[]> {
-        return (await this.http.get("")).data.map(normalizeRawConsultant);
+    async getConsultants(expertiseName?: string): Promise<Consultant[]> {
+        if (expertiseName) {
+            return (await this.http.get(`/users?expertise=${expertiseName}`)).data.map(normalizeRawConsultant);
+        } else {
+            return (await this.http.get(`/users`)).data.map(normalizeRawConsultant);
+        }
     }
 
-    async saveConsultant(consultant: Consultant): Promise<Object> {
-        return (await this.http.put<Consultant>(`${consultant.id}`, consultantToRaw(consultant))).data;
+    async saveExpertise(consultant: Consultant): Promise<Object> {
+        return (await this.http.post<any>(`/users/${consultant.id}/expertises`, consultantToRaw(consultant))).data;
     }
 
     async getConsultant(id: string): Promise<Consultant> {

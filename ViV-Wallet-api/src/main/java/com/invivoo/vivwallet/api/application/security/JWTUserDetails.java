@@ -1,12 +1,16 @@
 package com.invivoo.vivwallet.api.application.security;
 
+import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -55,14 +59,25 @@ public class JWTUserDetails implements UserDetails {
         return true;
     }
 
-    public static JWTUserDetails fromDecodedJWT(DecodedJWT decodedJWT) {
+    public static JWTUserDetails fromDecodedJWT(DecodedJWT decodedJWT, ObjectMapper objectMapper) {
         String username = decodedJWT.getClaim("user").asString();
-        List<SimpleGrantedAuthority> authorities = Optional.ofNullable(decodedJWT.getClaim("roles"))
-                                                           .map(roles -> roles.asList(String.class))
+        List<SimpleGrantedAuthority> authorities = Optional.ofNullable(decodedJWT.getClaim("viv-wallet"))
+                                                           .map(Claim::asString)
+                                                           .map(vivWalletClaimsAsString -> getVivWalletClaims(objectMapper, vivWalletClaimsAsString))
+                                                           .map(vivWalletClaims -> vivWalletClaims.get("roles"))
+                                                           .map(roles -> (List<String>) roles)
                                                            .orElse(List.of())
                                                            .stream()
                                                            .map(SimpleGrantedAuthority::new)
                                                            .collect(Collectors.toList());
         return new JWTUserDetails(username, authorities);
+    }
+
+    private static Map getVivWalletClaims(ObjectMapper objectMapper, String vivWalletClaimsAsString) {
+        try {
+            return objectMapper.readValue(vivWalletClaimsAsString, Map.class);
+        } catch (IOException e) {
+            return null;
+        }
     }
 }

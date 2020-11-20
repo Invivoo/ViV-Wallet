@@ -10,21 +10,17 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import { ActionForHistory, PaymentStatus } from "../models/action";
-import { Consultant } from "../models/consultant";
-import { ConsultantsService } from "@/services/consultants";
+import { Component, Vue } from "vue-property-decorator";
+import { ActionForHistory } from "../models/action";
 import { WalletService } from "../services/wallet";
 import Loading from "../components/Loading.vue";
 import ActionHistory from "../components/ActionHistory.vue";
 
 @Component({
     name: "history",
-    components: { ActionHistory, Loading },
+    components: { ActionHistory, Loading }
 })
 export default class History extends Vue {
-    // TODO get the expertise of the current user
-    expertise = "csharp";
     actions: ActionForHistory[] = [];
     loading = true;
     errored = false;
@@ -33,20 +29,9 @@ export default class History extends Vue {
 
     async mounted() {
         try {
-            const consultantsService = new ConsultantsService(this.expertise);
-            const consultants = await consultantsService.getConsultants();
-            this.actions = (
-                await Promise.all(
-                    consultants.map(async (consultant) => {
-                        return (await this.walletService.getActions(consultant.id!)).map((action) => ({
-                            ...action,
-                            userFullName: consultant.fullName,
-                        }));
-                    })
-                )
-            )
-                .flat()
-                .sort((a, b) => b.creationDate.getTime() - a.creationDate.getTime());
+            this.actions = (await this.walletService.getAllActions()).sort(
+                (a, b) => b.creationDate.getTime() - a.creationDate.getTime()
+            );
         } catch (ex) {
             this.errored = true;
         } finally {

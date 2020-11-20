@@ -5,7 +5,7 @@ export class ServiceBase {
     protected http: AxiosInstance;
     protected loginService: LoginService;
 
-    constructor(http?: AxiosInstance, route = "/users") {
+    constructor(http?: AxiosInstance, route = "") {
         this.loginService = new LoginService();
         this.http =
             http ||

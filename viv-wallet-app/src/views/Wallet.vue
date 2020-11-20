@@ -70,9 +70,9 @@ export default class wallet extends Vue {
             }
 
             [this.balance, this.actions, this.payments, this.userRoles, this.user] = await Promise.all([
-                this.walletService.getBalance(this.userId),
-                this.walletService.getActions(this.userId),
-                this.walletService.getPayments(this.userId),
+                this.walletService.getUserBalance(this.userId),
+                this.walletService.getUserActions(this.userId),
+                this.walletService.getUserPayments(this.userId),
                 this.loginService.getRoles(),
                 this.usersService.getUser(this.userId),
             ]);
