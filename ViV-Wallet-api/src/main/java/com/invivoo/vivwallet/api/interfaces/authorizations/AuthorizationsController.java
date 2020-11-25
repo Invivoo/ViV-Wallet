@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -31,7 +33,7 @@ public class AuthorizationsController {
     }
 
     @PostMapping
-    public ResponseEntity<AuthorizationsResponse> authorize(HttpServletRequest httpServletRequest) {
+    public ResponseEntity<AuthorizationsResponse> authorize(HttpServletRequest httpServletRequest) throws InvalidKeySpecException, NoSuchAlgorithmException {
         String token = jwtTokenProvider.resolveToken(httpServletRequest);
         DecodedJWT verify = jwtTokenProvider.verify(token);
         String x4bId = verify.getClaim("user").asString();

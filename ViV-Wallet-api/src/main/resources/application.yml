@@ -8,4 +8,4 @@ spring:
 x4b:
   auth:
     issuer: X4B
-    secret: U29tZVhDb21wb25lbnRLb29yZGluYXRvclNlY3JldA==
+    publicKeyUrl: https://login.uat.xcomponent.com/authentication/api/Configurations/Key
