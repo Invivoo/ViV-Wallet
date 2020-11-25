@@ -12,11 +12,19 @@
         >
             <div v-if="isBannerInitialized" class="root">
                 <div v-bind:class="['menu', isMenuOpen ? '' : 'hidden']">
-                    <custom-router-link to="/users">Utilisateurs</custom-router-link>
-                    <custom-router-link to="/wallet">Mon wallet</custom-router-link>
-                    <custom-router-link to="/members">Mon expertise</custom-router-link>
-                    <custom-router-link to="/wallets">Wallets</custom-router-link>
-                    <custom-router-link to="/actions">Historique des actions</custom-router-link>
+                    <check-roles v-bind:roles="adminOnly"
+                        ><custom-router-link to="/users">Utilisateurs</custom-router-link></check-roles
+                    >
+                    <check-roles v-bind:roles="myWalletRoles">
+                        <custom-router-link to="/wallet">Mon wallet</custom-router-link>
+                    </check-roles>
+                    <check-roles v-bind:roles="myExpertiseRoles">
+                        <custom-router-link to="/members">Mon expertise</custom-router-link>
+                    </check-roles>
+                    <check-roles v-bind:roles="adminOnly">
+                        <custom-router-link to="/wallets">Wallets</custom-router-link>
+                        <custom-router-link to="/actions">Historique des actions</custom-router-link>
+                    </check-roles>
                 </div>
                 <div class="content">
                     <router-view />
@@ -31,14 +39,19 @@ import { Component, Vue } from "vue-property-decorator";
 import "x4b-ui/dist/x4b-ui/x4b-ui.css";
 import { version } from "../package.json";
 import CustomRouterLink from "./components/CustomRouterLink.vue";
+import CheckRoles from "./components/CheckRoles.vue";
+import { adminOnly, Role } from "./models/role";
 
-@Component({ components: { CustomRouterLink } })
+@Component({ components: { CustomRouterLink, CheckRoles } })
 export default class App extends Vue {
     private appsUrl: string = process.env.VUE_APP_APPS_URL;
     private appVersion: string = version;
     private primaryColor: string = require("./styles/index.scss").primaryColor;
     isMenuOpen = false;
     isBannerInitialized = false;
+    adminOnly = adminOnly;
+    myWalletRoles = [Role.CONSULTANT, Role.EXPERTISE_MANAGER, Role.SENIOR_MANAGER];
+    myExpertiseRoles = [Role.EXPERTISE_MANAGER, Role.SENIOR_MANAGER];
 
     handleMenuToggleButtonClicked(evt) {
         this.isMenuOpen = evt.detail;
