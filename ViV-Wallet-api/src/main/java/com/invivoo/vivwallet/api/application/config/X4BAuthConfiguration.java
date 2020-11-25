@@ -16,5 +16,5 @@ import org.springframework.stereotype.Component;
 public class X4BAuthConfiguration {
 
     private String issuer;
-    private String secret;
+    private String publicKeyUrl;
 }
