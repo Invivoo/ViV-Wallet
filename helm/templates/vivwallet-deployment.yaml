@@ -21,11 +21,8 @@ spec:
               env:
               - name: DNS
                 value: "kube-dns.kube-system"
-              - name: JwtAuthenticationSecret
-                valueFrom:
-                    secretKeyRef:
-                      name: {{ .Release.Name }}-shared-secret
-                      key: jwtSecret 
+              - name: X4BAuthPublicKeyUrl
+                value: {{ .Values.global.x4bAuthPublicKeyUrl }}
               {{- include "resources.large" . | nindent 14 }}
               imagePullPolicy: Always
               ports:
