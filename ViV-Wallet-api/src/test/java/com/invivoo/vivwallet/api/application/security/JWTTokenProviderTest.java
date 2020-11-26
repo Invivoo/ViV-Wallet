@@ -1,7 +1,6 @@
 package com.invivoo.vivwallet.api.application.security;
 
 
-import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.invivoo.vivwallet.api.application.config.X4BAuthConfiguration;
 import com.invivoo.vivwallet.api.infrastructure.x4b.X4BConfigurationKey;
@@ -15,7 +14,7 @@ import java.security.spec.InvalidKeySpecException;
 
 public class JWTTokenProviderTest {
 
-    @Test(expected = TokenExpiredException.class)
+    @Test
     public void whenVerifyJwt_thenGetDecodedJWT() throws InvalidKeySpecException, NoSuchAlgorithmException {
         //given
         X4BConnector x4BConnectorMock = Mockito.mock(X4BConnector.class);
@@ -26,11 +25,11 @@ public class JWTTokenProviderTest {
 
         //when
         DecodedJWT verify = jwtTokenProvider.verify(
-                "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzY2VuYXJpbyI6IntcInJvbGVzXCI6W1wiUmVhZFwiLFwiV3JpdGVcIl0sXCJ3b3Jrc3BhY2VzXCI6W1wiQmVub2l0IEpPTkFUSEFTXCJdfSIsInR5cGUiOiJSZWd1bGFyVXNlciIsImlzcyI6Ilg0QiIsInVzZXIiOiJCZW5vaXQgSk9OQVRIQVMiLCJzcmMiOiJleHRlcm5hbCIsImV4cCI6MTYwNjMyNjA5MS4wfQ"
-                + ".iP44Cfabnv-j9cdjQ2J7JjpjFTvqjc2RX90tiFDyk0p2Jmr9eojYswMP2v2_CwP3qVP3rKzO-3hxI3ibJH2p_Omu1u-n-FnkhSq0lJvQEbSi38Y7CuPYaNK-S85Iq4J9p6bOf368O_dP9rn5NQotRj4kWdZhlUJA-U4KNd15Oyv2fiHXPiLeTIrslUsTzbRJdvw8Du_vRBfebiqbm"
-                + "-Ua_8lfOyh9bFOxgdYlAoZ8ZcyZqMVMT5WMiE9yav3_lyZCvBRZ1mVgqTD8uszAjByJzECgqNzHvAkn9bWCJHnl_zDi0zo1T3ydrhwR6rqU66FXYg2uJ8beqtXfFUKV-aYlJA");
+                "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9"
+                +
+                ".eyJzY2VuYXJpbyI6IntcInJvbGVzXCI6W1wiUmVhZFwiLFwiV3JpdGVcIl0sXCJ3b3Jrc3BhY2VzXCI6W1wiQmVub2l0IEpPTkFUSEFTXCJdfSIsInZpdi13YWxsZXQiOiJ7XCJyb2xlc1wiOltcIkVYUEVSVElTRV9NQU5BR0VSXCIsXCJDT01QQU5ZX0FETUlOSVNUUkFUT1JcIixcIlNFTklPUl9NQU5BR0VSXCIsXCJDT05TVUxUQU5UXCJdLFwidXNlcklkXCI6MX0iLCJ0eXBlIjoiUmVndWxhclVzZXIiLCJpc3MiOiJYNEIiLCJ1c2VyIjoiVGjDqW9waGlsZSBNT05UR09NRVJZIiwic3JjIjoiZXh0ZXJuYWwifQ.eJLphlzJSP5Ym55ksf81wLq1DFbd51mIj-uJGavTKh--eev_-GzviXpE42n6enVBGuV_uYKlZAykPMGhs3eu6Z997Ujc5xi0tQHaIDCcld10dvmXraTbm4ESrPHoHS8qjIToSai2tae3yfu7mN-Qqn1sOOjf2BfLjJQuZQMgpngEt51cAst57nZE-JiWdNDDXgiVOI-3RH7CIIFONK-wWT4S00ZaWJnrpKhRtV2lWnnxyEYSIwBd869HkxiaQNK9qdSEsFRclWDE4SFFSyA4yOFltSJglWKYIPoJ2thrp7jEKPqDOf1KxNtGf_rTWSXylX81y9JSmuEp63hQTAIAig");
 
         //then
-        Assert.assertEquals(verify.getClaim("user").asString(), "Benoit JONATHAS");
+        Assert.assertEquals(verify.getClaim("user").asString(), "Théophile MONTGOMERY");
     }
 }
