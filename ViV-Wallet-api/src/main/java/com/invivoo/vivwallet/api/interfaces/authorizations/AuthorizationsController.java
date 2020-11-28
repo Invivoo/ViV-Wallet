@@ -16,6 +16,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -44,9 +45,9 @@ public class AuthorizationsController {
                                                        .build());
     }
 
-    private List<String> getRolesAsString(List<Role> roles) {
+    private List<String> getRolesAsString(Set<Role> roles) {
         return Optional.ofNullable(roles)
-                       .orElse(List.of())
+                       .orElse(Set.of())
                        .stream()
                        .map(Role::getType)
                        .map(RoleType::name)

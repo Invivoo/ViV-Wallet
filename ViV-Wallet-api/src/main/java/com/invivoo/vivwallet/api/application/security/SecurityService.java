@@ -17,6 +17,6 @@ public class SecurityService {
     }
 
     public Optional<User> getConnectedUser() {
-        return userService.findByX4bId(SecurityContextHolder.getContext().getAuthentication().getName());
+        return userService.findById(Long.valueOf(SecurityContextHolder.getContext().getAuthentication().getName()));
     }
 }

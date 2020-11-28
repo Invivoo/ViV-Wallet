@@ -14,6 +14,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 public class JWTUserDetailsTest {
@@ -31,10 +32,16 @@ public class JWTUserDetailsTest {
         Mockito.when(decodedJWT.getClaim("viv-wallet")).thenReturn(mockVivWalletClaims());
 
         // when
-        JWTUserDetails jwtUserDetails = JWTUserDetails.fromDecodedJWT(decodedJWT, objectMapper);
+        Optional<JWTUserDetails> jwtUserDetails = JWTUserDetails.fromDecodedJWT(decodedJWT, objectMapper);
 
         // then
-        Assert.assertEquals(List.of(new SimpleGrantedAuthority(RoleType.COMPANY_ADMINISTRATOR.name()), new SimpleGrantedAuthority(RoleType.EXPERTISE_MANAGER.name())), jwtUserDetails.getAuthorities());
+        Assert.assertTrue(jwtUserDetails.isPresent());
+        JWTUserDetails details = jwtUserDetails.get();
+        Assert.assertEquals("1", details.getUsername());
+        Assert.assertEquals(List.of(new SimpleGrantedAuthority(RoleType.EXPERTISE_MANAGER.name()),
+                                    new SimpleGrantedAuthority(RoleType.COMPANY_ADMINISTRATOR.name()),
+                                    new SimpleGrantedAuthority(RoleType.SENIOR_MANAGER.name()),
+                                    new SimpleGrantedAuthority(RoleType.CONSULTANT.name())), details.getAuthorities());
 
     }
 
@@ -67,7 +74,7 @@ public class JWTUserDetailsTest {
 
             @Override
             public String asString() {
-                return "{\"roles\":[\"COMPANY_ADMINISTRATOR\",\"EXPERTISE_MANAGER\"]}";
+                return "{\"roles\":[\"EXPERTISE_MANAGER\",\"COMPANY_ADMINISTRATOR\",\"SENIOR_MANAGER\",\"CONSULTANT\"],\"userId\":1}";
             }
 
             @Override

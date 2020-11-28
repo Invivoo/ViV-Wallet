@@ -3,7 +3,7 @@ package com.invivoo.vivwallet.api.infrastructure.lynx.mapper;
 import com.invivoo.vivwallet.api.domain.action.Action;
 import com.invivoo.vivwallet.api.domain.action.ActionType;
 import com.invivoo.vivwallet.api.domain.user.User;
-import com.invivoo.vivwallet.api.domain.user.UserRepository;
+import com.invivoo.vivwallet.api.domain.user.UserService;
 import com.invivoo.vivwallet.api.infrastructure.lynx.model.Activity;
 import org.springframework.stereotype.Service;
 
@@ -12,21 +12,21 @@ import java.util.Optional;
 @Service
 public class ActivityToActionMapper {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    public ActivityToActionMapper(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public ActivityToActionMapper(UserService userService) {
+        this.userService = userService;
     }
 
     public Optional<Action> convert(Activity activity) {
-        Optional<User> user = userRepository.findByFullName(activity.getOwner());
-        if (user.isEmpty()) {
-            return Optional.empty();
-        }
+        User user = userService.findByFullName(activity.getOwner())
+                               .orElseGet(() -> userService.save(User.builder()
+                                                                     .fullName(activity.getOwner())
+                                                                     .build()));
         Action.ActionBuilder builder = Action.builder()
                                              .date(activity.getDate()) // todo actDate == valueDate ?
                                              .lynxActivityId(activity.getId())
-                                             .achiever(user.get());
+                                             .achiever(user);
         setActivityTypeContext(activity, builder);
         return Optional.of(builder.build());
     }
@@ -130,6 +130,8 @@ public class ActivityToActionMapper {
 //                builder.context(String.format("Cheat Sheet : %s", activity.getComment()));
 //                break;
             default:
+                builder.type(ActionType.NO_MAPPING_FOUND);
+                builder.context(String.format("No mapping found for %s", activity.getType()));
                 break;
         }
     }
