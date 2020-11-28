@@ -25,7 +25,7 @@ public class UserDto {
 
     private Long id;
     private String fullName;
-    private ExpertiseDto expertiseDto;
+    private ExpertiseDto expertise;
     private UserExpertiseStatus status;
     private LocalDate startDate;
     private LocalDate endDate;
@@ -34,15 +34,16 @@ public class UserDto {
     public static UserDto createFromUser(User user) {
         UserDtoBuilder builder = UserDto.builder()
                                         .id(user.getId())
-                                        .fullName(user.getFullName())
-                                        .roles(user.getRoles().stream().map(Role::getType).collect(Collectors.toList()));
+                                        .fullName(user.getFullName());
+        Optional.ofNullable(user.getRoles())
+                .ifPresent(roles -> builder.roles(user.getRoles().stream().map(Role::getType).collect(Collectors.toList())));
         LocalDate now = LocalDate.now();
-        Optional<UserExpertise> firstActiveExpertise = user.getExpertises()
-                                                           .stream()
-                                                           .filter(userExpertise -> userExpertise.isValid(now))
-                                                           .sorted()
-                                                           .findFirst();
-        firstActiveExpertise.ifPresent(activeExpertise -> builder.expertiseDto(ExpertiseDto.fromExpertise(activeExpertise.getExpertise()))
+        Optional<UserExpertise> firstActiveExpertise = Optional.ofNullable(user.getExpertises())
+                                                               .flatMap(userExpertises -> userExpertises.stream()
+                                                                                                        .filter(userExpertise -> userExpertise.isValid(now))
+                                                                                                        .sorted()
+                                                                                                        .findFirst());
+        firstActiveExpertise.ifPresent(activeExpertise -> builder.expertise(ExpertiseDto.fromExpertise(activeExpertise.getExpertise()))
                                                                  .status(activeExpertise.getStatus())
                                                                  .startDate(activeExpertise.getStartDate())
                                                                  .endDate(activeExpertise.getEndDate()));

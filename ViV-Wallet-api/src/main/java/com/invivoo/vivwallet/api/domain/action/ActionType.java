@@ -32,7 +32,9 @@ public enum ActionType {
     NEW_MEDIUM_FIRST_PUBLICATION("1er Article moyen 500 – 2500 mots sur un nouveau media", 30, Constants.IS_SHARED_BY_MULTIPLE_ACHIEVERS),
     LONG_NEW_MEDIUM_FIRST_PUBLICATION("1er Article long >2500 mots sur un nouveau media", 40, Constants.IS_SHARED_BY_MULTIPLE_ACHIEVERS),
     WHITE_BOOK("Livre blanc", 100, Constants.IS_SHARED_BY_MULTIPLE_ACHIEVERS),
-    CHEAT_SHEET("Cheat Sheet", 10, Constants.IS_SHARED_BY_MULTIPLE_ACHIEVERS);
+    CHEAT_SHEET("Cheat Sheet", 10, Constants.IS_SHARED_BY_MULTIPLE_ACHIEVERS),
+
+    NO_MAPPING_FOUND("No mapping found", 0, Constants.IS_NOT_SHARED_BY_MULTIPLE_ACHIEVERS);
 
     private final String name;
     private final Integer value;

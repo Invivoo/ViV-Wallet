@@ -59,18 +59,19 @@ public class JWTUserDetails implements UserDetails {
         return true;
     }
 
-    public static JWTUserDetails fromDecodedJWT(DecodedJWT decodedJWT, ObjectMapper objectMapper) {
-        String username = decodedJWT.getClaim("user").asString();
-        List<SimpleGrantedAuthority> authorities = Optional.ofNullable(decodedJWT.getClaim("viv-wallet"))
-                                                           .map(Claim::asString)
-                                                           .map(vivWalletClaimsAsString -> getVivWalletClaims(objectMapper, vivWalletClaimsAsString))
-                                                           .map(vivWalletClaims -> vivWalletClaims.get("roles"))
-                                                           .map(roles -> (List<String>) roles)
-                                                           .orElse(List.of())
-                                                           .stream()
-                                                           .map(SimpleGrantedAuthority::new)
-                                                           .collect(Collectors.toList());
-        return new JWTUserDetails(username, authorities);
+    public static Optional<JWTUserDetails> fromDecodedJWT(DecodedJWT decodedJWT, ObjectMapper objectMapper) {
+        Optional<Map<String, Object>> vivWalletClaims = Optional.ofNullable(decodedJWT.getClaim("viv-wallet"))
+                                                                .map(Claim::asString)
+                                                                .map(vivWalletClaimsAsString -> getVivWalletClaims(objectMapper, vivWalletClaimsAsString));
+        List<SimpleGrantedAuthority> authorities = vivWalletClaims.map(claims -> claims.get("roles"))
+                                                                  .map(roles -> (List<String>) roles)
+                                                                  .orElse(List.of())
+                                                                  .stream()
+                                                                  .map(SimpleGrantedAuthority::new)
+                                                                  .collect(Collectors.toList());
+        return vivWalletClaims.map(claims -> claims.get("userId"))
+                              .map(String::valueOf)
+                              .map(userId -> new JWTUserDetails(userId, authorities) );
     }
 
     private static Map getVivWalletClaims(ObjectMapper objectMapper, String vivWalletClaimsAsString) {

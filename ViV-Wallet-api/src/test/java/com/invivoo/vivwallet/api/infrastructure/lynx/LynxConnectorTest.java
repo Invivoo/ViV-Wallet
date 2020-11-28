@@ -45,7 +45,7 @@ public class LynxConnectorTest {
     @Test
     public void should_return_activities_when_get_from_lynx() throws IOException, URISyntaxException {
         // given
-        LynxConnector lynxConnector = new LynxConnector(restTemplate, null);
+        LynxConnector lynxConnector = new LynxConnector(restTemplate, "http://vivApiUrl", null);
 
         Path lynxResponse = Paths.get(Objects.requireNonNull(getClass().getClassLoader().getResource("lynx-response.json")).toURI());
         String expectedLynxResponse = Files.lines(lynxResponse).collect(Collectors.joining());

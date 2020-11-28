@@ -9,3 +9,5 @@ x4b:
   auth:
     issuer: X4B
     publicKeyUrl: https://login.uat.xcomponent.com/authentication/api/Configurations/Key
+lynx:
+  vivApiUrl: TO_BE_DEFINED

@@ -11,9 +11,11 @@ public enum Expertise {
     MODELISATION_ET_PRICING("Modélisation & Pricing"),
     PROGRAMMATION_C_SHARP("Programmation C#"),
     PROGRAMMATION_JAVA("Programmation Java"),
+    ARCHITECTURE_ET_DESIGN("Architecture & Design"),
     RISQUES("Risques"),
     BIG_DATA("Big Data"),
     POST_TRADE("Post-Trade"),
+    MOA("MOA Transverse"),
     AGILITE_ET_CRAFT("Agilité & Craft"),
     DEVOPS("Devops");
 
