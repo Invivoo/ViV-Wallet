@@ -40,6 +40,7 @@ import java.time.Month;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.mockito.Mockito.verify;
@@ -50,8 +51,8 @@ import static org.mockito.Mockito.when;
 public class UsersControllerTest {
 
     private static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(), MediaType.APPLICATION_JSON.getSubtype(), StandardCharsets.UTF_8);
-    private static final User TEST_USER_1 = new User(1L,"User 1", "User 1", List.of(UserExpertise.builder().expertise(Expertise.PROGRAMMATION_JAVA).build()), List.of());
-    private static final User TEST_USER_2 = new User(2L, "User 2", "User 2",List.of(UserExpertise.builder().expertise(Expertise.PROGRAMMATION_JAVA).build()), List.of());
+    private static final User TEST_USER_1 = new User(1L,"User 1", "User 1", Set.of(UserExpertise.builder().expertise(Expertise.PROGRAMMATION_JAVA).build()), Set.of());
+    private static final User TEST_USER_2 = new User(2L, "User 2", "User 2", Set.of(UserExpertise.builder().expertise(Expertise.PROGRAMMATION_JAVA).build()), Set.of());
     private static final List<User> TEST_USERS = Arrays.asList(TEST_USER_1, TEST_USER_2);
     private static final ObjectMapper mapper = new ObjectMapper();
 

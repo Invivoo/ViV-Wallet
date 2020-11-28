@@ -105,7 +105,7 @@ export default class ActionsHistory extends Vue {
     @Watch("filterValue")
     filterChanged() {
         this.filteredActions = this.actions.filter((action) =>
-            action.achiever?.fullName!.toLowerCase().includes(this.filterValue.toLowerCase())
+            action.achiever?.fullName?.toLowerCase().includes(this.filterValue.toLowerCase())
         );
     }
 }

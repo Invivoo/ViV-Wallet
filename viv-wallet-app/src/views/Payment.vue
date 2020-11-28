@@ -6,7 +6,7 @@
                 <div class="header">
                     <balance-card
                         :fullName="user.fullName"
-                        v-bind:expertise="(user.expertiseDto && user.expertiseDto.expertiseName) || ''"
+                        v-bind:expertise="(user.expertise && user.expertise.expertiseName) || ''"
                         v-bind:consultantStatus="formatConsultantStatus(user.status)"
                         v-bind:vivBalance="balance"
                     />
@@ -76,8 +76,11 @@ export default class Payment extends PaymentProps {
     usersService = new UsersService();
     walletService = new WalletService();
 
-    formatConsultantStatus(status?: ConsultantStatus) {
-        return (status && toString(status)) || "";
+    formatConsultantStatus(status?: string) {
+        if (status) {
+            return toString(ConsultantStatus[status]);
+        }
+        return "";
     }
 
     get amount(): number {

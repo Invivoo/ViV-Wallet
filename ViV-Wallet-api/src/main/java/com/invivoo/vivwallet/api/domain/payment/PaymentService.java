@@ -7,16 +7,14 @@ import com.invivoo.vivwallet.api.interfaces.payments.PaymentDto;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class PaymentService {
-
-    public static final int FACTOR_VIV_TO_AMOUNT = 5;
 
     private final UserRepository userRepository;
     private final PaymentRepository paymentRepository;
@@ -34,24 +32,16 @@ public class PaymentService {
 
     public List<PaymentDto> findAllByReceiver(Long receiverId) {
         return userRepository.findById(receiverId)
-                .map(paymentRepository::findAllByReceiverOrderByDateDesc)
-                .map(payments -> payments.stream()
-                        .map(payment -> convertToDto(payment, receiverId))
-                        .collect(Collectors.toList()))
-                .orElse(List.of());
+                             .map(paymentRepository::findAllByReceiverOrderByDateDesc)
+                             .map(payments -> payments.stream()
+                                                      .map(PaymentDto::createFromPayment)
+                                                      .collect(Collectors.toList()))
+                             .orElse(List.of());
     }
 
     public Payment save(Payment payment) {
+        Optional.ofNullable(payment.getActions())
+                .ifPresent(actions -> actions.forEach(a -> a.setPayment(payment)));
         return paymentRepository.save(payment);
-    }
-
-    private PaymentDto convertToDto(Payment payment, Long userId) {
-        int totalViv = payment.getActions().stream().mapToInt(action -> action.getViv().intValue()).sum();
-        return PaymentDto.builder()
-                .id(payment.getId())
-                .userId(userId)
-                .date(payment.getDate())
-                .viv(BigDecimal.valueOf(totalViv))
-                .amount(BigDecimal.valueOf(totalViv * FACTOR_VIV_TO_AMOUNT)).build();
     }
 }

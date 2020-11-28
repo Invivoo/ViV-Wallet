@@ -7,7 +7,6 @@ import com.invivoo.vivwallet.api.domain.payment.Payment;
 import com.invivoo.vivwallet.api.domain.payment.PaymentService;
 import com.invivoo.vivwallet.api.domain.user.User;
 import com.invivoo.vivwallet.api.domain.user.UserService;
-import com.invivoo.vivwallet.api.interfaces.actions.ActionDto;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -37,14 +35,16 @@ public class PaymentsController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<List<Payment>> getPayments() {
-        List<Payment> payments = paymentService.getAll();
-        return ResponseEntity.ok(payments);
+    public ResponseEntity<List<PaymentDto>> getPayments() {
+        return ResponseEntity.ok(paymentService.getAll()
+                                               .stream()
+                                               .map(PaymentDto::createFromPayment)
+                                               .collect(Collectors.toList()));
     }
 
     @PostMapping
     @PreAuthorize("hasAnyAuthority('COMPANY_ADMINISTRATOR')")
-    public ResponseEntity<Payment> postPayment(@RequestBody PaymentRequest paymentRequest) {
+    public ResponseEntity<PaymentDto> postPayment(@RequestBody PaymentRequest paymentRequest) {
         Optional<User> receiver = userService.findById(paymentRequest.getReceiverId());
         List<Action> actions = actionService.findAllById(paymentRequest.getActionIds());
         Optional<User> connectedUser = securityService.getConnectedUser();
@@ -60,7 +60,7 @@ public class PaymentsController {
                                  .build();
         Payment savedPayment = paymentService.save(payment);
         return ResponseEntity.created(getLocation(savedPayment))
-                             .body(savedPayment);
+                             .body(PaymentDto.createFromPayment(savedPayment));
     }
 
     @GetMapping("/{paymentId}/actions")

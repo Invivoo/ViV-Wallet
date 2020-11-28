@@ -1,6 +1,5 @@
 package com.invivoo.vivwallet.api.domain.payment;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.invivoo.vivwallet.api.domain.action.Action;
 import com.invivoo.vivwallet.api.domain.user.User;
 import lombok.AllArgsConstructor;
@@ -15,7 +14,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Collection;
 
 @Entity

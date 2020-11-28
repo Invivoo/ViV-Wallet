@@ -10,7 +10,7 @@ import com.invivoo.vivwallet.api.domain.payment.PaymentService;
 import com.invivoo.vivwallet.api.domain.role.Role;
 import com.invivoo.vivwallet.api.domain.role.RoleType;
 import com.invivoo.vivwallet.api.domain.user.User;
-import com.invivoo.vivwallet.api.domain.user.UserRepository;
+import com.invivoo.vivwallet.api.domain.user.UserService;
 import com.invivoo.vivwallet.api.infrastructure.lynx.LynxConnector;
 import com.invivoo.vivwallet.api.infrastructure.lynx.LynxConnectorConfiguration;
 import com.invivoo.vivwallet.api.infrastructure.lynx.model.Activities;
@@ -25,6 +25,7 @@ import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
@@ -33,14 +34,14 @@ public class DatabaseInitializer implements CommandLineRunner {
     private final ObjectMapper objectMapper;
     private final LynxConnector lynxConnector;
     private final ActionService actionService;
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final PaymentService paymentService;
 
-    public DatabaseInitializer(@Qualifier(LynxConnectorConfiguration.LYNX_CONNECTOR_OBJECT_MAPPER) ObjectMapper objectMapper, LynxConnector lynxConnector, ActionService actionService, UserRepository userRepository, PaymentService paymentService) {
+    public DatabaseInitializer(@Qualifier(LynxConnectorConfiguration.LYNX_CONNECTOR_OBJECT_MAPPER) ObjectMapper objectMapper, LynxConnector lynxConnector, ActionService actionService, UserService userService, PaymentService paymentService) {
         this.objectMapper = objectMapper;
         this.lynxConnector = lynxConnector;
         this.actionService = actionService;
-        this.userRepository = userRepository;
+        this.userService = userService;
         this.paymentService = paymentService;
     }
 
@@ -49,17 +50,17 @@ public class DatabaseInitializer implements CommandLineRunner {
         User theophileMontgomery = User.builder()
                                        .fullName("Théophile MONTGOMERY")
                                        .id(1L)
-                                       .expertises(List.of(UserExpertise.builder()
-                                                                        .expertise(Expertise.PROGRAMMATION_JAVA)
-                                                                        .startDate(LocalDate.of(2017, 6, 1))
-                                                                        .build()))
+                                       .expertises(Set.of(UserExpertise.builder()
+                                                                       .expertise(Expertise.PROGRAMMATION_JAVA)
+                                                                       .startDate(LocalDate.of(2017, 6, 1))
+                                                                       .build()))
+                                       .roles(Set.of(
+                                               new Role(RoleType.EXPERTISE_MANAGER),
+                                               new Role(RoleType.SENIOR_MANAGER),
+                                               new Role(RoleType.COMPANY_ADMINISTRATOR)
+                                       ))
                                        .build();
-        theophileMontgomery.setRoles(List.of(
-                new Role(theophileMontgomery, RoleType.EXPERTISE_MANAGER),
-                new Role(theophileMontgomery, RoleType.SENIOR_MANAGER),
-                new Role(theophileMontgomery, RoleType.COMPANY_ADMINISTRATOR)
-        ));
-        userRepository.saveAll(Arrays.asList(theophileMontgomery,
+        userService.saveAll(Arrays.asList(theophileMontgomery,
                                              User.builder()
                                                  .fullName("Collaborateur Invivoo")
                                                  .id(2L)

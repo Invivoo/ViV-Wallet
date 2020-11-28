@@ -19,7 +19,7 @@
                         <custom-router-link to="/wallet">Mon wallet</custom-router-link>
                     </check-roles>
                     <check-roles v-bind:roles="myExpertiseRoles">
-                        <custom-router-link to="/members">Mon expertise</custom-router-link>
+                        <custom-router-link to="/members">Expertises</custom-router-link>
                     </check-roles>
                     <check-roles v-bind:roles="adminOnly">
                         <custom-router-link to="/wallets">Wallets</custom-router-link>

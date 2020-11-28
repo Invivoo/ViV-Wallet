@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -55,7 +56,7 @@ public class UserExpertisesController {
                                  .build();
         }
         User user = userOpt.get();
-        List<UserExpertise> expertises = new ArrayList<>(user.getExpertises());
+        HashSet<UserExpertise> expertises = new HashSet<>(user.getExpertises());
         UserExpertise userExpertise = UserExpertise.builder()
                                                    .expertise(expertiseOpt.get())
                                                    .startDate(userExpertiseDto.getStartDate())

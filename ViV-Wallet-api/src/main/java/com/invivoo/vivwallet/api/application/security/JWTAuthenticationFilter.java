@@ -8,6 +8,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.GenericFilterBean;
 
+import javax.naming.AuthenticationException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
@@ -36,7 +37,8 @@ public class JWTAuthenticationFilter extends GenericFilterBean {
         if (token != null) {
             try {
                 DecodedJWT decodedJWT = jwtTokenProvider.verify(token);
-                JWTUserDetails jwtUserDetails = JWTUserDetails.fromDecodedJWT(decodedJWT, objectMapper);
+                JWTUserDetails jwtUserDetails = JWTUserDetails.fromDecodedJWT(decodedJWT, objectMapper)
+                                                              .orElseThrow(AuthenticationException::new);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(jwtUserDetails, null, jwtUserDetails.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);

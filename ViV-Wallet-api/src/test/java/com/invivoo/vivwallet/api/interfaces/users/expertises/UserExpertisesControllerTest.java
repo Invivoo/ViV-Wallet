@@ -23,8 +23,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.mockito.Mockito.verify;
@@ -38,11 +39,11 @@ public class UserExpertisesControllerTest {
     public static final User JANE_DOE = User.builder()
                                             .id(1L)
                                             .fullName("Jane Doe")
-                                            .expertises(List.of(UserExpertise.builder()
-                                                                             .id(1L)
-                                                                             .expertise(Expertise.AGILITE_ET_CRAFT)
-                                                                             .startDate(LocalDate.of(2017, 6, 1))
-                                                                             .build()))
+                                            .expertises(Set.of(UserExpertise.builder()
+                                                                            .id(1L)
+                                                                            .expertise(Expertise.AGILITE_ET_CRAFT)
+                                                                            .startDate(LocalDate.of(2017, 6, 1))
+                                                                            .build()))
                                             .build();
 
     @Autowired
@@ -75,7 +76,7 @@ public class UserExpertisesControllerTest {
                                                   .expertise(Expertise.PROGRAMMATION_JAVA)
                                                   .startDate(LocalDate.of(2018, 6, 1))
                                                   .build();
-        ArrayList<UserExpertise> updatedExpertises = new ArrayList<>(JANE_DOE.getExpertises());
+        HashSet<UserExpertise> updatedExpertises = new HashSet<>(JANE_DOE.getExpertises());
         updatedExpertises.add(newExpertise);
         User updatedJaneDoe = JANE_DOE.toBuilder()
                                       .expertises(updatedExpertises)
@@ -84,8 +85,8 @@ public class UserExpertisesControllerTest {
 
         //when
         ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/users/" + JANE_DOE.getId() + "/expertises").contentType(MediaType.APPLICATION_JSON_UTF8)
-                                                                                 .content(mapper.writeValueAsString(UserExpertiseDto.createFromUserExpertise(newExpertise))))
-                                                  .andDo(MockMvcResultHandlers.print());
+                                                                            .content(mapper.writeValueAsString(UserExpertiseDto.createFromUserExpertise(newExpertise))))
+                                             .andDo(MockMvcResultHandlers.print());
         //then
         verify(userService, Mockito.times(1)).save(updatedJaneDoe);
         resultActions.andExpect(MockMvcResultMatchers.status().isCreated())

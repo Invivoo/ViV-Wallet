@@ -16,7 +16,6 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -27,6 +26,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -44,8 +44,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(PaymentsController.class)
 public class PaymentsControllerTest {
 
-    private static final Action ACTION_1 = Action.builder().id(1L).build();
-    private static final Action ACTION_2 = Action.builder().id(2L).build();
+    private static final Action ACTION_1 = Action.builder().id(1L).viv(BigDecimal.TEN).build();
+    private static final Action ACTION_2 = Action.builder().id(2L).viv(BigDecimal.TEN).build();
     private static final List<Action> ACTIONS = Arrays.asList(ACTION_1, ACTION_2);
     private static final LocalDate PAYMENT_DATE = LocalDate.of(2020, 1, 1);
     private static final User THEOPHILE_MONTGOMERY = User.builder().id(1L).fullName("Théophile MONTGOMERY").build();
@@ -54,7 +54,7 @@ public class PaymentsControllerTest {
                                             .fullName("John DOE")
                                             .build();
     private static final Payment PAYMENT_1 = Payment.builder().id(1L).creator(THEOPHILE_MONTGOMERY).receiver(RECEIVER).date(PAYMENT_DATE).actions(ACTIONS).build();
-    private static final Payment PAYMENT_2 = Payment.builder().id(2L).build();
+    private static final Payment PAYMENT_2 = Payment.builder().id(2L).creator(THEOPHILE_MONTGOMERY).receiver(RECEIVER).date(PAYMENT_DATE).actions(ACTIONS).build();
     private static final List<Payment> PAYMENTS = Arrays.asList(PAYMENT_1, PAYMENT_2);
     private static final PaymentRequest PAYMENT_REQUEST = PaymentRequest.builder()
                                                                         .date(PAYMENT_DATE)
@@ -87,7 +87,6 @@ public class PaymentsControllerTest {
         // given
         when(paymentService.getAll())
                 .thenReturn(PAYMENTS);
-        String jsonPayments = mapper.writeValueAsString(PAYMENTS);
 
         // when
         ResultActions resultActions = this.mockMvc.perform(
@@ -95,7 +94,9 @@ public class PaymentsControllerTest {
                 .andDo(MockMvcResultHandlers.print());
         // then
         resultActions.andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string(jsonPayments));
+                .andExpect(MockMvcResultMatchers.content().string(mapper.writeValueAsString(PAYMENTS.stream()
+                                                                                                    .map(PaymentDto::createFromPayment)
+                                                                                                    .collect(Collectors.toList()))));
     }
 
     @Test
@@ -133,7 +134,7 @@ public class PaymentsControllerTest {
         verify(paymentService, Mockito.times(1)).save(PAYMENT_1.toBuilder().id(null).build());
         resultActions.andExpect(MockMvcResultMatchers.status().isCreated())
                      .andExpect(MockMvcResultMatchers.redirectedUrl(String.format("/api/v1/payments/%s", PAYMENT_1.getId())))
-                     .andExpect(MockMvcResultMatchers.content().string(mapper.writeValueAsString(PAYMENT_1)));
+                     .andExpect(MockMvcResultMatchers.content().string(mapper.writeValueAsString(PaymentDto.createFromPayment(PAYMENT_1))));
 
     }
 

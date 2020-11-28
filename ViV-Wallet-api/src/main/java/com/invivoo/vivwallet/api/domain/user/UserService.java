@@ -4,10 +4,12 @@ import com.invivoo.vivwallet.api.domain.action.ActionRepository;
 import com.invivoo.vivwallet.api.domain.expertise.Expertise;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@PersistenceContext
 public class UserService {
 
     private final UserRepository userRepository;
@@ -30,8 +32,12 @@ public class UserService {
         return userRepository.findById(userId);
     }
 
-    public Optional<User> findByX4bId(String x4bId){
+    public Optional<User> findByX4bId(String x4bId) {
         return userRepository.findByX4bId(x4bId);
+    }
+
+    public Optional<User> findByFullName(String fullName) {
+        return userRepository.findByFullName(fullName);
     }
 
     public User findByX4bIdOrCreateIfNotExists(String x4bId) {
@@ -41,7 +47,13 @@ public class UserService {
     }
 
     public User save(User user) {
+        updateRelatedEntitiesWithUser(user);
         return userRepository.save(user);
+    }
+
+    public List<User> saveAll(List<User> users) {
+        users.forEach(this::updateRelatedEntitiesWithUser);
+        return userRepository.saveAll(users);
     }
 
     public void delete(User user) {
@@ -55,8 +67,11 @@ public class UserService {
                                .sum();
     }
 
-    private String getFullNameFromX4bId(String x4bId) {
-        return x4bId.replaceAll("[0-9]", "").trim();
+    private void updateRelatedEntitiesWithUser(User user) {
+        Optional.ofNullable(user.getRoles())
+                .ifPresent(roles -> roles.forEach(r -> r.setUser(user)));
+        Optional.ofNullable(user.getExpertises())
+                .ifPresent(expertises -> expertises.forEach(r -> r.setUser(user)));
     }
 
     private User createUser(String x4bId) {
@@ -65,5 +80,9 @@ public class UserService {
                         .fullName(getFullNameFromX4bId(x4bId))
                         .build();
         return userRepository.save(user);
+    }
+
+    private String getFullNameFromX4bId(String x4bId) {
+        return x4bId.replaceAll("[0-9]", "").trim();
     }
 }

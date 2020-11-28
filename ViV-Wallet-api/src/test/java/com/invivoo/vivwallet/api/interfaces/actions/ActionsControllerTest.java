@@ -28,6 +28,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RunWith(SpringRunner.class)
@@ -35,9 +36,9 @@ import java.util.stream.Collectors;
 public class ActionsControllerTest {
 
     public static final User TEST_ACHIEVER = User.builder()
-                                                 .expertises(List.of(UserExpertise.builder().expertise(Expertise.PROGRAMMATION_JAVA)
-                                                                                  .build()))
-                                                 .roles(List.of()).build();
+                                                 .expertises(Set.of(UserExpertise.builder().expertise(Expertise.PROGRAMMATION_JAVA)
+                                                                                 .build()))
+                                                 .roles(Set.of()).build();
     private static final Action ACTION1 = Action.builder()
                                                 .id(1L)
                                                 .date(LocalDateTime.now())

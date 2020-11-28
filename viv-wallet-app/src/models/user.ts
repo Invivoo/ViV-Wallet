@@ -6,6 +6,6 @@ export interface User {
     user: string;
     fullName: string;
     email: string;
-    expertiseDto?: Expertise;
+    expertise?: Expertise;
     status?: ConsultantStatus;
 }
