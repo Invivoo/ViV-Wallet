@@ -18,7 +18,7 @@ import ActionHistory from "../components/ActionHistory.vue";
 
 @Component({
     name: "history",
-    components: { ActionHistory, Loading }
+    components: { ActionHistory, Loading },
 })
 export default class History extends Vue {
     actions: ActionForHistory[] = [];
