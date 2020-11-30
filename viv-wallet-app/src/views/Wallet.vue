@@ -4,8 +4,8 @@
             <div class="header">
                 <balance-card
                     v-bind:fullName="user.fullName"
-                    expertise="Expertise front-end"
-                    consultantStatus="Consultant sénior"
+                    v-bind:expertise="user.expertiseDto.expertiseName || ''"
+                    v-bind:consultantStatus="formatConsultantStatus(user.status)"
                     v-bind:vivBalance="balance"
                 />
                 <illustration />
@@ -13,7 +13,7 @@
             <div>
                 <router-link
                     class="primary-button payment-btn"
-                    v-bind:to="{ path: '/payment/2' }"
+                    v-bind:to="{ path: `/payment/${user.id}` }"
                     v-if="shouldDisplayPayButton()"
                     tag="button"
                     >Payer maintenant</router-link
@@ -38,6 +38,7 @@ import Loading from "../components/Loading.vue";
 import { Role } from "../models/role";
 import { LoginService } from "../services/login";
 import { UsersService } from "../services/users";
+import { ConsultantStatus, toString } from "../models/consultant";
 
 @Component({
     name: "wallet",
@@ -56,6 +57,10 @@ export default class wallet extends Vue {
     balance = 0;
     userId = "";
     user = {};
+
+    formatConsultantStatus(status?: ConsultantStatus) {
+        return (status && toString(status)) || "";
+    }
 
     shouldDisplayPayButton() {
         return this.userRoles && this.userRoles.indexOf(Role.COMPANY_ADMINISTRATOR) !== -1;
