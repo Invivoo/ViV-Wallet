@@ -6,8 +6,8 @@
                 <div class="header">
                     <balance-card
                         :fullName="user.fullName"
-                        expertise="Expertise front-end"
-                        consultantStatus="Consultant sénior"
+                        v-bind:expertise="(user.expertiseDto && user.expertiseDto.expertiseName) || ''"
+                        v-bind:consultantStatus="formatConsultantStatus(user.status)"
                         v-bind:vivBalance="balance"
                     />
                     <illustration />
@@ -49,6 +49,7 @@ import BalanceCard from "../components/BalanceCard.vue";
 import Illustration from "../components/Illustration.vue";
 import ActionsBlock from "../components/ActionsBlock.vue";
 import Loading from "../components/Loading.vue";
+import { ConsultantStatus, toString } from "../models/consultant";
 
 const PaymentProps = Vue.extend({
     props: {
@@ -74,6 +75,10 @@ export default class Payment extends PaymentProps {
 
     usersService = new UsersService();
     walletService = new WalletService();
+
+    formatConsultantStatus(status?: ConsultantStatus) {
+        return (status && toString(status)) || "";
+    }
 
     get amount(): number {
         return this.coeff * this.viv;
@@ -105,9 +110,9 @@ export default class Payment extends PaymentProps {
             this.loading = true;
             if (this.hasUnpaidActions) {
                 let payment: PaymentPost = {
-                    receiver: this.id,
+                    receiverId: this.id,
                     date: this.date,
-                    actions: this.unpaidActions.map(({ id }) => id),
+                    actionIds: this.unpaidActions.map(({ id }) => id),
                 };
                 await this.walletService.saveUserPayment(payment);
                 this.$router.push({ path: "/wallet" });
@@ -134,7 +139,7 @@ export default class Payment extends PaymentProps {
     width: 33.3%;
 }
 .payment {
-    width: 50%;
+    max-width: 900px;
     margin: auto;
 }
 h2 {

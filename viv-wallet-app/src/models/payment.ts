@@ -6,6 +6,6 @@ export interface Payment {
 }
 export interface PaymentPost {
     date: Date;
-    receiver: string;
-    actions: string[];
+    receiverId: string;
+    actionIds: string[];
 }

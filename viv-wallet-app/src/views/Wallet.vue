@@ -4,7 +4,7 @@
             <div class="header">
                 <balance-card
                     v-bind:fullName="user.fullName"
-                    v-bind:expertise="user.expertiseDto.expertiseName || ''"
+                    v-bind:expertise="(user.expertiseDto && user.expertiseDto.expertiseName) || ''"
                     v-bind:consultantStatus="formatConsultantStatus(user.status)"
                     v-bind:vivBalance="balance"
                 />

@@ -116,9 +116,9 @@ describe("BalanceService", () => {
 
     it("should post payment of a given user", async () => {
         const postedPayment: PaymentPost = {
-            receiver: "userId",
+            receiverId: "userId",
             date: new Date(2020, 1, 1),
-            actions: ["1", "2", "3"],
+            actionIds: ["1", "2", "3"],
         };
         const result = true;
         const response = {
