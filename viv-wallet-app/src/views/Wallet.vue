@@ -4,7 +4,7 @@
             <div class="header">
                 <balance-card
                     v-bind:fullName="user.fullName"
-                    v-bind:expertise="user.expertise || user.expertise.expertiseName || ''"
+                    v-bind:expertise="(user.expertise && user.expertise.expertiseName) || ''"
                     v-bind:consultantStatus="formatConsultantStatus(user.status)"
                     v-bind:vivBalance="balance"
                 />
@@ -58,8 +58,11 @@ export default class wallet extends Vue {
     userId = "";
     user = {};
 
-    formatConsultantStatus(status?: ConsultantStatus) {
-        return (status && toString(status)) || "";
+    formatConsultantStatus(status?: string) {
+        if (status) {
+            return toString(ConsultantStatus[status]);
+        }
+        return "";
     }
 
     shouldDisplayPayButton() {

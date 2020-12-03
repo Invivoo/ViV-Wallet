@@ -76,8 +76,11 @@ export default class Payment extends PaymentProps {
     usersService = new UsersService();
     walletService = new WalletService();
 
-    formatConsultantStatus(status?: ConsultantStatus) {
-        return (status && toString(status)) || "";
+    formatConsultantStatus(status?: string) {
+        if (status) {
+            return toString(ConsultantStatus[status]);
+        }
+        return "";
     }
 
     get amount(): number {
