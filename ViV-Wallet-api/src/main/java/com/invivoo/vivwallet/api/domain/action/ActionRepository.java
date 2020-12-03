@@ -15,4 +15,8 @@ public interface ActionRepository extends JpaRepository<Action, Long> {
     List<Action> findAllByPaymentIdOrderByDateDesc(@Param("paymentId") Long paymentId);
 
     List<Action> findAllByAchieverOrderByDateDesc(User achiever);
+
+    List<Action> findAllByLynxActivityIdInAndPaymentIsNotNull(List<Long> lynxActivityId);
+
+    List<Action> deleteAllByPaymentIsNull();
 }
