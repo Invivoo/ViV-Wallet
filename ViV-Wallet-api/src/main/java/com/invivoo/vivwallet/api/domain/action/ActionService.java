@@ -5,7 +5,7 @@ import com.invivoo.vivwallet.api.infrastructure.lynx.LynxConnector;
 import com.invivoo.vivwallet.api.infrastructure.lynx.model.Activities;
 import org.springframework.stereotype.Service;
 
-import java.util.AbstractMap;
+import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -38,37 +38,28 @@ public class ActionService {
         actionRepository.saveAll(actions);
     }
 
+    @Transactional
     public List<Action> updateFromLynx() {
         return updateActions(lynxConnector.findActions());
     }
 
+    @Transactional
     public List<Action> updateFromLynxActivities(Activities activities) {
         List<Action> actionsFromLynx = lynxConnector.getActionsFromActivities(activities.getActivities());
         return updateActions(actionsFromLynx);
     }
 
     private List<Action> updateActions(List<Action> actionsFromLynx) {
-        Map<String, Action> actionByUniqueKey = actionRepository.findAll()
-                                                                .stream()
-                                                                .collect(Collectors.toMap(this::getActionUniqueKey, a -> a));
+        actionRepository.deleteAllByPaymentIsNull();
+        Map<String, Action> paidActionsByLynxId = actionRepository.findAllByLynxActivityIdInAndPaymentIsNotNull(actionsFromLynx.stream()
+                                                                                                                               .map(Action::getLynxActivityId)
+                                                                                                                               .collect(Collectors.toList()))
+                                                                  .stream()
+                                                                  .collect(Collectors.toMap(this::getActionUniqueKey, a -> a));
         List<Action> actionsToSave = actionsFromLynx.stream()
-                                                    .map(action -> new AbstractMap.SimpleEntry(action, actionByUniqueKey.get(getActionUniqueKey(action))))
-                                                    .map(this::toActionToSave)
+                                                    .filter(actionFromLynx -> !paidActionsByLynxId.containsKey(getActionUniqueKey(actionFromLynx)))
                                                     .collect(Collectors.toList());
         return actionRepository.saveAll(actionsToSave);
-    }
-
-    private Action toActionToSave(AbstractMap.SimpleEntry<Action, Action> existingActionForActionFromLynx) {
-        Action actionFromLynx = existingActionForActionFromLynx.getKey();
-        Action actionFromVivWallet = existingActionForActionFromLynx.getValue();
-        if (actionFromVivWallet == null) {
-            return actionFromLynx;
-        } else if (actionFromVivWallet.getPayment() != null) {
-            return actionFromVivWallet;
-        }
-        return actionFromLynx.toBuilder()
-                             .id(actionFromVivWallet.getId())
-                             .build();
     }
 
     private String getActionUniqueKey(Action a) {

@@ -43,7 +43,7 @@ public class UsersProviderService {
     public List<User> importUserFromExcel(XSSFWorkbook workbook) {
         List<User> users = new ArrayList<>();
         for (Row row : workbook.getSheetAt(USER_SHEET_INDEX)) {
-            if(row.getRowNum() < START_ROW){
+            if (row.getRowNum() < START_ROW) {
                 continue;
             }
             String fullName = UsersProviderExcelCellResolver.FULL_NAME.resolve(row);
@@ -51,9 +51,13 @@ public class UsersProviderService {
                 break;
             }
             User.UserBuilder userBuilder = userService.findByFullName(fullName)
+                                                      .stream()
+                                                      .peek(user -> Optional.ofNullable(user.getRoles()).ifPresent(Set::clear))
+                                                      .peek(user -> Optional.ofNullable(user.getRoles()).ifPresent(Set::clear))
+                                                      .peek(userService::save)
                                                       .map(User::toBuilder)
-                                                      .orElse(User.builder()
-                                                                  .fullName(fullName));
+                                                      .findFirst()
+                                                      .orElse(User.builder().fullName(fullName));
             RoleType.forName(UsersProviderExcelCellResolver.ROLE_TYPE.resolve(row))
                     .map(Role::new)
                     .map(Set::of)
