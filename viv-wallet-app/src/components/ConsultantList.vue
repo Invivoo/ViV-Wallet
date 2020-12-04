@@ -9,7 +9,7 @@
             <tr>
                 <th>NOM</th>
                 <th>
-                    <span class="status-header">STATUS</span>
+                    <span class="status-header">STATUT</span>
                 </th>
                 <th />
             </tr>
