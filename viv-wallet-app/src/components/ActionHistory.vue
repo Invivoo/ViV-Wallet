@@ -26,7 +26,7 @@
                     <th>ACTION</th>
                     <th class="right">VIV</th>
                     <th>
-                        <span class="status-header">STATUS</span>
+                        <span class="status-header">STATUT</span>
                     </th>
                 </tr>
             </thead>

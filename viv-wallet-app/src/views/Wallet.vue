@@ -10,15 +10,17 @@
                 />
                 <illustration />
             </div>
-            <div>
-                <router-link
-                    class="primary-button payment-btn"
-                    v-bind:to="{ path: `/payment/${user.id}` }"
-                    v-if="shouldDisplayPayButton()"
-                    tag="button"
-                    >Payer maintenant</router-link
-                >
-            </div>
+            <check-roles v-bind:roles="adminOnly">
+                <div>
+                    <router-link
+                        class="primary-button payment-btn"
+                        v-bind:to="{ path: `/payment/${user.id}` }"
+                        v-if="shouldDisplayPayButton()"
+                        tag="button"
+                        >Payer maintenant</router-link
+                    >
+                </div>
+            </check-roles>
             <actions-block v-bind:actions="actions" />
             <payment-history-block v-bind:payments="payments" />
         </loading>
@@ -35,14 +37,15 @@ import PaymentHistoryBlock from "../components/PaymentHistoryBlock.vue";
 import { Payment } from "../models/payment";
 import { WalletService } from "../services/wallet";
 import Loading from "../components/Loading.vue";
-import { Role } from "../models/role";
+import { adminOnly, Role } from "../models/role";
 import { LoginService } from "../services/login";
 import { UsersService } from "../services/users";
 import { ConsultantStatus, toString } from "../models/consultant";
+import CheckRoles from "../components/CheckRoles.vue";
 
 @Component({
     name: "wallet",
-    components: { BalanceCard, Illustration, ActionsBlock, PaymentHistoryBlock, Loading },
+    components: { BalanceCard, Illustration, ActionsBlock, PaymentHistoryBlock, Loading, CheckRoles },
 })
 export default class wallet extends Vue {
     userRoles: Role[] | null | undefined = null;
@@ -57,6 +60,7 @@ export default class wallet extends Vue {
     balance = 0;
     userId = "";
     user = {};
+    adminOnly = adminOnly;
 
     formatConsultantStatus(status?: string) {
         if (status) {

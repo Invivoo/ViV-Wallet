@@ -1,33 +1,43 @@
 <template>
     <div class="wallets">
         <loading v-bind:loading="loading" v-bind:errored="errored">
-            <section>
-                <h2>Wallets</h2>
-                <div class="buttons-container">
-                    <div class="selector-container">
-                        <label class="expertise-label" for="select-expertise">Expertise :</label>
-                        <div class="select">
-                            <select id="select-expertise" v-model="selectedExpertiseId" v-on:change="expertiseChanged">
-                                <option disabled value>Choisissez</option>
-                                <option v-for="expertise in expertises" :key="expertise.id" v-bind:value="expertise.id">
-                                    {{ expertise.expertiseName }}
-                                </option>
-                            </select>
-                            <span class="select-focus"></span>
+            <check-roles v-bind:roles="extendedRoles" withErrorMessage="true">
+                <section>
+                    <h2>Wallets</h2>
+                    <div class="buttons-container">
+                        <div class="selector-container">
+                            <label class="expertise-label" for="select-expertise">Expertise :</label>
+                            <div class="select">
+                                <select
+                                    id="select-expertise"
+                                    v-model="selectedExpertiseId"
+                                    v-on:change="expertiseChanged"
+                                >
+                                    <option disabled value>Choisissez</option>
+                                    <option
+                                        v-for="expertise in expertises"
+                                        :key="expertise.id"
+                                        v-bind:value="expertise.id"
+                                    >
+                                        {{ expertise.expertiseName }}
+                                    </option>
+                                </select>
+                                <span class="select-focus"></span>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <consultant-list v-bind:consultants="consultants" v-bind:expertise="selectedExpertiseId">
-                    <template v-slot="{ consultantId }">
-                        <router-link
-                            v-bind:to="`/wallets/${selectedExpertiseId}/${consultantId}`"
-                            class="tertiary-button update-button"
-                            tag="a"
-                            >Voir le wallet</router-link
-                        >
-                    </template>
-                </consultant-list>
-            </section>
+                    <consultant-list v-bind:consultants="consultants" v-bind:expertise="selectedExpertiseId">
+                        <template v-slot="{ consultantId }">
+                            <router-link
+                                v-bind:to="`/wallets/${selectedExpertiseId}/${consultantId}`"
+                                class="tertiary-button update-button"
+                                tag="a"
+                                >Voir le wallet</router-link
+                            >
+                        </template>
+                    </consultant-list>
+                </section>
+            </check-roles>
         </loading>
     </div>
 </template>
@@ -41,10 +51,12 @@ import { ExpertisesService } from "@/services/expertises";
 import Loading from "../components/Loading.vue";
 
 import ConsultantList from "@/components/ConsultantList.vue";
+import { extendedRoles } from "../models/role";
+import CheckRoles from "../components/CheckRoles.vue";
 
 @Component({
     name: "wallets",
-    components: { ConsultantList, Loading },
+    components: { ConsultantList, Loading, CheckRoles },
 })
 export default class Wallets extends Vue {
     consultants: Consultant[] = [];
@@ -54,6 +66,7 @@ export default class Wallets extends Vue {
     errored = false;
 
     expertisesService = new ExpertisesService();
+    extendedRoles = extendedRoles;
 
     async mounted() {
         try {

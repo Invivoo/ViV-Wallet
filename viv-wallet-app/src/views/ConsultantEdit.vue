@@ -30,11 +30,6 @@
                 </div>
 
                 <div class="element-block">
-                    <label id="input-email-1" for="email-1">Email</label>
-                    <input id="email-1" type="text" v-model="consultant.email" placeholder="Email" readonly="true" />
-                </div>
-
-                <div class="element-block">
                     <label id="input-status-1" for="status-1">Status du consultant</label>
                     <div class="select">
                         <select id="status-1" v-model="consultant.status">
@@ -171,7 +166,6 @@ export default class ConsultantEdit extends ConsultantEditProps {
         if (selectedUser) {
             this.consultant.user = selectedUser.user;
             this.consultant.fullName = selectedUser.fullName;
-            this.consultant.email = selectedUser.email;
             this.submitButtonDisabled = false;
         }
     }

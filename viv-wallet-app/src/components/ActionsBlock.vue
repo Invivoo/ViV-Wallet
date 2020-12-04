@@ -14,7 +14,7 @@
                     <th>ACTION</th>
                     <th class="right">VIV</th>
                     <th>
-                        <span class="status-header">STATUS</span>
+                        <span class="status-header">STATUT</span>
                     </th>
                 </tr>
             </thead>
@@ -23,7 +23,7 @@
                     <td class="right">{{ action.creationDate.toDateString() }}</td>
                     <td>
                         <div>
-                            <div class="type">{{ action.type }} - {{ action.expertise }}</div>
+                            <div class="type">{{ action.type }}</div>
                             <div class="comment" v-bind:title="action.comment">{{ action.comment }}</div>
                         </div>
                     </td>

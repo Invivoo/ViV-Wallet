@@ -15,13 +15,9 @@
                     <check-roles v-bind:roles="adminOnly"
                         ><custom-router-link to="/users">Utilisateurs</custom-router-link></check-roles
                     >
-                    <check-roles v-bind:roles="myWalletRoles">
-                        <custom-router-link to="/wallet">Mon wallet</custom-router-link>
-                    </check-roles>
-                    <check-roles v-bind:roles="myExpertiseRoles">
+                    <custom-router-link to="/wallet">Mon wallet</custom-router-link>
+                    <check-roles v-bind:roles="extendedRoles">
                         <custom-router-link to="/members">Expertises</custom-router-link>
-                    </check-roles>
-                    <check-roles v-bind:roles="adminOnly">
                         <custom-router-link to="/wallets">Wallets</custom-router-link>
                         <custom-router-link to="/actions">Historique des actions</custom-router-link>
                     </check-roles>
@@ -40,7 +36,7 @@ import "x4b-ui/dist/x4b-ui/x4b-ui.css";
 import { version } from "../package.json";
 import CustomRouterLink from "./components/CustomRouterLink.vue";
 import CheckRoles from "./components/CheckRoles.vue";
-import { adminOnly, Role } from "./models/role";
+import { adminOnly, extendedRoles, Role } from "./models/role";
 
 @Component({ components: { CustomRouterLink, CheckRoles } })
 export default class App extends Vue {
@@ -50,8 +46,7 @@ export default class App extends Vue {
     isMenuOpen = false;
     isBannerInitialized = false;
     adminOnly = adminOnly;
-    myWalletRoles = [Role.CONSULTANT, Role.EXPERTISE_MANAGER, Role.SENIOR_MANAGER];
-    myExpertiseRoles = [Role.EXPERTISE_MANAGER, Role.SENIOR_MANAGER];
+    extendedRoles = extendedRoles;
 
     handleMenuToggleButtonClicked(evt) {
         this.isMenuOpen = evt.detail;

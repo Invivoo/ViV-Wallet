@@ -1,37 +1,50 @@
 <template>
     <div class="consultants">
         <loading v-bind:loading="loading" v-bind:errored="errored">
-            <section>
-                <h2>Consultants</h2>
-                <div class="buttons-container">
-                    <div class="selector-container">
-                        <label class="expertise-label" for="select-expertise">Expertise :</label>
-                        <div class="select">
-                            <select id="select-expertise" v-model="selectedExpertiseId" v-on:change="expertiseChanged">
-                                <option disabled value>Choisissez</option>
-                                <option v-for="expertise in expertises" :key="expertise.id" v-bind:value="expertise.id">
-                                    {{ expertise.expertiseName }}
-                                </option>
-                            </select>
-                            <span class="select-focus"></span>
+            <check-roles v-bind:roles="extendedRoles" withErrorMessage="true">
+                <section>
+                    <h2>Consultants</h2>
+                    <div class="buttons-container">
+                        <div class="selector-container">
+                            <label class="expertise-label" for="select-expertise">Expertise :</label>
+                            <div class="select">
+                                <select
+                                    id="select-expertise"
+                                    v-model="selectedExpertiseId"
+                                    v-on:change="expertiseChanged"
+                                >
+                                    <option disabled value>Choisissez</option>
+                                    <option
+                                        v-for="expertise in expertises"
+                                        :key="expertise.id"
+                                        v-bind:value="expertise.id"
+                                    >
+                                        {{ expertise.expertiseName }}
+                                    </option>
+                                </select>
+                                <span class="select-focus"></span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="spacer" />
-                    <router-link class="primary-button" v-bind:to="`/members/${selectedExpertiseId}/add`" tag="button"
-                        >Ajouter</router-link
-                    >
-                </div>
-                <consultant-list v-bind:consultants="consultants" v-bind:expertise="selectedExpertiseId">
-                    <template v-slot="{ consultantId }">
+                        <div class="spacer" />
                         <router-link
-                            v-bind:to="`/members/${selectedExpertiseId}/${consultantId}`"
-                            class="tertiary-button update-button"
+                            class="primary-button"
+                            v-bind:to="`/members/${selectedExpertiseId}/add`"
                             tag="button"
-                            >Mettre à jour</router-link
+                            >Ajouter</router-link
                         >
-                    </template>
-                </consultant-list>
-            </section>
+                    </div>
+                    <consultant-list v-bind:consultants="consultants" v-bind:expertise="selectedExpertiseId">
+                        <template v-slot="{ consultantId }">
+                            <router-link
+                                v-bind:to="`/members/${selectedExpertiseId}/${consultantId}`"
+                                class="tertiary-button update-button"
+                                tag="button"
+                                >Mettre à jour</router-link
+                            >
+                        </template>
+                    </consultant-list>
+                </section>
+            </check-roles>
         </loading>
     </div>
 </template>
@@ -43,12 +56,14 @@ import { Expertise } from "../models/expertise";
 import { ConsultantsService } from "@/services/consultants";
 import { ExpertisesService } from "@/services/expertises";
 import Loading from "../components/Loading.vue";
+import CheckRoles from "../components/CheckRoles.vue";
 
 import ConsultantList from "@/components/ConsultantList.vue";
+import { extendedRoles } from "../models/role";
 
 @Component({
     name: "members",
-    components: { ConsultantList, Loading },
+    components: { ConsultantList, Loading, CheckRoles },
 })
 export default class Consultants extends Vue {
     consultants: Consultant[] = [];
@@ -56,6 +71,7 @@ export default class Consultants extends Vue {
     selectedExpertiseId = "";
     loading = true;
     errored = false;
+    extendedRoles = extendedRoles;
 
     expertisesService = new ExpertisesService();
 
