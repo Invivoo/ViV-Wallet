@@ -5,6 +5,7 @@ import com.invivoo.vivwallet.api.domain.action.ActionRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.math.BigDecimal;
@@ -13,11 +14,11 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserServiceTest {
-
 
     @Mock
     private UserRepository userRepository;
@@ -72,6 +73,19 @@ public class UserServiceTest {
 
         //Then
         assertThat(balance).isEqualTo(0);
+    }
+
+    @Test
+    public void shouldCallFindByFullNameIgnoreCase_whenCallFindByUserName(){
+        //Given
+        UserService userService = new UserService(userRepository, actionRepository);
+        String fullName = "fullName";
+
+        //When
+        userService.findByFullName(fullName);
+
+        //Then
+        verify(userRepository, Mockito.times(1)).findByFullNameIgnoreCase(fullName);
     }
 
 }
