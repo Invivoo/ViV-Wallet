@@ -1,15 +1,13 @@
 <template>
     <table v-if="consultants.length > 0">
         <colgroup>
-            <col style="width: 28%" />
-            <col style="width: 35%" />
-            <col style="width: 22%" />
+            <col style="width: 55%" />
+            <col style="width: 30%" />
             <col style="width: 15%" />
         </colgroup>
         <thead>
             <tr>
                 <th>NOM</th>
-                <th>EMAIL</th>
                 <th>
                     <span class="status-header">STATUS</span>
                 </th>
@@ -22,7 +20,6 @@
                     <div>{{ consultant.fullName }}</div>
                     <div class="username">{{ consultant.user }}</div>
                 </td>
-                <td class="email">{{ consultant.email }}</td>
                 <td>
                     <status-badge :type="getConsultantStatusType(consultant.status)">{{
                         formatConsultantStatus(consultant.status)
@@ -83,11 +80,6 @@ td {
     color: $gray-600;
     font-weight: 400;
     margin-top: $m-1;
-}
-
-.email {
-    color: $gray-700;
-    font-size: $text-base;
 }
 
 .status-header {

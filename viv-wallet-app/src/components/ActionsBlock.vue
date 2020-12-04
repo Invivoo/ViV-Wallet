@@ -23,7 +23,7 @@
                     <td class="right">{{ action.creationDate.toDateString() }}</td>
                     <td>
                         <div>
-                            <div class="type">{{ action.type }} - {{ action.expertise }}</div>
+                            <div class="type">{{ action.type }}</div>
                             <div class="comment" v-bind:title="action.comment">{{ action.comment }}</div>
                         </div>
                     </td>

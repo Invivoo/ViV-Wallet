@@ -2,28 +2,21 @@
     <section>
         <h2>Users management</h2>
         <div id="users-list-container">
-            <router-link class="primary-button" to="/users/add" tag="button">Ajouter</router-link>
             <table>
                 <colgroup>
                     <col style="width: 8%" />
-                    <col style="width: 20%" />
-                    <col style="width: 30%" />
-                    <col style="width: 42%" />
+                    <col style="width: 92%" />
                 </colgroup>
                 <thead>
                     <tr>
                         <th class="right">ID</th>
-                        <th>IDENTIFIANT</th>
                         <th>NOM</th>
-                        <th>EMAIL</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-on:click="onRowSelected(user)" v-for="user in users" :key="user.id">
+                    <tr v-for="user in users" :key="user.id">
                         <td class="right">{{ user.id }}</td>
-                        <td>{{ user.user }}</td>
                         <td>{{ user.fullName }}</td>
-                        <td>{{ user.email }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -62,7 +55,6 @@ h2 {
 }
 
 tbody > tr {
-    cursor: pointer;
     &:hover td {
         background: $gray-300;
     }
