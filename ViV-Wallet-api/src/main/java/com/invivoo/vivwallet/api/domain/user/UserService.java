@@ -32,17 +32,13 @@ public class UserService {
         return userRepository.findById(userId);
     }
 
-    public Optional<User> findByX4bId(String x4bId) {
-        return userRepository.findByX4bId(x4bId);
-    }
-
     public Optional<User> findByFullName(String fullName) {
-        return userRepository.findByFullName(fullName);
+        return userRepository.findByFullNameIgnoreCase(fullName);
     }
 
     public User findByX4bIdOrCreateIfNotExists(String x4bId) {
         return userRepository.findByX4bId(x4bId)
-                             .orElseGet(() -> userRepository.findByFullName(getFullNameFromX4bId(x4bId))
+                             .orElseGet(() -> userRepository.findByFullNameIgnoreCase(getFullNameFromX4bId(x4bId))
                                                             .orElseGet(() -> createUser(x4bId)));
     }
 
