@@ -9,7 +9,6 @@ import com.invivoo.vivwallet.api.domain.role.RoleType;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Date;
 import java.util.List;
@@ -38,10 +37,10 @@ public class JWTUserDetailsTest {
         Assert.assertTrue(jwtUserDetails.isPresent());
         JWTUserDetails details = jwtUserDetails.get();
         Assert.assertEquals("1", details.getUsername());
-        Assert.assertEquals(List.of(new SimpleGrantedAuthority(RoleType.EXPERTISE_MANAGER.name()),
-                                    new SimpleGrantedAuthority(RoleType.COMPANY_ADMINISTRATOR.name()),
-                                    new SimpleGrantedAuthority(RoleType.SENIOR_MANAGER.name()),
-                                    new SimpleGrantedAuthority(RoleType.CONSULTANT.name())), details.getAuthorities());
+        Assert.assertEquals(List.of(new RoleGrantedAuthority(RoleType.EXPERTISE_MANAGER),
+                                    new RoleGrantedAuthority(RoleType.COMPANY_ADMINISTRATOR),
+                                    new RoleGrantedAuthority(RoleType.SENIOR_MANAGER),
+                                    new RoleGrantedAuthority(RoleType.CONSULTANT)), details.getAuthorities());
 
     }
 

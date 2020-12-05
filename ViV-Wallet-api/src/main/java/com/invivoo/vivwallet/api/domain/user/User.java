@@ -15,9 +15,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -48,13 +46,5 @@ public class User {
             fetch = FetchType.EAGER
     )
     private Set<Role> roles = new HashSet<>();
-
-    public void setExpertises(Set<UserExpertise> expertises) {
-        this.expertises = expertises;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
 
 }

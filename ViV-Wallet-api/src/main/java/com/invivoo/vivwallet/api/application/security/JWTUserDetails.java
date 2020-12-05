@@ -3,8 +3,8 @@ package com.invivoo.vivwallet.api.application.security;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.invivoo.vivwallet.api.domain.role.RoleType;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.IOException;
@@ -63,12 +63,13 @@ public class JWTUserDetails implements UserDetails {
         Optional<Map<String, Object>> vivWalletClaims = Optional.ofNullable(decodedJWT.getClaim("viv-wallet"))
                                                                 .map(Claim::asString)
                                                                 .map(vivWalletClaimsAsString -> getVivWalletClaims(objectMapper, vivWalletClaimsAsString));
-        List<SimpleGrantedAuthority> authorities = vivWalletClaims.map(claims -> claims.get("roles"))
-                                                                  .map(roles -> (List<String>) roles)
-                                                                  .orElse(List.of())
-                                                                  .stream()
-                                                                  .map(SimpleGrantedAuthority::new)
-                                                                  .collect(Collectors.toList());
+        List<RoleGrantedAuthority> authorities = vivWalletClaims.map(claims -> claims.get("roles"))
+                                                                .map(roles -> (List<String>) roles)
+                                                                .orElse(List.of())
+                                                                .stream()
+                                                                .map(RoleType::valueOf)
+                                                                .map(RoleGrantedAuthority::new)
+                                                                .collect(Collectors.toList());
         return vivWalletClaims.map(claims -> claims.get("userId"))
                               .map(String::valueOf)
                               .map(userId -> new JWTUserDetails(userId, authorities) );

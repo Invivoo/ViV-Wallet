@@ -21,7 +21,7 @@ public class ActivityToActionMapper {
     public Optional<Action> convert(Activity activity) {
         User user = userService.findByFullName(activity.getOwner())
                                .orElseGet(() -> userService.save(User.builder()
-                                                                     .fullName(activity.getOwner())
+                                                                     .fullName(activity.getOwner().trim())
                                                                      .build()));
         Action.ActionBuilder builder = Action.builder()
                                              .date(activity.getDate()) // todo actDate == valueDate ?

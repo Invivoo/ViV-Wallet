@@ -50,6 +50,7 @@ public class UsersProviderService {
             if (StringUtils.isBlank(fullName)) {
                 break;
             }
+            fullName = fullName.trim();
             User.UserBuilder userBuilder = userService.findByFullName(fullName)
                                                       .stream()
                                                       .peek(user -> Optional.ofNullable(user.getRoles()).ifPresent(Set::clear))
