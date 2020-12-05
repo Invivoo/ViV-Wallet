@@ -119,7 +119,7 @@ public class UsersController {
     }
 
     private User updateUser(User user, UserUpdateDto userUpdate) {
-        user.setFullName(userUpdate.getFullName());
+        user.setFullName(userUpdate.getFullName().trim());
         return user;
     }
 

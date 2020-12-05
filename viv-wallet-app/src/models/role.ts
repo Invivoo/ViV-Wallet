@@ -5,6 +5,6 @@ export enum Role {
     CONSULTANT = "CONSULTANT",
 }
 
-export const extendedRoles = [Role.EXPERTISE_MANAGER, Role.COMPANY_ADMINISTRATOR];
+export const extendedRoles = [Role.EXPERTISE_MANAGER, Role.COMPANY_ADMINISTRATOR, Role.SENIOR_MANAGER];
 
 export const adminOnly = [Role.COMPANY_ADMINISTRATOR, Role.SENIOR_MANAGER];

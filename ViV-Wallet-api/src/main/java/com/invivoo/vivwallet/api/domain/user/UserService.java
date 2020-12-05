@@ -33,7 +33,9 @@ public class UserService {
     }
 
     public Optional<User> findByFullName(String fullName) {
-        return userRepository.findByFullNameIgnoreCase(fullName);
+        return Optional.ofNullable(fullName)
+                       .map(String::trim)
+                       .flatMap(userRepository::findByFullNameIgnoreCase);
     }
 
     public User findByX4bIdOrCreateIfNotExists(String x4bId) {
@@ -67,7 +69,7 @@ public class UserService {
         Optional.ofNullable(user.getRoles())
                 .ifPresent(roles -> roles.forEach(r -> r.setUser(user)));
         Optional.ofNullable(user.getExpertises())
-                .ifPresent(expertises -> expertises.forEach(r -> r.setUser(user)));
+                .ifPresent(expertises -> expertises.forEach(e -> e.setUser(user)));
     }
 
     private User createUser(String x4bId) {

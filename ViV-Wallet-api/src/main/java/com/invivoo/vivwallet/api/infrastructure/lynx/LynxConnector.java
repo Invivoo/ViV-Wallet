@@ -4,6 +4,7 @@ import com.invivoo.vivwallet.api.domain.action.Action;
 import com.invivoo.vivwallet.api.infrastructure.lynx.mapper.ActivityToActionMapper;
 import com.invivoo.vivwallet.api.infrastructure.lynx.model.Activities;
 import com.invivoo.vivwallet.api.infrastructure.lynx.model.Activity;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -44,7 +45,7 @@ public class LynxConnector {
 
     public List<Action> getActionsFromActivities(List<Activity> activities) {
         List<Activity> activitiesWithType = activities.stream()
-                                                      .filter(activity -> Objects.nonNull(activity.getType())) // todo find why activity do not have type
+                                                      .filter(activity -> Objects.nonNull(activity.getType()) && StringUtils.isNotBlank(activity.getOwner())) // todo find why activity do not have type
                                                       .collect(Collectors.toList());
         List<Action> actions = activitiesWithType.stream()
                                                  .filter(activity -> ACTIVITY_HELD_STATUS.equals(activity.getStatus())) //todo validate this filter

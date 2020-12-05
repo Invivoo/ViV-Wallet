@@ -20,12 +20,10 @@ public class JWTAuthenticationFilter extends GenericFilterBean {
 
     private final JWTTokenProvider jwtTokenProvider;
     private final ObjectMapper objectMapper;
-    private final UserService userService;
 
-    public JWTAuthenticationFilter(JWTTokenProvider jwtTokenProvider, ObjectMapper objectMapper, UserService userService) {
+    public JWTAuthenticationFilter(JWTTokenProvider jwtTokenProvider, ObjectMapper objectMapper) {
         this.jwtTokenProvider = jwtTokenProvider;
         this.objectMapper = objectMapper;
-        this.userService = userService;
     }
 
     @Override
