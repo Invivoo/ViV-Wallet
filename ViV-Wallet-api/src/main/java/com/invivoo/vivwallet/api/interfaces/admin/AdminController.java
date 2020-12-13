@@ -1,6 +1,7 @@
 package com.invivoo.vivwallet.api.interfaces.admin;
 
-import com.invivoo.vivwallet.api.application.provider.user.UsersProviderService;
+import com.invivoo.vivwallet.api.application.provider.payments.PaymentsProviderService;
+import com.invivoo.vivwallet.api.application.provider.users.UsersProviderService;
 import com.invivoo.vivwallet.api.domain.action.ActionService;
 import com.invivoo.vivwallet.api.domain.user.User;
 import com.invivoo.vivwallet.api.infrastructure.lynx.model.Activities;
@@ -29,16 +30,20 @@ public class AdminController {
     protected static final String API_V_1_ADMIN = "/api/v1/admin";
 
     private UsersProviderService usersProviderService;
+    private PaymentsProviderService paymentsProviderService;
     private ActionService actionService;
 
-    public AdminController(UsersProviderService usersProviderService, ActionService actionService) {
+    public AdminController(UsersProviderService usersProviderService, PaymentsProviderService paymentsProviderService, ActionService actionService) {
         this.usersProviderService = usersProviderService;
+        this.paymentsProviderService = paymentsProviderService;
         this.actionService = actionService;
     }
 
     @PostMapping("/updateUsersFromExcel")
     public ResponseEntity<List<UserDto>> updateUsersFromExcel(@RequestParam MultipartFile file) throws IOException {
-        List<User> importedUsers = usersProviderService.importUserFromExcel(new XSSFWorkbook(file.getInputStream()));
+        XSSFWorkbook workbook = new XSSFWorkbook(file.getInputStream());
+        List<User> importedUsers = usersProviderService.provide(workbook);
+        paymentsProviderService.provide(workbook);
         return ResponseEntity.ok(importedUsers.stream()
                                               .map(UserDto::createFromUser)
                                               .collect(Collectors.toList()));

@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -23,7 +22,7 @@ public class ActionDto {
     private String type;
     private String comment;
     private LocalDateTime creationDate;
-    private BigDecimal payment;
+    private Integer payment;
     private String status;
     private LocalDate paymentDate;
     private UserDto achiever;
@@ -36,7 +35,7 @@ public class ActionDto {
                                        .comment(action.getContext())
                                        .creationDate(action.getDate())
                                        .achiever(UserDto.createFromUser(action.getAchiever()))
-                                       .payment(action.getViv()).build();
+                                       .payment(action.getVivAmount()).build();
         Optional.ofNullable(action.getPayment()).ifPresentOrElse(
                 payment -> {
                     actionDto.setStatus(ActionStatus.PAID.getLabel());

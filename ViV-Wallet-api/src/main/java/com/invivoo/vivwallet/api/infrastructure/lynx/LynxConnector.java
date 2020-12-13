@@ -14,8 +14,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -71,15 +69,13 @@ public class LynxConnector {
     }
 
     private void setVivFromRelatedActivities(Action action, List<Activity> activities) {
-        BigDecimal actionVivValue = BigDecimal.valueOf(action.getType().getValue());
         if (!action.getType().isSharedByAchievers()) {
-            action.setViv(actionVivValue);
+            action.setVivAmount((action.getType().getValue()));
             return;
         }
-        long count = activities.stream()
-                               .filter(activity -> activity.getId().equals(action.getLynxActivityId()))
-                               .count();
-        BigDecimal sharedActionVivValue = actionVivValue.divide(BigDecimal.valueOf(count), 0, RoundingMode.HALF_UP);
-        action.setViv(sharedActionVivValue);
+        int count = (int) activities.stream()
+                                    .filter(activity -> activity.getId().equals(action.getLynxActivityId()))
+                                    .count();
+        action.setVivAmount(action.getType().getValue() / count);
     }
 }

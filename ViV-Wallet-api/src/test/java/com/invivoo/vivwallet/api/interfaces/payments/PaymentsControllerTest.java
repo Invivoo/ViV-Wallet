@@ -26,7 +26,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -44,8 +43,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(PaymentsController.class)
 public class PaymentsControllerTest {
 
-    private static final Action ACTION_1 = Action.builder().id(1L).viv(BigDecimal.TEN).build();
-    private static final Action ACTION_2 = Action.builder().id(2L).viv(BigDecimal.TEN).build();
+    private static final Action ACTION_1 = Action.builder().id(1L).vivAmount(10).build();
+    private static final Action ACTION_2 = Action.builder().id(2L).vivAmount(10).build();
     private static final List<Action> ACTIONS = Arrays.asList(ACTION_1, ACTION_2);
     private static final LocalDate PAYMENT_DATE = LocalDate.of(2020, 1, 1);
     private static final User THEOPHILE_MONTGOMERY = User.builder().id(1L).fullName("Théophile MONTGOMERY").build();
@@ -53,8 +52,8 @@ public class PaymentsControllerTest {
                                             .id(8L)
                                             .fullName("John DOE")
                                             .build();
-    private static final Payment PAYMENT_1 = Payment.builder().id(1L).creator(THEOPHILE_MONTGOMERY).receiver(RECEIVER).date(PAYMENT_DATE).actions(ACTIONS).build();
-    private static final Payment PAYMENT_2 = Payment.builder().id(2L).creator(THEOPHILE_MONTGOMERY).receiver(RECEIVER).date(PAYMENT_DATE).actions(ACTIONS).build();
+    private static final Payment PAYMENT_1 = Payment.builder().id(1L).creator(THEOPHILE_MONTGOMERY).receiver(RECEIVER).date(PAYMENT_DATE).vivAmount(20).actions(ACTIONS).build();
+    private static final Payment PAYMENT_2 = Payment.builder().id(2L).creator(THEOPHILE_MONTGOMERY).receiver(RECEIVER).date(PAYMENT_DATE).vivAmount(20).actions(ACTIONS).build();
     private static final List<Payment> PAYMENTS = Arrays.asList(PAYMENT_1, PAYMENT_2);
     private static final PaymentRequest PAYMENT_REQUEST = PaymentRequest.builder()
                                                                         .date(PAYMENT_DATE)

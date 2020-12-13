@@ -1,10 +1,8 @@
-package com.invivoo.vivwallet.api.application.provider.user;
+package com.invivoo.vivwallet.api.application.provider.users;
 
-import com.invivoo.vivwallet.api.domain.action.ActionService;
 import com.invivoo.vivwallet.api.domain.expertise.Expertise;
 import com.invivoo.vivwallet.api.domain.expertise.UserExpertise;
 import com.invivoo.vivwallet.api.domain.expertise.UserExpertiseStatus;
-import com.invivoo.vivwallet.api.domain.payment.PaymentService;
 import com.invivoo.vivwallet.api.domain.role.Role;
 import com.invivoo.vivwallet.api.domain.role.RoleType;
 import com.invivoo.vivwallet.api.domain.user.User;
@@ -16,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
@@ -34,13 +33,11 @@ public class UsersProviderService {
     private final UserService userService;
 
     @Autowired
-    public UsersProviderService(UserService userService,
-                                ActionService actionService,
-                                PaymentService paymentService) {
+    public UsersProviderService(UserService userService) {
         this.userService = userService;
     }
 
-    public List<User> importUserFromExcel(XSSFWorkbook workbook) {
+    public List<User> provide(XSSFWorkbook workbook) {
         List<User> users = new ArrayList<>();
         for (Row row : workbook.getSheetAt(USER_SHEET_INDEX)) {
             if (row.getRowNum() < START_ROW) {
@@ -77,6 +74,14 @@ public class UsersProviderService {
                      .map(expertise -> createUserExpertise(expertiseStatus, startDate, expertise))
                      .ifPresent(userExpertises::add);
             userBuilder.expertises(userExpertises);
+            userBuilder.vivInitialBalance(Optional.ofNullable(UsersProviderExcelCellResolver.VIV_INITIAL_BALANCE.resolve(row))
+                                                  .map(Double.class::cast)
+                                                  .map(Double::intValue)
+                                                  .orElse(0));
+            Optional.ofNullable(UsersProviderExcelCellResolver.VIV_INITIAL_BALANCE_DATE.resolve(row))
+                    .map(Date.class::cast)
+                    .map(this::convertToLocalDateTime)
+                    .ifPresent(userBuilder::vivInitialBalanceDate);
             users.add(userBuilder.build());
         }
         return userService.saveAll(users);
@@ -86,6 +91,12 @@ public class UsersProviderService {
         return date.toInstant()
                    .atZone(ZoneId.systemDefault())
                    .toLocalDate();
+    }
+
+    private LocalDateTime convertToLocalDateTime(Date date) {
+        return date.toInstant()
+                   .atZone(ZoneId.systemDefault())
+                   .toLocalDateTime();
     }
 
     private UserExpertise createUserExpertise(UserExpertiseStatus expertiseStatus, LocalDate startDate, Expertise expertise) {

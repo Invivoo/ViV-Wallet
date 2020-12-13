@@ -7,5 +7,5 @@ import lombok.Data;
 @AllArgsConstructor
 public class BalanceDto {
 
-    private long value;
+    private int value;
 }

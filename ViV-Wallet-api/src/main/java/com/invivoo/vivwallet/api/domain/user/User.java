@@ -15,6 +15,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -46,5 +47,14 @@ public class User {
             fetch = FetchType.EAGER
     )
     private Set<Role> roles = new HashSet<>();
+    private int vivInitialBalance;
+    private LocalDateTime vivInitialBalanceDate;
 
+    public User(Long id, String x4bId, String fullName, Set<UserExpertise> expertises, Set<Role> roles) {
+        this.id = id;
+        this.x4bId = x4bId;
+        this.fullName = fullName;
+        this.expertises = expertises;
+        this.roles = roles;
+    }
 }

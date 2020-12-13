@@ -179,15 +179,16 @@ public class UsersControllerTest {
     public void whenGetBalanceForUser_shouldReturnBalance() throws Exception {
         //Given
         User testUser = TEST_USER_1;
-        long expectedBalance = 20;
-        when(userService.computeBalance(testUser.getId())).thenReturn(expectedBalance);
+        int expectedBalance = 20;
+        when(userService.findById(testUser.getId())).thenReturn(Optional.of(testUser));
+        when(userService.computeBalance(testUser)).thenReturn(expectedBalance);
 
         //When
         ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get(String.format("/api/v1/users/%s/balance", testUser.getId())))
                                                   .andDo(MockMvcResultHandlers.print());
 
         //Then
-        verify(userService).computeBalance(testUser.getId());
+        verify(userService).computeBalance(testUser);
         resultActions.andExpect(MockMvcResultMatchers.status().isOk())
                      .andExpect(MockMvcResultMatchers.jsonPath("$.value", Matchers.is(20)));
     }
@@ -199,7 +200,7 @@ public class UsersControllerTest {
         Action action1 = anUnpaidAction(testUser);
         Action action2 = aPaidAction(testUser);
         List<Action> expectedActions = Arrays.asList(action2, action1);
-        when(actionService.findAllByAchiever(testUser)).thenReturn(expectedActions);
+        when(actionService.findAllByAchieverOrderByDateDesc(testUser)).thenReturn(expectedActions);
 
         when(userService.findById(testUser.getId())).thenReturn(Optional.of(testUser));
 
@@ -211,7 +212,7 @@ public class UsersControllerTest {
         List<ActionDto> expectedActionDtos = Arrays.asList(ActionDto.createFromAction(action2), ActionDto.createFromAction(action1));
         String expectedJson = mapper.writeValueAsString(expectedActionDtos);
 
-        verify(actionService).findAllByAchiever(testUser);
+        verify(actionService).findAllByAchieverOrderByDateDesc(testUser);
         resultActions.andExpect(MockMvcResultMatchers.status().isOk())
                      .andExpect(MockMvcResultMatchers.content().string(expectedJson));
     }
@@ -223,7 +224,7 @@ public class UsersControllerTest {
         Action action2 = aPaidAction(TEST_USER_1);
         List<Action> expectedActions = Arrays.asList(action2, action1);
         when(userService.findById(TEST_USER_1.getId())).thenReturn(Optional.of(TEST_USER_1));
-        when(actionService.findAllByAchiever(TEST_USER_1)).thenReturn(expectedActions);
+        when(actionService.findAllByAchieverOrderByDateDesc(TEST_USER_1)).thenReturn(expectedActions);
 
         //When
         ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get(String.format("/api/v1/users/%s/actions", TEST_USER_1.getId())))
@@ -233,7 +234,7 @@ public class UsersControllerTest {
         List<ActionDto> expectedActionDtos = Arrays.asList(ActionDto.createFromAction(action2), ActionDto.createFromAction(action1));
         String expectedJson = mapper.writeValueAsString(expectedActionDtos);
 
-        verify(actionService).findAllByAchiever(TEST_USER_1);
+        verify(actionService).findAllByAchieverOrderByDateDesc(TEST_USER_1);
         resultActions.andExpect(MockMvcResultMatchers.status().isOk())
                      .andExpect(MockMvcResultMatchers.content().string(expectedJson));
     }
@@ -246,13 +247,13 @@ public class UsersControllerTest {
                                         .id(1L)
                                         .userId(testUser.getId())
                                         .date(LocalDate.of(2020, Month.JANUARY, 1))
-                                        .viv(BigDecimal.valueOf(50))
+                                        .viv(50)
                                         .amount(BigDecimal.valueOf(250)).build();
         PaymentDto payment2 = PaymentDto.builder()
                                         .id(2L)
                                         .userId(testUser.getId())
                                         .date(LocalDate.of(2020, Month.JUNE, 1))
-                                        .viv(BigDecimal.valueOf(50))
+                                        .viv(50)
                                         .amount(BigDecimal.valueOf(250)).build();
         List<PaymentDto> expectedPayments = Arrays.asList(payment2, payment1);
         when(paymentService.findAllByReceiver(testUser.getId())).thenReturn(expectedPayments);
@@ -272,7 +273,7 @@ public class UsersControllerTest {
         return Action.builder().id(1L)
                      .date(LocalDateTime.of(2020, Month.JANUARY, 1, 12, 0))
                      .type(ActionType.ARTICLE_PUBLICATION)
-                     .viv(BigDecimal.valueOf(15))
+                     .vivAmount(15)
                      .context("This is a comment")
                      .achiever(user)
                      .build();
@@ -282,7 +283,7 @@ public class UsersControllerTest {
         return Action.builder().id(2L)
                      .date(LocalDateTime.of(2020, Month.JUNE, 1, 12,0))
                      .type(ActionType.COACHING)
-                     .viv(BigDecimal.valueOf(10))
+                     .vivAmount(10)
                      .context("This is a comment")
                      .achiever(user)
                      .payment(Payment.builder()

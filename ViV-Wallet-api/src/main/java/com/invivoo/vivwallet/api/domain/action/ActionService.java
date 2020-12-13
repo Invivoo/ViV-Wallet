@@ -30,9 +30,14 @@ public class ActionService {
         return actionRepository.findAllByOrderByDateDesc();
     }
 
-    public List<Action> findAllByAchiever(User achiever) {
+    public List<Action> findAllByAchieverOrderByDateDesc(User achiever) {
         return actionRepository.findAllByAchieverOrderByDateDesc(achiever);
     }
+
+    public List<Action> findAllByAchieverAndPaymentIsNullOrderByDateAsc(User achiever) {
+        return actionRepository.findAllByAchieverAndPaymentIsNullOrderByDateAsc(achiever);
+    }
+
 
     public void saveAll(List<Action> actions) {
         actionRepository.saveAll(actions);

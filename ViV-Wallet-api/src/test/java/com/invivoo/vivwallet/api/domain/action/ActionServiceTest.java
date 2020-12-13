@@ -31,7 +31,7 @@ public class ActionServiceTest {
         ActionService actionService = new ActionService(actionRepository, lynxConnector);
 
         //When
-        List<Action> actions = actionService.findAllByAchiever(user);
+        List<Action> actions = actionService.findAllByAchieverOrderByDateDesc(user);
 
         //Then
         assertThat(actions).isEmpty();
@@ -48,7 +48,7 @@ public class ActionServiceTest {
         ActionService actionService = new ActionService(actionRepository, lynxConnector);
 
         //When
-        List<Action> actions = actionService.findAllByAchiever(user);
+        List<Action> actions = actionService.findAllByAchieverOrderByDateDesc(user);
 
         //Then
         assertThat(actions).containsExactly(action2, action1);
