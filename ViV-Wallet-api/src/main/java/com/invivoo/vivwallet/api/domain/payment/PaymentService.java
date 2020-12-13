@@ -2,11 +2,13 @@ package com.invivoo.vivwallet.api.domain.payment;
 
 import com.invivoo.vivwallet.api.domain.action.Action;
 import com.invivoo.vivwallet.api.domain.action.ActionRepository;
+import com.invivoo.vivwallet.api.domain.user.User;
 import com.invivoo.vivwallet.api.domain.user.UserRepository;
 import com.invivoo.vivwallet.api.interfaces.payments.PaymentDto;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +27,10 @@ public class PaymentService {
         return payments != null && !payments.isEmpty() ? payments : Collections.emptyList();
     }
 
+    public List<Payment> findAllByReceiverOrderByDateAsc(User receiver) {
+        return paymentRepository.findAllByReceiverOrderByDateAsc(receiver);
+    }
+
     public List<Action> getActionsByPaymentId(Long paymentId) {
         List<Action> actions = actionRepository.findAllByPaymentIdOrderByDateDesc(paymentId);
         return actions != null && !actions.isEmpty() ? actions : Collections.emptyList();
@@ -39,9 +45,18 @@ public class PaymentService {
                              .orElse(List.of());
     }
 
+    public Optional<Payment> findByDateAndReceiver(LocalDate paymentDate, User user) {
+        return paymentRepository.findByDateAndReceiver(paymentDate, user);
+    }
+
     public Payment save(Payment payment) {
         Optional.ofNullable(payment.getActions())
                 .ifPresent(actions -> actions.forEach(a -> a.setPayment(payment)));
-        return paymentRepository.save(payment);
+        paymentRepository.save(payment);
+        return payment;
+    }
+
+    public List<Payment> saveAll(List<Payment> payments) {
+        return paymentRepository.saveAll(payments);
     }
 }

@@ -1,4 +1,4 @@
-package com.invivoo.vivwallet.api.application.provider.user;
+package com.invivoo.vivwallet.api.application.provider.users;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -12,7 +12,9 @@ public enum UsersProviderExcelCellResolver {
     EXPERTISE_2(3, Cell::getStringCellValue),
     EXPERTISE_STATUS(4, Cell::getStringCellValue),
     ROLE_TYPE(5, Cell::getStringCellValue),
-    GT_ENTRY_DATE(6, Cell::getDateCellValue);
+    GT_ENTRY_DATE(6, Cell::getDateCellValue),
+    VIV_INITIAL_BALANCE(7, Cell::getNumericCellValue),
+    VIV_INITIAL_BALANCE_DATE(8, Cell::getDateCellValue);
 
     private final Integer cellNum;
     private final Function<Cell, ?> resolver;

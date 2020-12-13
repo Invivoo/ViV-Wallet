@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -48,6 +49,7 @@ public class UsersController {
         List<User> users = expertise == null ? userService.findAll() : userService.findByExpertise(expertise);
         return ResponseEntity.ok(users.stream()
                                       .map(UserDto::createFromUser)
+                                      .sorted(Comparator.comparing(UserDto::getFullName))
                                       .collect(Collectors.toList()));
     }
 
@@ -90,8 +92,11 @@ public class UsersController {
 
     @GetMapping("/{id}/balance")
     public ResponseEntity<BalanceDto> getBalance(@PathVariable("id") Long userId) {
-        long balance = userService.computeBalance(userId);
-        return ResponseEntity.ok(new BalanceDto(balance));
+        return userService.findById(userId)
+                          .map(userService::computeBalance)
+                          .map(BalanceDto::new)
+                          .map(ResponseEntity::ok)
+                          .orElseGet(ResponseEntity.notFound()::build);
     }
 
     @GetMapping("/{id}/actions")
@@ -101,7 +106,7 @@ public class UsersController {
             return ResponseEntity.notFound().build();
         }
         User user = userOpt.get();
-        List<Action> userActions = actionService.findAllByAchiever(user);
+        List<Action> userActions = actionService.findAllByAchieverOrderByDateDesc(user);
         List<ActionDto> userActionDtos = userActions.stream()
                                                     .map(ActionDto::createFromAction)
                                                     .collect(Collectors.toList());

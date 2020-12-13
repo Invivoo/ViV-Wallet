@@ -14,7 +14,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"lynxActivityId", "achiever_id"}))
@@ -31,7 +30,7 @@ public class Action {
     private LocalDateTime date;
     private ActionType type;
     private Long lynxActivityId;
-    private BigDecimal viv;
+    private int vivAmount;
     private String context;
     @ManyToOne
     private User achiever;

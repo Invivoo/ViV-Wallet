@@ -19,9 +19,10 @@ public class ActivityToActionMapper {
     }
 
     public Optional<Action> convert(Activity activity) {
-        User user = userService.findByFullName(activity.getOwner())
+        String owner = getCleanedOwnerFullName(activity);
+        User user = userService.findByFullName(owner)
                                .orElseGet(() -> userService.save(User.builder()
-                                                                     .fullName(activity.getOwner().trim())
+                                                                     .fullName(owner)
                                                                      .build()));
         Action.ActionBuilder builder = Action.builder()
                                              .date(activity.getDate()) // todo actDate == valueDate ?
@@ -29,6 +30,13 @@ public class ActivityToActionMapper {
                                              .achiever(user);
         setActivityTypeContext(activity, builder);
         return Optional.of(builder.build());
+    }
+
+    private String getCleanedOwnerFullName(Activity activity) {
+        String owner = activity.getOwner().trim();
+        owner = owner.substring(0, owner.contains("@") ? owner.indexOf("@") : owner.length());
+        owner = owner.contains("Marcos Aurelio ALMEIDA DA SILVA") ? "Marcos ALMEIDA" : owner;
+        return owner;
     }
 
     private void setActivityTypeContext(Activity activity, Action.ActionBuilder builder) {
@@ -64,20 +72,19 @@ public class ActivityToActionMapper {
                 builder.type(ActionType.TECHNICAL_ASSESSMENT);
                 builder.context(String.format("Évaluation de %s : candidat non retenu", activity.getRelatedTo()));
                 break;
-
-            case COOPTATION:
-                builder.type(ActionType.COOPTATION);
-                builder.context(String.format("Cooptation de %s", activity.getRelatedTo()));
-                break;
+//             todo how to know if cooptation is ok ?
+//            case COOPTATION:
+//                builder.type(ActionType.COOPTATION);
+//                builder.context(String.format("Cooptation de %s", activity.getRelatedTo()));
+//                break;
 //            todo how to differentiate CORPORATE_PARTNERSHIP and SCHOOL_PARTNERSHIP
 //            case INITIALISATION_DUN_PARTENARIAT:
 //                builder.type(ActionType.CORPORATE_PARTNERSHIP);
-//                builder.context(String.format("Partenariat Entreprise"));
+//                builder.context(String.format("Partenariat Entreprise : *%s %s", activity.getComment(), activity.getOpportunity()));
 //                builder.type(ActionType.SCHOOL_PARTNERSHIP);
 //                builder.context(String.format("Partenariat École"));
 //                break;
-
-//            todo how to differentiate one hour and two hour formation and to get the formation name
+//            todo how to differentiate one hour and two hour training support and to get the formation name
 //            case CREATION_DE_SUPPORT_DE_FORMATION:
 //                builder.type(ActionType.ONE_HOUR_FORMATION_TRAINING_SUPPORT);
 //                builder.context(String.format("Formation : %s", activity.getComment()));
@@ -102,33 +109,38 @@ public class ActivityToActionMapper {
 //                builder.context(String.format("Webinar : %s", activity.getComment()));
 //                break;
 //            todo how to get the event name
-//            case PARTICIPATION_A_UNE_CONFERENCE_EN_TANT_QUE_SPEAKER:
-//                builder.type(ActionType.SPEAKER);
-//                builder.context(String.format("Conférence : %s", activity.getComment()));
+            case PARTICIPATION_A_UNE_CONFERENCE_EN_TANT_QUE_SPEAKER:
+                builder.type(ActionType.SPEAKER);
+                builder.context(String.format("Conférence : %s %s", activity.getComment(), activity.getOpportunity()));
+                break;
 //            todo how to differentiate blog and other medium publication and get the publication name ?
-//            case PUBLIER_UN_ARTICLE_COURT:
-//                builder.type(ActionType.SHORT_ARTICLE_PUBLICATION);
+            case PUBLIER_UN_ARTICLE_COURT:
+                builder.type(ActionType.SHORT_ARTICLE_PUBLICATION);
+                builder.context(String.format("Article : %s", activity.getComment()));
 //                builder.type(ActionType.SHORT_NEW_MEDIUM_FIRST_PUBLICATION);
 //                builder.context(String.format("Article : %s", activity.getComment()));
-//                break;
+                break;
             case PUBLIER_UN_ARTICLE_MOYEN:
                 builder.type(ActionType.ARTICLE_PUBLICATION);
-//                builder.type(ActionType.NEW_MEDIUM_FIRST_PUBLICATION);
                 builder.context(String.format("Article : %s", activity.getComment()));
+//                builder.type(ActionType.NEW_MEDIUM_FIRST_PUBLICATION);
+//                builder.context(String.format("Article : %s", activity.getComment()));
                 break;
-//            case PUBLIER_UN_ARTICLE_LONG:
-//                builder.type(ActionType.LONG_ARTICLE_PUBLICATION);
+            case PUBLIER_UN_ARTICLE_LONG:
+                builder.type(ActionType.LONG_ARTICLE_PUBLICATION);
+                builder.context(String.format("Article : %s", activity.getComment()));
+                builder.context(String.format("Article : %s", activity.getComment()));
 //                builder.type(ActionType.LONG_NEW_MEDIUM_FIRST_PUBLICATION);
 //                builder.context(String.format("Article : %s", activity.getComment()));
-//                break;
-//            case PUBLIER_UN_LIVRE_BLANC:
-//                builder.type(ActionType.WHITE_BOOK);
-//                builder.context(String.format("Livre blanc : %s", activity.getComment()));
-//                break;
-//            case PUBLIER_UN_CHEAT_SHEET:
-//                builder.type(ActionType.CHEAT_SHEET);
-//                builder.context(String.format("Cheat Sheet : %s", activity.getComment()));
-//                break;
+                break;
+            case PUBLIER_UN_LIVRE_BLANC:
+                builder.type(ActionType.WHITE_BOOK);
+                builder.context(String.format("Livre blanc : %s", activity.getComment()));
+                break;
+            case PUBLIER_UN_CHEAT_SHEET:
+                builder.type(ActionType.CHEAT_SHEET);
+                builder.context(String.format("Cheat Sheet : %s", activity.getComment()));
+                break;
             default:
                 builder.type(ActionType.NO_MAPPING_FOUND);
                 builder.context(String.format("No mapping found for %s", activity.getType()));

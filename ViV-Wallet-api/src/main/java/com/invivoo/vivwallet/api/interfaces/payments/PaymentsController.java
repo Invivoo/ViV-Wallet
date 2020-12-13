@@ -56,6 +56,9 @@ public class PaymentsController {
                                  .date(paymentRequest.getDate())
                                  .receiver(receiver.get())
                                  .creator(connectedUser.get())
+                                 .vivAmount(actions.stream()
+                                                   .mapToInt(Action::getVivAmount)
+                                                   .sum())
                                  .actions(actions)
                                  .build();
         Payment savedPayment = paymentService.save(payment);

@@ -1,10 +1,15 @@
 package com.invivoo.vivwallet.api.domain.user;
 
+import com.invivoo.vivwallet.api.domain.action.Action;
 import com.invivoo.vivwallet.api.domain.action.ActionRepository;
 import com.invivoo.vivwallet.api.domain.expertise.Expertise;
+import com.invivoo.vivwallet.api.domain.payment.Payment;
+import com.invivoo.vivwallet.api.domain.payment.PaymentRepository;
+import com.invivoo.vivwallet.api.domain.role.RoleType;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.PersistenceContext;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,10 +19,12 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final ActionRepository actionRepository;
+    private final PaymentRepository paymentRepository;
 
-    public UserService(UserRepository userRepository, ActionRepository actionRepository) {
+    public UserService(UserRepository userRepository, ActionRepository actionRepository, PaymentRepository paymentRepository) {
         this.userRepository = userRepository;
         this.actionRepository = actionRepository;
+        this.paymentRepository = paymentRepository;
     }
 
     public List<User> findAll() {
@@ -44,6 +51,10 @@ public class UserService {
                                                             .orElseGet(() -> createUser(x4bId)));
     }
 
+    public Optional<User> findByRoleType(RoleType type) {
+        return userRepository.findFirstByRolesType(type);
+    }
+
     public User save(User user) {
         updateRelatedEntitiesWithUser(user);
         return userRepository.save(user);
@@ -58,11 +69,17 @@ public class UserService {
         userRepository.delete(user);
     }
 
-    public long computeBalance(long userId) {
-        return actionRepository.findAllByPaymentIsNull().stream()
-                               .filter(action -> action.getAchiever().getId().equals(userId))
-                               .mapToLong(action -> action.getViv().longValue())
-                               .sum();
+    public int computeBalance(User user) {
+        int userBalanceFromActionsInVivAfterInitialBalanceDate = actionRepository.findAllByAchieverAndDateAfter(user, Optional.ofNullable(user.getVivInitialBalanceDate())
+                                                                                                                              .orElse(LocalDateTime.MIN))
+                                                                                 .stream()
+                                                                                 .mapToInt(Action::getVivAmount)
+                                                                                 .sum();
+        int userPaymentsAmountInViv = paymentRepository.findAllByReceiverOrderByDateDesc(user)
+                                                       .stream()
+                                                       .mapToInt(Payment::getVivAmount)
+                                                       .sum();
+        return user.getVivInitialBalance() + userBalanceFromActionsInVivAfterInitialBalanceDate - userPaymentsAmountInViv;
     }
 
     private void updateRelatedEntitiesWithUser(User user) {
