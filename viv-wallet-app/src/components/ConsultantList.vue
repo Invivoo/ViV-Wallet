@@ -1,13 +1,15 @@
 <template>
     <table v-if="consultants.length > 0">
         <colgroup>
-            <col style="width: 55%" />
             <col style="width: 30%" />
-            <col style="width: 15%" />
+            <col style="width: 30%" />
+            <col style="width: 20%" />
+            <col style="width: 20%" />
         </colgroup>
         <thead>
             <tr>
                 <th>NOM</th>
+                <th>EXPERTISE</th>
                 <th>
                     <span class="status-header">STATUT</span>
                 </th>
@@ -18,7 +20,9 @@
             <tr v-for="consultant in consultants" :key="consultant.id">
                 <td>
                     <div>{{ consultant.fullName }}</div>
-                    <div class="username">{{ consultant.user }}</div>
+                </td>
+                <td>
+                    <div>{{ consultant.expertise ? consultant.expertise.expertiseName : "" }}</div>
                 </td>
                 <td>
                     <status-badge :type="getConsultantStatusType(consultant.status)">{{
