@@ -1,7 +1,7 @@
 <template>
     <div class="history">
         <loading v-bind:loading="loading" v-bind:errored="errored">
-            <check-roles v-bind:roles="extendedRoles" withErrorMessage="true">
+            <check-roles v-bind:roles="historyRoles" withErrorMessage="true">
                 <section>
                     <h2>Historique des actions</h2>
                     <action-history v-bind:actions="actions" />
@@ -17,7 +17,7 @@ import { ActionForHistory } from "../models/action";
 import { WalletService } from "../services/wallet";
 import Loading from "../components/Loading.vue";
 import ActionHistory from "../components/ActionHistory.vue";
-import { extendedRoles } from "../models/role";
+import { historyRoles } from "../models/role";
 import CheckRoles from "../components/CheckRoles.vue";
 
 @Component({
@@ -30,7 +30,7 @@ export default class History extends Vue {
     errored = false;
 
     walletService = new WalletService();
-    extendedRoles = extendedRoles;
+    historyRoles = historyRoles;
 
     async mounted() {
         try {

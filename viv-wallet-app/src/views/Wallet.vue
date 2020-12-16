@@ -1,28 +1,30 @@
 <template>
     <div class="main">
         <loading v-bind:loading="loading" v-bind:errored="errored">
-            <div class="header">
-                <balance-card
-                    v-bind:fullName="user.fullName"
-                    v-bind:expertise="(user.expertise && user.expertise.expertiseName) || ''"
-                    v-bind:consultantStatus="formatConsultantStatus(user.status)"
-                    v-bind:vivBalance="balance"
-                />
-                <illustration />
-            </div>
-            <check-roles v-bind:roles="adminOnly">
-                <div>
-                    <router-link
-                        class="primary-button payment-btn"
-                        v-bind:to="{ path: `/payment/${user.id}` }"
-                        v-if="shouldDisplayPayButton()"
-                        tag="button"
-                        >Payer maintenant</router-link
-                    >
+            <check-roles v-bind:roles="myWalletRoles">
+                <div class="header">
+                    <balance-card
+                        v-bind:fullName="user.fullName"
+                        v-bind:expertise="(user.expertise && user.expertise.expertiseName) || ''"
+                        v-bind:consultantStatus="formatConsultantStatus(user.status)"
+                        v-bind:vivBalance="balance"
+                    />
+                    <illustration />
                 </div>
+                <check-roles v-bind:roles="adminOnly">
+                    <div>
+                        <router-link
+                            class="primary-button payment-btn"
+                            v-bind:to="{ path: `/payment/${user.id}` }"
+                            v-if="shouldDisplayPayButton()"
+                            tag="button"
+                            >Payer maintenant</router-link
+                        >
+                    </div>
+                </check-roles>
+                <actions-block v-bind:actions="actions" />
+                <payment-history-block v-bind:payments="payments" />
             </check-roles>
-            <actions-block v-bind:actions="actions" />
-            <payment-history-block v-bind:payments="payments" />
         </loading>
     </div>
 </template>
@@ -37,7 +39,7 @@ import PaymentHistoryBlock from "../components/PaymentHistoryBlock.vue";
 import { Payment } from "../models/payment";
 import { WalletService } from "../services/wallet";
 import Loading from "../components/Loading.vue";
-import { adminOnly, Role } from "../models/role";
+import { adminOnly, myWalletRoles, Role } from "../models/role";
 import { LoginService } from "../services/login";
 import { UsersService } from "../services/users";
 import { ConsultantStatus, toString } from "../models/consultant";
@@ -61,6 +63,7 @@ export default class wallet extends Vue {
     userId = "";
     user = {};
     adminOnly = adminOnly;
+    myWalletRoles = myWalletRoles;
 
     formatConsultantStatus(status?: string) {
         if (status) {

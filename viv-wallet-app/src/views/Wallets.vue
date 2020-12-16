@@ -1,7 +1,7 @@
 <template>
     <div class="wallets">
         <loading v-bind:loading="loading" v-bind:errored="errored">
-            <check-roles v-bind:roles="extendedRoles" withErrorMessage="true">
+            <check-roles v-bind:roles="walletsRoles" withErrorMessage="true">
                 <section>
                     <h2>Wallets</h2>
                     <div class="buttons-container">
@@ -51,7 +51,7 @@ import { ExpertisesService } from "@/services/expertises";
 import Loading from "../components/Loading.vue";
 
 import ConsultantList from "@/components/ConsultantList.vue";
-import { extendedRoles } from "../models/role";
+import { walletsRoles } from "../models/role";
 import CheckRoles from "../components/CheckRoles.vue";
 
 @Component({
@@ -66,7 +66,7 @@ export default class Wallets extends Vue {
     errored = false;
 
     expertisesService = new ExpertisesService();
-    extendedRoles = extendedRoles;
+    walletsRoles = walletsRoles;
 
     async mounted() {
         try {
