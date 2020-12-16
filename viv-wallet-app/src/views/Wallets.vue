@@ -7,7 +7,7 @@
                     <div class="buttons-container">
                         <filter-input v-model="filterValue" />
                     </div>
-                    <consultant-list v-bind:consultants="filteredConsultants" v-bind:expertise="selectedExpertiseId">
+                    <consultant-list v-bind:consultants="filteredConsultants">
                         <template v-slot="{ consultantId }">
                             <router-link
                                 v-bind:to="`/wallets/${consultantId}`"

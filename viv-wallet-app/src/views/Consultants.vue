@@ -33,7 +33,7 @@
                             >Ajouter</router-link
                         >
                     </div>
-                    <consultant-list v-bind:consultants="consultants" v-bind:expertise="selectedExpertiseId">
+                    <consultant-list v-bind:consultants="consultants">
                         <template v-slot="{ consultantId }">
                             <router-link
                                 v-bind:to="`/members/${selectedExpertiseId}/${consultantId}`"

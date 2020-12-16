@@ -49,7 +49,6 @@ import StatusBadge from "../components/StatusBadge.vue";
 })
 export default class ConsultantList extends Vue {
     @Prop() consultants!: Consultant[];
-    @Prop() expertise!: string;
 
     formatConsultantStatus(status: ConsultantStatus) {
         return toString(status);
