@@ -12,9 +12,6 @@
         >
             <div v-if="isBannerInitialized" class="root">
                 <div v-bind:class="['menu', isMenuOpen ? '' : 'hidden']">
-                    <check-roles v-bind:roles="adminOnly"
-                        ><custom-router-link to="/users">Utilisateurs</custom-router-link></check-roles
-                    >
                     <custom-router-link to="/wallet">Mon wallet</custom-router-link>
                     <check-roles v-bind:roles="extendedRoles">
                         <custom-router-link to="/members">Expertises</custom-router-link>
