@@ -5,31 +5,12 @@
                 <section>
                     <h2>Wallets</h2>
                     <div class="buttons-container">
-                        <div class="selector-container">
-                            <label class="expertise-label" for="select-expertise">Expertise :</label>
-                            <div class="select">
-                                <select
-                                    id="select-expertise"
-                                    v-model="selectedExpertiseId"
-                                    v-on:change="expertiseChanged"
-                                >
-                                    <option disabled value>Choisissez</option>
-                                    <option
-                                        v-for="expertise in expertises"
-                                        :key="expertise.id"
-                                        v-bind:value="expertise.id"
-                                    >
-                                        {{ expertise.expertiseName }}
-                                    </option>
-                                </select>
-                                <span class="select-focus"></span>
-                            </div>
-                        </div>
+                        <filter-input v-model="filterValue" />
                     </div>
-                    <consultant-list v-bind:consultants="consultants" v-bind:expertise="selectedExpertiseId">
+                    <consultant-list v-bind:consultants="filteredConsultants">
                         <template v-slot="{ consultantId }">
                             <router-link
-                                v-bind:to="`/wallets/${selectedExpertiseId}/${consultantId}`"
+                                v-bind:to="`/wallets/${consultantId}`"
                                 class="tertiary-button update-button"
                                 tag="a"
                                 >Voir le wallet</router-link
@@ -49,36 +30,48 @@ import { Expertise } from "../models/expertise";
 import { ConsultantsService } from "@/services/consultants";
 import { ExpertisesService } from "@/services/expertises";
 import Loading from "../components/Loading.vue";
+import FilterInput from "../components/FilterInput.vue";
 
 import ConsultantList from "@/components/ConsultantList.vue";
-import { walletsRoles } from "../models/role";
+import { Role, walletsRoles } from "../models/role";
 import CheckRoles from "../components/CheckRoles.vue";
+import { LoginService } from "../services/login";
 
 @Component({
     name: "wallets",
-    components: { ConsultantList, Loading, CheckRoles },
+    components: { ConsultantList, Loading, CheckRoles, FilterInput },
 })
 export default class Wallets extends Vue {
     consultants: Consultant[] = [];
-    expertises: Expertise[] = [];
-    selectedExpertiseId = "";
+    filteredConsultants: Consultant[] = [];
     loading = true;
     errored = false;
 
     expertisesService = new ExpertisesService();
+    consultantsService = new ConsultantsService();
+    loginService = new LoginService();
     walletsRoles = walletsRoles;
+    filterValue = "";
 
     async mounted() {
         try {
-            this.expertises = await this.expertisesService.getExpertises();
-            if (this.$route.params.id) {
-                this.selectedExpertiseId = this.$route.params.id;
-                await this.updateConsultants();
+            const [expertises, allConsultants, userRoles] = await Promise.all([
+                this.expertisesService.getExpertises(),
+                this.consultantsService.getConsultants(),
+                this.loginService.getRoles(),
+            ]);
+            if (userRoles.includes(Role.COMPANY_ADMINISTRATOR) || userRoles.includes(Role.SENIOR_MANAGER)) {
+                this.consultants = allConsultants;
             } else {
-                if (this.expertises.length > 0) {
-                    this.$router.push(`/wallets/${this.expertises[0].id}`);
-                }
+                this.consultants = allConsultants.filter(
+                    (consultant) =>
+                        consultant.expertise &&
+                        expertises
+                            .map((expertise) => expertise.expertiseName)
+                            .includes(consultant.expertise.expertiseName)
+                );
             }
+            this.filterChanged();
         } catch (ex) {
             this.errored = true;
         } finally {
@@ -86,23 +79,11 @@ export default class Wallets extends Vue {
         }
     }
 
-    @Watch("$route")
-    async routeChanged() {
-        if (this.$route.params.id) {
-            this.selectedExpertiseId = this.$route.params.id;
-            await this.updateConsultants();
-        } else {
-            this.expertiseChanged();
-        }
-    }
-
-    expertiseChanged() {
-        this.$router.push(`/wallets/${this.selectedExpertiseId}`);
-    }
-
-    async updateConsultants() {
-        const consultantsService = new ConsultantsService();
-        this.consultants = await consultantsService.getConsultants(this.selectedExpertiseId);
+    @Watch("filterValue")
+    filterChanged() {
+        this.filteredConsultants = this.consultants.filter((consultant) =>
+            consultant.fullName?.toLowerCase().includes(this.filterValue.toLowerCase())
+        );
     }
 }
 </script>

@@ -30,7 +30,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import { Action, PaymentStatus } from "../models/action";
 import BalanceCard from "../components/BalanceCard.vue";
 import Illustration from "../components/Illustration.vue";
@@ -76,7 +76,8 @@ export default class wallet extends Vue {
         return this.userRoles && this.userRoles.indexOf(Role.COMPANY_ADMINISTRATOR) !== -1;
     }
 
-    async mounted() {
+    @Watch("$route", { immediate: true, deep: true })
+    async onUrlChange() {
         try {
             if (this.$route.params.consultantId) {
                 this.userId = this.$route.params.consultantId;

@@ -64,12 +64,7 @@ const routes = [
         component: () => import(/* webpackChunkName: "wallets" */ "../views/Wallets.vue"),
     },
     {
-        path: "/wallets/:id",
-        name: "walletsByExpertise",
-        component: () => import(/* webpackChunkName: "wallets" */ "../views/Wallets.vue"),
-    },
-    {
-        path: "/wallets/:expertiseName/:consultantId",
+        path: "/wallets/:consultantId",
         name: "walletView",
         component: () => import(/* webpackChunkName: "wallets" */ "../views/Wallet.vue"),
         props: true,
