@@ -12,10 +12,16 @@
         >
             <div v-if="isBannerInitialized" class="root">
                 <div v-bind:class="['menu', isMenuOpen ? '' : 'hidden']">
-                    <custom-router-link to="/wallet">Mon wallet</custom-router-link>
-                    <check-roles v-bind:roles="extendedRoles">
+                    <check-roles v-bind:roles="myWalletRoles">
+                        <custom-router-link to="/wallet">Mon wallet</custom-router-link>
+                    </check-roles>
+                    <check-roles v-bind:roles="expertisesRoles">
                         <custom-router-link to="/members">Expertises</custom-router-link>
+                    </check-roles>
+                    <check-roles v-bind:roles="walletsRoles">
                         <custom-router-link to="/wallets">Wallets</custom-router-link>
+                    </check-roles>
+                    <check-roles v-bind:roles="historyRoles">
                         <custom-router-link to="/actions">Historique des actions</custom-router-link>
                     </check-roles>
                 </div>
@@ -33,7 +39,7 @@ import "x4b-ui/dist/x4b-ui/x4b-ui.css";
 import { version } from "../package.json";
 import CustomRouterLink from "./components/CustomRouterLink.vue";
 import CheckRoles from "./components/CheckRoles.vue";
-import { adminOnly, extendedRoles, Role } from "./models/role";
+import { expertisesRoles, historyRoles, myWalletRoles, Role, walletsRoles } from "./models/role";
 
 @Component({ components: { CustomRouterLink, CheckRoles } })
 export default class App extends Vue {
@@ -42,8 +48,10 @@ export default class App extends Vue {
     private primaryColor: string = require("./styles/index.scss").primaryColor;
     isMenuOpen = false;
     isBannerInitialized = false;
-    adminOnly = adminOnly;
-    extendedRoles = extendedRoles;
+    myWalletRoles = myWalletRoles;
+    expertisesRoles = expertisesRoles;
+    walletsRoles = walletsRoles;
+    historyRoles = historyRoles;
 
     handleMenuToggleButtonClicked(evt) {
         this.isMenuOpen = evt.detail;

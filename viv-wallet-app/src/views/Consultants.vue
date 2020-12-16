@@ -1,7 +1,7 @@
 <template>
     <div class="consultants">
         <loading v-bind:loading="loading" v-bind:errored="errored">
-            <check-roles v-bind:roles="extendedRoles" withErrorMessage="true">
+            <check-roles v-bind:roles="expertisesRoles" withErrorMessage="true">
                 <section>
                     <h2>Consultants</h2>
                     <div class="buttons-container">
@@ -59,7 +59,7 @@ import Loading from "../components/Loading.vue";
 import CheckRoles from "../components/CheckRoles.vue";
 
 import ConsultantList from "@/components/ConsultantList.vue";
-import { extendedRoles } from "../models/role";
+import { expertisesRoles } from "../models/role";
 
 @Component({
     name: "members",
@@ -71,7 +71,7 @@ export default class Consultants extends Vue {
     selectedExpertiseId = "";
     loading = true;
     errored = false;
-    extendedRoles = extendedRoles;
+    expertisesRoles = expertisesRoles;
 
     expertisesService = new ExpertisesService();
 
