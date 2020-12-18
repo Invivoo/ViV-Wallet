@@ -10,6 +10,9 @@ global:
     useLocalhost: false
     traceEnabled: true
     prometheusCollectEnabled: false
+    sqlServerUrl: ""
+    sqlServerUsername: ""
+    sqlServerPassword: ""
 
 strategy:
     rollingUpdate:
@@ -45,12 +48,6 @@ vivwallet:
     port: 8080
     replicaCount: 1
     minReadySeconds: 10
-    localUsersEnabled: true
-    ldapEnabled: false
-    saml2Enabled: false
-    googleEnabled: false
-    microsoftEnabled: false
-    linkedInEnabled: false
     service:
         externalPort: 80
 
