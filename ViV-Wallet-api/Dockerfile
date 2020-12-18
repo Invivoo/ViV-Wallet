@@ -5,9 +5,9 @@ WORKDIR /
 ADD target/ViV-Wallet-api-0.0.1-SNAPSHOT.jar ViV-Wallet-api-0.0.1-SNAPSHOT.jar
 
 ENV X4BAuthPublicKeyUrl="" \
-    SqlServerUrl="" \
-    SqlServerUsername="" \
-    SqlServerPassword=""
+    SqlServerUrl="SQL_SERVER_URL" \
+    SqlServerUsername="SQL_SERVER_USERNAME" \
+    SqlServerPassword="SQL_SERVER_PASSWORD"
 
 EXPOSE 8080
 

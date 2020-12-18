@@ -10,9 +10,9 @@ global:
     useLocalhost: false
     traceEnabled: true
     prometheusCollectEnabled: false
-    sqlServerUrl: ""
-    sqlServerUsername: ""
-    sqlServerPassword: ""
+    sqlServerUrl: "SQL_SERVER_URL"
+    sqlServerUsername: "SQL_SERVER_USERNAME"
+    sqlServerPassword: "SQL_SERVER_PASSWORD"
 
 strategy:
     rollingUpdate:
