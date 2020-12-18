@@ -7,6 +7,8 @@ import com.invivoo.vivwallet.api.domain.user.UserService;
 import com.invivoo.vivwallet.api.infrastructure.lynx.model.Activity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
 @Service
@@ -40,6 +42,7 @@ public class ActivityToActionMapper {
     }
 
     private void setActivityTypeContext(Activity activity, Action.ActionBuilder builder) {
+        long activityDuration = getActivityDuration(activity);
         switch (activity.getType()) {
             case COACHING_HORS_OPPORTUNITE:
             case COACHING_SUR_OPPORTUNITE:
@@ -72,66 +75,62 @@ public class ActivityToActionMapper {
                 builder.type(ActionType.TECHNICAL_ASSESSMENT);
                 builder.context(String.format("Évaluation de %s : candidat non retenu", activity.getRelatedTo()));
                 break;
-//             todo how to know if cooptation is ok ?
-//            case COOPTATION:
-//                builder.type(ActionType.COOPTATION);
-//                builder.context(String.format("Cooptation de %s", activity.getRelatedTo()));
-//                break;
-//            todo how to differentiate CORPORATE_PARTNERSHIP and SCHOOL_PARTNERSHIP
-//            case INITIALISATION_DUN_PARTENARIAT:
-//                builder.type(ActionType.CORPORATE_PARTNERSHIP);
-//                builder.context(String.format("Partenariat Entreprise : *%s %s", activity.getComment(), activity.getOpportunity()));
-//                builder.type(ActionType.SCHOOL_PARTNERSHIP);
-//                builder.context(String.format("Partenariat École"));
-//                break;
-//            todo how to differentiate one hour and two hour training support and to get the formation name
-//            case CREATION_DE_SUPPORT_DE_FORMATION:
-//                builder.type(ActionType.ONE_HOUR_FORMATION_TRAINING_SUPPORT);
-//                builder.context(String.format("Formation : %s", activity.getComment()));
-//                builder.type(ActionType.TWO_HOURS_FORMATION_TRAINING_SUPPORT);
-//                builder.context(String.format("Formation : %s", activity.getComment()));
-//                break;
-//            todo how to differentiate one hour and two hour formation and to get the formation name
-//            case ANIMATION_DUNE_SESSION_DE_FORMATION_EN_PRESENTIEL:
-//                builder.type(ActionType.ONE_HOUR_FORMATION_ANIMATION);
-//                builder.context(String.format("Formation : %s", activity.getComment()));
-//                builder.type(ActionType.TWO_HOURS_FORMATION_ALONE_ANIMATION);
-//                builder.context(String.format("Formation : %s", activity.getComment()));
-//                builder.type(ActionType.TWO_HOURS_FORMATION_MULTIPLE_ANIMATION);
-//                builder.context(String.format("Formation : %s", activity.getComment()));
-//                break;
-//            case ANIMATION_DUNE_SESSION_DE_FORMATION_AU_FORMAT_WEBINAR:
-//                builder.type(ActionType.ONE_HOUR_FORMATION_ANIMATION);
-//                builder.context(String.format("Webinar : %s", activity.getComment()));
-//                builder.type(ActionType.TWO_HOURS_FORMATION_ALONE_ANIMATION);
-//                builder.context(String.format("Webinar : %s", activity.getComment()));
-//                builder.type(ActionType.TWO_HOURS_FORMATION_MULTIPLE_ANIMATION);
-//                builder.context(String.format("Webinar : %s", activity.getComment()));
-//                break;
-//            todo how to get the event name
+            case COOPTATION:
+                if ("OK".equalsIgnoreCase(activity.getValidity())) {
+                    builder.type(ActionType.COOPTATION);
+                }else{
+                    builder.type(ActionType.COOPTATION_NOK);
+                }
+                builder.context(String.format("Cooptation de %s", activity.getRelatedTo()));
+                break;
+            case INITIALISATION_DUN_PARTENARIAT:
+                if (activity.getOpportunityLabel().contains("Partnership/School")) {
+                    builder.type(ActionType.SCHOOL_PARTNERSHIP);
+                    builder.context(String.format("Partenariat École : %s %s", activity.getComment(), activity.getOpportunity()));
+                } else {
+                    builder.type(ActionType.CORPORATE_PARTNERSHIP);
+                    builder.context(String.format("Partenariat Entreprise : %s %s", activity.getComment(), activity.getOpportunity()));
+                }
+                break;
+            case CREATION_DE_SUPPORT_DE_FORMATION:
+                if (activityDuration <= 1) {
+                    builder.type(ActionType.ONE_HOUR_FORMATION_TRAINING_SUPPORT);
+                } else {
+                    builder.type(ActionType.TWO_HOURS_FORMATION_TRAINING_SUPPORT);
+                }
+                builder.context(String.format("Support Formation : %s", activity.getComment()));
+                break;
+            case ANIMATION_DUNE_SESSION_DE_FORMATION_EN_PRESENTIEL:
+                if (activityDuration <= 1) {
+                    builder.type(ActionType.ONE_HOUR_FORMATION_ANIMATION);
+                } else {
+                    builder.type(ActionType.TWO_HOURS_FORMATION_ANIMATION);
+                }
+                builder.context(String.format("Animation Formation : %s", activity.getComment()));
+                break;
+            case ANIMATION_DUNE_SESSION_DE_FORMATION_AU_FORMAT_WEBINAR:
+                if (activityDuration <= 1) {
+                    builder.type(ActionType.ONE_HOUR_FORMATION_ANIMATION);
+                } else {
+                    builder.type(ActionType.TWO_HOURS_FORMATION_ANIMATION);
+                }
+                builder.context(String.format("Animation Formation Webinar : %s", activity.getComment()));
+                break;
             case PARTICIPATION_A_UNE_CONFERENCE_EN_TANT_QUE_SPEAKER:
                 builder.type(ActionType.SPEAKER);
                 builder.context(String.format("Conférence : %s %s", activity.getComment(), activity.getOpportunity()));
                 break;
-//            todo how to differentiate blog and other medium publication and get the publication name ?
             case PUBLIER_UN_ARTICLE_COURT:
                 builder.type(ActionType.SHORT_ARTICLE_PUBLICATION);
                 builder.context(String.format("Article : %s", activity.getComment()));
-//                builder.type(ActionType.SHORT_NEW_MEDIUM_FIRST_PUBLICATION);
-//                builder.context(String.format("Article : %s", activity.getComment()));
                 break;
             case PUBLIER_UN_ARTICLE_MOYEN:
                 builder.type(ActionType.ARTICLE_PUBLICATION);
                 builder.context(String.format("Article : %s", activity.getComment()));
-//                builder.type(ActionType.NEW_MEDIUM_FIRST_PUBLICATION);
-//                builder.context(String.format("Article : %s", activity.getComment()));
                 break;
             case PUBLIER_UN_ARTICLE_LONG:
                 builder.type(ActionType.LONG_ARTICLE_PUBLICATION);
                 builder.context(String.format("Article : %s", activity.getComment()));
-                builder.context(String.format("Article : %s", activity.getComment()));
-//                builder.type(ActionType.LONG_NEW_MEDIUM_FIRST_PUBLICATION);
-//                builder.context(String.format("Article : %s", activity.getComment()));
                 break;
             case PUBLIER_UN_LIVRE_BLANC:
                 builder.type(ActionType.WHITE_BOOK);
@@ -146,5 +145,11 @@ public class ActivityToActionMapper {
                 builder.context(String.format("No mapping found for %s", activity.getType()));
                 break;
         }
+    }
+
+    private long getActivityDuration(Activity activity) {
+        return Optional.ofNullable(activity.getDate())
+                       .orElse(LocalDateTime.MIN)
+                       .until(Optional.ofNullable(activity.getEndDate()).orElse(LocalDateTime.MAX), ChronoUnit.HOURS);
     }
 }
