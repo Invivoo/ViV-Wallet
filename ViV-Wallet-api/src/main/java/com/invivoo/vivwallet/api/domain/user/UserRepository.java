@@ -14,7 +14,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByX4bId(String x4bId);
 
-    List<User> findByExpertisesExpertise(Expertise expertise);
+    List<User> findDistinctByExpertisesExpertise(Expertise expertise);
 
     Optional<User> findFirstByRolesType(RoleType type);
 
