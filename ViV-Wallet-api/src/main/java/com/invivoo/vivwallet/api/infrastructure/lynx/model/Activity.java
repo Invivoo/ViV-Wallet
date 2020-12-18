@@ -26,6 +26,10 @@ public class Activity {
     private ActivityType type;
     @JsonProperty("act_date")
     private LocalDateTime date;
+    @JsonProperty("start_act_from")
+    private LocalDateTime startActFrom;
+    @JsonProperty("act_date_end")
+    private LocalDateTime endDate;
     @JsonProperty("value_date")
     private LocalDateTime valueDate;
     @JsonProperty("act_status")
@@ -42,8 +46,10 @@ public class Activity {
     private String others;
     @JsonProperty("opportunity")
     private String opportunity;
+    @JsonProperty("opp_label")
+    private String opportunityLabel;
     @JsonProperty("inv_entry")
     private LocalDateTime invEntry;
-    @JsonProperty("start_act_from")
-    private LocalDateTime startActFrom;
+    @JsonProperty("validity")
+    private String validity;
 }

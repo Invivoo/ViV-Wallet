@@ -16,7 +16,7 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import java.time.LocalDateTime;
 
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"lynxActivityId", "achiever_id"}))
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"lynxActivityId", "achiever_id", "type"}))
 @Entity
 @Data
 @NoArgsConstructor

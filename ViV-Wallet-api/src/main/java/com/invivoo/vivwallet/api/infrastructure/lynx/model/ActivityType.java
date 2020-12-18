@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 @Getter
 public enum ActivityType {
     COACHING_HORS_OPPORTUNITE("Coach TechFcl hors Opp"),
-    COACHING_SUR_OPPORTUNITE("Coach TechFcl sur Opp"),
+    COACHING_SUR_OPPORTUNITE("Coach TechFcl sur Opp "),
     COACHING_SUR_OPPORTUNITE_GAGNEE("Coach TechFcl sur Opp gagnée"),
 
     PRESCRIPTEUR_SUR_AO("Relaying Opp"),
