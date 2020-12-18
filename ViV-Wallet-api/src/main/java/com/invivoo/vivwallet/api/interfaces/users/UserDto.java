@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -41,8 +42,7 @@ public class UserDto {
         Optional<UserExpertise> firstActiveExpertise = Optional.ofNullable(user.getExpertises())
                                                                .flatMap(userExpertises -> userExpertises.stream()
                                                                                                         .filter(userExpertise -> userExpertise.isValid(now))
-                                                                                                        .sorted()
-                                                                                                        .findFirst());
+                                                                                                        .max(Comparator.naturalOrder()));
         firstActiveExpertise.ifPresent(activeExpertise -> builder.expertise(ExpertiseDto.fromExpertise(activeExpertise.getExpertise()))
                                                                  .status(activeExpertise.getStatus())
                                                                  .startDate(activeExpertise.getStartDate())

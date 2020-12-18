@@ -22,11 +22,10 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -39,11 +38,12 @@ public class UserExpertisesControllerTest {
     public static final User JANE_DOE = User.builder()
                                             .id(1L)
                                             .fullName("Jane Doe")
-                                            .expertises(Set.of(UserExpertise.builder()
-                                                                            .id(1L)
-                                                                            .expertise(Expertise.AGILITE_ET_CRAFT)
-                                                                            .startDate(LocalDate.of(2017, 6, 1))
-                                                                            .build()))
+                                            .expertises(Stream.of(UserExpertise.builder()
+                                                                               .id(1L)
+                                                                               .expertise(Expertise.AGILITE_ET_CRAFT)
+                                                                               .startDate(LocalDate.of(2017, 6, 1))
+                                                                               .build())
+                                                              .collect(Collectors.toCollection(HashSet::new)))
                                             .build();
 
     @Autowired
@@ -94,6 +94,4 @@ public class UserExpertisesControllerTest {
                      .andExpect(MockMvcResultMatchers.content().string(mapper.writeValueAsString(UserExpertiseDto.createFromUserExpertise(newExpertise))));
     }
 
-    public void whenPutUserExpertise_thenReturnUserExpertise() {
-    }
 }

@@ -48,8 +48,8 @@ public class UserExpertise implements Comparable<UserExpertise> {
 
     @Override
     public int compareTo(UserExpertise o) {
-        return Comparator.comparing(UserExpertise::getStartDate, Comparator.nullsLast(Comparator.reverseOrder()))
-                         .thenComparing(UserExpertise::getEndDate, Comparator.nullsLast(Comparator.reverseOrder()))
+        return Comparator.comparing(UserExpertise::getStartDate, Comparator.nullsLast(Comparator.naturalOrder()))
+                         .thenComparing(UserExpertise::getEndDate, Comparator.nullsLast(Comparator.naturalOrder()))
                          .compare(this, o);
     }
 }

@@ -32,7 +32,7 @@ public class UserService {
     }
 
     public List<User> findByExpertise(Expertise expertise) {
-        return userRepository.findByExpertisesExpertise(expertise);
+        return userRepository.findDistinctByExpertisesExpertise(expertise);
     }
 
     public Optional<User> findById(Long userId) {
@@ -71,7 +71,7 @@ public class UserService {
 
     public int computeBalance(User user) {
         int userBalanceFromActionsInVivAfterInitialBalanceDate = actionRepository.findAllByAchieverAndDateAfter(user, Optional.ofNullable(user.getVivInitialBalanceDate())
-                                                                                                                              .orElse(LocalDateTime.MIN))
+                                                                                                                              .orElse(LocalDateTime.of(2000, 1, 1, 0, 0)))
                                                                                  .stream()
                                                                                  .mapToInt(Action::getVivAmount)
                                                                                  .sum();
