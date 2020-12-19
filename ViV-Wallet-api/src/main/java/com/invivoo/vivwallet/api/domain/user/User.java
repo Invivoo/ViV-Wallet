@@ -15,10 +15,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+@Table(name = "users")
 @Entity
 @Data
 @Builder(toBuilder = true, builderClassName = "UserBuilder")
@@ -29,7 +31,6 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(unique = true)
     private String x4bId;
     @Column(unique = true)
     private String fullName;

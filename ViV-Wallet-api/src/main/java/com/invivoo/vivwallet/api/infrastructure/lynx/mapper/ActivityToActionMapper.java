@@ -38,6 +38,7 @@ public class ActivityToActionMapper {
         String owner = activity.getOwner().trim();
         owner = owner.substring(0, owner.contains("@") ? owner.indexOf("@") : owner.length());
         owner = owner.contains("Marcos Aurelio ALMEIDA DA SILVA") ? "Marcos ALMEIDA" : owner;
+        owner = owner.contains("Gustavo OLIVEIRA") ? "Gustavo OLIVEIRA" : owner;
         return owner;
     }
 
@@ -53,7 +54,6 @@ public class ActivityToActionMapper {
                 builder.type(ActionType.SUCCESSFUL_COACHING);
                 builder.context(String.format("Coaching gagnant de %s", activity.getRelatedTo()));
                 break;
-
             case PRESCRIPTEUR_SUR_AO:
                 builder.type(ActionType.RELAYING_OPPORTUNITY);
                 builder.context(String.format("Remontée d’AO gagnante : %s", activity.getComment()));
@@ -62,7 +62,6 @@ public class ActivityToActionMapper {
                 builder.type(ActionType.INFLUENCING_OPPORTUNITY);
                 builder.context(String.format("Impact sur la décision client : %s", activity.getComment()));
                 break;
-
             case EVALUATION_TECHNIQUE_OK_SUR_PROFIL:
                 builder.type(ActionType.TECHNICAL_ASSESSMENT);
                 builder.context(String.format("Évaluation de %s : candidat retenu sur profil !", activity.getRelatedTo()));
@@ -78,7 +77,7 @@ public class ActivityToActionMapper {
             case COOPTATION:
                 if ("OK".equalsIgnoreCase(activity.getValidity())) {
                     builder.type(ActionType.COOPTATION);
-                }else{
+                } else {
                     builder.type(ActionType.COOPTATION_NOK);
                 }
                 builder.context(String.format("Cooptation de %s", activity.getRelatedTo()));

@@ -16,9 +16,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import java.time.LocalDate;
 import java.util.Comparator;
 
+@Table(name = "user_expertises")
 @Entity
 @Data
 @Builder(toBuilder = true)
