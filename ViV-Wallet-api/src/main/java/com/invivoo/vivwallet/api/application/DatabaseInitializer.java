@@ -16,6 +16,7 @@ import com.invivoo.vivwallet.api.infrastructure.lynx.LynxConnectorConfiguration;
 import com.invivoo.vivwallet.api.infrastructure.lynx.model.Activities;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
@@ -31,13 +32,15 @@ import java.util.stream.Collectors;
 @Component
 public class DatabaseInitializer implements CommandLineRunner {
 
+    private final Environment env;
     private final ObjectMapper objectMapper;
     private final LynxConnector lynxConnector;
     private final ActionService actionService;
     private final UserService userService;
     private final PaymentService paymentService;
 
-    public DatabaseInitializer(@Qualifier(LynxConnectorConfiguration.LYNX_CONNECTOR_OBJECT_MAPPER) ObjectMapper objectMapper, LynxConnector lynxConnector, ActionService actionService, UserService userService, PaymentService paymentService) {
+    public DatabaseInitializer(Environment env, @Qualifier(LynxConnectorConfiguration.LYNX_CONNECTOR_OBJECT_MAPPER) ObjectMapper objectMapper, LynxConnector lynxConnector, ActionService actionService, UserService userService, PaymentService paymentService) {
+        this.env = env;
         this.objectMapper = objectMapper;
         this.lynxConnector = lynxConnector;
         this.actionService = actionService;
@@ -47,6 +50,9 @@ public class DatabaseInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        if (!isInMemoryDatabase()) {
+            return;
+        }
         User theophileMontgomery = User.builder()
                                        .fullName("Théophile MONTGOMERY")
                                        .id(1L)
@@ -61,10 +67,10 @@ public class DatabaseInitializer implements CommandLineRunner {
                                        ))
                                        .build();
         userService.saveAll(Arrays.asList(theophileMontgomery,
-                                             User.builder()
-                                                 .fullName("Collaborateur Invivoo")
-                                                 .id(2L)
-                                                 .build()));
+                                          User.builder()
+                                              .fullName("Collaborateur Invivoo")
+                                              .id(2L)
+                                              .build()));
 
         String lynxResponse = readFromInputStream(getClass().getResourceAsStream(String.format("/%s", "lynx-dev-data.json")));
         Activities activities = objectMapper.readValue(lynxResponse, Activities.class);
@@ -97,6 +103,10 @@ public class DatabaseInitializer implements CommandLineRunner {
             }
         }
         return resultStringBuilder.toString();
+    }
+
+    private boolean isInMemoryDatabase() {
+        return "jdbc:h2:mem:testdb".equals(env.getProperty("spring.datasource.url"));
     }
 
 }

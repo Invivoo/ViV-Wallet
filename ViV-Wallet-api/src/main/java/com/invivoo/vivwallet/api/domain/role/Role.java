@@ -20,7 +20,7 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import java.util.Objects;
 
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "type"}))
+@Table(name = "roles", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "type"}))
 @Entity
 @Data
 @Builder
