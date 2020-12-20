@@ -14,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -30,7 +31,7 @@ public class LynxConnector {
     private String vivApiUrl;
     private final ActivityToActionMapper activityToActionMapper;
 
-    public LynxConnector(@Qualifier(LYNX_CONNECTOR_REST_TEMPLATE) RestTemplate restTemplate, @Value("lynx.vivApiUrl") String vivApiUrl, ActivityToActionMapper activityToActionMapper) {
+    public LynxConnector(@Qualifier(LYNX_CONNECTOR_REST_TEMPLATE) RestTemplate restTemplate, @Value("${lynx.vivApiUrl}") String vivApiUrl, ActivityToActionMapper activityToActionMapper) {
         this.restTemplate = restTemplate;
         this.vivApiUrl = vivApiUrl;
         this.activityToActionMapper = activityToActionMapper;
@@ -50,6 +51,8 @@ public class LynxConnector {
                                                  .map(activityToActionMapper::convert)
                                                  .filter(Optional::isPresent)
                                                  .map(Optional::get)
+                                                 .filter(a -> a.getDate().isAfter(Optional.ofNullable(a.getAchiever().getVivInitialBalanceDate())
+                                                                                          .orElse(LocalDateTime.MIN)))
                                                  .collect(Collectors.toList());
         actions.forEach(action -> setVivFromRelatedActivities(action, activitiesWithType));
         return actions;
@@ -57,7 +60,6 @@ public class LynxConnector {
 
     protected List<Activity> findActivities() {
         UriComponents lynxActionsUri = UriComponentsBuilder.fromHttpUrl(vivApiUrl)
-                                                           .queryParam("name", "viv")
                                                            .build();
         ResponseEntity<Activities> response = restTemplate.getForEntity(lynxActionsUri.toString(), Activities.class);
         if (HttpStatus.OK != response.getStatusCode()) {
