@@ -27,10 +27,10 @@
                     </div>
                     <actions-block v-bind:actions="unpaidActions" />
                     <div class="buttons">
-                        <button class="primary-button" :disabled="!hasUnpaidActions" v-on:click="AddPayment">
+                        <button class="primary-button" :disabled="!hasBalanceToPay" v-on:click="AddPayment">
                             Valider
                         </button>
-                        <router-link class="secondary-button" to="/wallet" tag="button">Cancel</router-link>
+                        <router-link class="secondary-button" v-bind:to="`/wallets/${id}`" tag="button">Cancel</router-link>
                     </div>
                 </form>
             </section>
@@ -39,17 +39,17 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
-import { User } from "../models/user";
-import { UsersService } from "@/services/users";
-import { PaymentPost } from "../models/payment";
-import { WalletService } from "../services/wallet";
-import { Action } from "@/models/action";
-import BalanceCard from "../components/BalanceCard.vue";
-import Illustration from "../components/Illustration.vue";
-import ActionsBlock from "../components/ActionsBlock.vue";
-import Loading from "../components/Loading.vue";
-import { ConsultantStatus, toString } from "../models/consultant";
+import {Component, Vue} from 'vue-property-decorator';
+import {User} from '../models/user';
+import {UsersService} from '@/services/users';
+import {PaymentPost} from '../models/payment';
+import {WalletService} from '../services/wallet';
+import {Action} from '@/models/action';
+import BalanceCard from '../components/BalanceCard.vue';
+import Illustration from '../components/Illustration.vue';
+import ActionsBlock from '../components/ActionsBlock.vue';
+import Loading from '../components/Loading.vue';
+import {ConsultantStatus, toString} from '../models/consultant';
 
 const PaymentProps = Vue.extend({
     props: {
@@ -87,8 +87,8 @@ export default class Payment extends PaymentProps {
         return this.coeff * this.viv;
     }
 
-    get hasUnpaidActions(): boolean {
-        return this.unpaidActions && this.unpaidActions.length > 0;
+    get hasBalanceToPay(): boolean {
+        return this.viv > 0;
     }
 
     async mounted() {
@@ -98,10 +98,7 @@ export default class Payment extends PaymentProps {
                 this.walletService.getUserBalance(this.id),
                 this.walletService.getUserUnpaidActions(this.id),
             ]);
-
-            this.unpaidActions.forEach((action) => {
-                this.viv += action.payment;
-            });
+            this.viv += this.balance;
         } catch (ex) {
             this.errored = true;
         } finally {
@@ -111,14 +108,14 @@ export default class Payment extends PaymentProps {
     async AddPayment() {
         try {
             this.loading = true;
-            if (this.hasUnpaidActions) {
+            if (this.hasBalanceToPay) {
                 let payment: PaymentPost = {
                     receiverId: this.id,
                     date: this.date,
                     actionIds: this.unpaidActions.map(({ id }) => id),
                 };
                 await this.walletService.saveUserPayment(payment);
-                this.$router.push({ path: "/wallet" });
+                this.$router.push({ path: `/wallets/${this.id}` });
             }
         } catch (ex) {
             this.errored = true;

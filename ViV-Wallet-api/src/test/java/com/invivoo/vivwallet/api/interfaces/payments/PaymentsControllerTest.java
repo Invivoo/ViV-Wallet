@@ -122,6 +122,7 @@ public class PaymentsControllerTest {
         when(userService.findById(PAYMENT_REQUEST.getReceiverId())).thenReturn(Optional.of(RECEIVER));
         when(securityService.getConnectedUser()).thenReturn(Optional.of(THEOPHILE_MONTGOMERY));
         when(actionService.findAllById(ACTIONS.stream().map(Action::getId).collect(Collectors.toList()))).thenReturn(ACTIONS);
+        when(userService.computeBalance(RECEIVER)).thenReturn(PAYMENT_1.getVivAmount());
         when(paymentService.save(any(Payment.class))).thenReturn(PAYMENT_1);
 
         // when
