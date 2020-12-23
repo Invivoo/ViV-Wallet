@@ -45,20 +45,19 @@ public class PaymentsController {
     @PostMapping
     @PreAuthorize("hasAnyAuthority('COMPANY_ADMINISTRATOR')")
     public ResponseEntity<PaymentDto> postPayment(@RequestBody PaymentRequest paymentRequest) {
-        Optional<User> receiver = userService.findById(paymentRequest.getReceiverId());
+        Optional<User> receiverOpt = userService.findById(paymentRequest.getReceiverId());
         List<Action> actions = actionService.findAllById(paymentRequest.getActionIds());
         Optional<User> connectedUser = securityService.getConnectedUser();
-        if (receiver.isEmpty() || actions.isEmpty() || connectedUser.isEmpty()) {
+        if (receiverOpt.isEmpty() || actions.isEmpty() || connectedUser.isEmpty()) {
             return ResponseEntity.badRequest()
                                  .build();
         }
+        User receiver = receiverOpt.get();
         Payment payment = Payment.builder()
                                  .date(paymentRequest.getDate())
-                                 .receiver(receiver.get())
+                                 .receiver(receiver)
                                  .creator(connectedUser.get())
-                                 .vivAmount(actions.stream()
-                                                   .mapToInt(Action::getVivAmount)
-                                                   .sum())
+                                 .vivAmount(userService.computeBalance(receiver))
                                  .actions(actions)
                                  .build();
         Payment savedPayment = paymentService.save(payment);
