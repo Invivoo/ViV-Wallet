@@ -110,9 +110,10 @@ export default class ActionsBlock extends Vue {
     color: $gray-600;
     font-weight: 400;
     margin-top: $m-2;
-    white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
 }
 
 .type {
