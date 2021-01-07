@@ -28,7 +28,7 @@
                     </td>
                     <td>
                         <div>
-                            <div class="type">{{ action.type }} - {{ action.expertise }}</div>
+                            <div class="type">{{ action.type }}</div>
                             <div class="comment" v-bind:title="action.comment">{{ action.comment }}</div>
                         </div>
                     </td>
@@ -131,9 +131,10 @@ export default class ActionsHistory extends Vue {
     color: $gray-600;
     font-weight: 400;
     margin-top: $m-2;
-    white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
 }
 
 .type,
