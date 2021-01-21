@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 {{$labelData := dict "Chart" .Chart "Release" .Release "Name" .Values.ingress.name }}
 metadata:
@@ -17,6 +17,9 @@ spec:
     http:
       paths:
       - path: /
+        pathType: ImplementationSpecific
         backend:
-          serviceName: {{ .Release.Name }}-{{ .Values.vivwallet.name }}-svc
-          servicePort: {{ .Values.vivwallet.service.externalPort }}
+          service:
+            name: {{ .Release.Name }}-{{ .Values.vivwallet.name }}-svc
+            port:
+              number: {{ .Values.vivwallet.service.externalPort }}
