@@ -59,4 +59,8 @@ public class PaymentService {
     public List<Payment> saveAll(List<Payment> payments) {
         return paymentRepository.saveAll(payments);
     }
+
+    public void deleteAll() {
+        paymentRepository.deleteAll();
+    }
 }

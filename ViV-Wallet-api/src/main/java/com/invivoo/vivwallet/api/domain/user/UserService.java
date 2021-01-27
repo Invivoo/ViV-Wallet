@@ -69,6 +69,10 @@ public class UserService {
         userRepository.delete(user);
     }
 
+    public void deleteAll() {
+        userRepository.deleteAll();
+    }
+
     public int computeBalance(User user) {
         int userBalanceFromActionsInVivAfterInitialBalanceDate = actionRepository.findAllByAchieverAndDateAfter(user, Optional.ofNullable(user.getVivInitialBalanceDate())
                                                                                                                               .orElse(LocalDateTime.of(2000, 1, 1, 0, 0)))

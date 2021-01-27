@@ -1,6 +1,9 @@
 package com.invivoo.vivwallet.api.infrastructure.lynx;
 
 import com.invivoo.vivwallet.api.domain.action.Action;
+import com.invivoo.vivwallet.api.domain.action.ActionType;
+import com.invivoo.vivwallet.api.domain.role.Role;
+import com.invivoo.vivwallet.api.domain.role.RoleType;
 import com.invivoo.vivwallet.api.infrastructure.lynx.mapper.ActivityToActionMapper;
 import com.invivoo.vivwallet.api.infrastructure.lynx.model.Activities;
 import com.invivoo.vivwallet.api.infrastructure.lynx.model.Activity;
@@ -15,6 +18,7 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -26,7 +30,11 @@ import static com.invivoo.vivwallet.api.infrastructure.lynx.LynxConnectorConfigu
 @Service
 public class LynxConnector {
 
+    public static final List<Integer> WORKING_HOURS = Arrays.asList(9, 10, 11, 14, 15, 16, 17);
+
     public static final String ACTIVITY_HELD_STATUS = "Held";
+    public static final String ACTIVITY_IS_OK = "OK";
+    public static final List<ActionType> ACTION_TYPES_WITH_PAYMENT_DEPENDING_ON_ROLE_AND_HOUR = Arrays.asList(ActionType.TECHNICAL_ASSESSMENT, ActionType.COACHING);
     private final RestTemplate restTemplate;
     private String vivApiUrl;
     private final ActivityToActionMapper activityToActionMapper;
@@ -47,7 +55,7 @@ public class LynxConnector {
                                                       .filter(activity -> Objects.nonNull(activity.getType()) && StringUtils.isNotBlank(activity.getOwner())) // todo find why activity do not have type
                                                       .collect(Collectors.toList());
         List<Action> actions = activitiesWithType.stream()
-                                                 .filter(activity -> ACTIVITY_HELD_STATUS.equals(activity.getStatus())) //todo validate this filter
+                                                 .filter(activity -> ACTIVITY_HELD_STATUS.equals(activity.getStatus()) && ACTIVITY_IS_OK.equals(activity.getValidity()))
                                                  .map(activityToActionMapper::convert)
                                                  .filter(Optional::isPresent)
                                                  .map(Optional::get)
@@ -71,6 +79,11 @@ public class LynxConnector {
     }
 
     private void setVivFromRelatedActivities(Action action, List<Activity> activities) {
+        if (isNotAnActionDoneDuringWorkingHoursToPay(action)) {
+            action.setVivAmount(0);
+            action.setContext(String.format("Durant les heures de travail - %s", action.getContext()));
+            return;
+        }
         if (!action.getType().isSharedByAchievers()) {
             action.setVivAmount((action.getType().getValue()));
             return;
@@ -79,5 +92,15 @@ public class LynxConnector {
                                     .filter(activity -> activity.getId().equals(action.getLynxActivityId()))
                                     .count();
         action.setVivAmount(action.getType().getValue() / count);
+    }
+
+    private boolean isNotAnActionDoneDuringWorkingHoursToPay(Action action) {
+        return WORKING_HOURS.contains(action.getDate().getHour())
+               && ACTION_TYPES_WITH_PAYMENT_DEPENDING_ON_ROLE_AND_HOUR.contains(action.getType())
+               && !action.getAchiever()
+                         .getRoles()
+                         .stream()
+                         .map(Role::getType)
+                         .allMatch(RoleType.CONSULTANT::equals);
     }
 }

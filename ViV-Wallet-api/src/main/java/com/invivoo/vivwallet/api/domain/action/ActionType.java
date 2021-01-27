@@ -31,6 +31,9 @@ public enum ActionType {
     WHITE_BOOK("Livre blanc", 100, Constants.IS_SHARED_BY_MULTIPLE_ACHIEVERS),
     CHEAT_SHEET("Cheat Sheet", 10, Constants.IS_SHARED_BY_MULTIPLE_ACHIEVERS),
 
+    AUDIT_CIR_PHASE_1("Audit CIR - phase 1", 20, Constants.IS_NOT_SHARED_BY_MULTIPLE_ACHIEVERS),
+    AUDIT_CIR_PHASE_2("Audit CIR - phase 2", 30, Constants.IS_NOT_SHARED_BY_MULTIPLE_ACHIEVERS),
+
     NO_MAPPING_FOUND("No mapping found", 0, Constants.IS_NOT_SHARED_BY_MULTIPLE_ACHIEVERS);
 
     private final String name;

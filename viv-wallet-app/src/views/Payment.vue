@@ -30,7 +30,9 @@
                         <button class="primary-button" :disabled="!hasBalanceToPay" v-on:click="AddPayment">
                             Valider
                         </button>
-                        <router-link class="secondary-button" v-bind:to="`/wallets/${id}`" tag="button">Cancel</router-link>
+                        <router-link class="secondary-button" v-bind:to="`/wallets/${id}`" tag="button"
+                            >Cancel</router-link
+                        >
                     </div>
                 </form>
             </section>
