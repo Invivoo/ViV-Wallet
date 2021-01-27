@@ -22,15 +22,16 @@ public class ActivityToActionMapper {
 
     public Optional<Action> convert(Activity activity) {
         String owner = getCleanedOwnerFullName(activity);
-        User user = userService.findByFullName(owner)
-                               .orElseGet(() -> userService.save(User.builder()
-                                                                     .fullName(owner)
-                                                                     .build()));
+        Optional<User> achieverOpt = userService.findByFullName(owner);
+        if (achieverOpt.isEmpty()) {
+            return Optional.empty();
+        }
+        User user = achieverOpt.get();
         Action.ActionBuilder builder = Action.builder()
-                                             .date(activity.getDate()) // todo actDate == valueDate ?
+                                             .date(activity.getDate())
                                              .lynxActivityId(activity.getId())
                                              .achiever(user);
-        setActivityTypeContext(activity, builder);
+        setActivityTypeContext(activity, user, builder);
         return Optional.of(builder.build());
     }
 
@@ -42,7 +43,7 @@ public class ActivityToActionMapper {
         return owner;
     }
 
-    private void setActivityTypeContext(Activity activity, Action.ActionBuilder builder) {
+    private void setActivityTypeContext(Activity activity, User user, Action.ActionBuilder builder) {
         long activityDuration = getActivityDuration(activity);
         switch (activity.getType()) {
             case COACHING_HORS_OPPORTUNITE:
@@ -138,6 +139,14 @@ public class ActivityToActionMapper {
             case PUBLIER_UN_CHEAT_SHEET:
                 builder.type(ActionType.CHEAT_SHEET);
                 builder.context(String.format("Cheat Sheet : %s", activity.getComment()));
+                break;
+            case AUDIT_CIR_PHASE_1:
+                builder.type(ActionType.AUDIT_CIR_PHASE_1);
+                builder.context(String.format("Audit CIR - phase 1 : %s\nRéponse à un questionnaire et éventuellement entretien téléphonique pour valider la compréhension des questions", activity.getComment()));
+                break;
+            case AUDIT_CIR_PHASE_2:
+                builder.type(ActionType.AUDIT_CIR_PHASE_2);
+                builder.context(String.format("Audit CIR - phase 2 : %s\nRelecture de la partie concernant l’intervenant sur le rapport technique", activity.getComment()));
                 break;
             default:
                 builder.type(ActionType.NO_MAPPING_FOUND);

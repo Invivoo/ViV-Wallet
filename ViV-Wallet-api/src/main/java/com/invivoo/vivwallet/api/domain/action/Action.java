@@ -5,6 +5,7 @@ import com.invivoo.vivwallet.api.domain.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
@@ -33,10 +34,13 @@ public class Action {
     private int vivAmount;
     private String context;
     @ManyToOne
+    @EqualsAndHashCode.Exclude
     private User achiever;
+    @EqualsAndHashCode.Exclude
     @ManyToOne
     private User creator;
     @ManyToOne
+    @EqualsAndHashCode.Exclude
     private Payment payment;
     private boolean isDeleted;
 }

@@ -4,6 +4,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 public enum RoleType {
+    SOFTWARE,
     CONSULTANT,
     EXPERTISE_MANAGER,
     SENIOR_MANAGER,

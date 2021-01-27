@@ -46,9 +46,12 @@ public class PaymentsController {
     @PreAuthorize("hasAnyAuthority('COMPANY_ADMINISTRATOR')")
     public ResponseEntity<PaymentDto> postPayment(@RequestBody PaymentRequest paymentRequest) {
         Optional<User> receiverOpt = userService.findById(paymentRequest.getReceiverId());
-        List<Action> actions = actionService.findAllById(paymentRequest.getActionIds());
+        List<Action> actionsToPay = actionService.findAllById(paymentRequest.getActionIds())
+                                                 .stream()
+                                                 .filter(action -> action.getVivAmount() > 0)
+                                                 .collect(Collectors.toList());
         Optional<User> connectedUser = securityService.getConnectedUser();
-        if (receiverOpt.isEmpty() || actions.isEmpty() || connectedUser.isEmpty()) {
+        if (receiverOpt.isEmpty() || actionsToPay.isEmpty() || connectedUser.isEmpty()) {
             return ResponseEntity.badRequest()
                                  .build();
         }
@@ -58,7 +61,7 @@ public class PaymentsController {
                                  .receiver(receiver)
                                  .creator(connectedUser.get())
                                  .vivAmount(userService.computeBalance(receiver))
-                                 .actions(actions)
+                                 .actions(actionsToPay)
                                  .build();
         Payment savedPayment = paymentService.save(payment);
         return ResponseEntity.created(getLocation(savedPayment))
@@ -74,6 +77,5 @@ public class PaymentsController {
     private URI getLocation(Payment payment) {
         return URI.create(String.format("%s/%s", API_V_1_PAYMENTS, payment.getId()));
     }
-
 
 }

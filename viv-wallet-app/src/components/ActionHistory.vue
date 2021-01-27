@@ -53,10 +53,10 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Watch } from "vue-property-decorator";
-import { ActionForHistory, PaymentStatus } from "../models/action";
-import StatusBadge from "../components/StatusBadge.vue";
-import FilterInput from "../components/FilterInput.vue";
+import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
+import {ActionForHistory, PaymentStatus} from '../models/action';
+import StatusBadge from '../components/StatusBadge.vue';
+import FilterInput from '../components/FilterInput.vue';
 
 @Component({
     name: "action-history",
@@ -74,10 +74,10 @@ export default class ActionsHistory extends Vue {
     formatPaymentStatus(status: PaymentStatus) {
         switch (status) {
             case PaymentStatus.Paid:
-                return "Payé";
+                return "Débloqué";
             case PaymentStatus.Unpaid:
             default:
-                return "Non payé";
+                return "Non débloqué";
         }
     }
 

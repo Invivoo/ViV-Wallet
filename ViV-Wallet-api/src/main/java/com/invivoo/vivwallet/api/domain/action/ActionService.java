@@ -27,7 +27,7 @@ public class ActionService {
     }
 
     public List<Action> findAllByOrderByDateDesc() {
-        return actionRepository.findAllByOrderByDateDesc();
+        return actionRepository.findAllByIsDeletedFalseOrderByDateDesc();
     }
 
     public List<Action> findAllByAchieverOrderByDateDesc(User achiever) {
@@ -52,6 +52,10 @@ public class ActionService {
     public List<Action> updateFromLynxActivities(Activities activities) {
         List<Action> actionsFromLynx = lynxConnector.getActionsFromActivities(activities.getActivities());
         return updateActions(actionsFromLynx);
+    }
+
+    public void deleteAll() {
+        actionRepository.deleteAll();
     }
 
     private List<Action> updateActions(List<Action> actionsFromLynx) {

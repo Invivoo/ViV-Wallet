@@ -48,10 +48,9 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from "vue-property-decorator";
-import { Action, PaymentStatus } from "../models/action";
-import StatusBadge from "../components/StatusBadge.vue";
-import { Role } from "../models/role";
+import {Component, Prop, Vue} from 'vue-property-decorator';
+import {Action, PaymentStatus} from '../models/action';
+import StatusBadge from '../components/StatusBadge.vue';
 
 @Component({
     name: "actions-block",
@@ -67,10 +66,10 @@ export default class ActionsBlock extends Vue {
     formatPaymentStatus(status: PaymentStatus) {
         switch (status) {
             case PaymentStatus.Paid:
-                return "Payé";
+                return "Débloqué";
             case PaymentStatus.Unpaid:
             default:
-                return "Non payé";
+                return "Non débloqué";
         }
     }
 

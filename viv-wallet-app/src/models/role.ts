@@ -3,10 +3,11 @@ export enum Role {
     SENIOR_MANAGER = "SENIOR_MANAGER",
     COMPANY_ADMINISTRATOR = "COMPANY_ADMINISTRATOR",
     CONSULTANT = "CONSULTANT",
+    SOFTWARE = "SOFTWARE",
 }
 
-export const myWalletRoles = [Role.EXPERTISE_MANAGER, Role.CONSULTANT, Role.SENIOR_MANAGER];
+export const myWalletRoles = [Role.SOFTWARE, Role.CONSULTANT, Role.EXPERTISE_MANAGER, Role.SENIOR_MANAGER];
 export const expertisesRoles = [Role.EXPERTISE_MANAGER, Role.SENIOR_MANAGER];
-export const walletsRoles = [Role.EXPERTISE_MANAGER, Role.COMPANY_ADMINISTRATOR, Role.SENIOR_MANAGER];
-export const historyRoles = [Role.EXPERTISE_MANAGER, Role.COMPANY_ADMINISTRATOR, Role.SENIOR_MANAGER];
+export const walletsRoles = [Role.EXPERTISE_MANAGER, Role.SENIOR_MANAGER, Role.COMPANY_ADMINISTRATOR];
+export const historyRoles = [Role.EXPERTISE_MANAGER, Role.SENIOR_MANAGER, Role.COMPANY_ADMINISTRATOR];
 export const adminOnly = [Role.COMPANY_ADMINISTRATOR];
