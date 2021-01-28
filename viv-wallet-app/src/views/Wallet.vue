@@ -1,7 +1,7 @@
 <template>
     <div class="main">
         <loading v-bind:loading="loading" v-bind:errored="errored">
-            <check-roles v-bind:roles="(myWalletRoles, adminOnly)">
+            <check-roles v-bind:roles="myWalletRoles">
                 <div class="header">
                     <balance-card
                         v-bind:fullName="user.fullName"
@@ -30,20 +30,20 @@
 </template>
 
 <script lang="ts">
-import {Component, Vue, Watch} from 'vue-property-decorator';
-import {Action} from '../models/action';
-import BalanceCard from '../components/BalanceCard.vue';
-import Illustration from '../components/Illustration.vue';
-import ActionsBlock from '../components/ActionsBlock.vue';
-import PaymentHistoryBlock from '../components/PaymentHistoryBlock.vue';
-import {Payment} from '../models/payment';
-import {WalletService} from '../services/wallet';
-import Loading from '../components/Loading.vue';
-import {adminOnly, myWalletRoles, Role} from '../models/role';
-import {LoginService} from '../services/login';
-import {UsersService} from '../services/users';
-import {ConsultantStatus, toString} from '../models/consultant';
-import CheckRoles from '../components/CheckRoles.vue';
+import { Component, Vue, Watch } from "vue-property-decorator";
+import { Action } from "../models/action";
+import BalanceCard from "../components/BalanceCard.vue";
+import Illustration from "../components/Illustration.vue";
+import ActionsBlock from "../components/ActionsBlock.vue";
+import PaymentHistoryBlock from "../components/PaymentHistoryBlock.vue";
+import { Payment } from "../models/payment";
+import { WalletService } from "../services/wallet";
+import Loading from "../components/Loading.vue";
+import { adminOnly, myWalletRoles, Role } from "../models/role";
+import { LoginService } from "../services/login";
+import { UsersService } from "../services/users";
+import { ConsultantStatus, toString } from "../models/consultant";
+import CheckRoles from "../components/CheckRoles.vue";
 
 @Component({
     name: "wallet",
