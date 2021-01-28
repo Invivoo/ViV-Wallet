@@ -15,16 +15,16 @@ export interface Authorizations {
 }
 
 const getCurrentToken = () => {
-    return process.env.NODE_ENV === "production" ? getToken() : process.env.VUE_APP_DEV_JWT;
+    return getToken();
 };
 
 export class LoginService {
-    private decodedToken: DecodedJwtTokenContent;
+    private decodedToken?: DecodedJwtTokenContent;
     private authorizations: Authorizations;
 
     constructor() {
         const token = getCurrentToken();
-        this.decodedToken = token && jwt_decode<DecodedJwtTokenContent>(token);
+        this.decodedToken = (token && jwt_decode<DecodedJwtTokenContent>(token)) || undefined;
         this.authorizations = (this.decodedToken &&
             this.decodedToken["viv-wallet"] &&
             JSON.parse(this.decodedToken["viv-wallet"])) as Authorizations;
@@ -39,7 +39,7 @@ export class LoginService {
     }
 
     getUserFullName(): string {
-        return this.decodedToken.user;
+        return this.decodedToken?.user || "";
     }
 
     getJwtToken(): string {

@@ -6,7 +6,13 @@ export enum Role {
     SOFTWARE = "SOFTWARE",
 }
 
-export const myWalletRoles = [Role.SOFTWARE, Role.CONSULTANT, Role.EXPERTISE_MANAGER, Role.SENIOR_MANAGER];
+export const myWalletRoles = [
+    Role.SOFTWARE,
+    Role.CONSULTANT,
+    Role.EXPERTISE_MANAGER,
+    Role.SENIOR_MANAGER,
+    Role.COMPANY_ADMINISTRATOR,
+];
 export const expertisesRoles = [Role.EXPERTISE_MANAGER, Role.SENIOR_MANAGER];
 export const walletsRoles = [Role.EXPERTISE_MANAGER, Role.SENIOR_MANAGER, Role.COMPANY_ADMINISTRATOR];
 export const historyRoles = [Role.EXPERTISE_MANAGER, Role.SENIOR_MANAGER, Role.COMPANY_ADMINISTRATOR];
