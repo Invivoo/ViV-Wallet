@@ -5,8 +5,9 @@ import com.invivoo.vivwallet.api.domain.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.apache.commons.lang3.builder.HashCodeExclude;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -31,7 +32,8 @@ public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @HashCodeExclude
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
     @Enumerated(EnumType.STRING)

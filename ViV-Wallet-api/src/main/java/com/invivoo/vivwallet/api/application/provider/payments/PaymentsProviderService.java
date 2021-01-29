@@ -93,6 +93,7 @@ public class PaymentsProviderService {
                                                 .filter(a -> ActionType.NO_MAPPING_FOUND != a.getType())
                                                 .filter(a -> a.getPayment() == null)
                                                 .filter(a -> a.getDate().toLocalDate().isBefore(payment.getDate()))
+                                                .filter(a -> a.getVivAmount() > 0)
                                                 .collect(Collectors.toList());
             for (Action unpaidAction : unpaidActions) {
                 balance += unpaidAction.getVivAmount();

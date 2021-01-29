@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -33,14 +34,17 @@ public class Action {
     private Long lynxActivityId;
     private int vivAmount;
     private String context;
-    @ManyToOne
+    @ToString.Exclude
     @EqualsAndHashCode.Exclude
+    @ManyToOne
     private User achiever;
+    @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @ManyToOne
     private User creator;
-    @ManyToOne
+    @ToString.Exclude
     @EqualsAndHashCode.Exclude
+    @ManyToOne
     private Payment payment;
     private boolean isDeleted;
 }

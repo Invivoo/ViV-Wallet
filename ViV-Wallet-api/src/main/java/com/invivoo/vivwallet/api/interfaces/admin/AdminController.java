@@ -99,8 +99,8 @@ public class AdminController {
 
     @PostMapping("/cleanData")
     public ResponseEntity<Boolean> cleanData(){
-        paymentService.deleteAll();
         actionService.deleteAll();
+        paymentService.deleteAll();
         userService.deleteAll();
         return ResponseEntity.ok(true);
     }

@@ -72,6 +72,6 @@ public class ActionService {
     }
 
     private String getActionUniqueKey(Action a) {
-        return a.getLynxActivityId().toString() + "_" + a.getAchiever().getId().toString();
+        return a.getLynxActivityId().toString() + "_" + a.getType() + a.getAchiever().getId().toString();
     }
 }
