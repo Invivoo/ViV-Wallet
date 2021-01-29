@@ -8,7 +8,8 @@ public enum RoleType {
     CONSULTANT,
     EXPERTISE_MANAGER,
     SENIOR_MANAGER,
-    COMPANY_ADMINISTRATOR;
+    COMPANY_ADMINISTRATOR,
+    API_USER;
 
     public static Optional<RoleType> forName(String name) {
         return Stream.of(RoleType.values())

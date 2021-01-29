@@ -1,5 +1,7 @@
 app:
   url: http://localhost:4200
+api:
+  key: DEV_API_KEY
 spring:
   datasource:
     url: jdbc:h2:mem:testdb

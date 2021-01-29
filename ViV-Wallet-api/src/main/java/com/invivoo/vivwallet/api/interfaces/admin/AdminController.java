@@ -17,6 +17,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,6 +36,7 @@ import java.util.stream.IntStream;
 // /!\ Must be deleted after UAT /!\
 @RestController
 @RequestMapping(AdminController.API_V_1_ADMIN)
+@PreAuthorize("hasAnyAuthority('API_USER')")
 @Deprecated
 public class AdminController {
 

@@ -2,6 +2,7 @@ package com.invivoo.vivwallet.api.application.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.invivoo.vivwallet.api.interfaces.authorizations.AuthorizationsController;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -15,10 +16,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     public static final String API = "api";
 
+    private final String apiKey;
     private final JWTTokenProvider jwtTokenProvider;
     private final ObjectMapper objectMapper;
 
-    public SecurityConfig(JWTTokenProvider jwtTokenProvider, ObjectMapper objectMapper) {
+    public SecurityConfig(@Value("${api.key}") String apiKey, JWTTokenProvider jwtTokenProvider, ObjectMapper objectMapper) {
+        this.apiKey = apiKey;
         this.jwtTokenProvider = jwtTokenProvider;
         this.objectMapper = objectMapper;
     }
@@ -36,6 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers(AuthorizationsController.API_V_1_AUTH).permitAll();
 
         // Add our custom JWT security filter
+        http.addFilterBefore(new ApiKeyAuthenticationFilter(apiKey), UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(new JWTAuthenticationFilter(jwtTokenProvider, objectMapper), UsernamePasswordAuthenticationFilter.class);
 
     }
