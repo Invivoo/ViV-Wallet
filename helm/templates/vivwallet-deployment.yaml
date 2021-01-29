@@ -23,12 +23,16 @@ spec:
                 value: "kube-dns.kube-system"
               - name: X4BAuthPublicKeyUrl
                 value: {{ .Values.global.x4bAuthPublicKeyUrl }}
+              - name: LynxApiUrl
+                value: {{ .Values.global.lynxApiUrl }}
               - name: SqlServerUrl
                 value: {{ .Values.global.sqlServerUrl }}
               - name: SqlServerUsername
                 value: {{ .Values.global.sqlServerUsername }}
               - name: SqlServerPassword
                 value: {{ .Values.global.sqlServerPassword }}
+              - name: ApiKey
+                value : {{ .Values.global.apiKey }}
               {{- include "resources.large" . | nindent 14 }}
               imagePullPolicy: Always
               ports:

@@ -1,0 +1,23 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+    name: {{ .Release.Name }}-lynxSynchronization
+spec:
+  schedule: {{ .Values.lynxSynchronization.cronExpression | quote }}
+  concurrencyPolicy: Forbid
+  suspend: {{ .Values.lynxSynchronization.suspend }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: {{ .Release.Name }}-lynxSynchronization-cronjob
+              image: {{ .Values.lynxSynchronization.image }}
+              command:
+              - "/bin/sh"
+              - "-ec"
+              - |
+                echo "Starting Lynx Synchronization"
+                curl --fail -s -X POST "http://{{ .Release.Name }}-{{ .Values.vivwallet.name }}-svc:{{ .Values.vivwallet.service.externalPort }}/api/v1/admin/updateActionsFromLynxActivities" -H "Authorization: ApiKey {{ .Values.global.apiKey }}"
+                echo "Lynx Synchronization Complete"
+          restartPolicy: Never

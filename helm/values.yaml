@@ -7,6 +7,8 @@ global:
     clusterSpecificDnszone: "496a8aa9ae8c48329209.northeurope.aksapp.io"
     vivwalletSpecificDnszone: "vivwallet.test.com"
     x4bAuthPublicKeyUrl: "Public Key Url"
+    lynxApiUrl: "Lynx Api Url"
+    apiKey: "YOUR API KEY"
     useLocalhost: false
     traceEnabled: true
     prometheusCollectEnabled: false
@@ -56,3 +58,8 @@ ingress:
     class: addon-http-application-routing
     sslredirect: false
     tls: false
+
+lynxSynchronization:
+    image: curlimages/curl:7.74.0
+    suspend: true
+    cronExpression: "0 0 * * *"
