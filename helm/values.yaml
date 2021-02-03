@@ -62,4 +62,4 @@ ingress:
 lynxSynchronization:
     image: curlimages/curl:7.74.0
     suspend: true
-    cronExpression: "0 0 * * *"
+    cronExpression: "@hourly"
