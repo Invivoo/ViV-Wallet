@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Optional;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(AuthorizationsController.class)
@@ -46,8 +47,8 @@ public class AuthorizationsControllerTest {
         Mockito.when(decodedJWT.getClaim("user")).thenReturn(userClaim);
 
         Mockito.when(jwtTokenProvider.verify("jwt")).thenReturn(decodedJWT);
-        Mockito.when(userService.findByX4bIdOrCreateIfNotExists("John DOE"))
-               .thenReturn(User.builder().build());
+        Mockito.when(userService.findByX4bIdOrByFullName("John DOE"))
+               .thenReturn(Optional.of(User.builder().build()));
 
         //when
         ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/api/Authorizations")

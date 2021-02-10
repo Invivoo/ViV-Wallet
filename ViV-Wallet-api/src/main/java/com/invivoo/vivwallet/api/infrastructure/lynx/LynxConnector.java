@@ -51,18 +51,20 @@ public class LynxConnector {
     }
 
     public List<Action> getActionsFromActivities(List<Activity> activities) {
-        List<Activity> activitiesWithType = activities.stream()
-                                                      .filter(activity -> Objects.nonNull(activity.getType()) && StringUtils.isNotBlank(activity.getOwner())) // todo find why activity do not have type
-                                                      .collect(Collectors.toList());
-        List<Action> actions = activitiesWithType.stream()
-                                                 .filter(activity -> ACTIVITY_HELD_STATUS.equals(activity.getStatus()) && ACTIVITY_IS_OK.equals(activity.getValidity()))
-                                                 .map(activityToActionMapper::convert)
-                                                 .filter(Optional::isPresent)
-                                                 .map(Optional::get)
-                                                 .filter(a -> a.getDate().isAfter(Optional.ofNullable(a.getAchiever().getVivInitialBalanceDate())
-                                                                                          .orElse(LocalDateTime.MIN)))
-                                                 .collect(Collectors.toList());
-        actions.forEach(action -> setVivFromRelatedActivities(action, activitiesWithType));
+        LocalDateTime validityDate = LocalDateTime.now();
+        List<Activity> validatedActivities = activities.stream()
+                                                       .filter(activity -> Objects.nonNull(activity.getType()) && StringUtils.isNotBlank(activity.getOwner()))
+                                                       .filter(activity -> Optional.ofNullable(activity.getValueDate()).filter(validityDate::isAfter).isPresent())
+                                                       .filter(activity -> ACTIVITY_HELD_STATUS.equals(activity.getStatus()) && ACTIVITY_IS_OK.equals(activity.getValidity()))
+                                                       .collect(Collectors.toList());
+        List<Action> actions = validatedActivities.stream()
+                                                  .map(activityToActionMapper::convert)
+                                                  .filter(Optional::isPresent)
+                                                  .map(Optional::get)
+                                                  .filter(a -> a.getValueDate().isAfter(Optional.ofNullable(a.getAchiever().getVivInitialBalanceDate())
+                                                                                           .orElse(LocalDateTime.MIN)))
+                                                  .collect(Collectors.toList());
+        actions.forEach(action -> setVivFromRelatedActivities(action, validatedActivities));
         return actions;
     }
 

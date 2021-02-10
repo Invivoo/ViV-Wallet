@@ -12,7 +12,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByFullNameIgnoreCase(String owner);
 
-    Optional<User> findByX4bId(String x4bId);
+    Optional<User> findByX4bIdIgnoreCase(String x4bId);
 
     List<User> findDistinctByExpertisesExpertise(Expertise expertise);
 

@@ -30,6 +30,7 @@ public class Action {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private LocalDateTime date;
+    private LocalDateTime valueDate;
     private ActionType type;
     private Long lynxActivityId;
     private int vivAmount;

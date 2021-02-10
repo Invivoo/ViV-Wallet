@@ -2,6 +2,7 @@ CREATE TABLE dbo.actions (
 	id bigint NOT NULL IDENTITY(1,1),
 	context varchar(255) NULL,
 	[date] datetime2 NULL,
+	value_date datetime2 NOT NULL,
 	is_deleted bit NOT NULL,
 	lynx_activity_id bigint NULL,
 	[type] int NULL,

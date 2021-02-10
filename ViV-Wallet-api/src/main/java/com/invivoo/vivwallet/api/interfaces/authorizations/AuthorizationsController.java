@@ -4,7 +4,6 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.invivoo.vivwallet.api.application.security.JWTTokenProvider;
 import com.invivoo.vivwallet.api.domain.role.Role;
 import com.invivoo.vivwallet.api.domain.role.RoleType;
-import com.invivoo.vivwallet.api.domain.user.User;
 import com.invivoo.vivwallet.api.domain.user.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,11 +37,13 @@ public class AuthorizationsController {
         String token = jwtTokenProvider.resolveToken(httpServletRequest);
         DecodedJWT verify = jwtTokenProvider.verify(token);
         String x4bId = verify.getClaim("user").asString();
-        User user = userService.findByX4bIdOrCreateIfNotExists(x4bId);
-        return ResponseEntity.ok(AuthorizationsResponse.builder()
-                                                       .userId(user.getId())
-                                                       .roles(getRolesAsString(user.getRoles()))
-                                                       .build());
+        return userService.findByX4bIdOrByFullName(x4bId)
+                   .map(user -> AuthorizationsResponse.builder()
+                                                      .userId(user.getId())
+                                                      .roles(getRolesAsString(user.getRoles()))
+                                                      .build())
+                   .map(ResponseEntity::ok)
+                   .orElseGet(ResponseEntity.notFound()::build);
     }
 
     private List<String> getRolesAsString(Set<Role> roles) {
