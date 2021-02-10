@@ -51,7 +51,7 @@ public class PaymentsController {
                                                  .filter(action -> action.getVivAmount() > 0)
                                                  .collect(Collectors.toList());
         Optional<User> connectedUser = securityService.getConnectedUser();
-        if (receiverOpt.isEmpty() || actionsToPay.isEmpty() || connectedUser.isEmpty()) {
+        if (receiverOpt.isEmpty() || connectedUser.isEmpty()) {
             return ResponseEntity.badRequest()
                                  .build();
         }

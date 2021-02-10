@@ -2,6 +2,7 @@ CREATE TABLE dbo.actions (
 	id bigint NOT NULL IDENTITY(1,1),
 	context varchar(255) NULL,
 	[date] datetime2 NULL,
+	value_date datetime2 NOT NULL,
 	is_deleted bit NOT NULL,
 	lynx_activity_id bigint NULL,
 	[type] int NULL,
@@ -34,17 +35,6 @@ IF OBJECT_ID('dbo.actions', 'U') IS NOT NULL AND OBJECT_ID('dbo.users', 'U') IS 
 	FOREIGN KEY (achiever_id)
 	REFERENCES dbo.users (id);
 
-
--- Add 4 rows for actions.
-SET IDENTITY_INSERT actions ON
-INSERT INTO actions (id, context, date, is_deleted, lynx_activity_id, type, viv_amount, achiever_id, creator_id, payment_id) VALUES 
-(1,'Évaluation de Candidat Externe : candidat non retenu','2020-01-07 12:10:01.0000000',0,185793,3,10,1,NULL,1),
-(2,'Évaluation de Candidat Externe : candidat retenu sur profil !','2020-01-13 18:00:01.0000000',0,186221,4,0,1,NULL,1),
-(3,'Évaluation de Candidat Externe : candidat retenu sur projet !','2020-01-28 13:00:01.0000000',0,187641,3,10,1,NULL,NULL),
-(4,'Article : Les nouveautés de Java 14','2020-06-05 00:00:01.0000000',0,193733,17,15,1,NULL,NULL);
-
-SET IDENTITY_INSERT actions OFF
-
 CREATE TABLE dbo.payments (
 	id bigint NOT NULL IDENTITY(1,1),
 	[date] date NULL,
@@ -70,14 +60,6 @@ IF OBJECT_ID('dbo.payments', 'U') IS NOT NULL AND OBJECT_ID('dbo.users', 'U') IS
 	FOREIGN KEY (receiver_id)
 	REFERENCES dbo.users (id);
 
-
--- Add 1 rows for payments.
-SET IDENTITY_INSERT payments ON
-INSERT INTO payments (id, date, viv_amount, creator_id, receiver_id) VALUES 
-(1,'2020-07-29 00:00:00',0,NULL,1);
-
-SET IDENTITY_INSERT payments OFF
-
 CREATE TABLE dbo.roles (
 	id bigint NOT NULL IDENTITY(1,1),
 	[type] varchar(255) NULL,
@@ -94,16 +76,6 @@ IF OBJECT_ID('dbo.roles', 'U') IS NOT NULL AND OBJECT_ID('dbo.users', 'U') IS NO
 	ADD CONSTRAINT FK97mxvrajhkq19dmvboprimeg1
 	FOREIGN KEY (user_id)
 	REFERENCES dbo.users (id);
-
-
--- Add 3 rows for roles.
-SET IDENTITY_INSERT roles ON
-INSERT INTO roles (id, type, user_id) VALUES 
-(1,'COMPANY_ADMINISTRATOR',1),
-(3,'EXPERTISE_MANAGER',1),
-(2,'SENIOR_MANAGER',1);
-
-SET IDENTITY_INSERT roles OFF
 
 CREATE TABLE dbo.user_expertises (
 	id bigint NOT NULL IDENTITY(1,1),
@@ -125,14 +97,6 @@ IF OBJECT_ID('dbo.user_expertises', 'U') IS NOT NULL AND OBJECT_ID('dbo.users', 
 	FOREIGN KEY (user_id)
 	REFERENCES dbo.users (id);
 
-
--- Add 1 rows for user_expertises.
-SET IDENTITY_INSERT user_expertises ON
-INSERT INTO user_expertises (id, end_date, expertise, start_date, status, user_id) VALUES 
-(1,NULL,'PROGRAMMATION_JAVA','2017-06-01 00:00:00',NULL,1);
-
-SET IDENTITY_INSERT user_expertises OFF
-
 CREATE TABLE dbo.users (
 	id bigint NOT NULL IDENTITY(1,1),
 	full_name varchar(255) NULL,
@@ -144,14 +108,4 @@ GO
 
 ALTER TABLE dbo.users ADD CONSTRAINT PK__users__3213E83FE16A46A6 PRIMARY KEY (id);
 GO
-
-
-
--- Add 2 rows for users.
-SET IDENTITY_INSERT users ON
-INSERT INTO users (id, full_name, viv_initial_balance, viv_initial_balance_date, x4b_id) VALUES 
-(1,'Théophile MONTGOMERY',0,NULL,NULL),
-(2,'Collaborateur Invivoo',0,NULL,NULL);
-
-SET IDENTITY_INSERT users OFF
 

@@ -29,6 +29,7 @@ public class ActivityToActionMapper {
         User user = achieverOpt.get();
         Action.ActionBuilder builder = Action.builder()
                                              .date(activity.getDate())
+                                             .valueDate(activity.getValueDate())
                                              .lynxActivityId(activity.getId())
                                              .achiever(user);
         setActivityTypeContext(activity, user, builder);
@@ -40,6 +41,7 @@ public class ActivityToActionMapper {
         owner = owner.substring(0, owner.contains("@") ? owner.indexOf("@") : owner.length());
         owner = owner.contains("Marcos Aurelio ALMEIDA DA SILVA") ? "Marcos ALMEIDA" : owner;
         owner = owner.contains("Gustavo OLIVEIRA") ? "Gustavo OLIVEIRA" : owner;
+        owner = owner.contains("Nhi TRAN") ? "Nhi TRAN" : owner;
         return owner;
     }
 

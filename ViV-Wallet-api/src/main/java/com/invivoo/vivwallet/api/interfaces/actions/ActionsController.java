@@ -50,6 +50,7 @@ public class ActionsController {
     }
 
     @PostMapping("/updateFromLynx")
+    @PreAuthorize("hasAnyAuthority('API_USER')")
     public ResponseEntity<List<ActionDto>> updateFromLynx() {
         List<ActionDto> actions = actionService.updateFromLynx()
                                                .stream()

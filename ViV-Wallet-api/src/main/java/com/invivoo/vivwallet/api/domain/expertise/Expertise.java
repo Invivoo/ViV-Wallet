@@ -17,7 +17,8 @@ public enum Expertise {
     POST_TRADE("Post-Trade"),
     MOA("MOA Transverse"),
     AGILITE_ET_CRAFT("Agilité & Craft"),
-    DEVOPS("Devops");
+    DEVOPS("Devops"),
+    SUPPORT_ET_PRODUCTION_APPLICATIVE("Support & Production Applicative");
 
     private String expertiseName;
 
