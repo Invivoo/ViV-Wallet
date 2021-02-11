@@ -79,8 +79,9 @@ public class UserService {
     }
 
     public int computeBalance(User user) {
-        int userBalanceFromActionsInVivAfterInitialBalanceDate = actionRepository.findAllByAchieverAndDateAfter(user, Optional.ofNullable(user.getVivInitialBalanceDate())
-                                                                                                                              .orElse(LocalDateTime.of(2000, 1, 1, 0, 0)))
+        LocalDateTime vivInitialBalanceDate = Optional.ofNullable(user.getVivInitialBalanceDate())
+                                                      .orElse(LocalDateTime.MIN);
+        int userBalanceFromActionsInVivAfterInitialBalanceDate = actionRepository.findAllByAchieverAndValueDateAfter(user, vivInitialBalanceDate)
                                                                                  .stream()
                                                                                  .mapToInt(Action::getVivAmount)
                                                                                  .sum();

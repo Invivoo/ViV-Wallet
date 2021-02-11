@@ -61,8 +61,7 @@ public class LynxConnector {
                                                   .map(activityToActionMapper::convert)
                                                   .filter(Optional::isPresent)
                                                   .map(Optional::get)
-                                                  .filter(a -> a.getValueDate().isAfter(Optional.ofNullable(a.getAchiever().getVivInitialBalanceDate())
-                                                                                           .orElse(LocalDateTime.MIN)))
+                                                  .filter(a -> a.getValueDate().isAfter(Optional.ofNullable(a.getAchiever().getVivInitialBalanceDate()).orElse(LocalDateTime.MIN)))
                                                   .collect(Collectors.toList());
         actions.forEach(action -> setVivFromRelatedActivities(action, validatedActivities));
         return actions;

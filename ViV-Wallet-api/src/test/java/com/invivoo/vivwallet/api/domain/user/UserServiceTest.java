@@ -35,7 +35,7 @@ public class UserServiceTest {
         Action action1 = Action.builder().id((long) 1).vivAmount(10).achiever(user).build();
         Action action2 = Action.builder().id((long) 2).vivAmount(10).achiever(user).build();
         List<Action> notPaidActions = Arrays.asList(action1, action2);
-        when(actionRepository.findAllByAchieverAndDateAfter(Mockito.any(User.class), Mockito.any(LocalDateTime.class))).thenReturn(notPaidActions);
+        when(actionRepository.findAllByAchieverAndValueDateAfter(Mockito.any(User.class), Mockito.any(LocalDateTime.class))).thenReturn(notPaidActions);
         UserService userService = new UserService(userRepository, actionRepository, paymentRepository);
 
         //When
@@ -52,7 +52,7 @@ public class UserServiceTest {
         Action action1 = Action.builder().id((long) 1).vivAmount(10).achiever(user).build();
         Action action2 = Action.builder().id((long) 2).vivAmount(10).achiever(user).build();
         List<Action> notPaidActions = Arrays.asList(action1, action2);
-        when(actionRepository.findAllByAchieverAndDateAfter(Mockito.any(User.class), Mockito.any(LocalDateTime.class))).thenReturn(notPaidActions);
+        when(actionRepository.findAllByAchieverAndValueDateAfter(Mockito.any(User.class), Mockito.any(LocalDateTime.class))).thenReturn(notPaidActions);
         UserService userService = new UserService(userRepository, actionRepository, paymentRepository);
 
         //When
@@ -66,7 +66,7 @@ public class UserServiceTest {
     public void should_return_a_balance_of_0_VIV_when_no_not_paid_action() {
         //Given
         User user = User.builder().id((long) 1).build();
-        when(actionRepository.findAllByAchieverAndDateAfter(Mockito.any(User.class), Mockito.any(LocalDateTime.class))).thenReturn(Collections.emptyList());
+        when(actionRepository.findAllByAchieverAndValueDateAfter(Mockito.any(User.class), Mockito.any(LocalDateTime.class))).thenReturn(Collections.emptyList());
         UserService userService = new UserService(userRepository, actionRepository, paymentRepository);
 
         //When

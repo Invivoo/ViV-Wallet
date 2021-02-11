@@ -11,7 +11,7 @@ public interface ActionRepository extends JpaRepository<Action, Long> {
 
     List<Action> findAllByIsDeletedFalseOrderByDateDesc();
 
-    List<Action> findAllByAchieverAndDateAfter(User achiever, LocalDateTime date);
+    List<Action> findAllByAchieverAndValueDateAfter(User achiever, LocalDateTime date);
 
     List<Action> findAllByPaymentIdOrderByDateDesc(@Param("paymentId") Long paymentId);
 
