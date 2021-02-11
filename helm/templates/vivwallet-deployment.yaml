@@ -33,6 +33,8 @@ spec:
                 value: {{ .Values.global.sqlServerPassword }}
               - name: ApiKey
                 value : {{ .Values.global.apiKey }}
+              - name: VivWalletUrl
+                value : {{ .Values.vivwallet.url }}
               {{- include "resources.large" . | nindent 14 }}
               imagePullPolicy: Always
               ports:
