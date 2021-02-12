@@ -1,0 +1,66 @@
+# Default values for koordinator.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+global:
+    pullSecretName: regcred
+    clusterSpecificDnszone: "496a8aa9ae8c48329209.northeurope.aksapp.io"
+    vivwalletSpecificDnszone: "vivwallet.test.com"
+    x4bAuthPublicKeyUrl: "Public Key Url"
+    lynxApiUrl: "Lynx Api Url"
+    apiKey: "YOUR API KEY"
+    useLocalhost: false
+    traceEnabled: true
+    prometheusCollectEnabled: false
+    sqlServerUrl: "SQL_SERVER_URL"
+    sqlServerUsername: "SQL_SERVER_USERNAME"
+    sqlServerPassword: "SQL_SERVER_PASSWORD"
+
+strategy:
+    rollingUpdate:
+        maxSurge: 1
+        maxUnavailable: 1
+
+resources:
+    large:
+        cpu:
+            limit: 1
+            request: 35m
+        memory:
+            limit: 1Gi
+            request: 200Mi
+    medium:
+        cpu:
+            limit: 0.8
+            request: 35m
+        memory:
+            limit: 600Mi
+            request: 100Mi
+    small:
+        cpu:
+            limit: 0.5
+            request: 5m
+        memory:
+            limit: 200Mi
+            request: 20Mi
+
+vivwallet:
+    name: viv-wallet
+    image: "xcomponent/viv-wallet:dev-develop"
+    url: "https://vivwallet.test.com"
+    port: 8080
+    replicaCount: 1
+    minReadySeconds: 10
+    service:
+        externalPort: 80
+
+ingress:
+    name: ingress
+    class: addon-http-application-routing
+    sslredirect: false
+    tls: false
+
+lynxSynchronization:
+    image: curlimages/curl:7.74.0
+    suspend: true
+    cronExpression: "@hourly"

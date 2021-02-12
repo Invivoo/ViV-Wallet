@@ -1,25 +1,28 @@
-import axios from "axios";
+import { AxiosInstance } from "axios";
 import { User } from "../models/user";
-import { BACKEND_BASE_URL, REQUEST_TIMEOUT_MS } from "../config/constants";
+import { ServiceBase } from "./serviceBase";
 
-export class UsersService {
+export class UsersService extends ServiceBase {
+    constructor(http?: AxiosInstance) {
+        super(http, "/users");
+    }
+
     async getUsers(): Promise<User[]> {
-        return (await axios.get<User[]>(`${BACKEND_BASE_URL}/users`, { timeout: REQUEST_TIMEOUT_MS })).data;
+        return (await this.http.get<User[]>("")).data;
     }
 
     async saveUser(user: User): Promise<Object> {
         if (!user.id) {
-            return (await axios.post<User>(`${BACKEND_BASE_URL}/users`, user, { timeout: REQUEST_TIMEOUT_MS })).data;
+            return (await this.http.post<User>("", user)).data;
         }
-        return (await axios.put<User>(`${BACKEND_BASE_URL}/users/${user.id}`, user, { timeout: REQUEST_TIMEOUT_MS }))
-            .data;
+        return (await this.http.put<User>(`${user.id}`, user)).data;
     }
 
     async getUser(id: string): Promise<User> {
-        return (await axios.get<User>(`${BACKEND_BASE_URL}/users/${id}`, { timeout: REQUEST_TIMEOUT_MS })).data;
+        return (await this.http.get<User>(`${id}`)).data;
     }
 
     async deleteUser(user: User): Promise<any> {
-        return (await axios.delete<User>(`${BACKEND_BASE_URL}/users/${user.id}`, { timeout: REQUEST_TIMEOUT_MS })).data;
+        return (await this.http.delete<User>(`${user.id}`)).data;
     }
 }

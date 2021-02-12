@@ -1,5 +1,4 @@
 import { User } from "@/models/user";
-import { BACKEND_BASE_URL } from "@/config/constants";
 import axios from "axios";
 import { UsersService } from "@/services/users";
 
@@ -13,14 +12,14 @@ describe("UsersService", () => {
         mockedAxios.get.mockClear();
         mockedAxios.get.mockReturnValue(Promise.resolve({}));
 
-        service = new UsersService();
+        service = new UsersService(mockedAxios);
     });
 
     const prototypeUser: User = {
         id: "123",
-        login: "mylogin",
-        fullname: "My LOGIN",
-        email: "my.login@invivoo.com"
+        user: "mylogin",
+        fullName: "My LOGIN",
+        email: "my.login@invivoo.com",
     };
 
     it("should be created", () => {
@@ -29,26 +28,26 @@ describe("UsersService", () => {
 
     it("should get all users", async () => {
         const response = {
-            data: [prototypeUser]
+            data: [prototypeUser],
         };
         mockedAxios.get.mockReturnValue(Promise.resolve(response));
 
         expect(await service.getUsers()).toEqual(response.data);
 
-        expect(mockedAxios.get).toHaveBeenCalledWith(`${BACKEND_BASE_URL}/users`, { timeout: 10000 });
+        expect(mockedAxios.get).toHaveBeenCalledWith("");
     });
 
     it("should get user by id", async () => {
         const response = {
-            data: { ...prototypeUser, id: 'id1', login: 'lid1' }
+            data: { ...prototypeUser, id: "id1", user: "lid1" },
         };
         mockedAxios.get.mockReturnValue(Promise.resolve(response));
 
-        const returnedUser = await service.getUser('id1');
-        expect(returnedUser.id).toEqual('id1');
-        expect(returnedUser.login).toEqual('lid1');
+        const returnedUser = await service.getUser("id1");
+        expect(returnedUser.id).toEqual("id1");
+        expect(returnedUser.user).toEqual("lid1");
 
-        expect(mockedAxios.get).toHaveBeenCalledWith(`${BACKEND_BASE_URL}/users/id1`, { timeout: 10000 });
+        expect(mockedAxios.get).toHaveBeenCalledWith(`id1`);
     });
 
     it("should delete user by id", async () => {
@@ -56,31 +55,29 @@ describe("UsersService", () => {
 
         await service.deleteUser(prototypeUser);
 
-        expect(mockedAxios.delete).toHaveBeenCalledWith(`${BACKEND_BASE_URL}/users/123`, { timeout: 10000 });
+        expect(mockedAxios.delete).toHaveBeenCalledWith(`123`);
     });
 
     it("should post user if there's no id", async () => {
         const response = {
-            data: prototypeUser
+            data: prototypeUser,
         };
         mockedAxios.post.mockReturnValue(Promise.resolve(response));
 
         const postedUser = { ...prototypeUser, id: undefined };
         expect(await service.saveUser(postedUser)).toEqual(prototypeUser);
 
-        expect(mockedAxios.post).toHaveBeenCalledWith(`${BACKEND_BASE_URL}/users`, postedUser, { timeout: 10000 });
+        expect(mockedAxios.post).toHaveBeenCalledWith("", postedUser);
     });
 
     it("should update user if there's an id", async () => {
         const response = {
-            data: prototypeUser
+            data: prototypeUser,
         };
         mockedAxios.put.mockReturnValue(Promise.resolve(response));
 
         expect(await service.saveUser(prototypeUser)).toEqual(prototypeUser);
 
-        expect(mockedAxios.put).toHaveBeenCalledWith(`${BACKEND_BASE_URL}/users/123`, prototypeUser, {
-            timeout: 10000
-        });
+        expect(mockedAxios.put).toHaveBeenCalledWith(`123`, prototypeUser);
     });
 });

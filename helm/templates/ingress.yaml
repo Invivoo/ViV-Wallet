@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+{{$labelData := dict "Chart" .Chart "Release" .Release "Name" .Values.ingress.name }}
+metadata:
+  name: {{ .Release.Name }}-ingress
+  namespace:  {{ .Release.Namespace }}
+  labels:
+    {{- include "labels" $labelData | nindent 4 }}
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: {{ .Values.ingress.sslredirect | quote }}
+    {{- include "ingress.issuer" . | nindent 4 -}}
+    kubernetes.io/ingress.class: {{ .Values.ingress.class }}
+spec:
+  {{- include "ingress.tls" . | nindent 2 -}}
+  rules:
+  - host: {{ include "vivwallet.url" . }}
+    http:
+      paths:
+      - path: /
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: {{ .Release.Name }}-{{ .Values.vivwallet.name }}-svc
+            port:
+              number: {{ .Values.vivwallet.service.externalPort }}

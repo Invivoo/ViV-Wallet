@@ -1,0 +1,25 @@
+@import "./colors.scss";
+@import "./typescale.scss";
+@import "./margins.scss";
+@import "./borders.scss";
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans&display=swap");
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+}
+
+.js-focus-visible :focus:not(.focus-visible) {
+    outline: none;
+}
+
+.js-focus-visible .focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px $primary-400;
+}
+
+:export {
+    primaryColor: $primary-700;
+}

@@ -2,19 +2,19 @@ import UserEdit from "@/views/UserEdit.vue";
 import { UsersService } from "@/services/users";
 import { factory } from "../testHelpers";
 import { User } from "@/models/user";
-import { prototype } from 'vue/types/umd';
+import { prototype } from "vue/types/umd";
 
 jest.mock("@/services/users");
 
 describe("UserEd", () => {
-    const user: User = { id: "0", fullname: "myName", login: "login", email: "test@test" };
+    const user: User = { id: "0", fullName: "myName", user: "login", email: "test@test" };
 
     beforeEach(() => {
         (UsersService as jest.Mock<UsersService>).mockClear();
     });
 
     it("creates new user", async () => {
-        const wrapper = factory(UserEdit)({ id: 'add' });
+        const wrapper = factory(UserEdit)({ id: "add" });
         await wrapper.vm.$nextTick();
 
         expect(UsersService as jest.Mock<UsersService>).toHaveBeenCalled();
@@ -27,24 +27,23 @@ describe("UserEd", () => {
         UsersService.prototype.getUser = jest.fn().mockImplementation(() => {
             return user;
         });
-        const wrapper = factory(UserEdit)({ id: '123' });
+        const wrapper = factory(UserEdit)({ id: "123" });
         await wrapper.vm.$nextTick();
 
         expect(UsersService as jest.Mock<UsersService>).toHaveBeenCalled();
         await wrapper.vm.$nextTick();
 
-        expect(UsersService.prototype.getUser).toHaveBeenCalledWith('123');
-
-        expect(wrapper.find('#fullname-1').props().value).toBe("myName");
-        expect(wrapper.find('#login-1').props().value).toBe("login");
-        expect(wrapper.find('#email-1').props().value).toBe("test@test");
+        expect(UsersService.prototype.getUser).toHaveBeenCalledWith("123");
+        expect((wrapper.find("#fullname-1").element as HTMLInputElement).value).toBe("myName");
+        expect((wrapper.find("#user-1").element as HTMLInputElement).value).toBe("login");
+        expect((wrapper.find("#email-1").element as HTMLInputElement).value).toBe("test@test");
     });
 
     it("detects error getting user", async () => {
         UsersService.prototype.getUser = jest.fn().mockImplementation(() => {
             throw "cannot get user";
         });
-        const wrapper = factory(UserEdit)({ id: '123' });
+        const wrapper = factory(UserEdit)({ id: "123" });
         await wrapper.vm.$nextTick();
 
         expect(UsersService as jest.Mock<UsersService>).toHaveBeenCalled();
@@ -63,7 +62,7 @@ describe("UserEd", () => {
 
     it("detect error when changing user info", async () => {
         UsersService.prototype.saveUser = jest.fn().mockImplementation(() => {
-            throw "error"
+            throw "error";
         });
         const wrapper = factory(UserEdit)();
 
@@ -83,7 +82,7 @@ describe("UserEd", () => {
 
     it("detect error when deleting user", async () => {
         UsersService.prototype.deleteUser = jest.fn().mockImplementation(() => {
-            throw "error"
+            throw "error";
         });
         const wrapper = factory(UserEdit)();
 

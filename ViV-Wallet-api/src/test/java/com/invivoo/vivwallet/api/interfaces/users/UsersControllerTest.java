@@ -1,8 +1,23 @@
 package com.invivoo.vivwallet.api.interfaces.users;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.invivoo.vivwallet.api.application.security.JWTTokenProvider;
+import com.invivoo.vivwallet.api.application.security.SecurityService;
+import com.invivoo.vivwallet.api.domain.action.Action;
+import com.invivoo.vivwallet.api.domain.action.ActionService;
+import com.invivoo.vivwallet.api.domain.action.ActionType;
+import com.invivoo.vivwallet.api.domain.expertise.Expertise;
+import com.invivoo.vivwallet.api.domain.expertise.UserExpertise;
+import com.invivoo.vivwallet.api.domain.payment.Payment;
+import com.invivoo.vivwallet.api.domain.payment.PaymentService;
 import com.invivoo.vivwallet.api.domain.user.User;
-import com.invivoo.vivwallet.api.domain.user.UserRepository;
+import com.invivoo.vivwallet.api.domain.user.UserService;
+import com.invivoo.vivwallet.api.interfaces.actions.ActionDto;
+import com.invivoo.vivwallet.api.interfaces.payments.PaymentDto;
+import org.hamcrest.Matchers;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -17,18 +32,27 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(UsersController.class)
 public class UsersControllerTest {
 
     private static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(), MediaType.APPLICATION_JSON.getSubtype(), StandardCharsets.UTF_8);
-    private static final User TEST_USER_1 = new User(1L, "User 1");
-    private static final User TEST_USER_2 = new User(2L, "User 2");
+    private static final User TEST_USER_1 = new User(1L,"User 1", "User 1", Set.of(UserExpertise.builder().expertise(Expertise.PROGRAMMATION_JAVA).build()), Set.of());
+    private static final User TEST_USER_2 = new User(2L, "User 2", "User 2", Set.of(UserExpertise.builder().expertise(Expertise.PROGRAMMATION_JAVA).build()), Set.of());
     private static final List<User> TEST_USERS = Arrays.asList(TEST_USER_1, TEST_USER_2);
     private static final ObjectMapper mapper = new ObjectMapper();
 
@@ -36,20 +60,40 @@ public class UsersControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private UserRepository userRepository;
+    private UserService userService;
+
+    @MockBean
+    private SecurityService securityService;
+
+    @MockBean
+    private ActionService actionService;
+
+    @MockBean
+    private PaymentService paymentService;
+
+    @MockBean
+    private JWTTokenProvider jwtTokenProvider;
+
+
+    public UsersControllerTest() {
+    }
+
+    @BeforeClass
+    public static void beforeClass() {
+        mapper.registerModule(new JavaTimeModule());
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+    }
 
     @Test
     public void whenGetUsers_shouldReturnUsers() throws Exception {
         //given
-        Mockito.when(userRepository.findAll())
-               .thenReturn(TEST_USERS);
-        String jsonTestUsers = mapper.writeValueAsString(TEST_USERS);
+        when(userService.findAll()).thenReturn(TEST_USERS);
         //when
         ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/users"))
                                                   .andDo(MockMvcResultHandlers.print());
         //then
         resultActions.andExpect(MockMvcResultMatchers.status().isOk())
-                     .andExpect(MockMvcResultMatchers.content().string(jsonTestUsers))
+                     .andExpect(MockMvcResultMatchers.content().string(mapper.writeValueAsString(TEST_USERS.stream().map(UserDto::createFromUser).collect(Collectors.toList()))))
                      .andExpect(MockMvcResultMatchers.jsonPath("$[0].fullName").value(TEST_USERS.get(0).getFullName()))
                      .andExpect(MockMvcResultMatchers.jsonPath("$[1].fullName").value(TEST_USERS.get(1).getFullName()));
     }
@@ -58,32 +102,32 @@ public class UsersControllerTest {
     public void whenPostUser_shouldSaveAndReturnUser() throws Exception {
         //given
         User testUser = TEST_USER_1;
-        Mockito.when(userRepository.save(testUser))
-               .thenReturn(testUser);
-        String jsonTestUser = mapper.writeValueAsString(testUser);
+        when(userService.save(Mockito.any(User.class))).thenReturn(testUser);
+        when(userService.save(Mockito.any(User.class))).thenReturn(testUser);
+        when(userService.save(Mockito.any(User.class))).thenReturn(testUser);
 
         //when
         ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/users").contentType(APPLICATION_JSON_UTF8)
-                                                                                 .content(jsonTestUser))
+                                                                                 .content(mapper.writeValueAsString(testUser)))
                                                   .andDo(MockMvcResultHandlers.print());
         //then
-        Mockito.verify(userRepository, Mockito.times(1)).save(testUser);
+        verify(userService, Mockito.times(1)).save(testUser);
         resultActions.andExpect(MockMvcResultMatchers.status().isCreated())
                      .andExpect(MockMvcResultMatchers.redirectedUrl(String.format("/api/v1/users/%s", testUser.getId())))
-                     .andExpect(MockMvcResultMatchers.content().string(jsonTestUser));
+                     .andExpect(MockMvcResultMatchers.content().string(mapper.writeValueAsString(UserDto.createFromUser(testUser))));
     }
 
     @Test
     public void whenGetUser_shouldReturnUser() throws Exception {
         //given
         User testUser = TEST_USER_1;
-        Mockito.when(userRepository.findById(testUser.getId()))
-               .thenReturn(Optional.of(testUser));
+        when(userService.findById(testUser.getId()))
+                .thenReturn(Optional.of(testUser));
         //when
         ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get(String.format("/api/v1/users/%s", testUser.getId())))
                                                   .andDo(MockMvcResultHandlers.print());
         //then
-        String expectedJsonUser = mapper.writeValueAsString(testUser);
+        String expectedJsonUser = mapper.writeValueAsString(UserDto.createFromUser(testUser));
         resultActions.andExpect(MockMvcResultMatchers.status().isOk())
                      .andExpect(MockMvcResultMatchers.content().string(expectedJsonUser));
     }
@@ -93,13 +137,13 @@ public class UsersControllerTest {
         //given
         User testUser = TEST_USER_1;
         UserUpdateDto userUpdate = new UserUpdateDto("newFullName");
-        Mockito.when(userRepository.findById(testUser.getId()))
-               .thenReturn(Optional.of(testUser));
+        when(userService.findById(testUser.getId()))
+                .thenReturn(Optional.of(testUser));
         User expectedUser = testUser.toBuilder()
                                     .fullName(userUpdate.getFullName())
                                     .build();
-        Mockito.when(userRepository.save(expectedUser))
-               .thenReturn(expectedUser);
+        when(userService.save(expectedUser))
+                .thenReturn(expectedUser);
 
         String jsonUserUpdate = mapper.writeValueAsString(userUpdate);
 
@@ -109,24 +153,142 @@ public class UsersControllerTest {
                                                                                  .content(jsonUserUpdate))
                                                   .andDo(MockMvcResultHandlers.print());
         //then
-        String expectedJsonUpdatedUser = mapper.writeValueAsString(expectedUser);
-        Mockito.verify(userRepository, Mockito.times(1)).save(expectedUser);
+        verify(userService, Mockito.times(1)).save(expectedUser);
         resultActions.andExpect(MockMvcResultMatchers.status().isOk())
-                     .andExpect(MockMvcResultMatchers.content().string(expectedJsonUpdatedUser));
+                     .andExpect(MockMvcResultMatchers.content().string(mapper.writeValueAsString(UserDto.createFromUser(TEST_USER_1.toBuilder()
+                                                                                                                                   .fullName(userUpdate.getFullName())
+                                                                                                                                   .build()))));
     }
 
     @Test
     public void whenDeleteUser_shouldDeleteAndReturnOk() throws Exception {
         //given
         User testUser = TEST_USER_1;
-        Mockito.when(userRepository.findById(testUser.getId()))
-               .thenReturn(Optional.of(testUser));
+        when(userService.findById(testUser.getId()))
+                .thenReturn(Optional.of(testUser));
 
         //when
         ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.delete(String.format("/api/v1/users/%s", TEST_USER_1.getId())))
                                                   .andDo(MockMvcResultHandlers.print());
         //then
-        Mockito.verify(userRepository, Mockito.times(1)).delete(testUser);
+        verify(userService, Mockito.times(1)).delete(testUser);
         resultActions.andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void whenGetBalanceForUser_shouldReturnBalance() throws Exception {
+        //Given
+        User testUser = TEST_USER_1;
+        int expectedBalance = 20;
+        when(userService.findById(testUser.getId())).thenReturn(Optional.of(testUser));
+        when(userService.computeBalance(testUser)).thenReturn(expectedBalance);
+
+        //When
+        ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get(String.format("/api/v1/users/%s/balance", testUser.getId())))
+                                                  .andDo(MockMvcResultHandlers.print());
+
+        //Then
+        verify(userService).computeBalance(testUser);
+        resultActions.andExpect(MockMvcResultMatchers.status().isOk())
+                     .andExpect(MockMvcResultMatchers.jsonPath("$.value", Matchers.is(20)));
+    }
+
+    @Test
+    public void whenGetListOfActionsForUserInAnExpertise_shouldReturnListOfActionsWithExpertiseInformation() throws Exception {
+        //Given
+        User testUser = TEST_USER_1;
+        Action action1 = anUnpaidAction(testUser);
+        Action action2 = aPaidAction(testUser);
+        List<Action> expectedActions = Arrays.asList(action2, action1);
+        when(actionService.findAllByAchieverOrderByDateDesc(testUser)).thenReturn(expectedActions);
+
+        when(userService.findById(testUser.getId())).thenReturn(Optional.of(testUser));
+
+        //When
+        ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get(String.format("/api/v1/users/%s/actions", testUser.getId())))
+                                                  .andDo(MockMvcResultHandlers.print());
+
+        //Then
+        List<ActionDto> expectedActionDtos = Arrays.asList(ActionDto.createFromAction(action2), ActionDto.createFromAction(action1));
+        String expectedJson = mapper.writeValueAsString(expectedActionDtos);
+
+        verify(actionService).findAllByAchieverOrderByDateDesc(testUser);
+        resultActions.andExpect(MockMvcResultMatchers.status().isOk())
+                     .andExpect(MockMvcResultMatchers.content().string(expectedJson));
+    }
+
+    @Test
+    public void whenGetListOfActionsForUserNotInAnExpertise_shouldReturnListOfActions() throws Exception {
+        //Given
+        Action action1 = anUnpaidAction(TEST_USER_1);
+        Action action2 = aPaidAction(TEST_USER_1);
+        List<Action> expectedActions = Arrays.asList(action2, action1);
+        when(userService.findById(TEST_USER_1.getId())).thenReturn(Optional.of(TEST_USER_1));
+        when(actionService.findAllByAchieverOrderByDateDesc(TEST_USER_1)).thenReturn(expectedActions);
+
+        //When
+        ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get(String.format("/api/v1/users/%s/actions", TEST_USER_1.getId())))
+                                                  .andDo(MockMvcResultHandlers.print());
+
+        //Then
+        List<ActionDto> expectedActionDtos = Arrays.asList(ActionDto.createFromAction(action2), ActionDto.createFromAction(action1));
+        String expectedJson = mapper.writeValueAsString(expectedActionDtos);
+
+        verify(actionService).findAllByAchieverOrderByDateDesc(TEST_USER_1);
+        resultActions.andExpect(MockMvcResultMatchers.status().isOk())
+                     .andExpect(MockMvcResultMatchers.content().string(expectedJson));
+    }
+
+    @Test
+    public void whenGetListOfPaymentsForUser_shouldReturnListOfPayments() throws Exception {
+        //Given
+        User testUser = TEST_USER_1;
+        PaymentDto payment1 = PaymentDto.builder()
+                                        .id(1L)
+                                        .userId(testUser.getId())
+                                        .date(LocalDate.of(2020, Month.JANUARY, 1))
+                                        .viv(50)
+                                        .amount(BigDecimal.valueOf(250)).build();
+        PaymentDto payment2 = PaymentDto.builder()
+                                        .id(2L)
+                                        .userId(testUser.getId())
+                                        .date(LocalDate.of(2020, Month.JUNE, 1))
+                                        .viv(50)
+                                        .amount(BigDecimal.valueOf(250)).build();
+        List<PaymentDto> expectedPayments = Arrays.asList(payment2, payment1);
+        when(paymentService.findAllByReceiver(testUser.getId())).thenReturn(expectedPayments);
+
+        //When
+        ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get(String.format("/api/v1/users/%s/payments", testUser.getId())))
+                                                  .andDo(MockMvcResultHandlers.print());
+
+        //Then
+        verify(paymentService).findAllByReceiver(testUser.getId());
+        String expectedJson = mapper.writeValueAsString(expectedPayments);
+        resultActions.andExpect(MockMvcResultMatchers.status().isOk())
+                     .andExpect(MockMvcResultMatchers.content().string(expectedJson));
+    }
+
+    private Action anUnpaidAction(User user) {
+        return Action.builder().id(1L)
+                     .date(LocalDateTime.of(2020, Month.JANUARY, 1, 12, 0))
+                     .type(ActionType.ARTICLE_PUBLICATION)
+                     .vivAmount(15)
+                     .context("This is a comment")
+                     .achiever(user)
+                     .build();
+    }
+
+    private Action aPaidAction(User user) {
+        return Action.builder().id(2L)
+                     .date(LocalDateTime.of(2020, Month.JUNE, 1, 12,0))
+                     .type(ActionType.COACHING)
+                     .vivAmount(10)
+                     .context("This is a comment")
+                     .achiever(user)
+                     .payment(Payment.builder()
+                                     .id(1L)
+                                     .date(LocalDate.of(2020, Month.JULY, 1)).build())
+                     .build();
     }
 }

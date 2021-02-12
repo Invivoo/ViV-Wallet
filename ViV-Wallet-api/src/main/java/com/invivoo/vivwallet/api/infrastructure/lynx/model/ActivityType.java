@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 @Getter
 public enum ActivityType {
     COACHING_HORS_OPPORTUNITE("Coach TechFcl hors Opp"),
-    COACHING_SUR_OPPORTUNITE("Coach TechFcl sur Opp"),
+    COACHING_SUR_OPPORTUNITE("Coach TechFcl sur Opp "),
     COACHING_SUR_OPPORTUNITE_GAGNEE("Coach TechFcl sur Opp gagnée"),
 
     PRESCRIPTEUR_SUR_AO("Relaying Opp"),
@@ -34,7 +34,10 @@ public enum ActivityType {
     PUBLIER_UN_ARTICLE_MOYEN("Publish:Article moyen"),
     PUBLIER_UN_ARTICLE_LONG("Publish:Article long"),
     PUBLIER_UN_LIVRE_BLANC("Publish:Livre blanc"),
-    PUBLIER_UN_CHEAT_SHEET("Publish:Cheat Sheet");
+    PUBLIER_UN_CHEAT_SHEET("Publish:Cheat Sheet"),
+
+    AUDIT_CIR_PHASE_1("Audit R&D - phase 1"),
+    AUDIT_CIR_PHASE_2("Audit R&D - phase 2");
 
     private final String name;
 

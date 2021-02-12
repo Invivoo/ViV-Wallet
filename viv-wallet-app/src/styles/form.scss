@@ -1,0 +1,39 @@
+form {
+    margin: 0 auto;
+    padding: $m-3 $m-5;
+    border: none;
+    border-radius: $rounded-md;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    background: $white;
+    .element-block {
+        margin-bottom: $m-4;
+    }
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    color: $gray-700;
+    font-size: $text-sm;
+    margin-bottom: $m-1;
+}
+input {
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    appearance: none;
+    border: solid 1px $gray-300;
+    border-radius: $rounded;
+    background-color: $gray-100;
+    color: $gray-700;
+    font-size: $text-base;
+    font-family: "Open Sans", sans-serif;
+    line-height: 1.25;
+    width: 100%;
+    padding: $m-2 $m-3;
+    &:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px $primary-400;
+    }
+    &::placeholder {
+        color: $gray-500;
+    }
+}

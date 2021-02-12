@@ -5,44 +5,30 @@
         </section>
         <section v-else>
             <h2>Edit User</h2>
-            <div v-if="loading">Loading...</div>
-            <b-form v-else>
-                <b-form-group id="input-fullname-1" label="Name:" label-for="fullname-1">
-                    <b-form-input
-                        id="fullname-1"
-                        type="text"
-                        required
-                        v-model="user.fullname"
-                        placeholder="Enter user's full name"
-                    ></b-form-input>
-                </b-form-group>
+            <loading v-bind:loading="loading" v-bind:errored="errored">
+                <form class="user-form">
+                    <div class="element-block">
+                        <label id="input-fullname-1" for="fullname-1">Nom</label>
+                        <input id="fullname-1" type="text" v-model="user.fullName" placeholder="Nom" />
+                    </div>
 
-                <b-form-group id="input-login-1" label="Login:" label-for="login-1">
-                    <b-form-input
-                        id="login-1"
-                        type="text"
-                        required
-                        v-model="user.login"
-                        placeholder="Enter user's login"
-                    ></b-form-input>
-                </b-form-group>
+                    <div class="element-block">
+                        <label id="input-user-1" for="user-1">Identifiant</label>
+                        <input id="user-1" type="text" v-model="user.user" placeholder="Identifiant" />
+                    </div>
 
-                <b-form-group id="input-email-1" label="Email address:" label-for="email-1">
-                    <b-form-input
-                        id="email-1"
-                        type="email"
-                        required
-                        v-model="user.email"
-                        placeholder="Enter email"
-                    ></b-form-input>
-                </b-form-group>
+                    <div class="element-block">
+                        <label id="input-email-1" for="email-1">Email</label>
+                        <input id="email-1" type="text" v-model="user.email" placeholder="Email" />
+                    </div>
 
-                <b-button variant="primary" v-on:click="confirmUser">Confirm</b-button>
-                &nbsp;
-                <b-button variant="outline-primary" to="/users">Cancel</b-button>
-                &nbsp;
-                <b-button variant="danger" v-on:click="deleteUser" to="/users">Delete</b-button>
-            </b-form>
+                    <div class="buttons">
+                        <button class="primary-button" v-on:click="confirmUser">Confirmer</button>
+                        <router-link class="secondary-button" to="/users" tag="button">Cancel</router-link>
+                        <button class="secondary-button" v-on:click="deleteUser">Supprimer</button>
+                    </div>
+                </form>
+            </loading>
         </section>
     </div>
 </template>
@@ -51,18 +37,20 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 import { User } from "../models/user";
 import { UsersService } from "@/services/users";
+import Loading from "../components/Loading.vue";
 
 const UserEditProps = Vue.extend({
     props: {
-        id: String
-    }
+        id: String,
+    },
 });
 
 @Component({
-    name: "user"
+    name: "user",
+    components: { Loading },
 })
 export default class UserEdit extends UserEditProps {
-    user: User | null = { id: "", fullname: "", login: "", email: "" };
+    user: User | null = { id: "", fullName: "", user: "", email: "" };
     loading = false;
     errored = false;
     usersService = new UsersService();
@@ -108,14 +96,38 @@ export default class UserEdit extends UserEditProps {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import "../styles/form.scss";
+@import "../styles/buttons.scss";
+
 .userEdit {
     width: 50%;
-    text-align: left;
-    display: inline-block;
+    margin: auto;
 }
 
 h2 {
     text-align: center;
+    font-size: $text-2xl;
+    color: $gray-700;
+    font-weight: 600;
+    margin: $m-6 0 $m-3 0;
+}
+
+.user-form {
+    width: 400px;
+    margin: $m-5 auto;
+    padding: $m-5 $m-6;
+}
+
+.buttons {
+    display: flex;
+    margin-top: $m-5;
+    justify-content: flex-end;
+    button {
+        margin-right: $m-2;
+    }
+    button:last-child {
+        margin-right: 0;
+    }
 }
 </style>

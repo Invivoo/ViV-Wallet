@@ -1,3 +1,7 @@
 {
-  "/api/v1/*": "/$1"
-}
+  "/api/v1/*": "/$1",
+  "/:users/:id/balance": "/balances/:id",
+  "/:users/:id/actions": "/actions?userId=:id",
+  "/:users/:id/payments": "/payments?userId=:id",
+  "/expertises/:id/members": "/expertiseMembers?expertise=:id",
+  "/expertises/:expertiseName/members/:id": "/expertiseMembers/:id"}

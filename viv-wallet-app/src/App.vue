@@ -1,37 +1,139 @@
 <template>
     <div id="app">
-        <Banner></Banner>
-        <div id="nav"><router-link to="/">Home</router-link> | <router-link to="/users">Users</router-link></div>
-        <router-view />
+        <x4b-ui
+            application="viv-wallet"
+            :apps-service-url="appsUrl"
+            :version="appVersion"
+            disable-fake-elements="true"
+            languages="fr"
+            :color="primaryColor"
+            @menuToggleButtonClicked="handleMenuToggleButtonClicked"
+            @startupFinished="handleStartupFinished"
+        >
+            <div v-if="isBannerInitialized" class="root">
+                <div v-bind:class="['menu', isMenuOpen ? '' : 'hidden']">
+                    <check-roles v-bind:roles="myWalletRoles">
+                        <custom-router-link to="/wallet">Mon wallet</custom-router-link>
+                    </check-roles>
+                    <check-roles v-bind:roles="expertisesRoles">
+                        <custom-router-link to="/members">Expertises</custom-router-link>
+                    </check-roles>
+                    <check-roles v-bind:roles="walletsRoles">
+                        <custom-router-link to="/wallets">Wallets</custom-router-link>
+                    </check-roles>
+                    <check-roles v-bind:roles="historyRoles">
+                        <custom-router-link to="/actions">Historique des actions</custom-router-link>
+                    </check-roles>
+                </div>
+                <div class="content">
+                    <router-view />
+                </div>
+            </div>
+            <div v-else />
+        </x4b-ui>
     </div>
 </template>
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import Banner from "./components/Banner.vue";
+import "x4b-ui/dist/x4b-ui/x4b-ui.css";
+import { version } from "../package.json";
+import CustomRouterLink from "./components/CustomRouterLink.vue";
+import CheckRoles from "./components/CheckRoles.vue";
+import { expertisesRoles, historyRoles, myWalletRoles, Role, walletsRoles } from "./models/role";
 
-@Component({ components: { Banner } })
-export default class App extends Vue {}
+@Component({ components: { CustomRouterLink, CheckRoles } })
+export default class App extends Vue {
+    private appsUrl: string = process.env.VUE_APP_APPS_URL;
+    private appVersion: string = version;
+    private primaryColor: string = require("./styles/index.scss").primaryColor;
+    isMenuOpen = false;
+    isBannerInitialized = false;
+    myWalletRoles = myWalletRoles;
+    expertisesRoles = expertisesRoles;
+    walletsRoles = walletsRoles;
+    historyRoles = historyRoles;
+
+    handleMenuToggleButtonClicked(evt) {
+        this.isMenuOpen = evt.detail;
+    }
+
+    handleStartupFinished() {
+        this.isBannerInitialized = true;
+    }
+}
 </script>
 
-<style>
+<style lang="scss">
+html,
+body {
+    height: 100%;
+    box-sizing: content-box;
+}
+
+.content {
+    height: 100%;
+    padding-left: $m-6;
+    padding-top: $m-6;
+    padding-right: $m-6;
+    flex-grow: 1;
+    flex-shrink: 1;
+    overflow-y: auto;
+    background-color: $gray-100;
+}
+
+.root {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.menu {
+    flex-grow: 0;
+    flex-shrink: 0;
+    background-color: $primary-700;
+    display: flex;
+    flex-direction: column;
+    color: $white;
+    text-align: left;
+    width: 270px;
+    a {
+        padding: $m-3 $m-5 $m-3 $m-6;
+        color: $primary-200;
+        outline: none;
+        text-decoration: none;
+        font-size: $text-lg;
+        font-weight: 400;
+        &:hover {
+            background-color: $primary-600;
+            color: $white;
+        }
+    }
+}
+
+a.router-link-active {
+    background-color: $primary-600;
+    color: $white;
+    font-weight: 600;
+}
+
+.menu.hidden {
+    display: none;
+}
+
 #app {
-    font-family: "Avenir", Helvetica, Arial, sans-serif;
+    font-family: "Open Sans", sans-serif;
+    font-size: 16px;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
-}
-
-#nav {
-    padding: 30px;
-}
-
-#nav a {
-    font-weight: bold;
-    color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-    color: #42b983;
+    text-align: left;
+    color: $black;
+    background-color: $gray-100;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    margin: 0;
 }
 </style>
