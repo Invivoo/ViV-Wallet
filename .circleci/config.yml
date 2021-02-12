@@ -204,7 +204,8 @@ jobs:
 workflows:
     viv_wallet:
         jobs:
-            - build
+            - build:
+                  filters: *job_filters_tags_and_branches
             - helm_chart:
                   filters: *job_filters_tags_and_master_and_develop
             - build-vuejs:
