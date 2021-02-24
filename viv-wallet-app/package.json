@@ -22,7 +22,7 @@
         "vue-fragment": "^1.5.1",
         "vue-property-decorator": "^9.0.2",
         "vue-router": "^3.4.8",
-        "x4b-ui": "https://www.myget.org/F/x4b/auth/d1a81b83-2f89-4063-85a4-9489e9ef0042/npm/x4b-ui/-/9.1.0.tgz"
+        "x4b-ui": "https://www.myget.org/F/x4b/auth/d1a81b83-2f89-4063-85a4-9489e9ef0042/npm/x4b-ui/-/10.1.0.tgz"
     },
     "devDependencies": {
         "@types/jest": "^24.0.25",
