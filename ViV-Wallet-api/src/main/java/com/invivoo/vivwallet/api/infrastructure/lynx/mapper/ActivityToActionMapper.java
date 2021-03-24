@@ -150,6 +150,18 @@ public class ActivityToActionMapper {
                 builder.type(ActionType.AUDIT_CIR_PHASE_2);
                 builder.context(String.format("Audit CIR - phase 2 : %s\nRelecture de la partie concernant l’intervenant sur le rapport technique", activity.getComment()));
                 break;
+            case DEV_SMALL:
+                builder.type(ActionType.PROJET_FIL_ROUGE_TICKET_S);
+                builder.context(String.format("Projet fil rouge - ticket S : %s", activity.getComment()));
+                break;
+            case DEV_MEDIUM:
+                builder.type(ActionType.PROJET_FIL_ROUGE_TICKET_M);
+                builder.context(String.format("Projet fil rouge - ticket L : %s", activity.getComment()));
+                break;
+            case DEV_LARGE:
+                builder.type(ActionType.PROJET_FIL_ROUGE_TICKET_L);
+                builder.context(String.format("Projet fil rouge - ticket L : %s", activity.getComment()));
+                break;
             default:
                 builder.type(ActionType.NO_MAPPING_FOUND);
                 builder.context(String.format("No mapping found for %s", activity.getType()));

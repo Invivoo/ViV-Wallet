@@ -83,6 +83,7 @@ public class UserService {
                                                       .orElse(LocalDateTime.MIN);
         int userBalanceFromActionsInVivAfterInitialBalanceDate = actionRepository.findAllByAchieverAndValueDateAfter(user, vivInitialBalanceDate)
                                                                                  .stream()
+                                                                                 .filter(Action::isPayable)
                                                                                  .mapToInt(Action::getVivAmount)
                                                                                  .sum();
         int userPaymentsAmountInViv = paymentRepository.findAllByReceiverOrderByDateDesc(user)

@@ -1,4 +1,4 @@
-import { Consultant } from "@/models/consultant";
+import {Consultant} from '@/models/consultant';
 
 export enum PaymentStatus {
     Unpaid,
@@ -10,6 +10,7 @@ export interface Action {
     type: string;
     comment?: string;
     creationDate: Date;
+    valueDate: Date;
     payment: number;
     status: PaymentStatus;
     paymentDate?: Date;

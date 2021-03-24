@@ -27,6 +27,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -43,8 +44,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(PaymentsController.class)
 public class PaymentsControllerTest {
 
-    private static final Action ACTION_1 = Action.builder().id(1L).vivAmount(10).build();
-    private static final Action ACTION_2 = Action.builder().id(2L).vivAmount(10).build();
+    private static final Action ACTION_1 = Action.builder().id(1L).vivAmount(10).valueDate(LocalDateTime.of(2020,7,1,0,0,0)).build();
+    private static final Action ACTION_2 = Action.builder().id(2L).vivAmount(10).valueDate(LocalDateTime.of(2020,7,1,0,0,0)).build();
     private static final List<Action> ACTIONS = Arrays.asList(ACTION_1, ACTION_2);
     private static final LocalDate PAYMENT_DATE = LocalDate.of(2020, 1, 1);
     private static final User THEOPHILE_MONTGOMERY = User.builder().id(1L).fullName("Théophile MONTGOMERY").build();

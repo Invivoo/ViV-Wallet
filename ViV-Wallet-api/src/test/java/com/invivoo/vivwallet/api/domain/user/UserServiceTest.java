@@ -32,8 +32,8 @@ public class UserServiceTest {
     public void should_return_a_balance_of_20_VIV_when_one_user_did_2_actions_of_10_VIV_not_paid() {
         //Given
         User user = User.builder().id((long) 1).build();
-        Action action1 = Action.builder().id((long) 1).vivAmount(10).achiever(user).build();
-        Action action2 = Action.builder().id((long) 2).vivAmount(10).achiever(user).build();
+        Action action1 = Action.builder().id((long) 1).vivAmount(10).valueDate(LocalDateTime.of(2020,1,1,0,0)).achiever(user).build();
+        Action action2 = Action.builder().id((long) 2).vivAmount(10).valueDate(LocalDateTime.of(2020,1,1,0,0)).achiever(user).build();
         List<Action> notPaidActions = Arrays.asList(action1, action2);
         when(actionRepository.findAllByAchieverAndValueDateAfter(Mockito.any(User.class), Mockito.any(LocalDateTime.class))).thenReturn(notPaidActions);
         UserService userService = new UserService(userRepository, actionRepository, paymentRepository);
@@ -49,8 +49,8 @@ public class UserServiceTest {
     public void should_return_a_balance_of_20_VIV_for_user1_when_user1_did_2_actions_of_10_VIV_not_paid_and_user2_did_1_action_of_5_VIV_not_paid() {
         //Given
         User user = User.builder().id((long) 1).build();
-        Action action1 = Action.builder().id((long) 1).vivAmount(10).achiever(user).build();
-        Action action2 = Action.builder().id((long) 2).vivAmount(10).achiever(user).build();
+        Action action1 = Action.builder().id((long) 1).vivAmount(10).valueDate(LocalDateTime.of(2020,1,1,0,0)).achiever(user).build();
+        Action action2 = Action.builder().id((long) 2).vivAmount(10).valueDate(LocalDateTime.of(2020,1,1,0,0)).achiever(user).build();
         List<Action> notPaidActions = Arrays.asList(action1, action2);
         when(actionRepository.findAllByAchieverAndValueDateAfter(Mockito.any(User.class), Mockito.any(LocalDateTime.class))).thenReturn(notPaidActions);
         UserService userService = new UserService(userRepository, actionRepository, paymentRepository);

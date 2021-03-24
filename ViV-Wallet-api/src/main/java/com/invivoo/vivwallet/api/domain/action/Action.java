@@ -1,5 +1,6 @@
 package com.invivoo.vivwallet.api.domain.action;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.invivoo.vivwallet.api.domain.payment.Payment;
 import com.invivoo.vivwallet.api.domain.user.User;
 import lombok.AllArgsConstructor;
@@ -48,4 +49,13 @@ public class Action {
     @ManyToOne
     private Payment payment;
     private boolean isDeleted;
+
+    @JsonIgnore
+    public boolean isPayable() {
+        if(valueDate == null){
+            return false;
+        }
+        LocalDateTime now = LocalDateTime.now();
+        return valueDate.getYear() < now.getYear() || (valueDate.getMonth().getValue() < now.getMonth().getValue() && valueDate.getYear() == now.getYear());
+    }
 }
