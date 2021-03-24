@@ -1,7 +1,7 @@
-import { AxiosInstance } from "axios";
-import { ServiceBase } from "./serviceBase";
-import { Action, PaymentStatus } from "@/models/action";
-import { Payment, PaymentPost } from "@/models/payment";
+import {AxiosInstance} from 'axios';
+import {ServiceBase} from './serviceBase';
+import {Action, PaymentStatus} from '@/models/action';
+import {Payment, PaymentPost} from '@/models/payment';
 
 export class WalletService extends ServiceBase {
     constructor(http?: AxiosInstance) {
@@ -26,15 +26,23 @@ export class WalletService extends ServiceBase {
         const rawData = (await this.http.get(`/users/${userId}/actions`)).data;
         return rawData.map((action) => {
             action.creationDate = new Date(action.creationDate);
+            action.valueDate = new Date(action.valueDate);
             action.paymentDate = new Date(action.paymentDate);
             action.status = PaymentStatus[action.status];
             return action;
         });
     }
 
-    async getUserUnpaidActions(userId: string): Promise<Action[]> {
+    async getUserPayableActions(userId: string): Promise<Action[]> {
+        const now = new Date();
         const actions = await this.getUserActions(userId);
-        return actions.filter((action) => action.status === PaymentStatus.Unpaid);
+        return actions.filter(
+            (action) =>
+                action.status === PaymentStatus.Unpaid &&
+                (action.valueDate.getFullYear() < now.getFullYear() ||
+                    (action.valueDate.getFullYear() === now.getFullYear() &&
+                        action.valueDate.getMonth() < now.getMonth()))
+        );
     }
 
     async getUserPayments(userId: string): Promise<Payment[]> {

@@ -49,6 +49,7 @@ public class PaymentsController {
         List<Action> actionsToPay = actionService.findAllById(paymentRequest.getActionIds())
                                                  .stream()
                                                  .filter(action -> action.getVivAmount() > 0)
+                                                 .filter(Action::isPayable)
                                                  .collect(Collectors.toList());
         Optional<User> connectedUser = securityService.getConnectedUser();
         if (receiverOpt.isEmpty() || connectedUser.isEmpty()) {

@@ -37,7 +37,12 @@ public enum ActivityType {
     PUBLIER_UN_CHEAT_SHEET("Publish:Cheat Sheet"),
 
     AUDIT_CIR_PHASE_1("Audit R&D - phase 1"),
-    AUDIT_CIR_PHASE_2("Audit R&D - phase 2");
+    AUDIT_CIR_PHASE_2("Audit R&D - phase 2"),
+
+    DEV_SMALL("Dev:Small"),
+    DEV_MEDIUM("Dev:Medium"),
+    DEV_LARGE("Dev:Large"),
+    DEV_EXTRA_LARGE("Dev:XLarge");
 
     private final String name;
 

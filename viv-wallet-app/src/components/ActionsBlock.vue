@@ -43,7 +43,7 @@
                 </tr>
             </tbody>
         </table>
-        <p v-else class="none">Aucune action trouvé !</p>
+        <p v-else class="none">Aucune action trouvée !</p>
     </Section>
 </template>
 

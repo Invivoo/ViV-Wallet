@@ -22,6 +22,7 @@ public class ActionDto {
     private String type;
     private String comment;
     private LocalDateTime creationDate;
+    private LocalDateTime valueDate;
     private Integer payment;
     private String status;
     private LocalDate paymentDate;
@@ -34,6 +35,7 @@ public class ActionDto {
                                        .type(action.getType().getName())
                                        .comment(action.getContext())
                                        .creationDate(action.getDate())
+                                       .valueDate(action.getValueDate())
                                        .achiever(UserDto.createFromUser(action.getAchiever()))
                                        .payment(action.getVivAmount()).build();
         Optional.ofNullable(action.getPayment()).ifPresentOrElse(

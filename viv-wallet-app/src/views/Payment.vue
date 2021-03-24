@@ -98,7 +98,7 @@ export default class Payment extends PaymentProps {
             [this.user, this.balance, this.unpaidActions] = await Promise.all([
                 this.usersService.getUser(this.id),
                 this.walletService.getUserBalance(this.id),
-                this.walletService.getUserUnpaidActions(this.id),
+                this.walletService.getUserPayableActions(this.id),
             ]);
             this.viv += this.balance;
         } catch (ex) {
