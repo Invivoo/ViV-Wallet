@@ -1,7 +1,7 @@
-import axios from "axios";
-import { WalletService } from "@/services/wallet";
-import { Action, PaymentStatus } from "@/models/action";
-import { Payment, PaymentPost } from "@/models/payment";
+import axios from 'axios';
+import {WalletService} from '@/services/wallet';
+import {Action, PaymentStatus} from '@/models/action';
+import {Payment, PaymentPost} from '@/models/payment';
 
 jest.mock("axios");
 const mockedAxios = axios as jest.Mocked<typeof axios>;
@@ -39,6 +39,7 @@ describe("BalanceService", () => {
             type: "Interview",
             comment: "This is a comment",
             creationDate: new Date("2020-07-15T15:00:00"),
+            valueDate: new Date("2020-07-15T15:00:00"),
             payment: 20,
             status: PaymentStatus.Paid,
             paymentDate: new Date("2020-07-15T15:00:00"),
@@ -56,12 +57,13 @@ describe("BalanceService", () => {
         expect(mockedAxios.get).toHaveBeenCalledWith(`/users/id1/actions`);
     });
 
-    it("should get only unpaied actions of a given user", async () => {
+    it("should get only unpaid actions of a given user", async () => {
         const actions = [
             {
                 id: "id1",
                 type: "Interview",
                 payment: 20,
+                valueDate: new Date("2020-07-15T15:00:00"),
                 status: PaymentStatus[PaymentStatus.Unpaid],
                 expertise: "Front-End",
             },
@@ -69,6 +71,7 @@ describe("BalanceService", () => {
                 id: "id1",
                 type: "Interview",
                 payment: 30,
+                valueDate: new Date("2020-07-15T15:00:00"),
                 status: PaymentStatus[PaymentStatus.Paid],
                 expertise: "Front-End",
             },
@@ -76,6 +79,7 @@ describe("BalanceService", () => {
                 id: "id1",
                 type: "Interview",
                 payment: 50,
+                valueDate: new Date("2020-07-15T15:00:00"),
                 status: PaymentStatus[PaymentStatus.Unpaid],
                 expertise: "Front-End",
             },
@@ -85,7 +89,7 @@ describe("BalanceService", () => {
         };
         mockedAxios.get.mockReturnValue(Promise.resolve(response));
 
-        const returnedActions = await service.getUserUnpaidActions("id1");
+        const returnedActions = await service.getUserPayableActions("id1");
 
         expect(2).toEqual(returnedActions.length);
         returnedActions.forEach((action) => {
