@@ -1,7 +1,7 @@
-import {AxiosInstance} from 'axios';
-import {ServiceBase} from './serviceBase';
-import {Action, PaymentStatus} from '@/models/action';
-import {Payment, PaymentPost} from '@/models/payment';
+import { AxiosInstance } from "axios";
+import { ServiceBase } from "./serviceBase";
+import { Action, PaymentStatus } from "@/models/action";
+import { Payment, PaymentPost } from "@/models/payment";
 
 export class WalletService extends ServiceBase {
     constructor(http?: AxiosInstance) {

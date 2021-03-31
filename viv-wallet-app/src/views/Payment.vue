@@ -41,17 +41,17 @@
 </template>
 
 <script lang="ts">
-import {Component, Vue} from 'vue-property-decorator';
-import {User} from '../models/user';
-import {UsersService} from '@/services/users';
-import {PaymentPost} from '../models/payment';
-import {WalletService} from '../services/wallet';
-import {Action} from '@/models/action';
-import BalanceCard from '../components/BalanceCard.vue';
-import Illustration from '../components/Illustration.vue';
-import ActionsBlock from '../components/ActionsBlock.vue';
-import Loading from '../components/Loading.vue';
-import {ConsultantStatus, toString} from '../models/consultant';
+import { Component, Vue } from "vue-property-decorator";
+import { User } from "../models/user";
+import { UsersService } from "@/services/users";
+import { PaymentPost } from "../models/payment";
+import { WalletService } from "../services/wallet";
+import { Action } from "@/models/action";
+import BalanceCard from "../components/BalanceCard.vue";
+import Illustration from "../components/Illustration.vue";
+import ActionsBlock from "../components/ActionsBlock.vue";
+import Loading from "../components/Loading.vue";
+import { ConsultantStatus, toString } from "../models/consultant";
 
 const PaymentProps = Vue.extend({
     props: {

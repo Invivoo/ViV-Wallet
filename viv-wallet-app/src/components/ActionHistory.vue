@@ -53,10 +53,10 @@
 </template>
 
 <script lang="ts">
-import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
-import {ActionForHistory, PaymentStatus} from '../models/action';
-import StatusBadge from '../components/StatusBadge.vue';
-import FilterInput from '../components/FilterInput.vue';
+import { Component, Prop, Vue, Watch } from "vue-property-decorator";
+import { ActionForHistory, PaymentStatus } from "../models/action";
+import StatusBadge from "../components/StatusBadge.vue";
+import FilterInput from "../components/FilterInput.vue";
 
 @Component({
     name: "action-history",
