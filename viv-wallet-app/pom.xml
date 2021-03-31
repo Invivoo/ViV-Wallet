@@ -24,9 +24,6 @@
           <npmVersion>6.13.0</npmVersion>
           <workingDirectory>.</workingDirectory>
           <installDirectory>target/</installDirectory>
-          <environmentVariables>
-            <NODE_ENV>${VUE_APP_PRODUCT_VERSION}</NODE_ENV>
-          </environmentVariables>        
         </configuration>
         <executions>
           <execution>
@@ -56,6 +53,9 @@
               <goal>npm</goal>
             </goals>
             <configuration>
+              <environmentVariables>
+                <NODE_ENV>${VUE_APP_PRODUCT_VERSION}</NODE_ENV>
+              </environmentVariables>        
               <arguments>run build</arguments>
             </configuration>
           </execution>
