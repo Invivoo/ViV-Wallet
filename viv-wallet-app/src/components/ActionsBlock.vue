@@ -48,9 +48,9 @@
 </template>
 
 <script lang="ts">
-import {Component, Prop, Vue} from 'vue-property-decorator';
-import {Action, PaymentStatus} from '../models/action';
-import StatusBadge from '../components/StatusBadge.vue';
+import { Component, Prop, Vue } from "vue-property-decorator";
+import { Action, PaymentStatus } from "../models/action";
+import StatusBadge from "../components/StatusBadge.vue";
 
 @Component({
     name: "actions-block",
