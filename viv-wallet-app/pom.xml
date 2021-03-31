@@ -54,7 +54,7 @@
             </goals>
             <configuration>
               <environmentVariables>
-                <NODE_ENV>${VUE_APP_PRODUCT_VERSION}</NODE_ENV>
+                <VUE_APP_PRODUCT_VERSION>${VUE_APP_PRODUCT_VERSION}</VUE_APP_PRODUCT_VERSION>
               </environmentVariables>        
               <arguments>run build</arguments>
             </configuration>
