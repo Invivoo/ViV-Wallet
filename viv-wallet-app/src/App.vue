@@ -36,7 +36,6 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import "x4b-ui/dist/x4b-ui/x4b-ui.css";
-import { version } from "../package.json";
 import CustomRouterLink from "./components/CustomRouterLink.vue";
 import CheckRoles from "./components/CheckRoles.vue";
 import { expertisesRoles, historyRoles, myWalletRoles, Role, walletsRoles } from "./models/role";
@@ -44,7 +43,7 @@ import { expertisesRoles, historyRoles, myWalletRoles, Role, walletsRoles } from
 @Component({ components: { CustomRouterLink, CheckRoles } })
 export default class App extends Vue {
     private appsUrl: string = process.env.VUE_APP_APPS_URL;
-    private appVersion: string = version;
+    private appVersion: string = process.env.VUE_APP_PRODUCT_VERSION || "[PRODUCT_VERSION]";
     private primaryColor: string = require("./styles/index.scss").primaryColor;
     isMenuOpen = false;
     isBannerInitialized = false;

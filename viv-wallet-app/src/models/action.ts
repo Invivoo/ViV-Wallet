@@ -1,4 +1,4 @@
-import {Consultant} from '@/models/consultant';
+import { Consultant } from "@/models/consultant";
 
 export enum PaymentStatus {
     Unpaid,
