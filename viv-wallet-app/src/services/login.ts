@@ -23,7 +23,7 @@ export class LoginService {
     private authorizations: Authorizations;
 
     constructor() {
-        const token = getCurrentToken();
+        const token = process.env.VUE_APP_DEV_JWT || getCurrentToken();
         this.decodedToken = (token && jwt_decode<DecodedJwtTokenContent>(token)) || undefined;
         this.authorizations = (this.decodedToken &&
             this.decodedToken["viv-wallet"] &&
