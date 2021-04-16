@@ -101,22 +101,28 @@
 </template>
 
 <script lang="ts">
-import { Vue, Prop, Component } from "vue-property-decorator";
+import Vue, { PropType } from "vue";
 import { Payment } from "../models/payment";
 
-@Component
-export default class PaymentHistoryBlock extends Vue {
-    @Prop() payments!: Payment;
+export default Vue.extend({
+    name: "payment-history-block",
+    props: {
+        payments: {
+            default: [],
+            type: Array as PropType<Payment[]>,
+        },
+    },
+    methods: {
+        formatWithCurrency: function (value: number) {
+            const formatter = new Intl.NumberFormat("fr", {
+                style: "currency",
+                currency: "EUR",
+            });
 
-    formatWithCurrency(value: number) {
-        const formatter = new Intl.NumberFormat("fr", {
-            style: "currency",
-            currency: "EUR",
-        });
-
-        return formatter.format(value);
-    }
-}
+            return formatter.format(value);
+        },
+    },
+});
 </script>
 
 <style scoped lang="scss">

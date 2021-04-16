@@ -34,27 +34,25 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import Vue from "vue";
 import { User } from "../models/user";
 import { UsersService } from "@/services/users";
 import Loading from "../components/Loading.vue";
 
-const UserEditProps = Vue.extend({
+export default Vue.extend({
+    name: "user",
+    components: { Loading },
     props: {
         id: String,
     },
-});
-
-@Component({
-    name: "user",
-    components: { Loading },
-})
-export default class UserEdit extends UserEditProps {
-    user: User | null = { id: "", fullName: "", user: "", email: "" };
-    loading = false;
-    errored = false;
-    usersService = new UsersService();
-
+    data() {
+        return {
+            user: { id: "", fullName: "", user: "", email: "" } as User | null,
+            loading: false,
+            errored: false,
+            usersService: new UsersService(),
+        };
+    },
     async mounted() {
         try {
             if (this.id !== "add") {
@@ -66,34 +64,36 @@ export default class UserEdit extends UserEditProps {
         } finally {
             this.loading = false;
         }
-    }
-    async confirmUser() {
-        try {
-            this.loading = true;
-            if (this.user) {
-                await this.usersService.saveUser(this.user);
-                this.$router.push({ path: "/users" });
-            }
-        } catch (ex) {
-            this.errored = true;
-        } finally {
-            this.loading = false;
-        }
-    }
-    async deleteUser() {
-        try {
-            if (this.user) {
+    },
+    methods: {
+        confirmUser: async function () {
+            try {
                 this.loading = true;
-                await this.usersService.deleteUser(this.user);
-                this.$router.push({ path: "/users" });
+                if (this.user) {
+                    await this.usersService.saveUser(this.user);
+                    this.$router.push({ path: "/users" }).catch(() => {});
+                }
+            } catch (ex) {
+                this.errored = true;
+            } finally {
+                this.loading = false;
             }
-        } catch (ex) {
-            this.errored = true;
-        } finally {
-            this.loading = false;
-        }
-    }
-}
+        },
+        deleteUser: async function () {
+            try {
+                if (this.user) {
+                    this.loading = true;
+                    await this.usersService.deleteUser(this.user);
+                    this.$router.push({ path: "/users" }).catch(() => {});
+                }
+            } catch (ex) {
+                this.errored = true;
+            } finally {
+                this.loading = false;
+            }
+        },
+    },
+});
 </script>
 
 <style scoped lang="scss">

@@ -1,7 +1,7 @@
 <template>
     <div class="history">
         <loading v-bind:loading="loading" v-bind:errored="errored">
-            <check-roles v-bind:roles="historyRoles" withErrorMessage="true">
+            <check-roles v-bind:roles="historyRoles" v-bind:withErrorMessage="true">
                 <section>
                     <h2>Historique des actions</h2>
                     <action-history v-bind:actions="actions" />
@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import Vue from "vue";
 import { ActionForHistory } from "../models/action";
 import { WalletService } from "../services/wallet";
 import Loading from "../components/Loading.vue";
@@ -20,18 +20,18 @@ import ActionHistory from "../components/ActionHistory.vue";
 import { historyRoles } from "../models/role";
 import CheckRoles from "../components/CheckRoles.vue";
 
-@Component({
+export default Vue.extend({
     name: "history",
     components: { ActionHistory, Loading, CheckRoles },
-})
-export default class History extends Vue {
-    actions: ActionForHistory[] = [];
-    loading = true;
-    errored = false;
-
-    walletService = new WalletService();
-    historyRoles = historyRoles;
-
+    data() {
+        return {
+            actions: [] as ActionForHistory[],
+            loading: true,
+            errored: false,
+            walletService: new WalletService(),
+            historyRoles: historyRoles,
+        };
+    },
     async mounted() {
         try {
             this.actions = (await this.walletService.getAllActions()).sort(
@@ -42,8 +42,8 @@ export default class History extends Vue {
         } finally {
             this.loading = false;
         }
-    }
-}
+    },
+});
 </script>
 
 <style scoped lang="scss">

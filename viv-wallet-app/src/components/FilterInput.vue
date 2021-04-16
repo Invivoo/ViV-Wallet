@@ -21,14 +21,17 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from "vue-property-decorator";
+import Vue from "vue";
 
-@Component({
+export default Vue.extend({
     name: "filter-input",
-})
-export default class FilterInput extends Vue {
-    @Prop({ default: "" }) filterValue!: string;
-}
+    props: {
+        filterValue: {
+            default: "",
+            type: String,
+        },
+    },
+});
 </script>
 
 <style lang="scss" scoped>

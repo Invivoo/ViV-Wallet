@@ -48,41 +48,45 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import Vue, { PropType } from "vue";
 import { Action, PaymentStatus } from "../models/action";
 import StatusBadge from "../components/StatusBadge.vue";
 
-@Component({
+export default Vue.extend({
     name: "actions-block",
     components: { StatusBadge },
-})
-export default class ActionsBlock extends Vue {
-    @Prop({ default: [] }) actions!: Action[];
+    props: {
+        actions: {
+            default: [],
+            type: Array as PropType<Action[]>,
+        },
+    },
+    methods: {
+        isPaymentPaid: function (action: Action) {
+            return action.status === PaymentStatus.Paid;
+        },
 
-    isPaymentPaid(action: Action) {
-        return action.status === PaymentStatus.Paid;
-    }
+        formatPaymentStatus: function (status: PaymentStatus) {
+            switch (status) {
+                case PaymentStatus.Paid:
+                    return "Débloqué";
+                case PaymentStatus.Unpaid:
+                default:
+                    return "Non débloqué";
+            }
+        },
 
-    formatPaymentStatus(status: PaymentStatus) {
-        switch (status) {
-            case PaymentStatus.Paid:
-                return "Débloqué";
-            case PaymentStatus.Unpaid:
-            default:
-                return "Non débloqué";
-        }
-    }
-
-    getPaymentStatusType(status: PaymentStatus) {
-        switch (status) {
-            case PaymentStatus.Paid:
-                return "green";
-            case PaymentStatus.Unpaid:
-            default:
-                return "red";
-        }
-    }
-}
+        getPaymentStatusType: function (status: PaymentStatus) {
+            switch (status) {
+                case PaymentStatus.Paid:
+                    return "green";
+                case PaymentStatus.Unpaid:
+                default:
+                    return "red";
+            }
+        },
+    },
+});
 </script>
 
 <style lang="scss" scoped>

@@ -53,51 +53,57 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import { ActionForHistory, PaymentStatus } from "../models/action";
 import StatusBadge from "../components/StatusBadge.vue";
 import FilterInput from "../components/FilterInput.vue";
+import Vue, { PropType } from "vue";
 
-@Component({
+export default Vue.extend({
     name: "action-history",
     components: { StatusBadge, FilterInput },
-})
-export default class ActionsHistory extends Vue {
-    @Prop({ default: [] }) actions!: ActionForHistory[];
-    filteredActions = this.actions;
-    filterValue = "";
-
-    isPaymentPaid(action: ActionForHistory) {
-        return action.status === PaymentStatus.Paid;
-    }
-
-    formatPaymentStatus(status: PaymentStatus) {
-        switch (status) {
-            case PaymentStatus.Paid:
-                return "Débloqué";
-            case PaymentStatus.Unpaid:
-            default:
-                return "Non débloqué";
-        }
-    }
-
-    getPaymentStatusType(status: PaymentStatus) {
-        switch (status) {
-            case PaymentStatus.Paid:
-                return "green";
-            case PaymentStatus.Unpaid:
-            default:
-                return "red";
-        }
-    }
-
-    @Watch("filterValue")
-    filterChanged() {
-        this.filteredActions = this.actions.filter((action) =>
-            action.achiever?.fullName?.toLowerCase().includes(this.filterValue.toLowerCase())
-        );
-    }
-}
+    props: {
+        actions: {
+            default: [],
+            type: Array as PropType<ActionForHistory[]>,
+        },
+    },
+    data() {
+        return {
+            filterValue: "",
+            filteredActions: [...this.actions],
+        };
+    },
+    methods: {
+        isPaymentPaid: function (action: ActionForHistory) {
+            return action.status === PaymentStatus.Paid;
+        },
+        formatPaymentStatus: function (status: PaymentStatus) {
+            switch (status) {
+                case PaymentStatus.Paid:
+                    return "Débloqué";
+                case PaymentStatus.Unpaid:
+                default:
+                    return "Non débloqué";
+            }
+        },
+        getPaymentStatusType: function (status: PaymentStatus) {
+            switch (status) {
+                case PaymentStatus.Paid:
+                    return "green";
+                case PaymentStatus.Unpaid:
+                default:
+                    return "red";
+            }
+        },
+    },
+    watch: {
+        filterValue: function () {
+            this.filteredActions = this.actions.filter((action) =>
+                action.achiever?.fullName?.toLowerCase().includes(this.filterValue.toLowerCase())
+            );
+        },
+    },
+});
 </script>
 
 <style lang="scss" scoped>

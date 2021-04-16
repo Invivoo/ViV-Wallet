@@ -5,12 +5,17 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import Vue from "vue";
 
-@Component
-export default class StatusBadge extends Vue {
-    @Prop() type!: string;
-}
+export default Vue.extend({
+    name: "status-badge",
+    props: {
+        type: {
+            required: true,
+            type: String,
+        },
+    },
+});
 </script>
 
 <style lang="scss" scoped>

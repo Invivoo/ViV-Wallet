@@ -1,7 +1,7 @@
 <template>
     <div class="wallets">
         <loading v-bind:loading="loading" v-bind:errored="errored">
-            <check-roles v-bind:roles="walletsRoles" withErrorMessage="true">
+            <check-roles v-bind:roles="walletsRoles" v-bind:withErrorMessage="true">
                 <section>
                     <h2>Wallets</h2>
                     <div class="buttons-container">
@@ -24,9 +24,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from "vue-property-decorator";
+import Vue from "vue";
 import { Consultant } from "../models/consultant";
-import { Expertise } from "../models/expertise";
 import { ConsultantsService } from "@/services/consultants";
 import { ExpertisesService } from "@/services/expertises";
 import Loading from "../components/Loading.vue";
@@ -37,22 +36,22 @@ import { Role, walletsRoles } from "../models/role";
 import CheckRoles from "../components/CheckRoles.vue";
 import { LoginService } from "../services/login";
 
-@Component({
+export default Vue.extend({
     name: "wallets",
     components: { ConsultantList, Loading, CheckRoles, FilterInput },
-})
-export default class Wallets extends Vue {
-    consultants: Consultant[] = [];
-    filteredConsultants: Consultant[] = [];
-    loading = true;
-    errored = false;
-
-    expertisesService = new ExpertisesService();
-    consultantsService = new ConsultantsService();
-    loginService = new LoginService();
-    walletsRoles = walletsRoles;
-    filterValue = "";
-
+    data() {
+        return {
+            consultants: [] as Consultant[],
+            filteredConsultants: [] as Consultant[],
+            loading: true,
+            errored: false,
+            expertisesService: new ExpertisesService(),
+            consultantsService: new ConsultantsService(),
+            loginService: new LoginService(),
+            walletsRoles: walletsRoles,
+            filterValue: "",
+        };
+    },
     async mounted() {
         try {
             const [expertises, allConsultants, userRoles] = await Promise.all([
@@ -77,15 +76,22 @@ export default class Wallets extends Vue {
         } finally {
             this.loading = false;
         }
-    }
-
-    @Watch("filterValue")
-    filterChanged() {
-        this.filteredConsultants = this.consultants.filter((consultant) =>
-            consultant.fullName?.toLowerCase().includes(this.filterValue.toLowerCase())
-        );
-    }
-}
+    },
+    methods: {
+        filterChanged: function () {
+            this.filteredConsultants = this.consultants.filter((consultant) =>
+                consultant.fullName?.toLowerCase().includes(this.filterValue.toLowerCase())
+            );
+        },
+    },
+    watch: {
+        filterValue: function () {
+            this.filteredConsultants = this.consultants.filter((consultant) =>
+                consultant.fullName?.toLowerCase().includes(this.filterValue.toLowerCase())
+            );
+        },
+    },
+});
 </script>
 
 <style scoped lang="scss">

@@ -18,9 +18,7 @@
         "jwt-decode": "^3.0.0",
         "v-calendar": "^1.0.0-beta.23",
         "vue": "^2.6.12",
-        "vue-class-component": "^7.2.6",
         "vue-fragment": "^1.5.1",
-        "vue-property-decorator": "^9.0.2",
         "vue-router": "^3.4.8",
         "x4b-ui": "https://www.myget.org/F/x4b/auth/d1a81b83-2f89-4063-85a4-9489e9ef0042/npm/x4b-ui/-/10.1.0.tgz"
     },
