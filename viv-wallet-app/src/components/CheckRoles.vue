@@ -6,28 +6,39 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import Vue, { PropType } from "vue";
 import { Role } from "../models/role";
 import { LoginService } from "../services/login";
 
-@Component({
+export default Vue.extend({
     name: "check-roles",
-})
-export default class CheckRoles extends Vue {
-    @Prop({ default: [] }) roles!: Role[];
-    @Prop({ default: false }) withErrorMessage!: boolean;
-    loginService = new LoginService();
-
-    isAuthorized() {
-        const userRoles = this.loginService.getRoles();
-        for (let role of this.roles) {
-            if (userRoles.includes(role)) {
-                return true;
+    props: {
+        roles: {
+            default: [],
+            type: Array as PropType<Role[]>,
+        },
+        withErrorMessage: {
+            default: false,
+            type: Boolean,
+        },
+    },
+    data() {
+        return {
+            loginService: new LoginService(),
+        };
+    },
+    methods: {
+        isAuthorized: function () {
+            const userRoles = this.loginService.getRoles();
+            for (let role of this.roles) {
+                if (userRoles.includes(role)) {
+                    return true;
+                }
             }
-        }
-        return false;
-    }
-}
+            return false;
+        },
+    },
+});
 </script>
 
 <style scoped lang="scss"></style>

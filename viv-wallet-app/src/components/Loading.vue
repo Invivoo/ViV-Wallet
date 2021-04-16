@@ -11,11 +11,19 @@
 </template>
 
 <script lang="ts">
-import { Vue, Prop, Component } from "vue-property-decorator";
+import Vue from "vue";
 
-@Component
-export default class Loading extends Vue {
-    @Prop({ default: true }) loading!: boolean;
-    @Prop({ default: false }) errored!: boolean;
-}
+export default Vue.extend({
+    name: "loading",
+    props: {
+        loading: {
+            default: true,
+            type: Boolean,
+        },
+        errored: {
+            default: false,
+            type: Boolean,
+        },
+    },
+});
 </script>

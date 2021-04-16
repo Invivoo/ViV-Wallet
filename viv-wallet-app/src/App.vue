@@ -34,32 +34,40 @@
     </div>
 </template>
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
 import "x4b-ui/dist/x4b-ui/x4b-ui.css";
 import CustomRouterLink from "./components/CustomRouterLink.vue";
 import CheckRoles from "./components/CheckRoles.vue";
 import { expertisesRoles, historyRoles, myWalletRoles, Role, walletsRoles } from "./models/role";
+import Vue from "vue";
 
-@Component({ components: { CustomRouterLink, CheckRoles } })
-export default class App extends Vue {
-    private appsUrl: string = process.env.VUE_APP_APPS_URL;
-    private appVersion: string = process.env.VUE_APP_PRODUCT_VERSION || "[PRODUCT_VERSION]";
-    private primaryColor: string = require("./styles/index.scss").primaryColor;
-    isMenuOpen = false;
-    isBannerInitialized = false;
-    myWalletRoles = myWalletRoles;
-    expertisesRoles = expertisesRoles;
-    walletsRoles = walletsRoles;
-    historyRoles = historyRoles;
-
-    handleMenuToggleButtonClicked(evt) {
-        this.isMenuOpen = evt.detail;
-    }
-
-    handleStartupFinished() {
-        this.isBannerInitialized = true;
-    }
-}
+export default Vue.extend({
+    name: "app",
+    components: {
+        "check-roles": CheckRoles,
+        "custom-router-link": CustomRouterLink,
+    },
+    data() {
+        return {
+            appsUrl: process.env.VUE_APP_APPS_URL,
+            appVersion: process.env.VUE_APP_PRODUCT_VERSION || "[PRODUCT_VERSION]",
+            primaryColor: require("./styles/index.scss").primaryColor,
+            isMenuOpen: false,
+            isBannerInitialized: false,
+            myWalletRoles: myWalletRoles,
+            expertisesRoles: expertisesRoles,
+            walletsRoles: walletsRoles,
+            historyRoles: historyRoles,
+        };
+    },
+    methods: {
+        handleMenuToggleButtonClicked: function (evt) {
+            this.isMenuOpen = evt.detail;
+        },
+        handleStartupFinished: function () {
+            this.isBannerInitialized = true;
+        },
+    },
+});
 </script>
 
 <style lang="scss">

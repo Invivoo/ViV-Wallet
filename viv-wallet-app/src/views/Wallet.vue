@@ -30,7 +30,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch } from "vue-property-decorator";
+import Vue from "vue";
 import { Action } from "../models/action";
 import BalanceCard from "../components/BalanceCard.vue";
 import Illustration from "../components/Illustration.vue";
@@ -45,60 +45,65 @@ import { UsersService } from "../services/users";
 import { ConsultantStatus, toString } from "../models/consultant";
 import CheckRoles from "../components/CheckRoles.vue";
 
-@Component({
+export default Vue.extend({
     name: "wallet",
     components: { BalanceCard, Illustration, ActionsBlock, PaymentHistoryBlock, Loading, CheckRoles },
-})
-export default class wallet extends Vue {
-    userRoles: Role[] | null | undefined = null;
-    actions: Action[] = [];
-    payments: Payment[] = [];
-    loading = true;
-    errored = false;
-    walletService = new WalletService();
-    loginService = new LoginService();
-    usersService = new UsersService();
-
-    balance = 0;
-    userId = "";
-    user = {};
-    adminOnly = adminOnly;
-    myWalletRoles = myWalletRoles;
-
-    formatConsultantStatus(status?: string) {
-        if (status) {
-            return toString(ConsultantStatus[status]);
-        }
-        return "";
-    }
-
-    shouldDisplayPayButton() {
-        return this.userRoles && this.userRoles.indexOf(Role.COMPANY_ADMINISTRATOR) !== -1;
-    }
-
-    @Watch("$route", { immediate: true, deep: true })
-    async onUrlChange() {
-        try {
-            if (this.$route.params.consultantId) {
-                this.userId = this.$route.params.consultantId;
-            } else {
-                this.userId = (await this.loginService.getUserId()) || "1"; // TODO to avoid crash (no authorization service yet)
+    data() {
+        return {
+            userRoles: null as Role[] | null | undefined,
+            actions: [] as Action[],
+            payments: [] as Payment[],
+            loading: true,
+            errored: false,
+            walletService: new WalletService(),
+            loginService: new LoginService(),
+            usersService: new UsersService(),
+            balance: 0,
+            userId: "",
+            user: {},
+            adminOnly: adminOnly,
+            myWalletRoles: myWalletRoles,
+        };
+    },
+    methods: {
+        formatConsultantStatus: function (status?: string) {
+            if (status) {
+                return toString(ConsultantStatus[status]);
             }
+            return "";
+        },
+        shouldDisplayPayButton: function () {
+            return this.userRoles && this.userRoles.indexOf(Role.COMPANY_ADMINISTRATOR) !== -1;
+        },
+    },
+    watch: {
+        $route: {
+            immediate: true,
+            deep: true,
+            async handler() {
+                try {
+                    if (this.$route.params.consultantId) {
+                        this.userId = this.$route.params.consultantId;
+                    } else {
+                        this.userId = (await this.loginService.getUserId()) || "1"; // TODO to avoid crash (no authorization service yet)
+                    }
 
-            [this.balance, this.actions, this.payments, this.userRoles, this.user] = await Promise.all([
-                this.walletService.getUserBalance(this.userId),
-                this.walletService.getUserActions(this.userId),
-                this.walletService.getUserPayments(this.userId),
-                this.loginService.getRoles(),
-                this.usersService.getUser(this.userId),
-            ]);
-        } catch (ex) {
-            this.errored = true;
-        } finally {
-            this.loading = false;
-        }
-    }
-}
+                    [this.balance, this.actions, this.payments, this.userRoles, this.user] = await Promise.all([
+                        this.walletService.getUserBalance(this.userId),
+                        this.walletService.getUserActions(this.userId),
+                        this.walletService.getUserPayments(this.userId),
+                        this.loginService.getRoles(),
+                        this.usersService.getUser(this.userId),
+                    ]);
+                } catch (ex) {
+                    this.errored = true;
+                } finally {
+                    this.loading = false;
+                }
+            },
+        },
+    },
+});
 </script>
 
 <style lang="scss" scoped>

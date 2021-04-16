@@ -2,7 +2,6 @@ import UserEdit from "@/views/UserEdit.vue";
 import { UsersService } from "@/services/users";
 import { factory } from "../testHelpers";
 import { User } from "@/models/user";
-import { prototype } from "vue/types/umd";
 
 jest.mock("@/services/users");
 
