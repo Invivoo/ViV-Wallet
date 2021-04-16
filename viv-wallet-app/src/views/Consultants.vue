@@ -1,7 +1,7 @@
 <template>
     <div class="consultants">
         <loading v-bind:loading="loading" v-bind:errored="errored">
-            <check-roles v-bind:roles="expertisesRoles" withErrorMessage="true">
+            <check-roles v-bind:roles="expertisesRoles" v-bind:withErrorMessage="true">
                 <section>
                     <h2>Consultants</h2>
                     <div class="buttons-container">
@@ -50,7 +50,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from "vue-property-decorator";
+import Vue from "vue";
 import { Consultant } from "../models/consultant";
 import { Expertise } from "../models/expertise";
 import { ConsultantsService } from "@/services/consultants";
@@ -61,20 +61,20 @@ import CheckRoles from "../components/CheckRoles.vue";
 import ConsultantList from "@/components/ConsultantList.vue";
 import { expertisesRoles } from "../models/role";
 
-@Component({
+export default Vue.extend({
     name: "members",
     components: { ConsultantList, Loading, CheckRoles },
-})
-export default class Consultants extends Vue {
-    consultants: Consultant[] = [];
-    expertises: Expertise[] = [];
-    selectedExpertiseId = "";
-    loading = true;
-    errored = false;
-    expertisesRoles = expertisesRoles;
-
-    expertisesService = new ExpertisesService();
-
+    data() {
+        return {
+            consultants: [] as Consultant[],
+            expertises: [] as Expertise[],
+            selectedExpertiseId: "",
+            loading: true,
+            errored: false,
+            expertisesRoles: expertisesRoles,
+            expertisesService: new ExpertisesService(),
+        };
+    },
     async mounted() {
         try {
             this.expertises = await this.expertisesService.getExpertises();
@@ -91,27 +91,27 @@ export default class Consultants extends Vue {
         } finally {
             this.loading = false;
         }
-    }
-
-    @Watch("$route")
-    async routeChanged() {
-        if (this.$route.params.id) {
-            this.selectedExpertiseId = this.$route.params.id;
-            await this.updateConsultants();
-        } else {
-            this.expertiseChanged();
-        }
-    }
-
-    expertiseChanged() {
-        this.$router.push(`/members/${this.selectedExpertiseId}`);
-    }
-
-    async updateConsultants() {
-        const consultantsService = new ConsultantsService();
-        this.consultants = await consultantsService.getConsultants(this.selectedExpertiseId);
-    }
-}
+    },
+    methods: {
+        expertiseChanged: function () {
+            this.$router.push(`/members/${this.selectedExpertiseId}`);
+        },
+        updateConsultants: async function () {
+            const consultantsService = new ConsultantsService();
+            this.consultants = await consultantsService.getConsultants(this.selectedExpertiseId);
+        },
+    },
+    watch: {
+        $route: async function () {
+            if (this.$route.params.id) {
+                this.selectedExpertiseId = this.$route.params.id;
+                await this.updateConsultants();
+            } else {
+                this.expertiseChanged();
+            }
+        },
+    },
+});
 </script>
 
 <style scoped lang="scss">

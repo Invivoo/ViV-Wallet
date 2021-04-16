@@ -12,15 +12,29 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import Vue from "vue";
 
-@Component
-export default class BalanceCard extends Vue {
-    @Prop() fullName!: string;
-    @Prop() expertise!: string;
-    @Prop() consultantStatus!: string;
-    @Prop() vivBalance!: string;
-}
+export default Vue.extend({
+    name: "balande-card",
+    props: {
+        fullName: {
+            required: true,
+            type: String,
+        },
+        expertise: {
+            required: true,
+            type: String,
+        },
+        consultantStatus: {
+            required: true,
+            type: String,
+        },
+        vivBalance: {
+            required: true,
+            type: Number,
+        },
+    },
+});
 </script>
 
 <style lang="scss" scoped>

@@ -25,16 +25,23 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import Vue, { PropType } from "vue";
 import { User } from "../models/user";
 
-@Component
-export default class UserList extends Vue {
-    @Prop() users!: User[];
-    onRowSelected(item: User) {
-        this.$router.push({ path: "users/" + item.id });
-    }
-}
+export default Vue.extend({
+    name: "user-list",
+    props: {
+        users: {
+            default: [],
+            type: Array as PropType<User[]>,
+        },
+    },
+    methods: {
+        onRowSelected: function (item: User) {
+            this.$router.push({ path: "users/" + item.id });
+        },
+    },
+});
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

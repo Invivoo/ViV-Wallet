@@ -41,7 +41,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import Vue from "vue";
 import { User } from "../models/user";
 import { UsersService } from "@/services/users";
 import { PaymentPost } from "../models/payment";
@@ -53,46 +53,60 @@ import ActionsBlock from "../components/ActionsBlock.vue";
 import Loading from "../components/Loading.vue";
 import { ConsultantStatus, toString } from "../models/consultant";
 
-const PaymentProps = Vue.extend({
+export default Vue.extend({
+    name: "payment",
+    components: { BalanceCard, Illustration, ActionsBlock, Loading },
     props: {
         id: String,
     },
-});
-
-@Component({
-    name: "payment",
-    components: { BalanceCard, Illustration, ActionsBlock, Loading },
-})
-export default class Payment extends PaymentProps {
-    user: User | null = { id: "", fullName: "", user: "", email: "" };
-    balance: number = 0;
-    date: Date = new Date();
-    unpaidActions: Action[] = [];
-
-    coeff: number = 5;
-    viv: number = 0;
-
-    loading = false;
-    errored = false;
-
-    usersService = new UsersService();
-    walletService = new WalletService();
-
-    formatConsultantStatus(status?: string) {
-        if (status) {
-            return toString(ConsultantStatus[status]);
-        }
-        return "";
-    }
-
-    get amount(): number {
-        return this.coeff * this.viv;
-    }
-
-    get hasBalanceToPay(): boolean {
-        return this.viv > 0;
-    }
-
+    data() {
+        return {
+            user: { id: "", fullName: "", user: "", email: "" } as User | null,
+            balance: 0,
+            date: new Date(),
+            unpaidActions: [] as Action[],
+            coeff: 5,
+            viv: 0,
+            loading: false,
+            errored: false,
+            usersService: new UsersService(),
+            walletService: new WalletService(),
+        };
+    },
+    computed: {
+        amount: function (): number {
+            return this.coeff * this.viv;
+        },
+        hasBalanceToPay: function (): boolean {
+            return this.viv > 0;
+        },
+    },
+    methods: {
+        formatConsultantStatus: function (status?: string) {
+            if (status) {
+                return toString(ConsultantStatus[status]);
+            }
+            return "";
+        },
+        AddPayment: async function () {
+            try {
+                this.loading = true;
+                if (this.hasBalanceToPay) {
+                    let payment: PaymentPost = {
+                        receiverId: this.id,
+                        date: this.date,
+                        actionIds: this.unpaidActions.map(({ id }) => id),
+                    };
+                    await this.walletService.saveUserPayment(payment);
+                    this.$router.push({ path: `/wallets/${this.id}` });
+                }
+            } catch (ex) {
+                this.errored = true;
+            } finally {
+                this.loading = false;
+            }
+        },
+    },
     async mounted() {
         try {
             [this.user, this.balance, this.unpaidActions] = await Promise.all([
@@ -106,26 +120,8 @@ export default class Payment extends PaymentProps {
         } finally {
             this.loading = false;
         }
-    }
-    async AddPayment() {
-        try {
-            this.loading = true;
-            if (this.hasBalanceToPay) {
-                let payment: PaymentPost = {
-                    receiverId: this.id,
-                    date: this.date,
-                    actionIds: this.unpaidActions.map(({ id }) => id),
-                };
-                await this.walletService.saveUserPayment(payment);
-                this.$router.push({ path: `/wallets/${this.id}` });
-            }
-        } catch (ex) {
-            this.errored = true;
-        } finally {
-            this.loading = false;
-        }
-    }
-}
+    },
+});
 </script>
 
 <style scoped lang="scss">

@@ -12,12 +12,16 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from "vue-property-decorator";
+import Vue from "vue";
 
-@Component
-export default class CustomRouterLink extends Vue {
-    @Prop() to!: string;
-}
+export default Vue.extend({
+    name: "custom-router-link",
+    props: {
+        to: {
+            type: String,
+        },
+    },
+});
 </script>
 
 <style />

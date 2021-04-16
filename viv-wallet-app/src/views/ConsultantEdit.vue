@@ -70,7 +70,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from "vue-property-decorator";
+import Vue from "vue";
 import { Consultant, ConsultantStatus, toString } from "../models/consultant";
 import { ConsultantsService } from "../services/consultants";
 import { UsersService } from "../services/users";
@@ -78,35 +78,26 @@ import { User } from "../models/user";
 import { Expertise } from "@/models/expertise";
 import Loading from "../components/Loading.vue";
 
-const ConsultantEditProps = Vue.extend({
+export default Vue.extend({
+    name: "consultant",
+    components: { Loading },
     props: {
         expertiseName: String,
         consultantId: String,
     },
-});
-
-@Component({
-    name: "consultant",
-    components: { Loading },
-})
-export default class ConsultantEdit extends ConsultantEditProps {
-    consultantsService: ConsultantsService;
-    usersService;
-    consultant: Consultant = {};
-    usersNotAlreadyInExpertise: User[] = [];
-    loading = false;
-    errored = false;
-    submitButtonDisabled = true;
-
-    options: { text: string; value: string; disabled: boolean }[] = [
-        { text: "Choisissez une option", value: "", disabled: true },
-    ];
-
-    constructor() {
-        super();
-        this.consultantsService = new ConsultantsService();
-        this.usersService = new UsersService();
-
+    data() {
+        return {
+            consultantsService: new ConsultantsService(),
+            usersService: new UsersService(),
+            consultant: {} as Consultant,
+            usersNotAlreadyInExpertise: [] as User[],
+            loading: false,
+            errored: false,
+            submitButtonDisabled: true,
+            options: [{ text: "Choisissez une option", value: "", disabled: true }],
+        };
+    },
+    created() {
         for (const [key, value] of Object.entries(ConsultantStatus)) {
             if (isNaN(Number(key))) {
                 // .entries contains either the constant names and indexes
@@ -117,8 +108,7 @@ export default class ConsultantEdit extends ConsultantEditProps {
                 });
             }
         }
-    }
-
+    },
     async mounted() {
         try {
             this.loading = true;
@@ -143,33 +133,34 @@ export default class ConsultantEdit extends ConsultantEditProps {
         } finally {
             this.loading = false;
         }
-    }
-
-    async confirm() {
-        try {
-            this.loading = true;
-            if (this.consultant) {
-                this.consultant.expertise = new Expertise(this.expertiseName, "");
-                await this.consultantsService.saveExpertise(this.consultant);
-                this.$router.push({ path: `/members/${this.expertiseName}` });
+    },
+    methods: {
+        confirm: async function () {
+            try {
+                this.loading = true;
+                if (this.consultant) {
+                    this.consultant.expertise = new Expertise(this.expertiseName, "");
+                    await this.consultantsService.saveExpertise(this.consultant);
+                    this.$router.push({ path: `/members/${this.expertiseName}` });
+                }
+            } catch (ex) {
+                this.errored = true;
+            } finally {
+                this.loading = false;
             }
-        } catch (ex) {
-            this.errored = true;
-        } finally {
-            this.loading = false;
-        }
-    }
-
-    @Watch("consultant.id")
-    async onSelectedUserChanged(value: string) {
-        const selectedUser = this.usersNotAlreadyInExpertise.find((u) => u.id === value);
-        if (selectedUser) {
-            this.consultant.user = selectedUser.user;
-            this.consultant.fullName = selectedUser.fullName;
-            this.submitButtonDisabled = false;
-        }
-    }
-}
+        },
+    },
+    watch: {
+        "consultant.id": async function (value: string) {
+            const selectedUser = this.usersNotAlreadyInExpertise.find((u) => u.id === value);
+            if (selectedUser) {
+                this.consultant.user = selectedUser.user;
+                this.consultant.fullName = selectedUser.fullName;
+                this.submitButtonDisabled = false;
+            }
+        },
+    },
+});
 </script>
 
 <style scoped lang="scss">
