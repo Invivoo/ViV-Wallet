@@ -1,15 +1,8 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
+import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import Home from "../views/Home.vue";
-import VCalendar from "v-calendar";
 require("focus-visible");
 
-Vue.use(VueRouter);
-Vue.use(VCalendar, {
-    componentPrefix: "vc", // Use <vc-calendar /> instead of <v-calendar />
-});
-
-const routes = [
+const routes: Array<RouteRecordRaw> = [
     {
         path: "/",
         name: "home",
@@ -71,9 +64,8 @@ const routes = [
     },
 ];
 
-const router = new VueRouter({
-    mode: "history",
-    base: process.env.BASE_URL,
+const router = createRouter({
+    history: createWebHistory(process.env.BASE_URL),
     routes,
 });
 

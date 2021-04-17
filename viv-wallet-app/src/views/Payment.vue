@@ -15,7 +15,7 @@
                 <form class="payment-form">
                     <div class="element-block inline-bloc w33">
                         <label id="lbl-date" for="payment-date">DATE</label>
-                        <vc-date-picker mode="single" id="payment-date" v-model="date" class="values" />
+                        <input id="payment-date" type="date" v-model="date" placeholder="Date de paiement" />
                     </div>
                     <div class="element-block inline-bloc w33">
                         <label id="lbl-viv">TOTAL VIVs</label>
@@ -30,9 +30,7 @@
                         <button class="primary-button" :disabled="!hasBalanceToPay" v-on:click="AddPayment">
                             Valider
                         </button>
-                        <router-link class="secondary-button" v-bind:to="`/wallets/${id}`" tag="button"
-                            >Cancel</router-link
-                        >
+                        <router-link class="secondary-button" v-bind:to="`/wallets/${id}`">Cancel</router-link>
                     </div>
                 </form>
             </section>
@@ -41,7 +39,7 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import { User } from "../models/user";
 import { UsersService } from "@/services/users";
 import { PaymentPost } from "../models/payment";
@@ -53,11 +51,14 @@ import ActionsBlock from "../components/ActionsBlock.vue";
 import Loading from "../components/Loading.vue";
 import { ConsultantStatus, toString } from "../models/consultant";
 
-export default Vue.extend({
+export default defineComponent({
     name: "payment",
     components: { BalanceCard, Illustration, ActionsBlock, Loading },
     props: {
-        id: String,
+        id: {
+            required: true,
+            type: String,
+        },
     },
     data() {
         return {

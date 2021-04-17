@@ -24,7 +24,7 @@
 
                     <div class="buttons">
                         <button class="primary-button" v-on:click="confirmUser">Confirmer</button>
-                        <router-link class="secondary-button" to="/users" tag="button">Cancel</router-link>
+                        <router-link class="secondary-button" to="/users">Cancel</router-link>
                         <button class="secondary-button" v-on:click="deleteUser">Supprimer</button>
                     </div>
                 </form>
@@ -34,16 +34,19 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import { User } from "../models/user";
 import { UsersService } from "@/services/users";
 import Loading from "../components/Loading.vue";
 
-export default Vue.extend({
+export default defineComponent({
     name: "user",
     components: { Loading },
     props: {
-        id: String,
+        id: {
+            required: true,
+            type: String,
+        },
     },
     data() {
         return {

@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import { ActionForHistory } from "../models/action";
 import { WalletService } from "../services/wallet";
 import Loading from "../components/Loading.vue";
@@ -20,7 +20,7 @@ import ActionHistory from "../components/ActionHistory.vue";
 import { historyRoles } from "../models/role";
 import CheckRoles from "../components/CheckRoles.vue";
 
-export default Vue.extend({
+export default defineComponent({
     name: "history",
     components: { ActionHistory, Loading, CheckRoles },
     data() {

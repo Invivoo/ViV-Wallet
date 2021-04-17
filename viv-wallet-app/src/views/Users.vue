@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import { User } from "../models/user";
 import { UsersService } from "@/services/users";
 import Loading from "../components/Loading.vue";
@@ -18,7 +18,7 @@ import UserList from "@/components/UserList.vue";
 import { adminOnly } from "../models/role";
 import CheckRoles from "../components/CheckRoles.vue";
 
-export default Vue.extend({
+export default defineComponent({
     name: "users",
     components: { UserList, Loading, CheckRoles },
     data() {

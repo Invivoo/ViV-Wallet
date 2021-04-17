@@ -1,5 +1,5 @@
 <template>
-    <Section>
+    <section>
         <filter-input v-model="filterValue" />
         <table v-if="actions.length > 0">
             <colgroup>
@@ -49,21 +49,21 @@
             </tbody>
         </table>
         <p v-else class="none">Aucun historique trouvé !</p>
-    </Section>
+    </section>
 </template>
 
 <script lang="ts">
 import { ActionForHistory, PaymentStatus } from "../models/action";
 import StatusBadge from "../components/StatusBadge.vue";
 import FilterInput from "../components/FilterInput.vue";
-import Vue, { PropType } from "vue";
+import { defineComponent, PropType } from "vue";
 
-export default Vue.extend({
+export default defineComponent({
     name: "action-history",
     components: { StatusBadge, FilterInput },
     props: {
         actions: {
-            default: [],
+            default: () => [],
             type: Array as PropType<ActionForHistory[]>,
         },
     },

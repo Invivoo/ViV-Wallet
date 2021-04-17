@@ -27,9 +27,9 @@
                         </div>
                         <div class="spacer" />
                         <router-link
+                            v-if="selectedExpertiseId"
                             class="primary-button"
                             v-bind:to="`/members/${selectedExpertiseId}/add`"
-                            tag="button"
                             >Ajouter</router-link
                         >
                     </div>
@@ -38,7 +38,6 @@
                             <router-link
                                 v-bind:to="`/members/${selectedExpertiseId}/${consultantId}`"
                                 class="tertiary-button update-button"
-                                tag="button"
                                 >Mettre à jour</router-link
                             >
                         </template>
@@ -50,7 +49,7 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import { Consultant } from "../models/consultant";
 import { Expertise } from "../models/expertise";
 import { ConsultantsService } from "@/services/consultants";
@@ -61,7 +60,7 @@ import CheckRoles from "../components/CheckRoles.vue";
 import ConsultantList from "@/components/ConsultantList.vue";
 import { expertisesRoles } from "../models/role";
 
-export default Vue.extend({
+export default defineComponent({
     name: "members",
     components: { ConsultantList, Loading, CheckRoles },
     data() {
@@ -79,7 +78,7 @@ export default Vue.extend({
         try {
             this.expertises = await this.expertisesService.getExpertises();
             if (this.$route.params.id) {
-                this.selectedExpertiseId = this.$route.params.id;
+                this.selectedExpertiseId = this.$route.params.id as string;
                 await this.updateConsultants();
             } else {
                 if (this.expertises.length > 0) {
@@ -102,12 +101,10 @@ export default Vue.extend({
         },
     },
     watch: {
-        $route: async function () {
+        "$route.params": async function () {
             if (this.$route.params.id) {
-                this.selectedExpertiseId = this.$route.params.id;
+                this.selectedExpertiseId = this.$route.params.id as string;
                 await this.updateConsultants();
-            } else {
-                this.expertiseChanged();
             }
         },
     },

@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import { Consultant } from "../models/consultant";
 import { ConsultantsService } from "@/services/consultants";
 import { ExpertisesService } from "@/services/expertises";
@@ -36,7 +36,7 @@ import { Role, walletsRoles } from "../models/role";
 import CheckRoles from "../components/CheckRoles.vue";
 import { LoginService } from "../services/login";
 
-export default Vue.extend({
+export default defineComponent({
     name: "wallets",
     components: { ConsultantList, Loading, CheckRoles, FilterInput },
     data() {
