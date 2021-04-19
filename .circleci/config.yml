@@ -78,13 +78,7 @@ jobs:
                   name: Unit Test
                   working_directory: viv-wallet-app
                   command: npm run test:unit
-            - run:
-                  name: E2E Test
-                  working_directory: viv-wallet-app
-                  command: npm run test:e2e
             - *save_node
-            - store_artifacts:
-                  path: ~/repo/viv-wallet-app/tests/e2e/videos
 
     build:
         docker:
