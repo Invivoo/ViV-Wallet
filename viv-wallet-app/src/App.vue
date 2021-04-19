@@ -7,8 +7,7 @@
             disable-fake-elements="true"
             languages="fr"
             :color="primaryColor"
-            @menuToggleButtonClicked="handleMenuToggleButtonClicked"
-            @startupFinished="handleStartupFinished"
+            ref="x4bui"
         >
             <div v-if="isBannerInitialized" class="root">
                 <div v-bind:class="['menu', isMenuOpen ? '' : 'hidden']">
@@ -37,10 +36,10 @@
 import "x4b-ui/dist/x4b-ui/x4b-ui.css";
 import CustomRouterLink from "./components/CustomRouterLink.vue";
 import CheckRoles from "./components/CheckRoles.vue";
-import { expertisesRoles, historyRoles, myWalletRoles, Role, walletsRoles } from "./models/role";
-import Vue from "vue";
+import { expertisesRoles, historyRoles, Role, myWalletRoles, walletsRoles } from "./models/role";
+import { defineComponent } from "vue";
 
-export default Vue.extend({
+export default defineComponent({
     name: "app",
     components: {
         "check-roles": CheckRoles,
@@ -50,7 +49,7 @@ export default Vue.extend({
         return {
             appsUrl: process.env.VUE_APP_APPS_URL,
             appVersion: process.env.VUE_APP_PRODUCT_VERSION || "[PRODUCT_VERSION]",
-            primaryColor: require("./styles/index.scss").primaryColor,
+            primaryColor: "#4c51bf",
             isMenuOpen: false,
             isBannerInitialized: false,
             myWalletRoles: myWalletRoles,
@@ -66,6 +65,20 @@ export default Vue.extend({
         handleStartupFinished: function () {
             this.isBannerInitialized = true;
         },
+    },
+    mounted() {
+        (this.$refs.x4bui as HTMLElement).addEventListener("startupFinished", this.handleStartupFinished);
+        (this.$refs.x4bui as HTMLElement).addEventListener(
+            "menuToggleButtonClicked",
+            this.handleMenuToggleButtonClicked
+        );
+    },
+    unmounted() {
+        (this.$refs.x4bui as HTMLElement).removeEventListener("startupFinished", this.handleStartupFinished);
+        (this.$refs.x4bui as HTMLElement).removeEventListener(
+            "menuToggleButtonClicked",
+            this.handleMenuToggleButtonClicked
+        );
     },
 });
 </script>

@@ -1,15 +1,15 @@
-import { shallowMount, createLocalVue } from "@vue/test-utils";
-import VueRouter from "vue-router";
+import { render } from "@testing-library/vue";
+import router from "@/router";
 
-const localVue = createLocalVue();
-localVue.use(VueRouter);
-const router = new VueRouter();
-export const factory = (component) => (values = {}) => {
-    return shallowMount(component, {
-        localVue,
-        router,
-        propsData: {
-            ...values,
+const customRender = async (Component, options = {}) => {
+    const renderResult = render(Component, {
+        global: {
+            plugins: [router],
         },
+        ...options,
     });
+    await router.isReady();
+    return renderResult;
 };
+
+export { customRender as render };

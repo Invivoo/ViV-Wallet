@@ -1,19 +1,17 @@
 <template>
-    <fragment>
-        <div v-if="errored">
-            <p>Une erreur s'est produite lors de la récupération des données. Veuillez réessayer plus tard.</p>
-        </div>
-        <div v-else>
-            <div v-if="loading">Chargement...</div>
-            <slot v-else />
-        </div>
-    </fragment>
+    <div v-if="errored">
+        <p>Une erreur s'est produite lors de la récupération des données. Veuillez réessayer plus tard.</p>
+    </div>
+    <div v-else>
+        <div v-if="loading">Chargement...</div>
+        <slot v-else />
+    </div>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 
-export default Vue.extend({
+export default defineComponent({
     name: "loading",
     props: {
         loading: {

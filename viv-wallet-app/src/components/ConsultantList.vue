@@ -39,16 +39,16 @@
 </template>
 
 <script lang="ts">
-import Vue, { PropType } from "vue";
+import { defineComponent, PropType } from "vue";
 import { Consultant, ConsultantStatus, toString } from "../models/consultant";
 import StatusBadge from "../components/StatusBadge.vue";
 
-export default Vue.extend({
+export default defineComponent({
     name: "consultant-list",
     components: { StatusBadge },
     props: {
         consultants: {
-            default: [],
+            default: () => [],
             type: Array as PropType<Consultant[]>,
         },
     },

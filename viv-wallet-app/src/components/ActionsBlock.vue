@@ -1,5 +1,5 @@
 <template>
-    <Section>
+    <section>
         <h2>Actions</h2>
         <table v-if="actions.length > 0">
             <colgroup>
@@ -44,20 +44,20 @@
             </tbody>
         </table>
         <p v-else class="none">Aucune action trouvée !</p>
-    </Section>
+    </section>
 </template>
 
 <script lang="ts">
-import Vue, { PropType } from "vue";
+import { defineComponent, PropType } from "vue";
 import { Action, PaymentStatus } from "../models/action";
 import StatusBadge from "../components/StatusBadge.vue";
 
-export default Vue.extend({
+export default defineComponent({
     name: "actions-block",
     components: { StatusBadge },
     props: {
         actions: {
-            default: [],
+            default: () => [],
             type: Array as PropType<Action[]>,
         },
     },

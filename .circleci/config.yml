@@ -57,7 +57,7 @@ references:
 jobs:
     build-vuejs:
         docker:
-            - image: circleci/node:12.13.0-browsers
+            - image: circleci/node:15.14.0-browsers
         working_directory: ~/repo
         steps:
             - checkout
@@ -65,7 +65,7 @@ jobs:
             - run:
                   name: Prepare
                   working_directory: viv-wallet-app
-                  command: npm install
+                  command: npm ci --legacy-peer-deps
             - run:
                   name: Lint
                   working_directory: viv-wallet-app
@@ -78,13 +78,7 @@ jobs:
                   name: Unit Test
                   working_directory: viv-wallet-app
                   command: npm run test:unit
-            - run:
-                  name: E2E Test
-                  working_directory: viv-wallet-app
-                  command: npm run test:e2e
             - *save_node
-            - store_artifacts:
-                  path: ~/repo/viv-wallet-app/tests/e2e/videos
 
     build:
         docker:
@@ -122,7 +116,7 @@ jobs:
 
     package:
         docker:
-            - image: circleci/node:12.1
+            - image: circleci/node:15.14
         working_directory: ~/repo
         steps:
             - checkout

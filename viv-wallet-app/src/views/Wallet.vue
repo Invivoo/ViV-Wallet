@@ -17,7 +17,6 @@
                             class="primary-button payment-btn"
                             v-bind:to="{ path: `/payment/${user.id}` }"
                             v-if="shouldDisplayPayButton()"
-                            tag="button"
                             >Payer maintenant</router-link
                         >
                     </div>
@@ -30,7 +29,7 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import { Action } from "../models/action";
 import BalanceCard from "../components/BalanceCard.vue";
 import Illustration from "../components/Illustration.vue";
@@ -45,7 +44,7 @@ import { UsersService } from "../services/users";
 import { ConsultantStatus, toString } from "../models/consultant";
 import CheckRoles from "../components/CheckRoles.vue";
 
-export default Vue.extend({
+export default defineComponent({
     name: "wallet",
     components: { BalanceCard, Illustration, ActionsBlock, PaymentHistoryBlock, Loading, CheckRoles },
     data() {
@@ -83,7 +82,7 @@ export default Vue.extend({
             async handler() {
                 try {
                     if (this.$route.params.consultantId) {
-                        this.userId = this.$route.params.consultantId;
+                        this.userId = this.$route.params.consultantId as string;
                     } else {
                         this.userId = (await this.loginService.getUserId()) || "1"; // TODO to avoid crash (no authorization service yet)
                     }

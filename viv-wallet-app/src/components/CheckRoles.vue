@@ -1,20 +1,18 @@
 <template>
-    <fragment>
-        <slot v-if="isAuthorized()"></slot>
-        <p v-else-if="withErrorMessage">Not authorized</p>
-    </fragment>
+    <slot v-if="isAuthorized()"></slot>
+    <p v-else-if="withErrorMessage">Not authorized</p>
 </template>
 
 <script lang="ts">
-import Vue, { PropType } from "vue";
+import { defineComponent, PropType } from "vue";
 import { Role } from "../models/role";
 import { LoginService } from "../services/login";
 
-export default Vue.extend({
+export default defineComponent({
     name: "check-roles",
     props: {
         roles: {
-            default: [],
+            default: () => [],
             type: Array as PropType<Role[]>,
         },
         withErrorMessage: {
