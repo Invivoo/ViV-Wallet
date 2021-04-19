@@ -1,5 +1,5 @@
 <template>
-    <router-link :to="to" v-slot="{ route, href, navigate }">
+    <router-link :to="to" custom v-slot="{ route, href, navigate }">
         <a
             :href="href"
             @click="navigate"
@@ -12,9 +12,9 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 
-export default Vue.extend({
+export default defineComponent({
     name: "custom-router-link",
     props: {
         to: {

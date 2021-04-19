@@ -1,4 +1,6 @@
 .primary-button {
+    display: block;
+    width: fit-content;
     font-family: "Open Sans", sans-serif;
     background: $primary-700;
     color: $white;
@@ -14,7 +16,8 @@
         background: $white;
         color: $primary-700;
     }
-    &:hover:enabled {
+    &:hover:enabled,
+    &:hover:not(button) {
         background: $primary-800;
     }
     &:focus {
@@ -24,6 +27,8 @@
 }
 
 .secondary-button {
+    display: block;
+    width: fit-content;
     font-family: "Open Sans", sans-serif;
     background: transparent;
     color: $primary-700;
@@ -44,6 +49,8 @@
 }
 
 .tertiary-button {
+    display: block;
+    width: fit-content;
     font-family: "Open Sans", sans-serif;
     text-decoration: none;
     background: none;

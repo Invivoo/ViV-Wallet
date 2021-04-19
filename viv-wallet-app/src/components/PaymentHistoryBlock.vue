@@ -101,14 +101,14 @@
 </template>
 
 <script lang="ts">
-import Vue, { PropType } from "vue";
+import { defineComponent, PropType } from "vue";
 import { Payment } from "../models/payment";
 
-export default Vue.extend({
+export default defineComponent({
     name: "payment-history-block",
     props: {
         payments: {
-            default: [],
+            default: () => [],
             type: Array as PropType<Payment[]>,
         },
     },

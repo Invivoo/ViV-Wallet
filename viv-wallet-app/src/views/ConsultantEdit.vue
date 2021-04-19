@@ -60,9 +60,7 @@
                     <button class="primary-button" v-on:click="confirm" :disabled="submitButtonDisabled">
                         Confirmer
                     </button>
-                    <router-link class="secondary-button" v-bind:to="`/members/${expertiseName}`" tag="button"
-                        >Cancel</router-link
-                    >
+                    <router-link class="secondary-button" v-bind:to="`/members/${expertiseName}`">Cancel</router-link>
                 </div>
             </form>
         </loading>
@@ -70,7 +68,7 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import { Consultant, ConsultantStatus, toString } from "../models/consultant";
 import { ConsultantsService } from "../services/consultants";
 import { UsersService } from "../services/users";
@@ -78,12 +76,18 @@ import { User } from "../models/user";
 import { Expertise } from "@/models/expertise";
 import Loading from "../components/Loading.vue";
 
-export default Vue.extend({
+export default defineComponent({
     name: "consultant",
     components: { Loading },
     props: {
-        expertiseName: String,
-        consultantId: String,
+        expertiseName: {
+            required: true,
+            type: String,
+        },
+        consultantId: {
+            required: true,
+            type: String,
+        },
     },
     data() {
         return {

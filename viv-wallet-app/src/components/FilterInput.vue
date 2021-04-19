@@ -13,17 +13,17 @@
                 type="text"
                 id="filter"
                 placeholder="Filtrer par utilisateur"
-                :value="filterValue"
-                @input="$emit('input', $event.target.value)"
+                :modelValue="filterValue"
+                @input="$emit('update:modelValue', $event.target.value)"
             />
         </div>
     </div>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 
-export default Vue.extend({
+export default defineComponent({
     name: "filter-input",
     props: {
         filterValue: {
