@@ -19,11 +19,6 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import(/* webpackChunkName: "actions" */ "../views/History.vue"),
     },
     {
-        path: "/users",
-        name: "users",
-        component: () => import(/* webpackChunkName: "users" */ "../views/Users.vue"),
-    },
-    {
         path: "/members",
         name: "members",
         component: () => import(/* webpackChunkName: "members" */ "../views/Consultants.vue"),
@@ -37,12 +32,6 @@ const routes: Array<RouteRecordRaw> = [
         path: "/members/:expertiseName/:consultantId",
         name: "memberEdit",
         component: () => import(/* webpackChunkName: "members" */ "../views/ConsultantEdit.vue"),
-        props: true,
-    },
-    {
-        path: "/users/:id",
-        name: "userEdit",
-        component: () => import(/* webpackChunkName: "users" */ "../views/UserEdit.vue"),
         props: true,
     },
     {
