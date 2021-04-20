@@ -71,6 +71,10 @@ jobs:
                   working_directory: viv-wallet-app
                   command: npm run lint
             - run:
+                  name: Typecheck
+                  working_directory: viv-wallet-app
+                  command: npm run typecheck
+            - run:
                   name: Build
                   working_directory: viv-wallet-app
                   command: npm run build

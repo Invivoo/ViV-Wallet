@@ -85,7 +85,7 @@ export default defineComponent({
         },
     },
     methods: {
-        formatConsultantStatus: function (status?: string) {
+        formatConsultantStatus: function (status?: keyof typeof ConsultantStatus) {
             if (status) {
                 return toString(ConsultantStatus[status]);
             }

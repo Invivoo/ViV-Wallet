@@ -59,8 +59,8 @@ export default defineComponent({
         };
     },
     methods: {
-        handleMenuToggleButtonClicked: function (evt) {
-            this.isMenuOpen = evt.detail;
+        handleMenuToggleButtonClicked: function (evt: Event) {
+            this.isMenuOpen = (evt as CustomEvent<boolean>).detail;
         },
         handleStartupFinished: function () {
             this.isBannerInitialized = true;
