@@ -34,10 +34,10 @@
 </template>
 <script lang="ts">
 import "x4b-ui/dist/x4b-ui/x4b-ui.css";
-import CustomRouterLink from "./components/CustomRouterLink.vue";
-import CheckRoles from "./components/CheckRoles.vue";
-import { expertisesRoles, historyRoles, Role, myWalletRoles, walletsRoles } from "./models/role";
 import { defineComponent } from "vue";
+import CheckRoles from "./components/CheckRoles.vue";
+import CustomRouterLink from "./components/CustomRouterLink.vue";
+import { expertisesRoles, historyRoles, myWalletRoles, walletsRoles } from "./models/role";
 
 export default defineComponent({
     name: "app",

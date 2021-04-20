@@ -49,8 +49,8 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
-import { Action, PaymentStatus } from "../models/action";
 import StatusBadge from "../components/StatusBadge.vue";
+import { Action, PaymentStatus } from "../models/action";
 
 export default defineComponent({
     name: "actions-block",

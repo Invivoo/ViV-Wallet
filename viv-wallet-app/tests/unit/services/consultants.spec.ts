@@ -1,5 +1,5 @@
 import { Consultant, ConsultantStatus } from "@/models/consultant";
-import { normalizeRawConsultant, consultantToRaw } from "@/services/consultants";
+import { consultantToRaw, normalizeRawConsultant } from "@/services/consultants";
 
 describe("ConsultantsService helper functions", () => {
     it("should normalize before saving", () => {

@@ -30,26 +30,26 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { Action } from "../models/action";
-import BalanceCard from "../components/BalanceCard.vue";
-import Illustration from "../components/Illustration.vue";
 import ActionsBlock from "../components/ActionsBlock.vue";
-import PaymentHistoryBlock from "../components/PaymentHistoryBlock.vue";
-import { Payment } from "../models/payment";
-import { WalletService } from "../services/wallet";
+import BalanceCard from "../components/BalanceCard.vue";
+import CheckRoles from "../components/CheckRoles.vue";
+import Illustration from "../components/Illustration.vue";
 import Loading from "../components/Loading.vue";
+import PaymentHistoryBlock from "../components/PaymentHistoryBlock.vue";
+import { Action } from "../models/action";
+import { ConsultantStatus, toString } from "../models/consultant";
+import { Payment } from "../models/payment";
 import { adminOnly, myWalletRoles, Role } from "../models/role";
 import { LoginService } from "../services/login";
 import { UsersService } from "../services/users";
-import { ConsultantStatus, toString } from "../models/consultant";
-import CheckRoles from "../components/CheckRoles.vue";
+import { WalletService } from "../services/wallet";
 
 export default defineComponent({
     name: "wallet",
     components: { BalanceCard, Illustration, ActionsBlock, PaymentHistoryBlock, Loading, CheckRoles },
     data() {
         return {
-            userRoles: null as Role[] | null | undefined,
+            userRoles: undefined as Role[] | null | undefined,
             actions: [] as Action[],
             payments: [] as Payment[],
             loading: true,
@@ -72,7 +72,7 @@ export default defineComponent({
             return "";
         },
         shouldDisplayPayButton: function () {
-            return this.userRoles && this.userRoles.indexOf(Role.COMPANY_ADMINISTRATOR) !== -1;
+            return this.userRoles && this.userRoles.includes(Role.COMPANY_ADMINISTRATOR);
         },
     },
     watch: {
@@ -81,11 +81,9 @@ export default defineComponent({
             deep: true,
             async handler() {
                 try {
-                    if (this.$route.params.consultantId) {
-                        this.userId = this.$route.params.consultantId as string;
-                    } else {
-                        this.userId = (await this.loginService.getUserId()) || "1"; // TODO to avoid crash (no authorization service yet)
-                    }
+                    this.userId = this.$route.params.consultantId
+                        ? (this.$route.params.consultantId as string)
+                        : (await this.loginService.getUserId()) || "1";
 
                     [this.balance, this.actions, this.payments, this.userRoles, this.user] = await Promise.all([
                         this.walletService.getUserBalance(this.userId),
@@ -94,7 +92,7 @@ export default defineComponent({
                         this.loginService.getRoles(),
                         this.usersService.getUser(this.userId),
                     ]);
-                } catch (ex) {
+                } catch {
                     this.errored = true;
                 } finally {
                     this.loading = false;

@@ -50,14 +50,13 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { Consultant } from "../models/consultant";
-import { Expertise } from "../models/expertise";
+import ConsultantList from "@/components/ConsultantList.vue";
 import { ConsultantsService } from "@/services/consultants";
 import { ExpertisesService } from "@/services/expertises";
-import Loading from "../components/Loading.vue";
 import CheckRoles from "../components/CheckRoles.vue";
-
-import ConsultantList from "@/components/ConsultantList.vue";
+import Loading from "../components/Loading.vue";
+import { Consultant } from "../models/consultant";
+import { Expertise } from "../models/expertise";
 import { expertisesRoles } from "../models/role";
 
 export default defineComponent({
@@ -85,7 +84,7 @@ export default defineComponent({
                     this.$router.push(`/members/${this.expertises[0].id}`);
                 }
             }
-        } catch (ex) {
+        } catch {
             this.errored = true;
         } finally {
             this.loading = false;

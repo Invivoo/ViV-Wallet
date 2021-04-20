@@ -1,5 +1,5 @@
-import { User } from "@/models/user";
 import axios from "axios";
+import { User } from "@/models/user";
 import { UsersService } from "@/services/users";
 
 jest.mock("axios");

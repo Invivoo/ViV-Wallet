@@ -25,15 +25,14 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { Consultant } from "../models/consultant";
+import ConsultantList from "@/components/ConsultantList.vue";
 import { ConsultantsService } from "@/services/consultants";
 import { ExpertisesService } from "@/services/expertises";
-import Loading from "../components/Loading.vue";
-import FilterInput from "../components/FilterInput.vue";
-
-import ConsultantList from "@/components/ConsultantList.vue";
-import { Role, walletsRoles } from "../models/role";
 import CheckRoles from "../components/CheckRoles.vue";
+import FilterInput from "../components/FilterInput.vue";
+import Loading from "../components/Loading.vue";
+import { Consultant } from "../models/consultant";
+import { Role, walletsRoles } from "../models/role";
 import { LoginService } from "../services/login";
 
 export default defineComponent({
@@ -59,19 +58,18 @@ export default defineComponent({
                 this.consultantsService.getConsultants(),
                 this.loginService.getRoles(),
             ]);
-            if (userRoles.includes(Role.COMPANY_ADMINISTRATOR) || userRoles.includes(Role.SENIOR_MANAGER)) {
-                this.consultants = allConsultants;
-            } else {
-                this.consultants = allConsultants.filter(
-                    (consultant) =>
-                        consultant.expertise &&
-                        expertises
-                            .map((expertise) => expertise.expertiseName)
-                            .includes(consultant.expertise.expertiseName)
-                );
-            }
+            this.consultants =
+                userRoles.includes(Role.COMPANY_ADMINISTRATOR) || userRoles.includes(Role.SENIOR_MANAGER)
+                    ? allConsultants
+                    : allConsultants.filter(
+                          (consultant) =>
+                              consultant.expertise &&
+                              expertises
+                                  .map((expertise) => expertise.expertiseName)
+                                  .includes(consultant.expertise.expertiseName)
+                      );
             this.filterChanged();
-        } catch (ex) {
+        } catch {
             this.errored = true;
         } finally {
             this.loading = false;
@@ -86,9 +84,7 @@ export default defineComponent({
     },
     watch: {
         filterValue: function () {
-            this.filteredConsultants = this.consultants.filter((consultant) =>
-                consultant.fullName?.toLowerCase().includes(this.filterValue.toLowerCase())
-            );
+            this.filterChanged();
         },
     },
 });
