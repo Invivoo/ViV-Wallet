@@ -13,12 +13,12 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { ActionForHistory } from "../models/action";
-import { WalletService } from "../services/wallet";
-import Loading from "../components/Loading.vue";
 import ActionHistory from "../components/ActionHistory.vue";
-import { historyRoles } from "../models/role";
 import CheckRoles from "../components/CheckRoles.vue";
+import Loading from "../components/Loading.vue";
+import { ActionForHistory } from "../models/action";
+import { historyRoles } from "../models/role";
+import { WalletService } from "../services/wallet";
 
 export default defineComponent({
     name: "history",
@@ -37,7 +37,7 @@ export default defineComponent({
             this.actions = (await this.walletService.getAllActions()).sort(
                 (a, b) => b.creationDate.getTime() - a.creationDate.getTime()
             );
-        } catch (ex) {
+        } catch {
             this.errored = true;
         } finally {
             this.loading = false;

@@ -1,6 +1,6 @@
+import "@testing-library/jest-dom";
 import Home from "@/views/Home.vue";
 import { render } from "../testHelpers";
-import "@testing-library/jest-dom";
 
 describe("Home", () => {
     it("renders the home page", async () => {

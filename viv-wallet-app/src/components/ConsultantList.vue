@@ -40,8 +40,8 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
-import { Consultant, ConsultantStatus, toString } from "../models/consultant";
 import StatusBadge from "../components/StatusBadge.vue";
+import { Consultant, ConsultantStatus, toString } from "../models/consultant";
 
 export default defineComponent({
     name: "consultant-list",

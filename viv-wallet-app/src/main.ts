@@ -1,8 +1,7 @@
-import Vue, { createApp } from "vue";
+import { createApp } from "vue";
+import { applyPolyfills, defineCustomElements } from "x4b-ui/loader";
 import App from "./App.vue";
 import router from "./router";
-
-import { applyPolyfills, defineCustomElements } from "x4b-ui/loader";
 
 applyPolyfills().then(() => {
     defineCustomElements();

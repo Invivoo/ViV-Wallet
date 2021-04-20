@@ -1,6 +1,6 @@
 import { AxiosInstance } from "axios";
-import { ServiceBase } from "./serviceBase";
 import { Expertise } from "@/models/expertise";
+import { ServiceBase } from "./serviceBase";
 
 export class ExpertisesService extends ServiceBase {
     constructor(http?: AxiosInstance) {
