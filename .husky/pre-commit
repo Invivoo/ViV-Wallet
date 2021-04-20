@@ -1,0 +1,5 @@
+#!/bin/sh
+set -e
+
+cd viv-wallet-app
+npx pretty-quick --staged
