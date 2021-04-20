@@ -2,7 +2,9 @@ import { AxiosInstance } from "axios";
 import { Consultant, ConsultantStatus } from "../models/consultant";
 import { ServiceBase } from "./serviceBase";
 
-type RawConsultant = Omit<Consultant, "status"> & { status: string };
+type RawConsultant = Omit<Consultant, "status"> & {
+    status: keyof typeof ConsultantStatus;
+};
 
 export class ConsultantsService extends ServiceBase {
     constructor(http?: AxiosInstance) {
@@ -11,10 +13,12 @@ export class ConsultantsService extends ServiceBase {
 
     async getConsultants(expertiseName?: string): Promise<Consultant[]> {
         return expertiseName
-            ? (await this.http.get(`/users?expertise=${expertiseName}`)).data.map((rawConsultant) =>
+            ? (await this.http.get<RawConsultant[]>(`/users?expertise=${expertiseName}`)).data.map((rawConsultant) =>
                   normalizeRawConsultant(rawConsultant)
               )
-            : (await this.http.get(`/users`)).data.map((rawConsultant) => normalizeRawConsultant(rawConsultant));
+            : (await this.http.get<RawConsultant[]>(`/users`)).data.map((rawConsultant) =>
+                  normalizeRawConsultant(rawConsultant)
+              );
     }
 
     async saveExpertise(consultant: Consultant): Promise<Object> {

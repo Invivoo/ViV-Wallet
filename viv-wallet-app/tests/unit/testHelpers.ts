@@ -1,7 +1,7 @@
 import { render } from "@testing-library/vue";
 import router from "@/router";
 
-const customRender = async (Component, options = {}) => {
+const customRender = async (Component: unknown, options = {}) => {
     const renderResult = render(Component, {
         global: {
             plugins: [router],
