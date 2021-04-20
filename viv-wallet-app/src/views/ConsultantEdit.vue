@@ -69,12 +69,12 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { Consultant, ConsultantStatus, toString } from "../models/consultant";
-import { ConsultantsService } from "../services/consultants";
-import { UsersService } from "../services/users";
-import { User } from "../models/user";
 import { Expertise } from "@/models/expertise";
 import Loading from "../components/Loading.vue";
+import { Consultant, ConsultantStatus, toString } from "../models/consultant";
+import { User } from "../models/user";
+import { ConsultantsService } from "../services/consultants";
+import { UsersService } from "../services/users";
 
 export default defineComponent({
     name: "consultant",
@@ -103,7 +103,7 @@ export default defineComponent({
     },
     created() {
         for (const [key, value] of Object.entries(ConsultantStatus)) {
-            if (isNaN(Number(key))) {
+            if (Number.isNaN(Number(key))) {
                 // .entries contains either the constant names and indexes
                 this.options.push({
                     text: toString(value as ConsultantStatus),
@@ -127,12 +127,12 @@ export default defineComponent({
                 const allUsers = await this.usersService.getUsers();
 
                 this.usersNotAlreadyInExpertise = allUsers.filter(
-                    (u) => !consultantsInExpertise.find((u1) => u1.id === u.id)
+                    (u) => !consultantsInExpertise.some((u1) => u1.id === u.id)
                 );
                 this.consultant.startDate = new Date().toLocaleDateString("en-CA"); // the format should be YYYY-MM-DD
                 this.consultant.status = ConsultantStatus.CONSULTANT_SENIOR_IN_ONBOARDING;
             }
-        } catch (ex) {
+        } catch {
             this.errored = true;
         } finally {
             this.loading = false;
@@ -147,7 +147,7 @@ export default defineComponent({
                     await this.consultantsService.saveExpertise(this.consultant);
                     this.$router.push({ path: `/members/${this.expertiseName}` });
                 }
-            } catch (ex) {
+            } catch {
                 this.errored = true;
             } finally {
                 this.loading = false;

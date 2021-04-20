@@ -1,7 +1,7 @@
 import axios from "axios";
-import { WalletService } from "@/services/wallet";
 import { Action, PaymentStatus } from "@/models/action";
 import { Payment, PaymentPost } from "@/models/payment";
+import { WalletService } from "@/services/wallet";
 
 jest.mock("axios");
 const mockedAxios = axios as jest.Mocked<typeof axios>;

@@ -1,11 +1,12 @@
-import { Role } from "../models/role";
 import jwt_decode from "jwt-decode";
 import { getToken } from "x4b-ui";
+import { Role } from "../models/role";
 
 export interface DecodedJwtTokenContent {
     exp: number;
     iss: string;
     user: string;
+    // eslint-disable-next-line sonarjs/no-duplicate-string
     "viv-wallet": string;
 }
 

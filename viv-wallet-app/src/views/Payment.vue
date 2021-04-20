@@ -18,11 +18,13 @@
                         <input id="payment-date" type="date" v-model="date" placeholder="Date de paiement" />
                     </div>
                     <div class="element-block inline-bloc w33">
-                        <label id="lbl-viv">TOTAL VIVs</label>
+                        <label id="lbl-viv" for="viv-total">TOTAL VIVs</label>
+                        <input hidden id="viv-total" :value="viv" />
                         <div class="values">{{ viv }}</div>
                     </div>
                     <div class="element-block inline-bloc w33">
-                        <label id="lbl-amount">MONTANT</label>
+                        <label id="lbl-amount" for="amount">MONTANT</label>
+                        <input hidden id="amount" :value="`${amount} €`" />
                         <div class="values">{{ amount }} €</div>
                     </div>
                     <actions-block v-bind:actions="unpaidActions" />
@@ -40,16 +42,16 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { User } from "../models/user";
-import { UsersService } from "@/services/users";
-import { PaymentPost } from "../models/payment";
-import { WalletService } from "../services/wallet";
 import { Action } from "@/models/action";
+import { UsersService } from "@/services/users";
+import ActionsBlock from "../components/ActionsBlock.vue";
 import BalanceCard from "../components/BalanceCard.vue";
 import Illustration from "../components/Illustration.vue";
-import ActionsBlock from "../components/ActionsBlock.vue";
 import Loading from "../components/Loading.vue";
 import { ConsultantStatus, toString } from "../models/consultant";
+import { PaymentPost } from "../models/payment";
+import { User } from "../models/user";
+import { WalletService } from "../services/wallet";
 
 export default defineComponent({
     name: "payment",
@@ -101,7 +103,7 @@ export default defineComponent({
                     await this.walletService.saveUserPayment(payment);
                     this.$router.push({ path: `/wallets/${this.id}` });
                 }
-            } catch (ex) {
+            } catch {
                 this.errored = true;
             } finally {
                 this.loading = false;
@@ -116,7 +118,7 @@ export default defineComponent({
                 this.walletService.getUserPayableActions(this.id),
             ]);
             this.viv += this.balance;
-        } catch (ex) {
+        } catch {
             this.errored = true;
         } finally {
             this.loading = false;
