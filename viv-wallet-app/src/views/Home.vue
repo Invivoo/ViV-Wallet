@@ -3,7 +3,7 @@
         <div class="container">
             <div class="text">
                 <h1>Gérer facilement vos ViVs <br />avec le ViV Wallet</h1>
-                <router-link class="primary-button" v-bind:to="{ path: `/wallet` }">Accéder à mon wallet</router-link>
+                <router-link class="primary-button" :to="{ path: `/wallet` }">Accéder à mon wallet</router-link>
             </div>
             <img src="../assets/home.svg" class="illustration" alt="" />
         </div>

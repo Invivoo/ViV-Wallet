@@ -24,7 +24,7 @@
                     <td>
                         <div>
                             <div class="type">{{ action.type }}</div>
-                            <div class="comment" v-bind:title="action.comment">{{ action.comment }}</div>
+                            <div class="comment" :title="action.comment">{{ action.comment }}</div>
                         </div>
                     </td>
                     <td class="right payment">{{ action.payment }}</td>
@@ -53,7 +53,7 @@ import StatusBadge from "../components/StatusBadge.vue";
 import { Action, PaymentStatus } from "../models/action";
 
 export default defineComponent({
-    name: "actions-block",
+    name: "ActionsBlock",
     components: { StatusBadge },
     props: {
         actions: {

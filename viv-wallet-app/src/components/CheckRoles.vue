@@ -9,7 +9,7 @@ import { Role } from "../models/role";
 import { LoginService } from "../services/login";
 
 export default defineComponent({
-    name: "check-roles",
+    name: "CheckRoles",
     props: {
         roles: {
             default: () => [],

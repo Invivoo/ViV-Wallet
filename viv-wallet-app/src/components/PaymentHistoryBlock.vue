@@ -105,7 +105,7 @@ import { defineComponent, PropType } from "vue";
 import { Payment } from "../models/payment";
 
 export default defineComponent({
-    name: "payment-history-block",
+    name: "PaymentHistoryBlock",
     props: {
         payments: {
             default: () => [],

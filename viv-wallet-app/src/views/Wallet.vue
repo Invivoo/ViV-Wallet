@@ -1,28 +1,28 @@
 <template>
     <div class="main">
-        <loading v-bind:loading="loading" v-bind:errored="errored">
-            <check-roles v-bind:roles="myWalletRoles">
+        <loading :loading="loading" :errored="errored">
+            <check-roles :roles="myWalletRoles">
                 <div class="header">
                     <balance-card
-                        v-bind:fullName="user.fullName"
-                        v-bind:expertise="(user.expertise && user.expertise.expertiseName) || ''"
-                        v-bind:consultantStatus="formatConsultantStatus(user.status)"
-                        v-bind:vivBalance="balance"
+                        :full-name="user.fullName"
+                        :expertise="(user.expertise && user.expertise.expertiseName) || ''"
+                        :consultant-status="formatConsultantStatus(user.status)"
+                        :viv-balance="balance"
                     />
                     <illustration />
                 </div>
-                <check-roles v-bind:roles="adminOnly">
+                <check-roles :roles="adminOnly">
                     <div>
                         <router-link
-                            class="primary-button payment-btn"
-                            v-bind:to="{ path: `/payment/${user.id}` }"
                             v-if="shouldDisplayPayButton()"
+                            class="primary-button payment-btn"
+                            :to="{ path: `/payment/${user.id}` }"
                             >Payer maintenant</router-link
                         >
                     </div>
                 </check-roles>
-                <actions-block v-bind:actions="actions" />
-                <payment-history-block v-bind:payments="payments" />
+                <actions-block :actions="actions" />
+                <payment-history-block :payments="payments" />
             </check-roles>
         </loading>
     </div>
@@ -45,7 +45,7 @@ import { UsersService } from "../services/users";
 import { WalletService } from "../services/wallet";
 
 export default defineComponent({
-    name: "wallet",
+    name: "Wallet",
     components: { BalanceCard, Illustration, ActionsBlock, PaymentHistoryBlock, Loading, CheckRoles },
     data() {
         return {
@@ -63,17 +63,6 @@ export default defineComponent({
             adminOnly: adminOnly,
             myWalletRoles: myWalletRoles,
         };
-    },
-    methods: {
-        formatConsultantStatus: function (status?: keyof typeof ConsultantStatus) {
-            if (status) {
-                return toString(ConsultantStatus[status]);
-            }
-            return "";
-        },
-        shouldDisplayPayButton: function () {
-            return this.userRoles && this.userRoles.includes(Role.COMPANY_ADMINISTRATOR);
-        },
     },
     watch: {
         $route: {
@@ -98,6 +87,17 @@ export default defineComponent({
                     this.loading = false;
                 }
             },
+        },
+    },
+    methods: {
+        formatConsultantStatus: function (status?: keyof typeof ConsultantStatus) {
+            if (status) {
+                return toString(ConsultantStatus[status]);
+            }
+            return "";
+        },
+        shouldDisplayPayButton: function () {
+            return this.userRoles && this.userRoles.includes(Role.COMPANY_ADMINISTRATOR);
         },
     },
 });

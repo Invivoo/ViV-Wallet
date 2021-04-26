@@ -1,10 +1,10 @@
 <template>
-    <router-link :to="to" custom v-slot="{ route, href, navigate }">
+    <router-link v-slot="{ route, href, navigate }" :to="to" custom>
         <a
             :href="href"
-            @click="navigate"
             :class="route.path === $route.path ? 'router-link-active' : ''"
             :aria-current="route.path === $route.path && route.path"
+            @click="navigate"
         >
             <slot></slot>
         </a>
@@ -15,10 +15,11 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
-    name: "custom-router-link",
+    name: "CustomRouterLink",
     props: {
         to: {
             type: String,
+            required: true,
         },
     },
 });

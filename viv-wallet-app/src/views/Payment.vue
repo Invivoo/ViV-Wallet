@@ -1,38 +1,36 @@
 <template>
     <div class="payment">
-        <loading v-bind:loading="loading" v-bind:errored="errored">
+        <loading :loading="loading" :errored="errored">
             <section>
                 <h2>Paiement</h2>
                 <div class="header">
                     <balance-card
-                        :fullName="user.fullName"
-                        v-bind:expertise="(user.expertise && user.expertise.expertiseName) || ''"
-                        v-bind:consultantStatus="formatConsultantStatus(user.status)"
-                        v-bind:vivBalance="balance"
+                        :full-name="user.fullName"
+                        :expertise="(user.expertise && user.expertise.expertiseName) || ''"
+                        :consultant-status="formatConsultantStatus(user.status)"
+                        :viv-balance="balance"
                     />
                     <illustration />
                 </div>
                 <form class="payment-form">
                     <div class="element-block inline-bloc w33">
                         <label id="lbl-date" for="payment-date">DATE</label>
-                        <input id="payment-date" type="date" v-model="date" placeholder="Date de paiement" />
+                        <input id="payment-date" v-model="date" type="date" placeholder="Date de paiement" />
                     </div>
                     <div class="element-block inline-bloc w33">
                         <label id="lbl-viv" for="viv-total">TOTAL VIVs</label>
-                        <input hidden id="viv-total" :value="viv" />
+                        <input id="viv-total" hidden :value="viv" />
                         <div class="values">{{ viv }}</div>
                     </div>
                     <div class="element-block inline-bloc w33">
                         <label id="lbl-amount" for="amount">MONTANT</label>
-                        <input hidden id="amount" :value="`${amount} €`" />
+                        <input id="amount" hidden :value="`${amount} €`" />
                         <div class="values">{{ amount }} €</div>
                     </div>
-                    <actions-block v-bind:actions="unpaidActions" />
+                    <actions-block :actions="unpaidActions" />
                     <div class="buttons">
-                        <button class="primary-button" :disabled="!hasBalanceToPay" v-on:click="AddPayment">
-                            Valider
-                        </button>
-                        <router-link class="secondary-button" v-bind:to="`/wallets/${id}`">Cancel</router-link>
+                        <button class="primary-button" :disabled="!hasBalanceToPay" @click="AddPayment">Valider</button>
+                        <router-link class="secondary-button" :to="`/wallets/${id}`">Cancel</router-link>
                     </div>
                 </form>
             </section>
@@ -54,7 +52,7 @@ import { User } from "../models/user";
 import { WalletService } from "../services/wallet";
 
 export default defineComponent({
-    name: "payment",
+    name: "Payment",
     components: { BalanceCard, Illustration, ActionsBlock, Loading },
     props: {
         id: {
@@ -84,6 +82,20 @@ export default defineComponent({
             return this.viv > 0;
         },
     },
+    async mounted() {
+        try {
+            [this.user, this.balance, this.unpaidActions] = await Promise.all([
+                this.usersService.getUser(this.id),
+                this.walletService.getUserBalance(this.id),
+                this.walletService.getUserPayableActions(this.id),
+            ]);
+            this.viv += this.balance;
+        } catch {
+            this.errored = true;
+        } finally {
+            this.loading = false;
+        }
+    },
     methods: {
         formatConsultantStatus: function (status?: keyof typeof ConsultantStatus) {
             if (status) {
@@ -109,20 +121,6 @@ export default defineComponent({
                 this.loading = false;
             }
         },
-    },
-    async mounted() {
-        try {
-            [this.user, this.balance, this.unpaidActions] = await Promise.all([
-                this.usersService.getUser(this.id),
-                this.walletService.getUserBalance(this.id),
-                this.walletService.getUserPayableActions(this.id),
-            ]);
-            this.viv += this.balance;
-        } catch {
-            this.errored = true;
-        } finally {
-            this.loading = false;
-        }
     },
 });
 </script>

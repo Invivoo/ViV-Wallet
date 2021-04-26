@@ -1,18 +1,15 @@
 <template>
     <div class="wallets">
-        <loading v-bind:loading="loading" v-bind:errored="errored">
-            <check-roles v-bind:roles="walletsRoles" v-bind:withErrorMessage="true">
+        <loading :loading="loading" :errored="errored">
+            <check-roles :roles="walletsRoles" :with-error-message="true">
                 <section>
                     <h2>Wallets</h2>
                     <div class="buttons-container">
                         <filter-input v-model="filterValue" />
                     </div>
-                    <consultant-list v-bind:consultants="filteredConsultants">
-                        <template v-slot="{ consultantId }">
-                            <router-link
-                                v-bind:to="`/wallets/${consultantId}`"
-                                class="tertiary-button update-button"
-                                tag="a"
+                    <consultant-list :consultants="filteredConsultants">
+                        <template #default="{ consultantId }">
+                            <router-link :to="`/wallets/${consultantId}`" class="tertiary-button update-button" tag="a"
                                 >Voir le wallet</router-link
                             >
                         </template>
@@ -36,7 +33,7 @@ import { Role, walletsRoles } from "../models/role";
 import { LoginService } from "../services/login";
 
 export default defineComponent({
-    name: "wallets",
+    name: "Wallets",
     components: { ConsultantList, Loading, CheckRoles, FilterInput },
     data() {
         return {
@@ -50,6 +47,11 @@ export default defineComponent({
             walletsRoles: walletsRoles,
             filterValue: "",
         };
+    },
+    watch: {
+        filterValue: function () {
+            this.filterChanged();
+        },
     },
     async mounted() {
         try {
@@ -80,11 +82,6 @@ export default defineComponent({
             this.filteredConsultants = this.consultants.filter((consultant) =>
                 consultant.fullName?.toLowerCase().includes(this.filterValue.toLowerCase())
             );
-        },
-    },
-    watch: {
-        filterValue: function () {
-            this.filterChanged();
         },
     },
 });

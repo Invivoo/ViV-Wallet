@@ -15,7 +15,7 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
-    name: "balande-card",
+    name: "BalandeCard",
     props: {
         fullName: {
             required: true,

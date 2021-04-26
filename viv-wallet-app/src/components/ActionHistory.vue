@@ -29,7 +29,7 @@
                     <td>
                         <div>
                             <div class="type">{{ action.type }}</div>
-                            <div class="comment" v-bind:title="action.comment">{{ action.comment }}</div>
+                            <div class="comment" :title="action.comment">{{ action.comment }}</div>
                         </div>
                     </td>
                     <td class="right payment">{{ action.payment }}</td>
@@ -59,7 +59,7 @@ import StatusBadge from "../components/StatusBadge.vue";
 import { ActionForHistory, PaymentStatus } from "../models/action";
 
 export default defineComponent({
-    name: "action-history",
+    name: "ActionHistory",
     components: { StatusBadge, FilterInput },
     props: {
         actions: {
@@ -72,6 +72,13 @@ export default defineComponent({
             filterValue: "",
             filteredActions: [...this.actions],
         };
+    },
+    watch: {
+        filterValue: function () {
+            this.filteredActions = this.actions.filter((action) =>
+                action.achiever?.fullName?.toLowerCase().includes(this.filterValue.toLowerCase())
+            );
+        },
     },
     methods: {
         isPaymentPaid: function (action: ActionForHistory) {
@@ -94,13 +101,6 @@ export default defineComponent({
                 default:
                     return "red";
             }
-        },
-    },
-    watch: {
-        filterValue: function () {
-            this.filteredActions = this.actions.filter((action) =>
-                action.achiever?.fullName?.toLowerCase().includes(this.filterValue.toLowerCase())
-            );
         },
     },
 });

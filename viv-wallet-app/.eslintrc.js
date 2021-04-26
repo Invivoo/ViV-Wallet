@@ -8,7 +8,7 @@ module.exports = {
     plugins: ["@typescript-eslint", "simple-import-sort", "testing-library", "jest-dom"],
     extends: [
         "eslint:recommended",
-        "plugin:vue/vue3-essential",
+        "plugin:vue/vue3-recommended",
         "@vue/prettier",
         "@vue/prettier/@typescript-eslint",
         "@vue/typescript",
