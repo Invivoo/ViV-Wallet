@@ -9,6 +9,7 @@ module.exports = {
     extends: [
         "eslint:recommended",
         "plugin:vue/vue3-recommended",
+        "@vue/airbnb",
         "@vue/prettier",
         "@vue/prettier/@typescript-eslint",
         "@vue/typescript",
@@ -64,6 +65,11 @@ module.exports = {
                 },
             },
         ],
+        "import/prefer-default-export": "off",
+        "func-names": "off",
+        "no-restricted-syntax": "off",
+        "no-use-before-define": "off",
+        "no-shadow": "off",
     },
     overrides: [
         {

@@ -75,10 +75,10 @@ export default defineComponent({
         };
     },
     computed: {
-        amount: function (): number {
+        amount(): number {
             return this.coeff * this.viv;
         },
-        hasBalanceToPay: function (): boolean {
+        hasBalanceToPay(): boolean {
             return this.viv > 0;
         },
     },
@@ -97,17 +97,17 @@ export default defineComponent({
         }
     },
     methods: {
-        formatConsultantStatus: function (status?: keyof typeof ConsultantStatus) {
+        formatConsultantStatus(status?: keyof typeof ConsultantStatus) {
             if (status) {
                 return toString(ConsultantStatus[status]);
             }
             return "";
         },
-        AddPayment: async function () {
+        async AddPayment() {
             try {
                 this.loading = true;
                 if (this.hasBalanceToPay) {
-                    let payment: PaymentPost = {
+                    const payment: PaymentPost = {
                         receiverId: this.id,
                         date: this.date,
                         actionIds: this.unpaidActions.map(({ id }) => id),

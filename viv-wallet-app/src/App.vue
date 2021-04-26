@@ -52,10 +52,10 @@ export default defineComponent({
             primaryColor: "#4c51bf",
             isMenuOpen: false,
             isBannerInitialized: false,
-            myWalletRoles: myWalletRoles,
-            expertisesRoles: expertisesRoles,
-            walletsRoles: walletsRoles,
-            historyRoles: historyRoles,
+            myWalletRoles,
+            expertisesRoles,
+            walletsRoles,
+            historyRoles,
         };
     },
     mounted() {
@@ -73,10 +73,10 @@ export default defineComponent({
         );
     },
     methods: {
-        handleMenuToggleButtonClicked: function (evt: Event) {
+        handleMenuToggleButtonClicked(evt: Event) {
             this.isMenuOpen = (evt as CustomEvent<boolean>).detail;
         },
-        handleStartupFinished: function () {
+        handleStartupFinished() {
             this.isBannerInitialized = true;
         },
     },

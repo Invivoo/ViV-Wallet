@@ -40,8 +40,8 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
-import StatusBadge from "../components/StatusBadge.vue";
 import { Consultant, ConsultantStatus, toString } from "../models/consultant";
+import StatusBadge from "./StatusBadge.vue";
 
 export default defineComponent({
     name: "ConsultantList",
@@ -53,10 +53,10 @@ export default defineComponent({
         },
     },
     methods: {
-        formatConsultantStatus: function (status: ConsultantStatus) {
+        formatConsultantStatus(status: ConsultantStatus) {
             return toString(status);
         },
-        getConsultantStatusType: function (status: ConsultantStatus) {
+        getConsultantStatusType(status: ConsultantStatus) {
             switch (status) {
                 case ConsultantStatus.CONSULTANT_SENIOR:
                 case ConsultantStatus.MANAGER:

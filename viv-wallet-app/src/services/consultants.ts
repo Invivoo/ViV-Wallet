@@ -1,4 +1,3 @@
-import { AxiosInstance } from "axios";
 import { Consultant, ConsultantStatus } from "../models/consultant";
 import { ServiceBase } from "./serviceBase";
 
@@ -7,10 +6,6 @@ type RawConsultant = Omit<Consultant, "status"> & {
 };
 
 export class ConsultantsService extends ServiceBase {
-    constructor(http?: AxiosInstance) {
-        super(http);
-    }
-
     async getConsultants(expertiseName?: string): Promise<Consultant[]> {
         return expertiseName
             ? (await this.http.get<RawConsultant[]>(`/users?expertise=${expertiseName}`)).data.map((rawConsultant) =>

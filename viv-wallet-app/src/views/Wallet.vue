@@ -60,8 +60,8 @@ export default defineComponent({
             balance: 0,
             userId: "",
             user: {},
-            adminOnly: adminOnly,
-            myWalletRoles: myWalletRoles,
+            adminOnly,
+            myWalletRoles,
         };
     },
     watch: {
@@ -90,13 +90,13 @@ export default defineComponent({
         },
     },
     methods: {
-        formatConsultantStatus: function (status?: keyof typeof ConsultantStatus) {
+        formatConsultantStatus(status?: keyof typeof ConsultantStatus) {
             if (status) {
                 return toString(ConsultantStatus[status]);
             }
             return "";
         },
-        shouldDisplayPayButton: function () {
+        shouldDisplayPayButton() {
             return this.userRoles && this.userRoles.includes(Role.COMPANY_ADMINISTRATOR);
         },
     },

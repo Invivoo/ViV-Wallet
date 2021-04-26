@@ -113,7 +113,7 @@ export default defineComponent({
         },
     },
     methods: {
-        formatWithCurrency: function (value: number) {
+        formatWithCurrency(value: number) {
             const formatter = new Intl.NumberFormat("fr", {
                 style: "currency",
                 currency: "EUR",

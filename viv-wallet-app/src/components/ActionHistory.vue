@@ -54,9 +54,9 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
-import FilterInput from "../components/FilterInput.vue";
-import StatusBadge from "../components/StatusBadge.vue";
 import { ActionForHistory, PaymentStatus } from "../models/action";
+import FilterInput from "./FilterInput.vue";
+import StatusBadge from "./StatusBadge.vue";
 
 export default defineComponent({
     name: "ActionHistory",
@@ -74,17 +74,17 @@ export default defineComponent({
         };
     },
     watch: {
-        filterValue: function () {
+        filterValue() {
             this.filteredActions = this.actions.filter((action) =>
                 action.achiever?.fullName?.toLowerCase().includes(this.filterValue.toLowerCase())
             );
         },
     },
     methods: {
-        isPaymentPaid: function (action: ActionForHistory) {
+        isPaymentPaid(action: ActionForHistory) {
             return action.status === PaymentStatus.Paid;
         },
-        formatPaymentStatus: function (status: PaymentStatus) {
+        formatPaymentStatus(status: PaymentStatus) {
             switch (status) {
                 case PaymentStatus.Paid:
                     return "Débloqué";
@@ -93,7 +93,7 @@ export default defineComponent({
                     return "Non débloqué";
             }
         },
-        getPaymentStatusType: function (status: PaymentStatus) {
+        getPaymentStatusType(status: PaymentStatus) {
             switch (status) {
                 case PaymentStatus.Paid:
                     return "green";

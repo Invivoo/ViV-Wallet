@@ -26,9 +26,9 @@ export default defineComponent({
         };
     },
     methods: {
-        isAuthorized: function () {
+        isAuthorized() {
             const userRoles = this.loginService.getRoles();
-            for (let role of this.roles) {
+            for (const role of this.roles) {
                 if (userRoles.includes(role)) {
                     return true;
                 }

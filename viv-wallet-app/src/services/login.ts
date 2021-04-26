@@ -1,3 +1,4 @@
+// eslint-disable-next-line camelcase
 import jwt_decode from "jwt-decode";
 import { getToken } from "x4b-ui";
 import { Role } from "../models/role";
@@ -21,6 +22,7 @@ const getCurrentToken = () => {
 
 export class LoginService {
     private decodedToken?: DecodedJwtTokenContent;
+
     private authorizations: Authorizations;
 
     constructor() {
@@ -43,7 +45,7 @@ export class LoginService {
         return this.decodedToken?.user || "";
     }
 
-    getJwtToken(): string {
+    static getJwtToken(): string {
         return getCurrentToken();
     }
 }

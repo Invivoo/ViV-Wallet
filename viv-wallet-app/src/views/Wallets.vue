@@ -44,12 +44,12 @@ export default defineComponent({
             expertisesService: new ExpertisesService(),
             consultantsService: new ConsultantsService(),
             loginService: new LoginService(),
-            walletsRoles: walletsRoles,
+            walletsRoles,
             filterValue: "",
         };
     },
     watch: {
-        filterValue: function () {
+        filterValue() {
             this.filterChanged();
         },
     },
@@ -78,7 +78,7 @@ export default defineComponent({
         }
     },
     methods: {
-        filterChanged: function () {
+        filterChanged() {
             this.filteredConsultants = this.consultants.filter((consultant) =>
                 consultant.fullName?.toLowerCase().includes(this.filterValue.toLowerCase())
             );

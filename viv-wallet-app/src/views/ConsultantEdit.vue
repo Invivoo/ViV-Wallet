@@ -143,7 +143,7 @@ export default defineComponent({
         }
     },
     methods: {
-        confirm: async function () {
+        async confirm() {
             try {
                 this.loading = true;
                 if (this.consultant) {

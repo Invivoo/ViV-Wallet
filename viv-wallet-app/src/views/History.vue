@@ -29,7 +29,7 @@ export default defineComponent({
             loading: true,
             errored: false,
             walletService: new WalletService(),
-            historyRoles: historyRoles,
+            historyRoles,
         };
     },
     async mounted() {

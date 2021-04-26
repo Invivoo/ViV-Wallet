@@ -61,7 +61,7 @@ export default defineComponent({
             selectedExpertiseId: "",
             loading: true,
             errored: false,
-            expertisesRoles: expertisesRoles,
+            expertisesRoles,
             expertisesService: new ExpertisesService(),
         };
     },
@@ -79,10 +79,8 @@ export default defineComponent({
             if (this.$route.params.id) {
                 this.selectedExpertiseId = this.$route.params.id as string;
                 await this.updateConsultants();
-            } else {
-                if (this.expertises.length > 0) {
-                    this.$router.push(`/members/${this.expertises[0].id}`);
-                }
+            } else if (this.expertises.length > 0) {
+                this.$router.push(`/members/${this.expertises[0].id}`);
             }
         } catch {
             this.errored = true;
@@ -91,10 +89,10 @@ export default defineComponent({
         }
     },
     methods: {
-        expertiseChanged: function () {
+        expertiseChanged() {
             this.$router.push(`/members/${this.selectedExpertiseId}`);
         },
-        updateConsultants: async function () {
+        async updateConsultants() {
             const consultantsService = new ConsultantsService();
             this.consultants = await consultantsService.getConsultants(this.selectedExpertiseId);
         },
