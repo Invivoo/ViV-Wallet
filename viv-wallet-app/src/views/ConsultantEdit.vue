@@ -2,18 +2,14 @@
     <div class="consultantEdit">
         <h2 v-if="consultantId == 'add'">Ajouter consultant</h2>
         <h2 v-else>Editer consultant</h2>
-        <loading v-bind:loading="loading" v-bind:errored="errored">
+        <loading :loading="loading" :errored="errored">
             <form class="consultant-form">
                 <div class="element-block">
                     <label id="input-fullName-1" for="fullName-1">Nom</label>
-                    <div v-if="consultantId == 'add'" v-bind:class="`select ${consultant.id ? '' : 'select-error'}`">
+                    <div v-if="consultantId == 'add'" :class="`select ${consultant.id ? '' : 'select-error'}`">
                         <select id="fullName-1" v-model="consultant.id" required="true">
                             <option value disabled="true">Choisissez une option</option>
-                            <option
-                                v-for="user in usersNotAlreadyInExpertise"
-                                v-bind:key="user.id"
-                                v-bind:value="user.id"
-                            >
+                            <option v-for="user in usersNotAlreadyInExpertise" :key="user.id" :value="user.id">
                                 {{ user.fullName }}
                             </option>
                             <span class="select-focus"></span>
@@ -22,8 +18,8 @@
                     <input
                         v-else
                         id="fullName-1"
-                        type="text"
                         v-model="consultant.fullName"
+                        type="text"
                         placeholder="Nom"
                         readonly="true"
                     />
@@ -34,10 +30,10 @@
                     <div class="select">
                         <select id="status-1" v-model="consultant.status">
                             <option
-                                v-bind:key="option.value"
                                 v-for="option in options"
-                                v-bind:value="option.value"
-                                v-bind:disabled="option.disabled"
+                                :key="option.value"
+                                :value="option.value"
+                                :disabled="option.disabled"
                             >
                                 {{ option.text }}
                             </option>
@@ -48,19 +44,17 @@
 
                 <div class="element-block">
                     <label id="input-startDate-1" for="startDate-1">Arrivé</label>
-                    <input id="startDate-1" type="date" v-model="consultant.startDate" placeholder="Date d'arrivé" />
+                    <input id="startDate-1" v-model="consultant.startDate" type="date" placeholder="Date d'arrivé" />
                 </div>
 
                 <div class="element-block">
                     <label id="input-endDate-1" for="endDate-1">Départ</label>
-                    <input id="endDate-1" type="date" v-model="consultant.endDate" placeholder="Date de départ" />
+                    <input id="endDate-1" v-model="consultant.endDate" type="date" placeholder="Date de départ" />
                 </div>
 
                 <div class="buttons">
-                    <button class="primary-button" v-on:click="confirm" :disabled="submitButtonDisabled">
-                        Confirmer
-                    </button>
-                    <router-link class="secondary-button" v-bind:to="`/members/${expertiseName}`">Cancel</router-link>
+                    <button class="primary-button" :disabled="submitButtonDisabled" @click="confirm">Confirmer</button>
+                    <router-link class="secondary-button" :to="`/members/${expertiseName}`">Cancel</router-link>
                 </div>
             </form>
         </loading>
@@ -77,7 +71,7 @@ import { ConsultantsService } from "../services/consultants";
 import { UsersService } from "../services/users";
 
 export default defineComponent({
-    name: "consultant",
+    name: "Consultant",
     components: { Loading },
     props: {
         expertiseName: {
@@ -100,6 +94,16 @@ export default defineComponent({
             submitButtonDisabled: true,
             options: [{ text: "Choisissez une option", value: "", disabled: true }],
         };
+    },
+    watch: {
+        "consultant.id": async function (value: string) {
+            const selectedUser = this.usersNotAlreadyInExpertise.find((u) => u.id === value);
+            if (selectedUser) {
+                this.consultant.user = selectedUser.user;
+                this.consultant.fullName = selectedUser.fullName;
+                this.submitButtonDisabled = false;
+            }
+        },
     },
     created() {
         for (const [key, value] of Object.entries(ConsultantStatus)) {
@@ -139,7 +143,7 @@ export default defineComponent({
         }
     },
     methods: {
-        confirm: async function () {
+        async confirm() {
             try {
                 this.loading = true;
                 if (this.consultant) {
@@ -151,16 +155,6 @@ export default defineComponent({
                 this.errored = true;
             } finally {
                 this.loading = false;
-            }
-        },
-    },
-    watch: {
-        "consultant.id": async function (value: string) {
-            const selectedUser = this.usersNotAlreadyInExpertise.find((u) => u.id === value);
-            if (selectedUser) {
-                this.consultant.user = selectedUser.user;
-                this.consultant.fullName = selectedUser.fullName;
-                this.submitButtonDisabled = false;
             }
         },
     },

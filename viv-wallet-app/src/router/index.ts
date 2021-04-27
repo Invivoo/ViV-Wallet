@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import Home from "../views/Home.vue";
+
 require("focus-visible");
 
 const routes: Array<RouteRecordRaw> = [

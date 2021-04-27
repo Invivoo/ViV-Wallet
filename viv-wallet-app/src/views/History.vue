@@ -1,10 +1,10 @@
 <template>
     <div class="history">
-        <loading v-bind:loading="loading" v-bind:errored="errored">
-            <check-roles v-bind:roles="historyRoles" v-bind:withErrorMessage="true">
+        <loading :loading="loading" :errored="errored">
+            <check-roles :roles="historyRoles" :with-error-message="true">
                 <section>
                     <h2>Historique des actions</h2>
-                    <action-history v-bind:actions="actions" />
+                    <action-history :actions="actions" />
                 </section>
             </check-roles>
         </loading>
@@ -21,7 +21,7 @@ import { historyRoles } from "../models/role";
 import { WalletService } from "../services/wallet";
 
 export default defineComponent({
-    name: "history",
+    name: "History",
     components: { ActionHistory, Loading, CheckRoles },
     data() {
         return {
@@ -29,7 +29,7 @@ export default defineComponent({
             loading: true,
             errored: false,
             walletService: new WalletService(),
-            historyRoles: historyRoles,
+            historyRoles,
         };
     },
     async mounted() {

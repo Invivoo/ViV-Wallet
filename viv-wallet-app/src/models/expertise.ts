@@ -1,5 +1,6 @@
 export class Expertise {
     id: string;
+
     expertiseName: string;
 
     constructor(id: string, expertiseName: string) {

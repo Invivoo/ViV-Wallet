@@ -10,8 +10,8 @@
                 </svg>
             </div>
             <input
-                type="text"
                 id="filter"
+                type="text"
                 placeholder="Filtrer par utilisateur"
                 :modelValue="filterValue"
                 @input="$emit('update:modelValue', $event.target.value)"
@@ -24,13 +24,14 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
-    name: "filter-input",
+    name: "FilterInput",
     props: {
         filterValue: {
             default: "",
             type: String,
         },
     },
+    emits: ["update:modelValue"],
 });
 </script>
 
