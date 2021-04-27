@@ -1,5 +1,4 @@
-// eslint-disable-next-line camelcase
-import jwt_decode from "jwt-decode";
+import jwtDecode from "jwt-decode";
 import { getToken } from "x4b-ui";
 import { Role } from "../models/role";
 
@@ -27,7 +26,7 @@ export class LoginService {
 
     constructor() {
         const token = process.env.VUE_APP_DEV_JWT || getCurrentToken();
-        this.decodedToken = (token && jwt_decode<DecodedJwtTokenContent>(token)) || undefined;
+        this.decodedToken = (token && jwtDecode<DecodedJwtTokenContent>(token)) || undefined;
         this.authorizations = (this.decodedToken &&
             this.decodedToken["viv-wallet"] &&
             JSON.parse(this.decodedToken["viv-wallet"])) as Authorizations;

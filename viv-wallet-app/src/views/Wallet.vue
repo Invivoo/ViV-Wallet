@@ -94,6 +94,7 @@ export default defineComponent({
             if (status) {
                 return toString(ConsultantStatus[status]);
             }
+            console.warn(`Unknown consultant status ${status}`);
             return "";
         },
         shouldDisplayPayButton() {
