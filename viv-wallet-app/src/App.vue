@@ -1,26 +1,26 @@
 <template>
     <div id="app">
         <x4b-ui
+            ref="x4bui"
             application="viv-wallet"
             :apps-service-url="appsUrl"
             :version="appVersion"
             disable-fake-elements="true"
             languages="fr"
             :color="primaryColor"
-            ref="x4bui"
         >
             <div v-if="isBannerInitialized" class="root">
-                <div v-bind:class="['menu', isMenuOpen ? '' : 'hidden']">
-                    <check-roles v-bind:roles="myWalletRoles">
+                <div :class="['menu', isMenuOpen ? '' : 'hidden']">
+                    <check-roles :roles="myWalletRoles">
                         <custom-router-link to="/wallet">Mon wallet</custom-router-link>
                     </check-roles>
-                    <check-roles v-bind:roles="expertisesRoles">
+                    <check-roles :roles="expertisesRoles">
                         <custom-router-link to="/members">Expertises</custom-router-link>
                     </check-roles>
-                    <check-roles v-bind:roles="walletsRoles">
+                    <check-roles :roles="walletsRoles">
                         <custom-router-link to="/wallets">Wallets</custom-router-link>
                     </check-roles>
-                    <check-roles v-bind:roles="historyRoles">
+                    <check-roles :roles="historyRoles">
                         <custom-router-link to="/actions">Historique des actions</custom-router-link>
                     </check-roles>
                 </div>
@@ -40,7 +40,7 @@ import CustomRouterLink from "./components/CustomRouterLink.vue";
 import { expertisesRoles, historyRoles, myWalletRoles, walletsRoles } from "./models/role";
 
 export default defineComponent({
-    name: "app",
+    name: "App",
     components: {
         "check-roles": CheckRoles,
         "custom-router-link": CustomRouterLink,
@@ -52,19 +52,11 @@ export default defineComponent({
             primaryColor: "#4c51bf",
             isMenuOpen: false,
             isBannerInitialized: false,
-            myWalletRoles: myWalletRoles,
-            expertisesRoles: expertisesRoles,
-            walletsRoles: walletsRoles,
-            historyRoles: historyRoles,
+            myWalletRoles,
+            expertisesRoles,
+            walletsRoles,
+            historyRoles,
         };
-    },
-    methods: {
-        handleMenuToggleButtonClicked: function (evt: Event) {
-            this.isMenuOpen = (evt as CustomEvent<boolean>).detail;
-        },
-        handleStartupFinished: function () {
-            this.isBannerInitialized = true;
-        },
     },
     mounted() {
         (this.$refs.x4bui as HTMLElement).addEventListener("startupFinished", this.handleStartupFinished);
@@ -79,6 +71,14 @@ export default defineComponent({
             "menuToggleButtonClicked",
             this.handleMenuToggleButtonClicked
         );
+    },
+    methods: {
+        handleMenuToggleButtonClicked(evt: Event) {
+            this.isMenuOpen = (evt as CustomEvent<boolean>).detail;
+        },
+        handleStartupFinished() {
+            this.isBannerInitialized = true;
+        },
     },
 });
 </script>

@@ -8,7 +8,7 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
-    name: "status-badge",
+    name: "StatusBadge",
     props: {
         type: {
             required: true,

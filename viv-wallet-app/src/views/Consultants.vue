@@ -1,24 +1,16 @@
 <template>
     <div class="consultants">
-        <loading v-bind:loading="loading" v-bind:errored="errored">
-            <check-roles v-bind:roles="expertisesRoles" v-bind:withErrorMessage="true">
+        <loading :loading="loading" :errored="errored">
+            <check-roles :roles="expertisesRoles" :with-error-message="true">
                 <section>
                     <h2>Consultants</h2>
                     <div class="buttons-container">
                         <div class="selector-container">
                             <label class="expertise-label" for="select-expertise">Expertise :</label>
                             <div class="select">
-                                <select
-                                    id="select-expertise"
-                                    v-model="selectedExpertiseId"
-                                    v-on:change="expertiseChanged"
-                                >
+                                <select id="select-expertise" v-model="selectedExpertiseId" @change="expertiseChanged">
                                     <option disabled value>Choisissez</option>
-                                    <option
-                                        v-for="expertise in expertises"
-                                        :key="expertise.id"
-                                        v-bind:value="expertise.id"
-                                    >
+                                    <option v-for="expertise in expertises" :key="expertise.id" :value="expertise.id">
                                         {{ expertise.expertiseName }}
                                     </option>
                                 </select>
@@ -29,14 +21,14 @@
                         <router-link
                             v-if="selectedExpertiseId"
                             class="primary-button"
-                            v-bind:to="`/members/${selectedExpertiseId}/add`"
+                            :to="`/members/${selectedExpertiseId}/add`"
                             >Ajouter</router-link
                         >
                     </div>
-                    <consultant-list v-bind:consultants="consultants">
-                        <template v-slot="{ consultantId }">
+                    <consultant-list :consultants="consultants">
+                        <template #default="{ consultantId }">
                             <router-link
-                                v-bind:to="`/members/${selectedExpertiseId}/${consultantId}`"
+                                :to="`/members/${selectedExpertiseId}/${consultantId}`"
                                 class="tertiary-button update-button"
                                 >Mettre à jour</router-link
                             >
@@ -60,7 +52,7 @@ import { Expertise } from "../models/expertise";
 import { expertisesRoles } from "../models/role";
 
 export default defineComponent({
-    name: "members",
+    name: "Members",
     components: { ConsultantList, Loading, CheckRoles },
     data() {
         return {
@@ -69,9 +61,17 @@ export default defineComponent({
             selectedExpertiseId: "",
             loading: true,
             errored: false,
-            expertisesRoles: expertisesRoles,
+            expertisesRoles,
             expertisesService: new ExpertisesService(),
         };
+    },
+    watch: {
+        "$route.params": async function () {
+            if (this.$route.params.id) {
+                this.selectedExpertiseId = this.$route.params.id as string;
+                await this.updateConsultants();
+            }
+        },
     },
     async mounted() {
         try {
@@ -79,10 +79,8 @@ export default defineComponent({
             if (this.$route.params.id) {
                 this.selectedExpertiseId = this.$route.params.id as string;
                 await this.updateConsultants();
-            } else {
-                if (this.expertises.length > 0) {
-                    this.$router.push(`/members/${this.expertises[0].id}`);
-                }
+            } else if (this.expertises.length > 0) {
+                this.$router.push(`/members/${this.expertises[0].id}`);
             }
         } catch {
             this.errored = true;
@@ -91,20 +89,12 @@ export default defineComponent({
         }
     },
     methods: {
-        expertiseChanged: function () {
+        expertiseChanged() {
             this.$router.push(`/members/${this.selectedExpertiseId}`);
         },
-        updateConsultants: async function () {
+        async updateConsultants() {
             const consultantsService = new ConsultantsService();
             this.consultants = await consultantsService.getConsultants(this.selectedExpertiseId);
-        },
-    },
-    watch: {
-        "$route.params": async function () {
-            if (this.$route.params.id) {
-                this.selectedExpertiseId = this.$route.params.id as string;
-                await this.updateConsultants();
-            }
         },
     },
 });

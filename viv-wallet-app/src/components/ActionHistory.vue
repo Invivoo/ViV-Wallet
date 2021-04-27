@@ -29,7 +29,7 @@
                     <td>
                         <div>
                             <div class="type">{{ action.type }}</div>
-                            <div class="comment" v-bind:title="action.comment">{{ action.comment }}</div>
+                            <div class="comment" :title="action.comment">{{ action.comment }}</div>
                         </div>
                     </td>
                     <td class="right payment">{{ action.payment }}</td>
@@ -54,12 +54,12 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
-import FilterInput from "../components/FilterInput.vue";
-import StatusBadge from "../components/StatusBadge.vue";
 import { ActionForHistory, PaymentStatus } from "../models/action";
+import FilterInput from "./FilterInput.vue";
+import StatusBadge from "./StatusBadge.vue";
 
 export default defineComponent({
-    name: "action-history",
+    name: "ActionHistory",
     components: { StatusBadge, FilterInput },
     props: {
         actions: {
@@ -73,11 +73,18 @@ export default defineComponent({
             filteredActions: [...this.actions],
         };
     },
+    watch: {
+        filterValue() {
+            this.filteredActions = this.actions.filter((action) =>
+                action.achiever?.fullName?.toLowerCase().includes(this.filterValue.toLowerCase())
+            );
+        },
+    },
     methods: {
-        isPaymentPaid: function (action: ActionForHistory) {
+        isPaymentPaid(action: ActionForHistory) {
             return action.status === PaymentStatus.Paid;
         },
-        formatPaymentStatus: function (status: PaymentStatus) {
+        formatPaymentStatus(status: PaymentStatus) {
             switch (status) {
                 case PaymentStatus.Paid:
                     return "Débloqué";
@@ -86,7 +93,7 @@ export default defineComponent({
                     return "Non débloqué";
             }
         },
-        getPaymentStatusType: function (status: PaymentStatus) {
+        getPaymentStatusType(status: PaymentStatus) {
             switch (status) {
                 case PaymentStatus.Paid:
                     return "green";
@@ -94,13 +101,6 @@ export default defineComponent({
                 default:
                     return "red";
             }
-        },
-    },
-    watch: {
-        filterValue: function () {
-            this.filteredActions = this.actions.filter((action) =>
-                action.achiever?.fullName?.toLowerCase().includes(this.filterValue.toLowerCase())
-            );
         },
     },
 });

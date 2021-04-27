@@ -30,7 +30,7 @@
                     }}</status-badge>
                 </td>
                 <td class="no-padding">
-                    <slot v-bind:consultantId="consultant.id"></slot>
+                    <slot :consultantId="consultant.id"></slot>
                 </td>
             </tr>
         </tbody>
@@ -40,11 +40,11 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
-import StatusBadge from "../components/StatusBadge.vue";
 import { Consultant, ConsultantStatus, toString } from "../models/consultant";
+import StatusBadge from "./StatusBadge.vue";
 
 export default defineComponent({
-    name: "consultant-list",
+    name: "ConsultantList",
     components: { StatusBadge },
     props: {
         consultants: {
@@ -53,10 +53,10 @@ export default defineComponent({
         },
     },
     methods: {
-        formatConsultantStatus: function (status: ConsultantStatus) {
+        formatConsultantStatus(status: ConsultantStatus) {
             return toString(status);
         },
-        getConsultantStatusType: function (status: ConsultantStatus) {
+        getConsultantStatusType(status: ConsultantStatus) {
             switch (status) {
                 case ConsultantStatus.CONSULTANT_SENIOR:
                 case ConsultantStatus.MANAGER:
