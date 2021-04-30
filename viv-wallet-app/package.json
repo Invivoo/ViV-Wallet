@@ -24,6 +24,7 @@
     "devDependencies": {
         "@testing-library/jest-dom": "^5.11.10",
         "@testing-library/vue": "^6.4.0",
+        "@types/faker": "^5.5.3",
         "@types/jest": "^26.0.22",
         "@types/node": "^14.14.41",
         "@typescript-eslint/eslint-plugin": "^4.22.0",
@@ -51,8 +52,10 @@
         "eslint-plugin-unicorn": "29.0.0",
         "eslint-plugin-vue": "^7.9.0",
         "eslint-plugin-vuejs-accessibility": "^0.6.1",
+        "faker": "^5.5.3",
         "husky": "^6.0.0",
         "json-server": "^0.16.3",
+        "msw": "^0.28.2",
         "prettier": "^2.2.1",
         "pretty-quick": "^3.1.0",
         "sass": "^1.32.8",

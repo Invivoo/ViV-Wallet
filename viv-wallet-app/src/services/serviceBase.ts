@@ -12,7 +12,9 @@ export class ServiceBase {
             http ||
             axios.create({
                 baseURL: `${process.env.VUE_APP_BACKEND_BASE_URL}${route}`,
-                timeout: process.env.VUE_APP_REQUEST_TIMEOUT_MS,
+                timeout: process.env.VUE_APP_REQUEST_TIMEOUT_MS
+                    ? Number.parseInt(process.env.VUE_APP_REQUEST_TIMEOUT_MS, 10)
+                    : undefined,
                 headers: { Authorization: `Bearer ${LoginService.getJwtToken()}` },
                 withCredentials: true,
             });

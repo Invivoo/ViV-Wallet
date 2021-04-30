@@ -12,4 +12,6 @@ const customRender = async (Component: unknown, options = {}) => {
     return renderResult;
 };
 
+export * from "@testing-library/vue";
+
 export { customRender as render };

@@ -12,7 +12,7 @@
                     />
                     <illustration />
                 </div>
-                <form class="payment-form">
+                <form class="payment-form" @submit.prevent>
                     <div class="element-block inline-bloc w33">
                         <label id="lbl-date" for="payment-date">DATE</label>
                         <input id="payment-date" v-model="date" type="date" placeholder="Date de paiement" />
@@ -27,9 +27,64 @@
                         <input id="amount" hidden :value="`${amount} €`" />
                         <div class="values">{{ amount }} €</div>
                     </div>
-                    <actions-block :actions="unpaidActions" />
+                    <section>
+                        <h3>Actions</h3>
+                        <table v-if="unpaidActions.length > 0" aria-label="liste des actions">
+                            <colgroup>
+                                <col />
+                                <col style="width: 22%" />
+                                <col style="width: 41%" />
+                                <col style="width: 7%" />
+                                <col style="width: 24%" />
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th class="action-checkbox" />
+                                    <th class="right no-left-padding">DATE DE CREATION</th>
+                                    <th>ACTION</th>
+                                    <th class="right">VIV</th>
+                                    <th>
+                                        <span class="status-header">STATUT</span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="action in unpaidActions" :key="action.id" :data-testid="action.id">
+                                    <td class="action-checkbox">
+                                        <Checkbox
+                                            v-model="action.isSelected"
+                                            :aria-label="
+                                                'Sélectionner l\'action du ' + action.creationDate.toDateString()
+                                            "
+                                        />
+                                    </td>
+                                    <td class="right no-left-padding">{{ action.creationDate.toDateString() }}</td>
+                                    <td>
+                                        <div>
+                                            <div class="type">{{ action.type }}</div>
+                                            <div class="comment" :title="action.comment">{{ action.comment }}</div>
+                                        </div>
+                                    </td>
+                                    <td class="right payment">{{ action.payment }}</td>
+                                    <td>
+                                        <div>
+                                            <div>
+                                                <status-badge :type="getPaymentStatusType(action.status)">
+                                                    {{ formatPaymentStatus(action.status) }}
+                                                </status-badge>
+                                            </div>
+                                            <div v-if="isPaymentPaid(action)" class="payment-date">
+                                                {{ action.paymentDate ? action.paymentDate.toDateString() : "" }}
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p v-else class="none" role="alert">Aucune action trouvée !</p>
+                    </section>
                     <div class="buttons">
-                        <button class="primary-button" :disabled="!hasBalanceToPay" @click="AddPayment">Valider</button>
+                        <button class="primary-button" :disabled="!hasBalanceToPay" @click="Pay">Valider</button>
                         <router-link class="secondary-button" :to="`/wallets/${id}`">Cancel</router-link>
                     </div>
                 </form>
@@ -40,12 +95,13 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { Action } from "@/models/action";
+import { Action, PaymentStatus } from "@/models/action";
 import { UsersService } from "@/services/users";
-import ActionsBlock from "../components/ActionsBlock.vue";
 import BalanceCard from "../components/BalanceCard.vue";
+import Checkbox from "../components/Checkbox.vue";
 import Illustration from "../components/Illustration.vue";
 import Loading from "../components/Loading.vue";
+import StatusBadge from "../components/StatusBadge.vue";
 import { ConsultantStatus, toString } from "../models/consultant";
 import { PaymentPost } from "../models/payment";
 import { User } from "../models/user";
@@ -53,7 +109,7 @@ import { WalletService } from "../services/wallet";
 
 export default defineComponent({
     name: "Payment",
-    components: { BalanceCard, Illustration, ActionsBlock, Loading },
+    components: { BalanceCard, Illustration, Loading, StatusBadge, Checkbox },
     props: {
         id: {
             required: true,
@@ -65,9 +121,8 @@ export default defineComponent({
             user: { id: "", fullName: "", user: "", email: "" } as User | null,
             balance: 0,
             date: new Date(),
-            unpaidActions: [] as Action[],
+            unpaidActions: [] as (Action & { isSelected: boolean })[],
             coeff: 5,
-            viv: 0,
             loading: false,
             errored: false,
             usersService: new UsersService(),
@@ -81,15 +136,23 @@ export default defineComponent({
         hasBalanceToPay(): boolean {
             return this.viv > 0;
         },
+        viv(): number {
+            // TODO manage the initial viv difference
+            return this.unpaidActions
+                .filter((action) => action.isSelected)
+                .reduce((acc, action) => acc + action.payment, 0);
+        },
     },
     async mounted() {
         try {
+            this.loading = true;
             [this.user, this.balance, this.unpaidActions] = await Promise.all([
                 this.usersService.getUser(this.id),
                 this.walletService.getUserBalance(this.id),
-                this.walletService.getUserPayableActions(this.id),
+                this.walletService
+                    .getUserPayableActions(this.id)
+                    .then((actions) => actions.map((action) => ({ ...action, isSelected: false }))),
             ]);
-            this.viv += this.balance;
         } catch {
             this.errored = true;
         } finally {
@@ -103,14 +166,15 @@ export default defineComponent({
             }
             return "";
         },
-        async AddPayment() {
+        async Pay() {
             try {
                 this.loading = true;
                 if (this.hasBalanceToPay) {
                     const payment: PaymentPost = {
                         receiverId: this.id,
                         date: this.date,
-                        actionIds: this.unpaidActions.map(({ id }) => id),
+                        actionIds: this.unpaidActions.filter((action) => action.isSelected).map(({ id }) => id),
+                        vivAmount: this.viv,
                     };
                     await this.walletService.saveUserPayment(payment);
                     this.$router.push({ path: `/wallets/${this.id}` });
@@ -121,12 +185,36 @@ export default defineComponent({
                 this.loading = false;
             }
         },
+        isPaymentPaid(action: Action) {
+            return action.status === PaymentStatus.Paid;
+        },
+
+        formatPaymentStatus(status: PaymentStatus) {
+            switch (status) {
+                case PaymentStatus.Paid:
+                    return "Débloqué";
+                case PaymentStatus.Unpaid:
+                default:
+                    return "Non débloqué";
+            }
+        },
+
+        getPaymentStatusType(status: PaymentStatus) {
+            switch (status) {
+                case PaymentStatus.Paid:
+                    return "green";
+                case PaymentStatus.Unpaid:
+                default:
+                    return "red";
+            }
+        },
     },
 });
 </script>
 
 <style scoped lang="scss">
 @import "../styles/form.scss";
+@import "../styles/table.scss";
 @import "../styles/buttons.scss";
 .inline-bloc {
     display: inline-block;
@@ -143,6 +231,13 @@ export default defineComponent({
 }
 h2 {
     text-align: center;
+    font-size: $text-2xl;
+    color: $gray-700;
+    font-weight: 600;
+    margin: $m-6 0 $m-3 0;
+}
+h3 {
+    text-align: left;
     font-size: $text-2xl;
     color: $gray-700;
     font-weight: 600;
@@ -171,9 +266,45 @@ h2 {
     font-weight: 600;
     color: $gray-700;
 }
+
 button:disabled,
 button[disabled] {
     cursor: not-allowed;
     opacity: 0.7;
+}
+
+.payment-date {
+    color: $gray-600;
+    font-weight: 400;
+    margin-top: $m-2;
+    padding-left: $m-3;
+}
+
+.status-header {
+    padding-left: $m-2;
+}
+
+.comment {
+    color: $gray-600;
+    font-weight: 400;
+    margin-top: $m-2;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.type {
+    font-weight: 600;
+    color: $gray-700;
+}
+
+.action-checkbox {
+    font-size: $text-xl;
+    color: $primary-600;
+}
+
+.no-left-padding {
+    padding-left: 0px;
 }
 </style>
