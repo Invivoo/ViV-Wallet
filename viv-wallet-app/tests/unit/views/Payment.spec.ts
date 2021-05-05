@@ -3,9 +3,9 @@ import userEvent from "@testing-library/user-event";
 import faker from "faker";
 import { rest } from "msw";
 import { setupServer } from "msw/node";
+import { PaymentPost } from "@/models/payment";
 import Payment from "@/views/Payment.vue";
 import { render, screen, waitFor, waitForElementToBeRemoved, within } from "../testHelpers";
-import { PaymentPost } from "@/models/payment";
 
 const server = setupServer();
 
@@ -107,7 +107,7 @@ describe("Payment", () => {
         expect(screen.getByText(fullName)).toBeInTheDocument();
         expect(screen.getByText(`${balance} VIV`)).toBeInTheDocument();
 
-        expect(screen.getByLabelText(/total vivs/i)).toHaveValue("0");
+        await waitFor(() => expect(screen.getByLabelText(/total vivs/i)).toHaveValue("0"));
         expect(screen.getByLabelText(/montant/i)).toHaveValue("0 €");
         expect(screen.queryByText(/dont .* de report/)).not.toBeInTheDocument();
 
@@ -128,7 +128,7 @@ describe("Payment", () => {
         await render(Payment, { props: { id: userId } });
         await waitForElementToBeRemoved(() => screen.getByText(/chargement/i));
 
-        expect(screen.getByLabelText(/total vivs/i)).toHaveValue(initialVivs.toString());
+        await waitFor(() => expect(screen.getByLabelText(/total vivs/i)).toHaveValue(initialVivs.toString()));
         expect(screen.getByLabelText(/montant/i)).toHaveValue(`${5 * initialVivs} €`);
         expect(screen.getByText(`(dont ${initialVivs} de report)`)).toBeInTheDocument();
     });
@@ -152,7 +152,7 @@ describe("Payment", () => {
         const { router } = await render(Payment, { props: { id: userId } });
         await waitForElementToBeRemoved(() => screen.getByText(/chargement/i));
 
-        expect(screen.getByLabelText(/total vivs/i)).toHaveValue(initialVivs.toString());
+        await waitFor(() => expect(screen.getByLabelText(/total vivs/i)).toHaveValue(initialVivs.toString()));
         expect(screen.getByLabelText(/montant/i)).toHaveValue(`${5 * initialVivs} €`);
         expect(screen.getByText(`(dont ${initialVivs} de report)`)).toBeInTheDocument();
 
