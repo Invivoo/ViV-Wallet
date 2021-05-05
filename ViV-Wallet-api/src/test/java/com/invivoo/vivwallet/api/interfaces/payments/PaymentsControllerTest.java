@@ -59,6 +59,7 @@ public class PaymentsControllerTest {
     private static final PaymentRequest PAYMENT_REQUEST = PaymentRequest.builder()
                                                                         .date(PAYMENT_DATE)
                                                                         .receiverId(RECEIVER.getId())
+                                                                        .vivAmount(20)
                                                                         .actionIds(ACTIONS.stream().map(Action::getId).collect(Collectors.toList()))
                                                                         .build();
     private static final ObjectMapper mapper = new ViVWalletApiApplication().objectMapper();
