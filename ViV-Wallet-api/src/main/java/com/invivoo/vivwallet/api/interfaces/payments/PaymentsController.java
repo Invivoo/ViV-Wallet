@@ -57,13 +57,18 @@ public class PaymentsController {
                                  .build();
         }
         User receiver = receiverOpt.get();
-        Payment payment = Payment.builder()
-                                 .date(paymentRequest.getDate())
-                                 .receiver(receiver)
-                                 .creator(connectedUser.get())
-                                 .vivAmount(userService.computeBalance(receiver))
-                                 .actions(actionsToPay)
+        int balance = userService.computeBalance(receiver);
+        if(paymentRequest.getVivAmount() > balance) {
+            return ResponseEntity.badRequest()
                                  .build();
+        }
+        Payment payment = Payment.builder()
+                                     .date(paymentRequest.getDate())
+                                     .receiver(receiver)
+                                     .creator(connectedUser.get())
+                                     .vivAmount(paymentRequest.getVivAmount())
+                                     .actions(actionsToPay)
+                                     .build();
         Payment savedPayment = paymentService.save(payment);
         return ResponseEntity.created(getLocation(savedPayment))
                              .body(PaymentDto.createFromPayment(savedPayment));
