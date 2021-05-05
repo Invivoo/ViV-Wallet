@@ -23,6 +23,7 @@
     },
     "devDependencies": {
         "@testing-library/jest-dom": "^5.11.10",
+        "@testing-library/user-event": "^13.1.8",
         "@testing-library/vue": "^6.4.0",
         "@types/faker": "^5.5.3",
         "@types/jest": "^26.0.22",

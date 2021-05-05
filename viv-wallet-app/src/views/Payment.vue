@@ -20,7 +20,12 @@
                     <div class="element-block inline-bloc w33">
                         <label id="lbl-viv" for="viv-total">TOTAL VIVs</label>
                         <input id="viv-total" hidden :value="viv" />
-                        <div class="values">{{ viv }}</div>
+                        <div class="values">
+                            {{ viv }} VIVs
+                            <span v-if="initialVivAmount > 0" class="viv-details">
+                                {{ " " }}(dont {{ initialVivAmount }} de report)
+                            </span>
+                        </div>
                     </div>
                     <div class="element-block inline-bloc w33">
                         <label id="lbl-amount" for="amount">MONTANT</label>
@@ -136,11 +141,16 @@ export default defineComponent({
         hasBalanceToPay(): boolean {
             return this.viv > 0;
         },
+        initialVivAmount(): number {
+            const initial = this.balance - this.unpaidActions.reduce((acc, action) => acc + action.payment, 0);
+            return initial > 0 ? initial : 0;
+        },
         viv(): number {
-            // TODO manage the initial viv difference
-            return this.unpaidActions
-                .filter((action) => action.isSelected)
-                .reduce((acc, action) => acc + action.payment, 0);
+            return (
+                this.unpaidActions
+                    .filter((action) => action.isSelected)
+                    .reduce((acc, action) => acc + action.payment, 0) + this.initialVivAmount
+            );
         },
     },
     async mounted() {
@@ -265,6 +275,12 @@ h3 {
 .payment .values {
     font-weight: 600;
     color: $gray-700;
+}
+
+.viv-details {
+    font-weight: 400;
+    color: $gray-500;
+    vertical-align: baseline;
 }
 
 button:disabled,

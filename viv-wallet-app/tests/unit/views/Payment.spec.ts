@@ -1,9 +1,11 @@
 import "@testing-library/jest-dom";
+import userEvent from "@testing-library/user-event";
 import faker from "faker";
 import { rest } from "msw";
 import { setupServer } from "msw/node";
 import Payment from "@/views/Payment.vue";
-import { render, screen, waitForElementToBeRemoved, within } from "../testHelpers";
+import { render, screen, waitFor, waitForElementToBeRemoved, within } from "../testHelpers";
+import { PaymentPost } from "@/models/payment";
 
 const server = setupServer();
 
@@ -68,19 +70,33 @@ function setupRestMocks(
     );
 }
 
+function generateTestData(initialVivs: number) {
+    const userId = faker.datatype.number().toString();
+    const fullName = faker.name.findName();
+    const unPaidActions = [
+        { id: faker.unique(faker.datatype.number), payment: faker.datatype.number(50), status: "Unpaid" },
+        { id: faker.unique(faker.datatype.number), payment: faker.datatype.number(50), status: "Unpaid" },
+    ];
+    const balance = initialVivs + unPaidActions.reduce((acc, action) => action.payment + acc, 0);
+    return {
+        userId,
+        fullName,
+        unPaidActions,
+        initialVivs,
+        balance,
+    };
+}
+
 describe("Payment", () => {
     beforeAll(() => server.listen());
-    afterEach(() => server.resetHandlers());
+    afterEach(() => {
+        server.resetHandlers();
+        jest.clearAllMocks();
+    });
     afterAll(() => server.close());
 
     it("should display the list of unpaid actions and the viv balance", async () => {
-        const userId = faker.datatype.number().toString();
-        const fullName = faker.name.findName();
-        const balance = faker.datatype.number(1000);
-        const unPaidActions = [
-            { id: faker.unique(faker.datatype.number), payment: faker.datatype.number(50), status: "Unpaid" },
-            { id: faker.unique(faker.datatype.number), payment: faker.datatype.number(50), status: "Unpaid" },
-        ];
+        const { userId, fullName, unPaidActions, balance } = generateTestData(0);
         setupRestMocks(userId, fullName, balance, [
             ...unPaidActions,
             { id: faker.unique(faker.datatype.number), payment: faker.datatype.number(50), status: "Paid" },
@@ -93,11 +109,68 @@ describe("Payment", () => {
 
         expect(screen.getByLabelText(/total vivs/i)).toHaveValue("0");
         expect(screen.getByLabelText(/montant/i)).toHaveValue("0 €");
+        expect(screen.queryByText(/dont .* de report/)).not.toBeInTheDocument();
 
         const actionTable = within(screen.getByRole("table", { name: /liste des actions/i }));
         expect(actionTable.getAllByRole("row").length).toBe(unPaidActions.length + 1); // + the header
         unPaidActions.forEach((action) => {
             expect(actionTable.getByTestId(action.id)).toBeInTheDocument();
         });
+    });
+
+    it("should display initial VIVs", async () => {
+        const initialVivs = faker.datatype.number(50);
+        const { userId, fullName, unPaidActions, balance } = generateTestData(initialVivs);
+        setupRestMocks(userId, fullName, balance, [
+            ...unPaidActions,
+            { id: faker.unique(faker.datatype.number), payment: faker.datatype.number(50), status: "Paid" },
+        ]);
+        await render(Payment, { props: { id: userId } });
+        await waitForElementToBeRemoved(() => screen.getByText(/chargement/i));
+
+        expect(screen.getByLabelText(/total vivs/i)).toHaveValue(initialVivs.toString());
+        expect(screen.getByLabelText(/montant/i)).toHaveValue(`${5 * initialVivs} €`);
+        expect(screen.getByText(`(dont ${initialVivs} de report)`)).toBeInTheDocument();
+    });
+
+    it("should select an unpaid action and request a payment", async () => {
+        const initialVivs = faker.datatype.number(50);
+        const { userId, fullName, unPaidActions, balance } = generateTestData(initialVivs);
+        server.use(
+            rest.post(`${process.env.VUE_APP_BACKEND_BASE_URL}/payments`, (req, res, ctx) => {
+                const body = req.body as PaymentPost;
+                expect(body.actionIds).toHaveLength(1);
+                expect(body.actionIds).toEqual(expect.arrayContaining([unPaidActions[0].id]));
+                expect(body.vivAmount).toEqual(initialVivs + unPaidActions[0].payment);
+                return res(ctx.status(200));
+            })
+        );
+        setupRestMocks(userId, fullName, balance, [
+            ...unPaidActions,
+            { id: faker.unique(faker.datatype.number), payment: faker.datatype.number(50), status: "Paid" },
+        ]);
+        const { router } = await render(Payment, { props: { id: userId } });
+        await waitForElementToBeRemoved(() => screen.getByText(/chargement/i));
+
+        expect(screen.getByLabelText(/total vivs/i)).toHaveValue(initialVivs.toString());
+        expect(screen.getByLabelText(/montant/i)).toHaveValue(`${5 * initialVivs} €`);
+        expect(screen.getByText(`(dont ${initialVivs} de report)`)).toBeInTheDocument();
+
+        // Select an unpaid action
+        const actionCheckboxes = screen.getAllByRole("checkbox", { name: /sélectionner l'action du/i });
+        userEvent.click(actionCheckboxes[0]);
+        expect(actionCheckboxes[0]).toBeChecked();
+
+        const expectedVivs = unPaidActions[0].payment + initialVivs;
+        await waitFor(() => expect(screen.getByLabelText(/total vivs/i)).toHaveValue(expectedVivs.toString()));
+        expect(screen.getByLabelText(/montant/i)).toHaveValue(`${5 * expectedVivs} €`);
+
+        // Request a payment
+        router.push = jest.fn();
+        userEvent.click(screen.getByRole("button", { name: /valider/i }));
+
+        await waitFor(() =>
+            expect(router.push).toHaveBeenCalledWith(expect.objectContaining({ path: `/wallets/${userId}` }))
+        );
     });
 });
