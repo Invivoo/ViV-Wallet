@@ -42,6 +42,7 @@ public class ActivityToActionMapper {
         owner = owner.contains("Marcos Aurelio ALMEIDA DA SILVA") ? "Marcos ALMEIDA" : owner;
         owner = owner.contains("Gustavo OLIVEIRA") ? "Gustavo OLIVEIRA" : owner;
         owner = owner.contains("Nhi TRAN") ? "Nhi TRAN" : owner;
+        owner = owner.contains("Leopold TSOGO") ? "Léopold TSOGO" : owner;
         return owner;
     }
 
