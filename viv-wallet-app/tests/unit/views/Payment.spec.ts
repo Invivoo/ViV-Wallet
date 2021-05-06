@@ -173,4 +173,37 @@ describe("Payment", () => {
             expect(router.push).toHaveBeenCalledWith(expect.objectContaining({ path: `/wallets/${userId}` }))
         );
     });
+
+    it("should select / unselect all unpaid actions", async () => {
+        const initialVivs = faker.datatype.number(50);
+        const { userId, fullName, unPaidActions, balance } = generateTestData(initialVivs);
+        setupRestMocks(userId, fullName, balance, [
+            ...unPaidActions,
+            { id: faker.unique(faker.datatype.number), payment: faker.datatype.number(50), status: "Paid" },
+        ]);
+        await render(Payment, { props: { id: userId } });
+        await waitForElementToBeRemoved(() => screen.getByText(/chargement/i));
+
+        await waitFor(() => expect(screen.getByLabelText(/total vivs/i)).toHaveValue(initialVivs.toString()));
+
+        // Select all unpaid actions
+        const selectAllChecbox = screen.getByRole("checkbox", { name: /tout sélectionner/i });
+        userEvent.click(selectAllChecbox);
+        expect(selectAllChecbox).toBeChecked();
+        const actionCheckboxes = screen.getAllByRole("checkbox", { name: /sélectionner l'action du/i });
+        await waitFor(() => {
+            actionCheckboxes.forEach((actionCheckbox) => {
+                expect(actionCheckbox).toBeChecked();
+            });
+        });
+
+        // Unselect all unpaid actions
+        userEvent.click(selectAllChecbox);
+        expect(selectAllChecbox).not.toBeChecked();
+        await waitFor(() => {
+            actionCheckboxes.forEach((actionCheckbox) => {
+                expect(actionCheckbox).not.toBeChecked();
+            });
+        });
+    });
 });
