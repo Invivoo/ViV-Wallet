@@ -10,25 +10,29 @@
                 </svg>
             </div>
             <input
-                type="text"
                 id="filter"
+                type="text"
                 placeholder="Filtrer par utilisateur"
-                :value="filterValue"
-                @input="$emit('input', $event.target.value)"
+                :modelValue="filterValue"
+                @input="$emit('update:modelValue', $event.target.value)"
             />
         </div>
     </div>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from "vue-property-decorator";
+import { defineComponent } from "vue";
 
-@Component({
-    name: "filter-input",
-})
-export default class FilterInput extends Vue {
-    @Prop({ default: "" }) filterValue!: string;
-}
+export default defineComponent({
+    name: "FilterInput",
+    props: {
+        filterValue: {
+            default: "",
+            type: String,
+        },
+    },
+    emits: ["update:modelValue"],
+});
 </script>
 
 <style lang="scss" scoped>

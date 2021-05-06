@@ -1,10 +1,10 @@
 <template>
     <div class="history">
-        <loading v-bind:loading="loading" v-bind:errored="errored">
-            <check-roles v-bind:roles="historyRoles" withErrorMessage="true">
+        <loading :loading="loading" :errored="errored">
+            <check-roles :roles="historyRoles" :with-error-message="true">
                 <section>
                     <h2>Historique des actions</h2>
-                    <action-history v-bind:actions="actions" />
+                    <action-history :actions="actions" />
                 </section>
             </check-roles>
         </loading>
@@ -12,38 +12,38 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
-import { ActionForHistory } from "../models/action";
-import { WalletService } from "../services/wallet";
-import Loading from "../components/Loading.vue";
+import { defineComponent } from "vue";
 import ActionHistory from "../components/ActionHistory.vue";
-import { historyRoles } from "../models/role";
 import CheckRoles from "../components/CheckRoles.vue";
+import Loading from "../components/Loading.vue";
+import { ActionForHistory } from "../models/action";
+import { historyRoles } from "../models/role";
+import { WalletService } from "../services/wallet";
 
-@Component({
-    name: "history",
+export default defineComponent({
+    name: "History",
     components: { ActionHistory, Loading, CheckRoles },
-})
-export default class History extends Vue {
-    actions: ActionForHistory[] = [];
-    loading = true;
-    errored = false;
-
-    walletService = new WalletService();
-    historyRoles = historyRoles;
-
+    data() {
+        return {
+            actions: [] as ActionForHistory[],
+            loading: true,
+            errored: false,
+            walletService: new WalletService(),
+            historyRoles,
+        };
+    },
     async mounted() {
         try {
             this.actions = (await this.walletService.getAllActions()).sort(
                 (a, b) => b.creationDate.getTime() - a.creationDate.getTime()
             );
-        } catch (ex) {
+        } catch {
             this.errored = true;
         } finally {
             this.loading = false;
         }
-    }
-}
+    },
+});
 </script>
 
 <style scoped lang="scss">

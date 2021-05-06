@@ -1,5 +1,5 @@
 <template>
-    <Section>
+    <section>
         <h2>Actions</h2>
         <table v-if="actions.length > 0">
             <colgroup>
@@ -24,7 +24,7 @@
                     <td>
                         <div>
                             <div class="type">{{ action.type }}</div>
-                            <div class="comment" v-bind:title="action.comment">{{ action.comment }}</div>
+                            <div class="comment" :title="action.comment">{{ action.comment }}</div>
                         </div>
                     </td>
                     <td class="right payment">{{ action.payment }}</td>
@@ -44,45 +44,49 @@
             </tbody>
         </table>
         <p v-else class="none">Aucune action trouvée !</p>
-    </Section>
+    </section>
 </template>
 
 <script lang="ts">
-import {Component, Prop, Vue} from 'vue-property-decorator';
-import {Action, PaymentStatus} from '../models/action';
-import StatusBadge from '../components/StatusBadge.vue';
+import { defineComponent, PropType } from "vue";
+import { Action, PaymentStatus } from "../models/action";
+import StatusBadge from "./StatusBadge.vue";
 
-@Component({
-    name: "actions-block",
+export default defineComponent({
+    name: "ActionsBlock",
     components: { StatusBadge },
-})
-export default class ActionsBlock extends Vue {
-    @Prop({ default: [] }) actions!: Action[];
+    props: {
+        actions: {
+            default: () => [],
+            type: Array as PropType<Action[]>,
+        },
+    },
+    methods: {
+        isPaymentPaid(action: Action) {
+            return action.status === PaymentStatus.Paid;
+        },
 
-    isPaymentPaid(action: Action) {
-        return action.status === PaymentStatus.Paid;
-    }
+        formatPaymentStatus(status: PaymentStatus) {
+            switch (status) {
+                case PaymentStatus.Paid:
+                    return "Débloqué";
+                case PaymentStatus.Unpaid:
+                default:
+                    return "Non débloqué";
+            }
+        },
 
-    formatPaymentStatus(status: PaymentStatus) {
-        switch (status) {
-            case PaymentStatus.Paid:
-                return "Débloqué";
-            case PaymentStatus.Unpaid:
-            default:
-                return "Non débloqué";
-        }
-    }
-
-    getPaymentStatusType(status: PaymentStatus) {
-        switch (status) {
-            case PaymentStatus.Paid:
-                return "green";
-            case PaymentStatus.Unpaid:
-            default:
-                return "red";
-        }
-    }
-}
+        getPaymentStatusType(status: PaymentStatus) {
+            switch (status) {
+                case PaymentStatus.Paid:
+                    return "green";
+                case PaymentStatus.Unpaid:
+                default:
+                    return "red";
+            }
+        },
+    },
+});
 </script>
 
 <style lang="scss" scoped>

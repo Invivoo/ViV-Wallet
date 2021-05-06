@@ -1,7 +1,7 @@
-import axios from 'axios';
-import {WalletService} from '@/services/wallet';
-import {Action, PaymentStatus} from '@/models/action';
-import {Payment, PaymentPost} from '@/models/payment';
+import axios from "axios";
+import { PaymentStatus } from "@/models/action";
+import { Payment, PaymentPost } from "@/models/payment";
+import { RawAction, WalletService } from "@/services/wallet";
 
 jest.mock("axios");
 const mockedAxios = axios as jest.Mocked<typeof axios>;
@@ -34,15 +34,15 @@ describe("BalanceService", () => {
     });
 
     it("should get the actions of a given user", async () => {
-        const action: Action = {
+        const action: RawAction = {
             id: "id1",
             type: "Interview",
             comment: "This is a comment",
-            creationDate: new Date("2020-07-15T15:00:00"),
-            valueDate: new Date("2020-07-15T15:00:00"),
+            creationDate: "2020-07-15T13:00:00.000Z",
+            valueDate: "2020-07-15T13:00:00.000Z",
             payment: 20,
-            status: PaymentStatus.Paid,
-            paymentDate: new Date("2020-07-15T15:00:00"),
+            status: "Paid",
+            paymentDate: "2020-07-15T13:00:00.000Z",
             expertise: "Front-End",
         };
         const response = {
@@ -52,7 +52,13 @@ describe("BalanceService", () => {
 
         const returnedActions = await service.getUserActions("id1");
         expect(1).toEqual(returnedActions.length);
-        expect(action).toEqual(returnedActions[0]);
+        expect(returnedActions[0]).toMatchObject({
+            ...action,
+            status: PaymentStatus.Paid,
+            paymentDate: new Date(action.paymentDate),
+            creationDate: new Date(action.creationDate),
+            valueDate: new Date(action.valueDate),
+        });
 
         expect(mockedAxios.get).toHaveBeenCalledWith(`/users/id1/actions`);
     });
@@ -123,6 +129,7 @@ describe("BalanceService", () => {
             receiverId: "userId",
             date: new Date(2020, 1, 1),
             actionIds: ["1", "2", "3"],
+            vivAmount: 200,
         };
         const result = true;
         const response = {

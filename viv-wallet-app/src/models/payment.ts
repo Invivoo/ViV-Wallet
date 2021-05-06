@@ -8,4 +8,5 @@ export interface PaymentPost {
     date: Date;
     receiverId: string;
     actionIds: string[];
+    vivAmount: number;
 }

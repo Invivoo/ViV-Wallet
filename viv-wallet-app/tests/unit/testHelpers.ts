@@ -1,18 +1,22 @@
-import { VueConstructor } from "vue/types/umd";
-import { Vue } from "vue-property-decorator";
-import { shallowMount, createLocalVue } from "@vue/test-utils";
-import VueRouter from "vue-router";
+import { render } from "@testing-library/vue";
+import { createRouter, createWebHistory } from "vue-router";
+import { routes } from "@/router";
 
-const localVue = createLocalVue();
-localVue.use(VueRouter);
-const router = new VueRouter();
-
-export const factory = (component: VueConstructor<Vue>) => (values = {}) => {
-    return shallowMount(component, {
-        localVue,
-        router,
-        propsData: {
-            ...values,
-        },
+const customRender = async (Component: unknown, options = {}) => {
+    const router = createRouter({
+        history: createWebHistory(process.env.BASE_URL),
+        routes,
     });
+    const renderResult = render(Component, {
+        global: {
+            plugins: [router],
+        },
+        ...options,
+    });
+    await router.isReady();
+    return { ...renderResult, router };
 };
+
+export * from "@testing-library/vue";
+
+export { customRender as render };

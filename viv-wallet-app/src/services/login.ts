@@ -1,11 +1,12 @@
-import { Role } from "../models/role";
-import jwt_decode from "jwt-decode";
+import jwtDecode from "jwt-decode";
 import { getToken } from "x4b-ui";
+import { Role } from "../models/role";
 
 export interface DecodedJwtTokenContent {
     exp: number;
     iss: string;
     user: string;
+    // eslint-disable-next-line sonarjs/no-duplicate-string
     "viv-wallet": string;
 }
 
@@ -20,11 +21,12 @@ const getCurrentToken = () => {
 
 export class LoginService {
     private decodedToken?: DecodedJwtTokenContent;
+
     private authorizations: Authorizations;
 
     constructor() {
-        const token = getCurrentToken();
-        this.decodedToken = (token && jwt_decode<DecodedJwtTokenContent>(token)) || undefined;
+        const token = process.env.VUE_APP_DEV_JWT || getCurrentToken();
+        this.decodedToken = (token && jwtDecode<DecodedJwtTokenContent>(token)) || undefined;
         this.authorizations = (this.decodedToken &&
             this.decodedToken["viv-wallet"] &&
             JSON.parse(this.decodedToken["viv-wallet"])) as Authorizations;
@@ -42,7 +44,7 @@ export class LoginService {
         return this.decodedToken?.user || "";
     }
 
-    getJwtToken(): string {
+    static getJwtToken(): string {
         return getCurrentToken();
     }
 }

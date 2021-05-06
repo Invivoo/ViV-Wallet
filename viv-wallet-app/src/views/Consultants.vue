@@ -1,24 +1,16 @@
 <template>
     <div class="consultants">
-        <loading v-bind:loading="loading" v-bind:errored="errored">
-            <check-roles v-bind:roles="expertisesRoles" withErrorMessage="true">
+        <loading :loading="loading" :errored="errored">
+            <check-roles :roles="expertisesRoles" :with-error-message="true">
                 <section>
                     <h2>Consultants</h2>
                     <div class="buttons-container">
                         <div class="selector-container">
                             <label class="expertise-label" for="select-expertise">Expertise :</label>
                             <div class="select">
-                                <select
-                                    id="select-expertise"
-                                    v-model="selectedExpertiseId"
-                                    v-on:change="expertiseChanged"
-                                >
+                                <select id="select-expertise" v-model="selectedExpertiseId" @change="expertiseChanged">
                                     <option disabled value>Choisissez</option>
-                                    <option
-                                        v-for="expertise in expertises"
-                                        :key="expertise.id"
-                                        v-bind:value="expertise.id"
-                                    >
+                                    <option v-for="expertise in expertises" :key="expertise.id" :value="expertise.id">
                                         {{ expertise.expertiseName }}
                                     </option>
                                 </select>
@@ -27,18 +19,17 @@
                         </div>
                         <div class="spacer" />
                         <router-link
+                            v-if="selectedExpertiseId"
                             class="primary-button"
-                            v-bind:to="`/members/${selectedExpertiseId}/add`"
-                            tag="button"
+                            :to="`/members/${selectedExpertiseId}/add`"
                             >Ajouter</router-link
                         >
                     </div>
-                    <consultant-list v-bind:consultants="consultants">
-                        <template v-slot="{ consultantId }">
+                    <consultant-list :consultants="consultants">
+                        <template #default="{ consultantId }">
                             <router-link
-                                v-bind:to="`/members/${selectedExpertiseId}/${consultantId}`"
+                                :to="`/members/${selectedExpertiseId}/${consultantId}`"
                                 class="tertiary-button update-button"
-                                tag="button"
                                 >Mettre à jour</router-link
                             >
                         </template>
@@ -50,68 +41,63 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import { Consultant } from "../models/consultant";
-import { Expertise } from "../models/expertise";
+import { defineComponent } from "vue";
+import ConsultantList from "@/components/ConsultantList.vue";
 import { ConsultantsService } from "@/services/consultants";
 import { ExpertisesService } from "@/services/expertises";
-import Loading from "../components/Loading.vue";
 import CheckRoles from "../components/CheckRoles.vue";
-
-import ConsultantList from "@/components/ConsultantList.vue";
+import Loading from "../components/Loading.vue";
+import { Consultant } from "../models/consultant";
+import { Expertise } from "../models/expertise";
 import { expertisesRoles } from "../models/role";
 
-@Component({
-    name: "members",
+export default defineComponent({
+    name: "Members",
     components: { ConsultantList, Loading, CheckRoles },
-})
-export default class Consultants extends Vue {
-    consultants: Consultant[] = [];
-    expertises: Expertise[] = [];
-    selectedExpertiseId = "";
-    loading = true;
-    errored = false;
-    expertisesRoles = expertisesRoles;
-
-    expertisesService = new ExpertisesService();
-
+    data() {
+        return {
+            consultants: [] as Consultant[],
+            expertises: [] as Expertise[],
+            selectedExpertiseId: "",
+            loading: true,
+            errored: false,
+            expertisesRoles,
+            expertisesService: new ExpertisesService(),
+        };
+    },
+    watch: {
+        "$route.params": async function () {
+            if (this.$route.params.id) {
+                this.selectedExpertiseId = this.$route.params.id as string;
+                await this.updateConsultants();
+            }
+        },
+    },
     async mounted() {
         try {
             this.expertises = await this.expertisesService.getExpertises();
             if (this.$route.params.id) {
-                this.selectedExpertiseId = this.$route.params.id;
+                this.selectedExpertiseId = this.$route.params.id as string;
                 await this.updateConsultants();
-            } else {
-                if (this.expertises.length > 0) {
-                    this.$router.push(`/members/${this.expertises[0].id}`);
-                }
+            } else if (this.expertises.length > 0) {
+                this.$router.push(`/members/${this.expertises[0].id}`);
             }
-        } catch (ex) {
+        } catch {
             this.errored = true;
         } finally {
             this.loading = false;
         }
-    }
-
-    @Watch("$route")
-    async routeChanged() {
-        if (this.$route.params.id) {
-            this.selectedExpertiseId = this.$route.params.id;
-            await this.updateConsultants();
-        } else {
-            this.expertiseChanged();
-        }
-    }
-
-    expertiseChanged() {
-        this.$router.push(`/members/${this.selectedExpertiseId}`);
-    }
-
-    async updateConsultants() {
-        const consultantsService = new ConsultantsService();
-        this.consultants = await consultantsService.getConsultants(this.selectedExpertiseId);
-    }
-}
+    },
+    methods: {
+        expertiseChanged() {
+            this.$router.push(`/members/${this.selectedExpertiseId}`);
+        },
+        async updateConsultants() {
+            const consultantsService = new ConsultantsService();
+            this.consultants = await consultantsService.getConsultants(this.selectedExpertiseId);
+        },
+    },
+});
 </script>
 
 <style scoped lang="scss">

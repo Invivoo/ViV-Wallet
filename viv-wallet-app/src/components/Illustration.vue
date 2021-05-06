@@ -3,10 +3,11 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { defineComponent } from "vue";
 
-@Component
-export default class Illustration extends Vue {}
+export default defineComponent({
+    name: "Illustration",
+});
 </script>
 
 <style scoped lang="scss">

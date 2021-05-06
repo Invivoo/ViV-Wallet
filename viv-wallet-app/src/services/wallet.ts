@@ -1,7 +1,18 @@
-import {AxiosInstance} from 'axios';
-import {ServiceBase} from './serviceBase';
-import {Action, PaymentStatus} from '@/models/action';
-import {Payment, PaymentPost} from '@/models/payment';
+import { AxiosInstance } from "axios";
+import { Action, PaymentStatus } from "@/models/action";
+import { Payment, PaymentPost } from "@/models/payment";
+import { ServiceBase } from "./serviceBase";
+
+export type RawAction = Omit<Action, "creationDate" | "paymentDate" | "status" | "valueDate"> & {
+    creationDate: string;
+    paymentDate: string;
+    valueDate: string;
+    status: keyof typeof PaymentStatus;
+};
+
+export type RawPayment = Omit<Payment, "date"> & {
+    date: string;
+};
 
 export class WalletService extends ServiceBase {
     constructor(http?: AxiosInstance) {
@@ -9,13 +20,14 @@ export class WalletService extends ServiceBase {
     }
 
     async getAllActions(): Promise<Action[]> {
-        const rawData = (await this.http.get(`/actions`)).data;
-        return rawData.map((action) => {
-            action.creationDate = new Date(action.creationDate);
-            action.paymentDate = new Date(action.paymentDate);
-            action.status = PaymentStatus[action.status];
-            return action;
-        });
+        const rawData = (await this.http.get<RawAction[]>(`/actions`)).data;
+        return rawData.map((rawAction) => ({
+            ...rawAction,
+            creationDate: new Date(rawAction.creationDate),
+            paymentDate: new Date(rawAction.paymentDate),
+            valueDate: new Date(rawAction.valueDate),
+            status: PaymentStatus[rawAction.status],
+        }));
     }
 
     async getUserBalance(userId: string): Promise<number> {
@@ -23,14 +35,14 @@ export class WalletService extends ServiceBase {
     }
 
     async getUserActions(userId: string): Promise<Action[]> {
-        const rawData = (await this.http.get(`/users/${userId}/actions`)).data;
-        return rawData.map((action) => {
-            action.creationDate = new Date(action.creationDate);
-            action.valueDate = new Date(action.valueDate);
-            action.paymentDate = new Date(action.paymentDate);
-            action.status = PaymentStatus[action.status];
-            return action;
-        });
+        const rawData = (await this.http.get<RawAction[]>(`/users/${userId}/actions`)).data;
+        return rawData.map((rawAction) => ({
+            ...rawAction,
+            creationDate: new Date(rawAction.creationDate),
+            valueDate: new Date(rawAction.valueDate),
+            paymentDate: new Date(rawAction.paymentDate),
+            status: PaymentStatus[rawAction.status],
+        }));
     }
 
     async getUserPayableActions(userId: string): Promise<Action[]> {
@@ -46,11 +58,11 @@ export class WalletService extends ServiceBase {
     }
 
     async getUserPayments(userId: string): Promise<Payment[]> {
-        const rawData = (await this.http.get(`/users/${userId}/payments`)).data;
-        return rawData.map((action) => {
-            action.date = new Date(action.date);
-            return action;
-        });
+        const rawData = (await this.http.get<RawPayment[]>(`/users/${userId}/payments`)).data;
+        return rawData.map((rawPayment) => ({
+            ...rawPayment,
+            date: new Date(rawPayment.date),
+        }));
     }
 
     async saveUserPayment(payment: PaymentPost): Promise<Object> {

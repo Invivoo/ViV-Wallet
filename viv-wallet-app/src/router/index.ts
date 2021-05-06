@@ -1,15 +1,9 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
+import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import Home from "../views/Home.vue";
-import VCalendar from "v-calendar";
+
 require("focus-visible");
 
-Vue.use(VueRouter);
-Vue.use(VCalendar, {
-    componentPrefix: "vc", // Use <vc-calendar /> instead of <v-calendar />
-});
-
-const routes = [
+export const routes: Array<RouteRecordRaw> = [
     {
         path: "/",
         name: "home",
@@ -26,11 +20,6 @@ const routes = [
         component: () => import(/* webpackChunkName: "actions" */ "../views/History.vue"),
     },
     {
-        path: "/users",
-        name: "users",
-        component: () => import(/* webpackChunkName: "users" */ "../views/Users.vue"),
-    },
-    {
         path: "/members",
         name: "members",
         component: () => import(/* webpackChunkName: "members" */ "../views/Consultants.vue"),
@@ -44,12 +33,6 @@ const routes = [
         path: "/members/:expertiseName/:consultantId",
         name: "memberEdit",
         component: () => import(/* webpackChunkName: "members" */ "../views/ConsultantEdit.vue"),
-        props: true,
-    },
-    {
-        path: "/users/:id",
-        name: "userEdit",
-        component: () => import(/* webpackChunkName: "users" */ "../views/UserEdit.vue"),
         props: true,
     },
     {
@@ -71,9 +54,8 @@ const routes = [
     },
 ];
 
-const router = new VueRouter({
-    mode: "history",
-    base: process.env.BASE_URL,
+const router = createRouter({
+    history: createWebHistory(process.env.BASE_URL),
     routes,
 });
 

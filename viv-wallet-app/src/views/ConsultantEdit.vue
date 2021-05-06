@@ -2,18 +2,14 @@
     <div class="consultantEdit">
         <h2 v-if="consultantId == 'add'">Ajouter consultant</h2>
         <h2 v-else>Editer consultant</h2>
-        <loading v-bind:loading="loading" v-bind:errored="errored">
+        <loading :loading="loading" :errored="errored">
             <form class="consultant-form">
                 <div class="element-block">
                     <label id="input-fullName-1" for="fullName-1">Nom</label>
-                    <div v-if="consultantId == 'add'" v-bind:class="`select ${consultant.id ? '' : 'select-error'}`">
+                    <div v-if="consultantId == 'add'" :class="`select ${consultant.id ? '' : 'select-error'}`">
                         <select id="fullName-1" v-model="consultant.id" required="true">
                             <option value disabled="true">Choisissez une option</option>
-                            <option
-                                v-for="user in usersNotAlreadyInExpertise"
-                                v-bind:key="user.id"
-                                v-bind:value="user.id"
-                            >
+                            <option v-for="user in usersNotAlreadyInExpertise" :key="user.id" :value="user.id">
                                 {{ user.fullName }}
                             </option>
                             <span class="select-focus"></span>
@@ -22,8 +18,8 @@
                     <input
                         v-else
                         id="fullName-1"
-                        type="text"
                         v-model="consultant.fullName"
+                        type="text"
                         placeholder="Nom"
                         readonly="true"
                     />
@@ -34,10 +30,10 @@
                     <div class="select">
                         <select id="status-1" v-model="consultant.status">
                             <option
-                                v-bind:key="option.value"
                                 v-for="option in options"
-                                v-bind:value="option.value"
-                                v-bind:disabled="option.disabled"
+                                :key="option.value"
+                                :value="option.value"
+                                :disabled="option.disabled"
                             >
                                 {{ option.text }}
                             </option>
@@ -48,21 +44,17 @@
 
                 <div class="element-block">
                     <label id="input-startDate-1" for="startDate-1">Arrivé</label>
-                    <input id="startDate-1" type="date" v-model="consultant.startDate" placeholder="Date d'arrivé" />
+                    <input id="startDate-1" v-model="consultant.startDate" type="date" placeholder="Date d'arrivé" />
                 </div>
 
                 <div class="element-block">
                     <label id="input-endDate-1" for="endDate-1">Départ</label>
-                    <input id="endDate-1" type="date" v-model="consultant.endDate" placeholder="Date de départ" />
+                    <input id="endDate-1" v-model="consultant.endDate" type="date" placeholder="Date de départ" />
                 </div>
 
                 <div class="buttons">
-                    <button class="primary-button" v-on:click="confirm" :disabled="submitButtonDisabled">
-                        Confirmer
-                    </button>
-                    <router-link class="secondary-button" v-bind:to="`/members/${expertiseName}`" tag="button"
-                        >Cancel</router-link
-                    >
+                    <button class="primary-button" :disabled="submitButtonDisabled" @click="confirm">Confirmer</button>
+                    <router-link class="secondary-button" :to="`/members/${expertiseName}`">Cancel</router-link>
                 </div>
             </form>
         </loading>
@@ -70,45 +62,52 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import { Consultant, ConsultantStatus, toString } from "../models/consultant";
-import { ConsultantsService } from "../services/consultants";
-import { UsersService } from "../services/users";
-import { User } from "../models/user";
+import { defineComponent } from "vue";
 import { Expertise } from "@/models/expertise";
 import Loading from "../components/Loading.vue";
+import { Consultant, ConsultantStatus, toString } from "../models/consultant";
+import { User } from "../models/user";
+import { ConsultantsService } from "../services/consultants";
+import { UsersService } from "../services/users";
 
-const ConsultantEditProps = Vue.extend({
-    props: {
-        expertiseName: String,
-        consultantId: String,
-    },
-});
-
-@Component({
-    name: "consultant",
+export default defineComponent({
+    name: "Consultant",
     components: { Loading },
-})
-export default class ConsultantEdit extends ConsultantEditProps {
-    consultantsService: ConsultantsService;
-    usersService;
-    consultant: Consultant = {};
-    usersNotAlreadyInExpertise: User[] = [];
-    loading = false;
-    errored = false;
-    submitButtonDisabled = true;
-
-    options: { text: string; value: string; disabled: boolean }[] = [
-        { text: "Choisissez une option", value: "", disabled: true },
-    ];
-
-    constructor() {
-        super();
-        this.consultantsService = new ConsultantsService();
-        this.usersService = new UsersService();
-
+    props: {
+        expertiseName: {
+            required: true,
+            type: String,
+        },
+        consultantId: {
+            required: true,
+            type: String,
+        },
+    },
+    data() {
+        return {
+            consultantsService: new ConsultantsService(),
+            usersService: new UsersService(),
+            consultant: {} as Consultant,
+            usersNotAlreadyInExpertise: [] as User[],
+            loading: false,
+            errored: false,
+            submitButtonDisabled: true,
+            options: [{ text: "Choisissez une option", value: "", disabled: true }],
+        };
+    },
+    watch: {
+        "consultant.id": async function (value: string) {
+            const selectedUser = this.usersNotAlreadyInExpertise.find((u) => u.id === value);
+            if (selectedUser) {
+                this.consultant.user = selectedUser.user;
+                this.consultant.fullName = selectedUser.fullName;
+                this.submitButtonDisabled = false;
+            }
+        },
+    },
+    created() {
         for (const [key, value] of Object.entries(ConsultantStatus)) {
-            if (isNaN(Number(key))) {
+            if (Number.isNaN(Number(key))) {
                 // .entries contains either the constant names and indexes
                 this.options.push({
                     text: toString(value as ConsultantStatus),
@@ -117,8 +116,7 @@ export default class ConsultantEdit extends ConsultantEditProps {
                 });
             }
         }
-    }
-
+    },
     async mounted() {
         try {
             this.loading = true;
@@ -133,43 +131,34 @@ export default class ConsultantEdit extends ConsultantEditProps {
                 const allUsers = await this.usersService.getUsers();
 
                 this.usersNotAlreadyInExpertise = allUsers.filter(
-                    (u) => !consultantsInExpertise.find((u1) => u1.id === u.id)
+                    (u) => !consultantsInExpertise.some((u1) => u1.id === u.id)
                 );
                 this.consultant.startDate = new Date().toLocaleDateString("en-CA"); // the format should be YYYY-MM-DD
                 this.consultant.status = ConsultantStatus.CONSULTANT_SENIOR_IN_ONBOARDING;
             }
-        } catch (ex) {
+        } catch {
             this.errored = true;
         } finally {
             this.loading = false;
         }
-    }
-
-    async confirm() {
-        try {
-            this.loading = true;
-            if (this.consultant) {
-                this.consultant.expertise = new Expertise(this.expertiseName, "");
-                await this.consultantsService.saveExpertise(this.consultant);
-                this.$router.push({ path: `/members/${this.expertiseName}` });
+    },
+    methods: {
+        async confirm() {
+            try {
+                this.loading = true;
+                if (this.consultant) {
+                    this.consultant.expertise = new Expertise(this.expertiseName, "");
+                    await this.consultantsService.saveExpertise(this.consultant);
+                    this.$router.push({ path: `/members/${this.expertiseName}` });
+                }
+            } catch {
+                this.errored = true;
+            } finally {
+                this.loading = false;
             }
-        } catch (ex) {
-            this.errored = true;
-        } finally {
-            this.loading = false;
-        }
-    }
-
-    @Watch("consultant.id")
-    async onSelectedUserChanged(value: string) {
-        const selectedUser = this.usersNotAlreadyInExpertise.find((u) => u.id === value);
-        if (selectedUser) {
-            this.consultant.user = selectedUser.user;
-            this.consultant.fullName = selectedUser.fullName;
-            this.submitButtonDisabled = false;
-        }
-    }
-}
+        },
+    },
+});
 </script>
 
 <style scoped lang="scss">

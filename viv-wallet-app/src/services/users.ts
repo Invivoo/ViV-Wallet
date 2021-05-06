@@ -22,7 +22,7 @@ export class UsersService extends ServiceBase {
         return (await this.http.get<User>(`${id}`)).data;
     }
 
-    async deleteUser(user: User): Promise<any> {
+    async deleteUser(user: User): Promise<User> {
         return (await this.http.delete<User>(`${user.id}`)).data;
     }
 }

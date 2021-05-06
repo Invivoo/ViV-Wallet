@@ -13,10 +13,10 @@ export interface Consultant {
 }
 
 export enum ConsultantStatus {
-    CONSULTANT_SENIOR,
-    CONSULTANT_SENIOR_IN_ONBOARDING,
-    MANAGER,
-    MANAGER_SENIOR,
+    CONSULTANT_SENIOR = "CONSULTANT_SENIOR",
+    CONSULTANT_SENIOR_IN_ONBOARDING = "CONSULTANT_SENIOR_IN_ONBOARDING",
+    MANAGER = "MANAGER",
+    MANAGER_SENIOR = "MANAGER_SENIOR",
 }
 
 export function toString(status: ConsultantStatus): string {

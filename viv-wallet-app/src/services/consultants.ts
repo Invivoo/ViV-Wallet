@@ -1,22 +1,24 @@
-import { AxiosInstance } from "axios";
 import { Consultant, ConsultantStatus } from "../models/consultant";
 import { ServiceBase } from "./serviceBase";
 
-export class ConsultantsService extends ServiceBase {
-    constructor(http?: AxiosInstance) {
-        super(http);
-    }
+type RawConsultant = Omit<Consultant, "status"> & {
+    status: keyof typeof ConsultantStatus;
+};
 
+export class ConsultantsService extends ServiceBase {
     async getConsultants(expertiseName?: string): Promise<Consultant[]> {
-        if (expertiseName) {
-            return (await this.http.get(`/users?expertise=${expertiseName}`)).data.map(normalizeRawConsultant);
-        } else {
-            return (await this.http.get(`/users`)).data.map(normalizeRawConsultant);
-        }
+        return expertiseName
+            ? (await this.http.get<RawConsultant[]>(`/users?expertise=${expertiseName}`)).data.map((rawConsultant) =>
+                  normalizeRawConsultant(rawConsultant)
+              )
+            : (await this.http.get<RawConsultant[]>(`/users`)).data.map((rawConsultant) =>
+                  normalizeRawConsultant(rawConsultant)
+              );
     }
 
     async saveExpertise(consultant: Consultant): Promise<Object> {
-        return (await this.http.post<any>(`/users/${consultant.id}/expertises`, consultantToRaw(consultant))).data;
+        return (await this.http.post<RawConsultant>(`/users/${consultant.id}/expertises`, consultantToRaw(consultant)))
+            .data;
     }
 
     async getConsultant(id: string): Promise<Consultant> {
@@ -24,14 +26,16 @@ export class ConsultantsService extends ServiceBase {
     }
 }
 
-export function normalizeRawConsultant(consultant: any): Consultant {
-    consultant.status = ConsultantStatus[consultant.status || ConsultantStatus.CONSULTANT_SENIOR];
-    return consultant;
+export function normalizeRawConsultant(rawConsultant: RawConsultant): Consultant {
+    return {
+        ...rawConsultant,
+        status: ConsultantStatus[rawConsultant.status || ConsultantStatus.CONSULTANT_SENIOR],
+    };
 }
 
-export function consultantToRaw(consultant: Consultant): any {
-    consultant.status = (ConsultantStatus[
-        consultant.status || ConsultantStatus.CONSULTANT_SENIOR
-    ] as unknown) as ConsultantStatus;
-    return consultant;
+export function consultantToRaw(consultant: Consultant): RawConsultant {
+    return {
+        ...consultant,
+        status: ConsultantStatus[consultant.status || ConsultantStatus.CONSULTANT_SENIOR],
+    };
 }

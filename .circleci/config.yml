@@ -57,7 +57,7 @@ references:
 jobs:
     build-vuejs:
         docker:
-            - image: circleci/node:12.13.0-browsers
+            - image: circleci/node:15.14.0-browsers
         working_directory: ~/repo
         steps:
             - checkout
@@ -65,11 +65,15 @@ jobs:
             - run:
                   name: Prepare
                   working_directory: viv-wallet-app
-                  command: npm install
+                  command: npm ci --legacy-peer-deps
             - run:
                   name: Lint
                   working_directory: viv-wallet-app
                   command: npm run lint
+            - run:
+                  name: Typecheck
+                  working_directory: viv-wallet-app
+                  command: npm run typecheck
             - run:
                   name: Build
                   working_directory: viv-wallet-app
@@ -78,13 +82,7 @@ jobs:
                   name: Unit Test
                   working_directory: viv-wallet-app
                   command: npm run test:unit
-            - run:
-                  name: E2E Test
-                  working_directory: viv-wallet-app
-                  command: npm run test:e2e
             - *save_node
-            - store_artifacts:
-                  path: ~/repo/viv-wallet-app/tests/e2e/videos
 
     build:
         docker:
@@ -98,6 +96,7 @@ jobs:
                   keys:
                       - v1-dependencies-{{ checksum "pom.xml" }}
                       - v1-dependencies-
+            - *build_version_variables
             - run: mvn dependency:go-offline
             - save_cache:
                   paths:
@@ -110,7 +109,7 @@ jobs:
                       sudo apt install ./google-chrome-stable_current_amd64.deb
                       rm ./google-chrome-stable_current_amd64.deb
             - run:
-                  command: mvn clean install
+                  command: mvn clean install -DVUE_APP_PRODUCT_VERSION=${BUILD_VERSION_TAG}
                   no_output_timeout: 20m
             - persist_to_workspace:
                   root: ~/repo
@@ -121,7 +120,7 @@ jobs:
 
     package:
         docker:
-            - image: circleci/node:12.1
+            - image: circleci/node:15.14
         working_directory: ~/repo
         steps:
             - checkout

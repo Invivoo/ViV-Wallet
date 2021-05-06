@@ -1,27 +1,26 @@
 <template>
     <div id="app">
         <x4b-ui
+            ref="x4bui"
             application="viv-wallet"
             :apps-service-url="appsUrl"
             :version="appVersion"
             disable-fake-elements="true"
             languages="fr"
             :color="primaryColor"
-            @menuToggleButtonClicked="handleMenuToggleButtonClicked"
-            @startupFinished="handleStartupFinished"
         >
             <div v-if="isBannerInitialized" class="root">
-                <div v-bind:class="['menu', isMenuOpen ? '' : 'hidden']">
-                    <check-roles v-bind:roles="myWalletRoles">
+                <div :class="['menu', isMenuOpen ? '' : 'hidden']">
+                    <check-roles :roles="myWalletRoles">
                         <custom-router-link to="/wallet">Mon wallet</custom-router-link>
                     </check-roles>
-                    <check-roles v-bind:roles="expertisesRoles">
+                    <check-roles :roles="expertisesRoles">
                         <custom-router-link to="/members">Expertises</custom-router-link>
                     </check-roles>
-                    <check-roles v-bind:roles="walletsRoles">
+                    <check-roles :roles="walletsRoles">
                         <custom-router-link to="/wallets">Wallets</custom-router-link>
                     </check-roles>
-                    <check-roles v-bind:roles="historyRoles">
+                    <check-roles :roles="historyRoles">
                         <custom-router-link to="/actions">Historique des actions</custom-router-link>
                     </check-roles>
                 </div>
@@ -34,33 +33,54 @@
     </div>
 </template>
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
 import "x4b-ui/dist/x4b-ui/x4b-ui.css";
-import { version } from "../package.json";
-import CustomRouterLink from "./components/CustomRouterLink.vue";
+import { defineComponent } from "vue";
 import CheckRoles from "./components/CheckRoles.vue";
-import { expertisesRoles, historyRoles, myWalletRoles, Role, walletsRoles } from "./models/role";
+import CustomRouterLink from "./components/CustomRouterLink.vue";
+import { expertisesRoles, historyRoles, myWalletRoles, walletsRoles } from "./models/role";
 
-@Component({ components: { CustomRouterLink, CheckRoles } })
-export default class App extends Vue {
-    private appsUrl: string = process.env.VUE_APP_APPS_URL;
-    private appVersion: string = version;
-    private primaryColor: string = require("./styles/index.scss").primaryColor;
-    isMenuOpen = false;
-    isBannerInitialized = false;
-    myWalletRoles = myWalletRoles;
-    expertisesRoles = expertisesRoles;
-    walletsRoles = walletsRoles;
-    historyRoles = historyRoles;
-
-    handleMenuToggleButtonClicked(evt) {
-        this.isMenuOpen = evt.detail;
-    }
-
-    handleStartupFinished() {
-        this.isBannerInitialized = true;
-    }
-}
+export default defineComponent({
+    name: "App",
+    components: {
+        "check-roles": CheckRoles,
+        "custom-router-link": CustomRouterLink,
+    },
+    data() {
+        return {
+            appsUrl: process.env.VUE_APP_APPS_URL,
+            appVersion: process.env.VUE_APP_PRODUCT_VERSION || "[PRODUCT_VERSION]",
+            primaryColor: "#4c51bf",
+            isMenuOpen: false,
+            isBannerInitialized: false,
+            myWalletRoles,
+            expertisesRoles,
+            walletsRoles,
+            historyRoles,
+        };
+    },
+    mounted() {
+        (this.$refs.x4bui as HTMLElement).addEventListener("startupFinished", this.handleStartupFinished);
+        (this.$refs.x4bui as HTMLElement).addEventListener(
+            "menuToggleButtonClicked",
+            this.handleMenuToggleButtonClicked
+        );
+    },
+    unmounted() {
+        (this.$refs.x4bui as HTMLElement).removeEventListener("startupFinished", this.handleStartupFinished);
+        (this.$refs.x4bui as HTMLElement).removeEventListener(
+            "menuToggleButtonClicked",
+            this.handleMenuToggleButtonClicked
+        );
+    },
+    methods: {
+        handleMenuToggleButtonClicked(evt: Event) {
+            this.isMenuOpen = (evt as CustomEvent<boolean>).detail;
+        },
+        handleStartupFinished() {
+            this.isBannerInitialized = true;
+        },
+    },
+});
 </script>
 
 <style lang="scss">

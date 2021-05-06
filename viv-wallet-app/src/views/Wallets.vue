@@ -1,18 +1,15 @@
 <template>
     <div class="wallets">
-        <loading v-bind:loading="loading" v-bind:errored="errored">
-            <check-roles v-bind:roles="walletsRoles" withErrorMessage="true">
+        <loading :loading="loading" :errored="errored">
+            <check-roles :roles="walletsRoles" :with-error-message="true">
                 <section>
                     <h2>Wallets</h2>
                     <div class="buttons-container">
                         <filter-input v-model="filterValue" />
                     </div>
-                    <consultant-list v-bind:consultants="filteredConsultants">
-                        <template v-slot="{ consultantId }">
-                            <router-link
-                                v-bind:to="`/wallets/${consultantId}`"
-                                class="tertiary-button update-button"
-                                tag="a"
+                    <consultant-list :consultants="filteredConsultants">
+                        <template #default="{ consultantId }">
+                            <router-link :to="`/wallets/${consultantId}`" class="tertiary-button update-button" tag="a"
                                 >Voir le wallet</router-link
                             >
                         </template>
@@ -24,35 +21,38 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import { Consultant } from "../models/consultant";
-import { Expertise } from "../models/expertise";
+import { defineComponent } from "vue";
+import ConsultantList from "@/components/ConsultantList.vue";
 import { ConsultantsService } from "@/services/consultants";
 import { ExpertisesService } from "@/services/expertises";
-import Loading from "../components/Loading.vue";
-import FilterInput from "../components/FilterInput.vue";
-
-import ConsultantList from "@/components/ConsultantList.vue";
-import { Role, walletsRoles } from "../models/role";
 import CheckRoles from "../components/CheckRoles.vue";
+import FilterInput from "../components/FilterInput.vue";
+import Loading from "../components/Loading.vue";
+import { Consultant } from "../models/consultant";
+import { Role, walletsRoles } from "../models/role";
 import { LoginService } from "../services/login";
 
-@Component({
-    name: "wallets",
+export default defineComponent({
+    name: "Wallets",
     components: { ConsultantList, Loading, CheckRoles, FilterInput },
-})
-export default class Wallets extends Vue {
-    consultants: Consultant[] = [];
-    filteredConsultants: Consultant[] = [];
-    loading = true;
-    errored = false;
-
-    expertisesService = new ExpertisesService();
-    consultantsService = new ConsultantsService();
-    loginService = new LoginService();
-    walletsRoles = walletsRoles;
-    filterValue = "";
-
+    data() {
+        return {
+            consultants: [] as Consultant[],
+            filteredConsultants: [] as Consultant[],
+            loading: true,
+            errored: false,
+            expertisesService: new ExpertisesService(),
+            consultantsService: new ConsultantsService(),
+            loginService: new LoginService(),
+            walletsRoles,
+            filterValue: "",
+        };
+    },
+    watch: {
+        filterValue() {
+            this.filterChanged();
+        },
+    },
     async mounted() {
         try {
             const [expertises, allConsultants, userRoles] = await Promise.all([
@@ -60,32 +60,31 @@ export default class Wallets extends Vue {
                 this.consultantsService.getConsultants(),
                 this.loginService.getRoles(),
             ]);
-            if (userRoles.includes(Role.COMPANY_ADMINISTRATOR) || userRoles.includes(Role.SENIOR_MANAGER)) {
-                this.consultants = allConsultants;
-            } else {
-                this.consultants = allConsultants.filter(
-                    (consultant) =>
-                        consultant.expertise &&
-                        expertises
-                            .map((expertise) => expertise.expertiseName)
-                            .includes(consultant.expertise.expertiseName)
-                );
-            }
+            this.consultants =
+                userRoles.includes(Role.COMPANY_ADMINISTRATOR) || userRoles.includes(Role.SENIOR_MANAGER)
+                    ? allConsultants
+                    : allConsultants.filter(
+                          (consultant) =>
+                              consultant.expertise &&
+                              expertises
+                                  .map((expertise) => expertise.expertiseName)
+                                  .includes(consultant.expertise.expertiseName)
+                      );
             this.filterChanged();
-        } catch (ex) {
+        } catch {
             this.errored = true;
         } finally {
             this.loading = false;
         }
-    }
-
-    @Watch("filterValue")
-    filterChanged() {
-        this.filteredConsultants = this.consultants.filter((consultant) =>
-            consultant.fullName?.toLowerCase().includes(this.filterValue.toLowerCase())
-        );
-    }
-}
+    },
+    methods: {
+        filterChanged() {
+            this.filteredConsultants = this.consultants.filter((consultant) =>
+                consultant.fullName?.toLowerCase().includes(this.filterValue.toLowerCase())
+            );
+        },
+    },
+});
 </script>
 
 <style scoped lang="scss">

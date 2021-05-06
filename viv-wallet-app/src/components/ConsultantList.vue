@@ -30,7 +30,7 @@
                     }}</status-badge>
                 </td>
                 <td class="no-padding">
-                    <slot v-bind:consultantId="consultant.id"></slot>
+                    <slot :consultantId="consultant.id"></slot>
                 </td>
             </tr>
         </tbody>
@@ -39,33 +39,36 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { defineComponent, PropType } from "vue";
 import { Consultant, ConsultantStatus, toString } from "../models/consultant";
-import StatusBadge from "../components/StatusBadge.vue";
+import StatusBadge from "./StatusBadge.vue";
 
-@Component({
-    name: "consultant-list",
+export default defineComponent({
+    name: "ConsultantList",
     components: { StatusBadge },
-})
-export default class ConsultantList extends Vue {
-    @Prop() consultants!: Consultant[];
-
-    formatConsultantStatus(status: ConsultantStatus) {
-        return toString(status);
-    }
-
-    getConsultantStatusType(status: ConsultantStatus) {
-        switch (status) {
-            case ConsultantStatus.CONSULTANT_SENIOR:
-            case ConsultantStatus.MANAGER:
-                return "green";
-            case ConsultantStatus.CONSULTANT_SENIOR_IN_ONBOARDING:
-                return "yellow";
-            default:
-                return "red";
-        }
-    }
-}
+    props: {
+        consultants: {
+            default: () => [],
+            type: Array as PropType<Consultant[]>,
+        },
+    },
+    methods: {
+        formatConsultantStatus(status: ConsultantStatus) {
+            return toString(status);
+        },
+        getConsultantStatusType(status: ConsultantStatus) {
+            switch (status) {
+                case ConsultantStatus.CONSULTANT_SENIOR:
+                case ConsultantStatus.MANAGER:
+                    return "green";
+                case ConsultantStatus.CONSULTANT_SENIOR_IN_ONBOARDING:
+                    return "yellow";
+                default:
+                    return "red";
+            }
+        },
+    },
+});
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
