@@ -3,7 +3,7 @@ import Home from "../views/Home.vue";
 
 require("focus-visible");
 
-const routes: Array<RouteRecordRaw> = [
+export const routes: Array<RouteRecordRaw> = [
     {
         path: "/",
         name: "home",

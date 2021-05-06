@@ -1,9 +1,9 @@
 <template>
     <div v-if="errored">
-        <p>Une erreur s'est produite lors de la récupération des données. Veuillez réessayer plus tard.</p>
+        <p role="alert">Une erreur s'est produite lors de la récupération des données. Veuillez réessayer plus tard.</p>
     </div>
     <div v-else>
-        <div v-if="loading">Chargement...</div>
+        <p v-if="loading" role="alert">Chargement...</p>
         <slot v-else />
     </div>
 </template>

@@ -1,325 +1,317 @@
 {
-  "users": [
-    {
-      "id": "1",
-      "user": "rleloup",
-      "fullName": "Roch Leloup",
-      "status": "CONSULTANT_SENIOR",
-      "startDate": "2020-08-27",
-      "expertise": {
-        "id": "csharp",
-        "expertiseName": "Programmation C#"
-      },
-      "email": "roch.leloup@invivoo.com"
-    },
-    {
-      "id": "2",
-      "user": "dboudet",
-      "fullName": "Djeferson Boudet",
-      "email": "djeverson.boudet@invivoo.com",
-      "expertise": {
-        "id": "csharp",
-        "expertiseName": "Programmation C#"
-      },
-      "startDate": "2020-08-27",
-      "endDate": "2020-08-13"
-    },
-    {
-      "id": "3",
-      "user": "rflondin",
-      "fullName": "Roger Flodin",
-      "status": "MANAGER",
-      "email": "roget.flondin@invivoo.com",
-      "expertise": {
-        "id": "csharp",
-        "expertiseName": "Programmation C#"
-      },
-      "startDate": "2020-08-27"
-    },
-    {
-      "id": "4",
-      "user": "rflondingjava",
-      "fullName": "Roger Flodin Java",
-      "status": "MANAGER",
-      "email": "roget.flondin.java@invivoo.com",
-      "expertise": {
-        "id": "java",
-        "expertiseName": "Programmation Java"
-      },
-      "startDate": "2020-08-27"
-    }
-  ],
-  "expertiseMembers": [
-    {
-      "id": "1",
-      "user": "rleloup",
-      "fullName": "Roch Leloup",
-      "expertise": "csharp",
-      "email": "roch.leloup@invivoo.com",
-      "status": "CONSULTANT_SENIOR",
-      "startDate": "2020-08-27"
-    },
-    {
-      "id": "2",
-      "user": "dboudet",
-      "expertise": "csharp",
-      "email": "djeverson.boudet@invivoo.com",
-      "fullName": "Djeferson Boudet",
-      "status": "CONSULTANT_SENIOR",
-      "startDate": "2020-08-27",
-      "endDate": "2020-08-13"
-    },
-    {
-      "id": "3",
-      "user": "rflonding",
-      "expertise": "csharp",
-      "status": "MANAGER",
-      "fullName": "Roger Flodin",
-      "email": "roget.flondin@invivoo.com",
-      "startDate": "2020-08-27",
-      "endDate": "2020-08-27"
-    },
-    {
-      "id": "4",
-      "user": "rflondingjava",
-      "expertise": "java",
-      "status": "MANAGER",
-      "fullName": "Roger Flodin Java",
-      "email": "roget.flondin.java@invivoo.com",
-      "startDate": "2020-08-27",
-      "endDate": "2020-08-27"
-    }
-  ],
-  "expertises": [
-    {
-      "id": "csharp",
-      "expertiseName": "Programmation C#"
-    },
-    {
-      "id": "java",
-      "expertiseName": "Programmation Java"
-    },
-    {
-      "id": "python",
-      "expertiseName": "Programmation Python"
-    },
-    {
-      "id": "frontend",
-      "expertiseName": "Front-End"
-    }
-  ],
-  "balances": [
-    {
-      "id": "1",
-      "value": 300
-    },
-    {
-      "id": "2",
-      "value": 250
-    },
-    {
-      "id": "3",
-      "value": 300
-    },
-    {
-      "id": "4",
-      "value": 0
-    }
-  ],
-  "actions": [
-    {
-      "userId": "1",
-      "id": "1",
-      "type": "Interview",
-      "comment": "This is a comment",
-      "creationDate": "2020-07-15T15:00:00",
-      "valueDate": "2020-07-15T15:00:00",
-      "payment": 20,
-      "status": "Paid",
-      "paymentDate": "2020-07-15T15:00:00",
-      "expertise": "Front-End",
-      "achiever": {
-        "id": "1",
-        "user": "rleloup",
-        "fullName": "Roch Leloup",
-        "expertise": "csharp",
-        "email": "roch.leloup@invivoo.com",
-        "status": "CONSULTANT_SENIOR",
-        "startDate": "2020-08-27"
-      }
-    },
-    {
-      "userId": "1",
-      "id": "2",
-      "type": "Interview",
-      "comment": "This is a comment",
-      "creationDate": "2020-07-12T15:00:00",
-      "valueDate": "2020-07-15T15:00:00",
-      "payment": 20,
-      "status": "Unpaid",
-      "expertise": "Front-End",
-      "achiever": {
-        "id": "1",
-        "user": "rleloup",
-        "fullName": "Roch Leloup",
-        "expertise": "csharp",
-        "email": "roch.leloup@invivoo.com",
-        "status": "CONSULTANT_SENIOR",
-        "startDate": "2020-08-27"
-      }
-    },
-    {
-      "userId": "1",
-      "id": "3",
-      "type": "Article",
-      "comment": "This is another comment with much details",
-      "creationDate": "2020-07-15T15:00:00",
-      "valueDate": "2020-07-15T15:00:00",
-      "payment": 50,
-      "status": "Paid",
-      "paymentDate": "2020-07-12T15:00:00",
-      "expertise": "Front-End",
-      "achiever": {
-        "id": "1",
-        "user": "rleloup",
-        "fullName": "Roch Leloup",
-        "expertise": "csharp",
-        "email": "roch.leloup@invivoo.com",
-        "status": "CONSULTANT_SENIOR",
-        "startDate": "2020-08-27"
-      }
-    },
-    {
-      "userId": "1",
-      "id": "4",
-      "type": "Article",
-      "comment": "This is another comment with much details",
-      "creationDate": "2020-07-15T15:00:00",
-      "valueDate": "2020-07-15T15:00:00",
-      "payment": 50,
-      "status": "Unpaid",
-      "paymentDate": "2020-07-12T15:00:00",
-      "expertise": "Front-End",
-      "achiever": {
-        "id": "1",
-        "user": "rleloup",
-        "fullName": "Roch Leloup",
-        "expertise": "csharp",
-        "email": "roch.leloup@invivoo.com",
-        "status": "CONSULTANT_SENIOR",
-        "startDate": "2020-08-27"
-      }
-    },
-    {
-      "userId": "2",
-      "id": "5",
-      "type": "Interview",
-      "comment": "This is a comment",
-      "creationDate": "2020-07-15T15:00:00",
-      "valueDate": "2020-07-15T15:00:00",
-      "payment": 20,
-      "status": "Paid",
-      "paymentDate": "2020-07-15T15:00:00",
-      "expertise": "Front-End",
-      "achiever": {
-        "id": "2",
-        "user": "dboudet",
-        "expertise": "csharp",
-        "email": "djeverson.boudet@invivoo.com",
-        "fullName": "Djeferson Boudet",
-        "status": "CONSULTANT_SENIOR",
-        "startDate": "2020-08-27",
-        "endDate": "2020-08-13"
-      }
-    },
-    {
-      "userId": "2",
-      "id": "6",
-      "type": "Interview",
-      "comment": "This is a comment",
-      "creationDate": "2020-07-15T15:00:00",
-      "valueDate": "2020-07-15T15:00:00",
-      "payment": 20,
-      "status": "Unpaid",
-      "paymentDate": "2020-07-15T15:00:00",
-      "expertise": "Front-End",
-      "achiever": {
-        "id": "2",
-        "user": "dboudet",
-        "expertise": "csharp",
-        "email": "djeverson.boudet@invivoo.com",
-        "fullName": "Djeferson Boudet",
-        "status": "CONSULTANT_SENIOR",
-        "startDate": "2020-08-27",
-        "endDate": "2020-08-13"
-      }
-    },
-    {
-      "userId": "3",
-      "id": "7",
-      "type": "Article",
-      "comment": "This is another comment",
-      "creationDate": "2020-07-15T15:00:00",
-      "valueDate": "2020-07-15T15:00:00",
-      "payment": 50,
-      "status": "Paid",
-      "paymentDate": "2020-07-15T15:00:00",
-      "expertise": "Front-End",
-      "achiever": {
-        "id": "3",
-        "user": "rflonding",
-        "expertise": "csharp",
-        "status": "MANAGER",
-        "fullName": "Roger Flodin",
-        "email": "roget.flondin@invivoo.com",
-        "startDate": "2020-08-27",
-        "endDate": "2020-08-27"
-      }
-    }
-  ],
-  "payments": [
-    {
-      "userId": "1",
-      "id": "1",
-      "date": "2020-07-16T15:00:00",
-      "viv": 1000,
-      "amount": 2200
-    },
-    {
-      "userId": "1",
-      "id": "2",
-      "date": "2020-07-15T15:00:00",
-      "viv": 500,
-      "amount": 1000
-    },
-    {
-      "userId": "1",
-      "id": "3",
-      "date": "2020-07-15T15:00:00",
-      "viv": 100,
-      "amount": 220
-    },
-    {
-      "userId": "2",
-      "id": "4",
-      "date": "2020-07-15T15:00:00",
-      "viv": 1000,
-      "amount": 2200
-    },
-    {
-      "userId": "3",
-      "id": "5",
-      "date": "2020-07-15T15:00:00",
-      "viv": 1000,
-      "amount": 2200
-    },
-    {
-      "receiverId": "2",
-      "date": "2021-04-16T09:54:49.248Z",
-      "actionIds": [
-        "6"
-      ],
-      "id": "uR4JFEq"
-    }
-  ]
+    "users": [
+        {
+            "id": "1",
+            "user": "rleloup",
+            "fullName": "Roch Leloup",
+            "status": "CONSULTANT_SENIOR",
+            "startDate": "2020-08-27",
+            "expertise": {
+                "id": "csharp",
+                "expertiseName": "Programmation C#"
+            },
+            "email": "roch.leloup@invivoo.com"
+        },
+        {
+            "id": "2",
+            "user": "dboudet",
+            "fullName": "Djeferson Boudet",
+            "email": "djeverson.boudet@invivoo.com",
+            "expertise": {
+                "id": "csharp",
+                "expertiseName": "Programmation C#"
+            },
+            "startDate": "2020-08-27",
+            "endDate": "2020-08-13"
+        },
+        {
+            "id": "3",
+            "user": "rflondin",
+            "fullName": "Roger Flodin",
+            "status": "MANAGER",
+            "email": "roget.flondin@invivoo.com",
+            "expertise": {
+                "id": "csharp",
+                "expertiseName": "Programmation C#"
+            },
+            "startDate": "2020-08-27"
+        },
+        {
+            "id": "4",
+            "user": "rflondingjava",
+            "fullName": "Roger Flodin Java",
+            "status": "MANAGER",
+            "email": "roget.flondin.java@invivoo.com",
+            "expertise": {
+                "id": "java",
+                "expertiseName": "Programmation Java"
+            },
+            "startDate": "2020-08-27"
+        }
+    ],
+    "expertiseMembers": [
+        {
+            "id": "1",
+            "user": "rleloup",
+            "fullName": "Roch Leloup",
+            "expertise": "csharp",
+            "email": "roch.leloup@invivoo.com",
+            "status": "CONSULTANT_SENIOR",
+            "startDate": "2020-08-27"
+        },
+        {
+            "id": "2",
+            "user": "dboudet",
+            "expertise": "csharp",
+            "email": "djeverson.boudet@invivoo.com",
+            "fullName": "Djeferson Boudet",
+            "status": "CONSULTANT_SENIOR",
+            "startDate": "2020-08-27",
+            "endDate": "2020-08-13"
+        },
+        {
+            "id": "3",
+            "user": "rflonding",
+            "expertise": "csharp",
+            "status": "MANAGER",
+            "fullName": "Roger Flodin",
+            "email": "roget.flondin@invivoo.com",
+            "startDate": "2020-08-27",
+            "endDate": "2020-08-27"
+        },
+        {
+            "id": "4",
+            "user": "rflondingjava",
+            "expertise": "java",
+            "status": "MANAGER",
+            "fullName": "Roger Flodin Java",
+            "email": "roget.flondin.java@invivoo.com",
+            "startDate": "2020-08-27",
+            "endDate": "2020-08-27"
+        }
+    ],
+    "expertises": [
+        {
+            "id": "csharp",
+            "expertiseName": "Programmation C#"
+        },
+        {
+            "id": "java",
+            "expertiseName": "Programmation Java"
+        },
+        {
+            "id": "python",
+            "expertiseName": "Programmation Python"
+        },
+        {
+            "id": "frontend",
+            "expertiseName": "Front-End"
+        }
+    ],
+    "balances": [
+        {
+            "id": "1",
+            "value": 300
+        },
+        {
+            "id": "2",
+            "value": 250
+        },
+        {
+            "id": "3",
+            "value": 300
+        },
+        {
+            "id": "4",
+            "value": 0
+        }
+    ],
+    "actions": [
+        {
+            "userId": "1",
+            "id": "1",
+            "type": "Interview",
+            "comment": "This is a comment",
+            "creationDate": "2020-07-15T15:00:00",
+            "valueDate": "2020-07-15T15:00:00",
+            "payment": 20,
+            "status": "Paid",
+            "paymentDate": "2020-07-15T15:00:00",
+            "expertise": "Front-End",
+            "achiever": {
+                "id": "1",
+                "user": "rleloup",
+                "fullName": "Roch Leloup",
+                "expertise": "csharp",
+                "email": "roch.leloup@invivoo.com",
+                "status": "CONSULTANT_SENIOR",
+                "startDate": "2020-08-27"
+            }
+        },
+        {
+            "userId": "1",
+            "id": "2",
+            "type": "Interview",
+            "comment": "This is a comment",
+            "creationDate": "2020-07-12T15:00:00",
+            "valueDate": "2020-07-15T15:00:00",
+            "payment": 20,
+            "status": "Unpaid",
+            "expertise": "Front-End",
+            "achiever": {
+                "id": "1",
+                "user": "rleloup",
+                "fullName": "Roch Leloup",
+                "expertise": "csharp",
+                "email": "roch.leloup@invivoo.com",
+                "status": "CONSULTANT_SENIOR",
+                "startDate": "2020-08-27"
+            }
+        },
+        {
+            "userId": "1",
+            "id": "3",
+            "type": "Article",
+            "comment": "This is another comment with much details",
+            "creationDate": "2020-07-15T15:00:00",
+            "valueDate": "2020-07-15T15:00:00",
+            "payment": 50,
+            "status": "Paid",
+            "paymentDate": "2020-07-12T15:00:00",
+            "expertise": "Front-End",
+            "achiever": {
+                "id": "1",
+                "user": "rleloup",
+                "fullName": "Roch Leloup",
+                "expertise": "csharp",
+                "email": "roch.leloup@invivoo.com",
+                "status": "CONSULTANT_SENIOR",
+                "startDate": "2020-08-27"
+            }
+        },
+        {
+            "userId": "1",
+            "id": "4",
+            "type": "Article",
+            "comment": "This is another comment with much details",
+            "creationDate": "2020-07-15T15:00:00",
+            "valueDate": "2020-07-15T15:00:00",
+            "payment": 50,
+            "status": "Unpaid",
+            "paymentDate": "2020-07-12T15:00:00",
+            "expertise": "Front-End",
+            "achiever": {
+                "id": "1",
+                "user": "rleloup",
+                "fullName": "Roch Leloup",
+                "expertise": "csharp",
+                "email": "roch.leloup@invivoo.com",
+                "status": "CONSULTANT_SENIOR",
+                "startDate": "2020-08-27"
+            }
+        },
+        {
+            "userId": "2",
+            "id": "5",
+            "type": "Interview",
+            "comment": "This is a comment",
+            "creationDate": "2020-07-15T15:00:00",
+            "valueDate": "2020-07-15T15:00:00",
+            "payment": 20,
+            "status": "Paid",
+            "paymentDate": "2020-07-15T15:00:00",
+            "expertise": "Front-End",
+            "achiever": {
+                "id": "2",
+                "user": "dboudet",
+                "expertise": "csharp",
+                "email": "djeverson.boudet@invivoo.com",
+                "fullName": "Djeferson Boudet",
+                "status": "CONSULTANT_SENIOR",
+                "startDate": "2020-08-27",
+                "endDate": "2020-08-13"
+            }
+        },
+        {
+            "userId": "2",
+            "id": "6",
+            "type": "Interview",
+            "comment": "This is a comment",
+            "creationDate": "2020-07-15T15:00:00",
+            "valueDate": "2020-07-15T15:00:00",
+            "payment": 20,
+            "status": "Unpaid",
+            "paymentDate": "2020-07-15T15:00:00",
+            "expertise": "Front-End",
+            "achiever": {
+                "id": "2",
+                "user": "dboudet",
+                "expertise": "csharp",
+                "email": "djeverson.boudet@invivoo.com",
+                "fullName": "Djeferson Boudet",
+                "status": "CONSULTANT_SENIOR",
+                "startDate": "2020-08-27",
+                "endDate": "2020-08-13"
+            }
+        },
+        {
+            "userId": "3",
+            "id": "7",
+            "type": "Article",
+            "comment": "This is another comment",
+            "creationDate": "2020-07-15T15:00:00",
+            "valueDate": "2020-07-15T15:00:00",
+            "payment": 50,
+            "status": "Paid",
+            "paymentDate": "2020-07-15T15:00:00",
+            "expertise": "Front-End",
+            "achiever": {
+                "id": "3",
+                "user": "rflonding",
+                "expertise": "csharp",
+                "status": "MANAGER",
+                "fullName": "Roger Flodin",
+                "email": "roget.flondin@invivoo.com",
+                "startDate": "2020-08-27",
+                "endDate": "2020-08-27"
+            }
+        }
+    ],
+    "payments": [
+        {
+            "userId": "1",
+            "id": "1",
+            "date": "2020-07-16T15:00:00",
+            "viv": 1000,
+            "amount": 2200
+        },
+        {
+            "userId": "1",
+            "id": "2",
+            "date": "2020-07-15T15:00:00",
+            "viv": 500,
+            "amount": 1000
+        },
+        {
+            "userId": "1",
+            "id": "3",
+            "date": "2020-07-15T15:00:00",
+            "viv": 100,
+            "amount": 220
+        },
+        {
+            "userId": "2",
+            "id": "4",
+            "date": "2020-07-15T15:00:00",
+            "viv": 1000,
+            "amount": 2200
+        },
+        {
+            "userId": "3",
+            "id": "5",
+            "date": "2020-07-15T15:00:00",
+            "viv": 1000,
+            "amount": 2200
+        }
+    ]
 }
