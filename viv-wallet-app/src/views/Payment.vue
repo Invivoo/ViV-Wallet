@@ -44,7 +44,13 @@
                             </colgroup>
                             <thead>
                                 <tr>
-                                    <th class="action-checkbox" />
+                                    <th class="checkbox-header">
+                                        <Checkbox
+                                            v-model="isAllActionsSelected"
+                                            title="Tout sélectionner"
+                                            aria-label="Tout sélectionner"
+                                        />
+                                    </th>
                                     <th class="right no-left-padding">DATE DE CREATION</th>
                                     <th>ACTION</th>
                                     <th class="right">VIV</th>
@@ -151,6 +157,23 @@ export default defineComponent({
                     .filter((action) => action.isSelected)
                     .reduce((acc, action) => acc + action.payment, 0) + this.initialVivAmount
             );
+        },
+        isAllActionsSelected: {
+            get(): boolean {
+                return this.unpaidActions.every((action) => action.isSelected);
+            },
+            set(newValue: boolean) {
+                if (!this.isAllActionsSelected && newValue) {
+                    this.unpaidActions.forEach((action) => {
+                        action.isSelected = true;
+                    });
+                }
+                if (this.isAllActionsSelected && !newValue) {
+                    this.unpaidActions.forEach((action) => {
+                        action.isSelected = false;
+                    });
+                }
+            },
         },
     },
     async mounted() {
@@ -279,7 +302,7 @@ h3 {
 
 .viv-details {
     font-weight: 400;
-    color: $gray-500;
+    color: $gray-600;
     vertical-align: baseline;
 }
 
@@ -318,6 +341,11 @@ button[disabled] {
 .action-checkbox {
     font-size: $text-xl;
     color: $primary-600;
+}
+
+.checkbox-header {
+    font-size: $text-xl;
+    color: $gray-600;
 }
 
 .no-left-padding {
