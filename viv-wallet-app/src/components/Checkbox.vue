@@ -6,6 +6,7 @@
                 class="native"
                 :aria-label="ariaLabel"
                 :modelValue="modelValue"
+                :checked="modelValue"
                 @input="$emit('update:modelValue', $event.target.checked)"
             />
             <div class="checkbox__icon">
