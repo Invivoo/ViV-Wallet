@@ -91,6 +91,8 @@ public class LynxConnector {
         }
         int count = (int) activities.stream()
                                     .filter(activity -> activity.getId().equals(action.getLynxActivityId()))
+                                    .map(Activity::getOwner)
+                                    .distinct()
                                     .count();
         action.setVivAmount(action.getType().getValue() / count);
     }
