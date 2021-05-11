@@ -153,19 +153,19 @@ jobs:
         steps:
             - checkout
             - attach_workspace:
-                  at: /home/circleci/project
+                  at: /root/project
             - docker/install-docker
             - helm/install-helm-client:
                   version: v3.1.1
             - *build_version_variables
             - run:
                   name: Test
-                  working_directory: /home/circleci/project/helm
+                  working_directory: /root/project/helm
                   command: |
                       helm lint -f values.yaml
             - run:
                   name: Package
-                  working_directory: /home/circleci/project/helm
+                  working_directory: /root/project/helm
                   command: |
                       if [[ -n "${CIRCLE_TAG}" ]]
                       then
@@ -178,7 +178,7 @@ jobs:
             - azure-cli/login-with-user-or-service-principal
             - run:
                   name: Publish chart
-                  working_directory: /home/circleci/project/helm
+                  working_directory: /root/project/helm
                   command: |
                       CONTAINER_REGISTRY=x4bcontainerregistry
                       az acr login --name "$CONTAINER_REGISTRY"
