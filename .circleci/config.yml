@@ -1,9 +1,9 @@
 version: 2.1
 
 orbs:
-    azure-aks: circleci/azure-aks@0.2.0
     azure-cli: circleci/azure-cli@1.1.0
     helm: circleci/helm@0.2.3
+    docker: circleci/docker@1.5.0
 
 references:
     job_filters_tags_and_branches: &job_filters_tags_and_branches
@@ -148,12 +148,13 @@ jobs:
                       fi
 
     helm_chart:
-        executor: azure-aks/default
+        executor: azure-cli/azure-docker
         resource_class: small
         steps:
             - checkout
             - attach_workspace:
                   at: /home/circleci/project
+            - docker/install-docker
             - helm/install-helm-client:
                   version: v3.1.1
             - *build_version_variables
@@ -174,7 +175,6 @@ jobs:
                       fi
             - setup_remote_docker:
                   docker_layer_caching: false
-            - azure-cli/install
             - azure-cli/login-with-user-or-service-principal
             - run:
                   name: Publish chart

@@ -6,7 +6,7 @@
         "serve": "vue-cli-service serve",
         "serve:localbackend": "vue-cli-service serve --mode localbackend",
         "build": "vue-cli-service build",
-        "test:unit": "vue-cli-service test:unit",
+        "test:unit": "vue-cli-service test:unit --runInBand",
         "lint": "vue-cli-service lint --max-warnings 0",
         "typecheck": "./node_modules/.bin/tsc --noEmit",
         "mock-server": "json-server --watch mock-server.json --routes mock-server-routes.json",
