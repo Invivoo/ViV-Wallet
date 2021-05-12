@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: {{ .Release.Name }}-{{ .Values.webapp.name }}
+{{- $labelData := dict "Chart" .Chart "Release" .Release "Name" .Values.webapp.name }}
+spec:
+    replicas: {{ .Values.webapp.replicaCount }} 
+    minReadySeconds: {{ .Values.webapp.minReadySeconds }}
+    {{- include "strategy.rolling" . | nindent 4 }}
+    selector:
+        matchLabels:
+            {{- include "labels.noversion" $labelData | nindent 12 }}
+    template:
+        metadata:
+            labels:
+                {{- include "labels" $labelData | nindent 16 }}
+        spec:
+            containers:
+            - name: {{ .Release.Name }}-{{ .Values.webapp.name }}-pod
+              image: {{ tpl .Values.webapp.image . }}
+              {{- include "resources.small" . | nindent 14 }}
+              imagePullPolicy: Always
+              ports:
+              - containerPort: 80
+            imagePullSecrets:
+            - name: {{ .Values.global.pullSecretName }}
