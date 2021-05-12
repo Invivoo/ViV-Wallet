@@ -34,7 +34,7 @@ spec:
               - name: ApiKey
                 value : {{ .Values.global.apiKey }}
               - name: VivWalletUrl
-                value : {{ .Values.global.url }}
+                value : {{ include "vivwallet.url" . }}
               {{- include "resources.large" . | nindent 14 }}
               imagePullPolicy: Always
               ports:

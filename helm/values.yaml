@@ -5,7 +5,6 @@
 global:
     sha1: "#SHA1#"
     pullSecretName: regcred
-    url: "https://vivwallet.test.com"
     clusterSpecificDnszone: "YOUR ZONE.northeurope.aksapp.io"
     vivwalletSpecificDnszone: "vivwallet.test.com"
     x4bAuthPublicKeyUrl: "Public Key Url"

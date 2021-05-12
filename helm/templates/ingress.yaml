@@ -13,7 +13,7 @@ metadata:
 spec:
   {{- include "ingress.tls" . | nindent 2 -}}
   rules:
-  - host: {{ include "vivwallet.url" . }}
+  - host: {{ include "vivwallet.base" . }}
     http:
       paths:
       - path: /{{ if ne .Values.ingress.class "addon-http-application-routing" }}(.*){{ end }}

@@ -1,15 +1,3 @@
 global:
-    sha1: "#SHA1#"
     pullSecretName: regcred
-    url: "https://vivwallet.test.com"
     clusterSpecificDnszone: "496a8aa9ae8c48329209.northeurope.aksapp.io"
-    vivwalletSpecificDnszone: "vivwallet.test.com"
-    x4bAuthPublicKeyUrl: "Public Key Url"
-    lynxApiUrl: "Lynx Api Url"
-    apiKey: "YOUR API KEY"
-    useLocalhost: false
-    traceEnabled: true
-    prometheusCollectEnabled: false
-    sqlServerUrl: "SQL_SERVER_URL"
-    sqlServerUsername: "SQL_SERVER_USERNAME"
-    sqlServerPassword: "SQL_SERVER_PASSWORD"
