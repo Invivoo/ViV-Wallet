@@ -1,11 +1,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-    name: {{ .Release.Name }}-{{ .Values.vivwallet.name }}
-{{- $labelData := dict "Chart" .Chart "Release" .Release "Name" .Values.vivwallet.name }}
+    name: {{ .Release.Name }}-{{ .Values.api.name }}
+{{- $labelData := dict "Chart" .Chart "Release" .Release "Name" .Values.api.name }}
 spec:
-    replicas: {{ .Values.vivwallet.replicaCount }} 
-    minReadySeconds: {{ .Values.vivwallet.minReadySeconds }}
+    replicas: {{ .Values.api.replicaCount }} 
+    minReadySeconds: {{ .Values.api.minReadySeconds }}
     {{- include "strategy.rolling" . | nindent 4 }}
     selector:
         matchLabels:
@@ -16,8 +16,8 @@ spec:
                 {{- include "labels" $labelData | nindent 16 }}
         spec:
             containers:
-            - name: {{ .Release.Name }}-{{ .Values.vivwallet.name }}-pod
-              image: {{ tpl .Values.vivwallet.image . }}
+            - name: {{ .Release.Name }}-{{ .Values.api.name }}-pod
+              image: {{ tpl .Values.api.image . }}
               env:
               - name: DNS
                 value: "kube-dns.kube-system"
@@ -34,11 +34,11 @@ spec:
               - name: ApiKey
                 value : {{ .Values.global.apiKey }}
               - name: VivWalletUrl
-                value : {{ .Values.vivwallet.url }}
+                value : {{ include "vivwallet.url" . }}
               {{- include "resources.large" . | nindent 14 }}
               imagePullPolicy: Always
               ports:
-              - containerPort: {{ .Values.vivwallet.port }}
+              - containerPort: {{ .Values.api.port }}
             imagePullSecrets:
             - name: {{ .Values.global.pullSecretName }}
 

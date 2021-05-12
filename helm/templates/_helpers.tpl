@@ -71,11 +71,15 @@ strategy:
 Endpoint env variables
 */}}
 
+{{- define "vivwallet.url" -}}
+{{- print (include "protocol" .) "://" (include "vivwallet.base" .) -}}
+{{- end -}}
+
 {{- define "protocol" -}}
 {{- if .Values.ingress.tls }}{{ print "https" }}{{- else }}{{ print "http" }}{{- end -}}
 {{- end -}}
 
-{{- define "vivwallet.url" -}}
+{{- define "vivwallet.base" -}}
 {{- if eq .Values.ingress.class "addon-http-application-routing" }}{{ print "vivwallet." (default .Release.Name .Values.global.devSubDomain) "." .Values.global.clusterSpecificDnszone }}{{- else }}{{ print .Values.global.vivwalletSpecificDnszone }}{{- end -}}
 {{- end -}}
 
@@ -83,7 +87,7 @@ Endpoint env variables
 {{- if .Values.ingress.tls -}}
 tls:
 - hosts:
-  - {{ include "vivwallet.url" .}}
+  - {{ include "vivwallet.base" .}}
   secretName: vivwallet-tls-secret
 {{- print "\n" -}}
 {{- end -}}

@@ -3,8 +3,9 @@
 # Declare variables to be passed into your templates.
 
 global:
+    sha1: "#SHA1#"
     pullSecretName: regcred
-    clusterSpecificDnszone: "496a8aa9ae8c48329209.northeurope.aksapp.io"
+    clusterSpecificDnszone: "YOUR ZONE.northeurope.aksapp.io"
     vivwalletSpecificDnszone: "vivwallet.test.com"
     x4bAuthPublicKeyUrl: "Public Key Url"
     lynxApiUrl: "Lynx Api Url"
@@ -44,15 +45,20 @@ resources:
             limit: 200Mi
             request: 20Mi
 
-vivwallet:
-    name: viv-wallet
-    image: "xcomponent/viv-wallet:dev-develop"
-    url: "https://vivwallet.test.com"
+api:
+    name: api
+    image: "xcomponent/viv-wallet-api:{{ .Values.global.sha1 }}"
     port: 8080
     replicaCount: 1
     minReadySeconds: 10
     service:
         externalPort: 80
+
+webapp:
+    name: webapp
+    image: "xcomponent/viv-wallet-webapp:{{ .Values.global.sha1 }}"
+    replicaCount: 1
+    minReadySeconds: 10
 
 ingress:
     name: ingress
