@@ -1,3 +1,0 @@
-global:
-    pullSecretName: regcred
-    clusterSpecificDnszone: "496a8aa9ae8c48329209.northeurope.aksapp.io"
