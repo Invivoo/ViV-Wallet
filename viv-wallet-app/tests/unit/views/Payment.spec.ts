@@ -74,8 +74,8 @@ function generateTestData(initialVivs: number) {
     const userId = faker.datatype.number().toString();
     const fullName = faker.name.findName();
     const unPaidActions = [
-        { id: faker.unique(faker.datatype.number), payment: faker.datatype.number(50), status: "Unpaid" },
-        { id: faker.unique(faker.datatype.number), payment: faker.datatype.number(50), status: "Unpaid" },
+        { id: faker.unique(faker.datatype.number), payment: getAmount(), status: "Unpaid" },
+        { id: faker.unique(faker.datatype.number), payment: getAmount(), status: "Unpaid" },
     ];
     const balance = initialVivs + unPaidActions.reduce((acc, action) => action.payment + acc, 0);
     return {
@@ -85,6 +85,10 @@ function generateTestData(initialVivs: number) {
         initialVivs,
         balance,
     };
+}
+
+function getAmount() {
+    return faker.datatype.number({ min: 1, max: 50 });
 }
 
 describe("Payment", () => {
@@ -99,7 +103,7 @@ describe("Payment", () => {
         const { userId, fullName, unPaidActions, balance } = generateTestData(0);
         setupRestMocks(userId, fullName, balance, [
             ...unPaidActions,
-            { id: faker.unique(faker.datatype.number), payment: faker.datatype.number(50), status: "Paid" },
+            { id: faker.unique(faker.datatype.number), payment: getAmount(), status: "Paid" },
         ]);
         await render(Payment, { props: { id: userId } });
         await waitForElementToBeRemoved(() => screen.getByText(/chargement/i));
@@ -119,11 +123,11 @@ describe("Payment", () => {
     });
 
     it("should display initial VIVs", async () => {
-        const initialVivs = faker.datatype.number(50);
+        const initialVivs = getAmount();
         const { userId, fullName, unPaidActions, balance } = generateTestData(initialVivs);
         setupRestMocks(userId, fullName, balance, [
             ...unPaidActions,
-            { id: faker.unique(faker.datatype.number), payment: faker.datatype.number(50), status: "Paid" },
+            { id: faker.unique(faker.datatype.number), payment: getAmount(), status: "Paid" },
         ]);
         await render(Payment, { props: { id: userId } });
         await waitForElementToBeRemoved(() => screen.getByText(/chargement/i));
@@ -134,7 +138,7 @@ describe("Payment", () => {
     });
 
     it("should select an unpaid action and request a payment", async () => {
-        const initialVivs = faker.datatype.number(50);
+        const initialVivs = getAmount();
         const { userId, fullName, unPaidActions, balance } = generateTestData(initialVivs);
         server.use(
             rest.post(`${process.env.VUE_APP_BACKEND_BASE_URL}/payments`, (req, res, ctx) => {
@@ -147,7 +151,7 @@ describe("Payment", () => {
         );
         setupRestMocks(userId, fullName, balance, [
             ...unPaidActions,
-            { id: faker.unique(faker.datatype.number), payment: faker.datatype.number(50), status: "Paid" },
+            { id: faker.unique(faker.datatype.number), payment: getAmount(), status: "Paid" },
         ]);
         const { router } = await render(Payment, { props: { id: userId } });
         await waitForElementToBeRemoved(() => screen.getByText(/chargement/i));
@@ -175,11 +179,11 @@ describe("Payment", () => {
     });
 
     it("should select / unselect all unpaid actions", async () => {
-        const initialVivs = faker.datatype.number(50);
+        const initialVivs = getAmount();
         const { userId, fullName, unPaidActions, balance } = generateTestData(initialVivs);
         setupRestMocks(userId, fullName, balance, [
             ...unPaidActions,
-            { id: faker.unique(faker.datatype.number), payment: faker.datatype.number(50), status: "Paid" },
+            { id: faker.unique(faker.datatype.number), payment: getAmount(), status: "Paid" },
         ]);
         await render(Payment, { props: { id: userId } });
         await waitForElementToBeRemoved(() => screen.getByText(/chargement/i));

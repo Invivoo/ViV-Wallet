@@ -16,14 +16,14 @@ spec:
   - host: {{ include "vivwallet.base" . }}
     http:
       paths:
-      - path: /{{ if ne .Values.ingress.class "addon-http-application-routing" }}(.*){{ end }}
+      - path: /
         pathType: ImplementationSpecific
         backend:
           service:
             name: {{ .Release.Name }}-{{ .Values.webapp.name }}-svc
             port:
               number: 80
-      - path: /api/{{ if ne .Values.ingress.class "addon-http-application-routing" }}(.*){{ end }}
+      - path: /api
         pathType: ImplementationSpecific
         backend:
           service:
