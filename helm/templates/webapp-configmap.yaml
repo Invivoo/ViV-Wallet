@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: {{ .Release.Name }}-{{ .Values.webapp.name }}-config
+{{$labelData := dict "Chart" .Chart "Release" .Release "Name" .Values.webapp.name }}
+data:
+  config.js: |
+    window.configs = {
+        VUE_APP_APPS_URL: {{ .Values.x4b.appsExternalUrl | quote }},
+    };

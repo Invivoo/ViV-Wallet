@@ -1,5 +1,6 @@
 import jwtDecode from "jwt-decode";
 import { getToken } from "x4b-ui";
+import getConfigValue from "@/utils/configUtils";
 import { Role } from "../models/role";
 
 export interface DecodedJwtTokenContent {
@@ -25,7 +26,7 @@ export class LoginService {
     private authorizations: Authorizations;
 
     constructor() {
-        const token = process.env.VUE_APP_DEV_JWT || getCurrentToken();
+        const token = getConfigValue("VUE_APP_DEV_JWT") || getCurrentToken();
         this.decodedToken = (token && jwtDecode<DecodedJwtTokenContent>(token)) || undefined;
         this.authorizations = (this.decodedToken &&
             this.decodedToken["viv-wallet"] &&

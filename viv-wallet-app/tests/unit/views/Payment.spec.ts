@@ -4,6 +4,7 @@ import faker from "faker";
 import { rest } from "msw";
 import { setupServer } from "msw/node";
 import { PaymentPost } from "@/models/payment";
+import getConfigValue from "@/utils/configUtils";
 import Payment from "@/views/Payment.vue";
 import { render, screen, waitFor, waitForElementToBeRemoved, within } from "../testHelpers";
 
@@ -39,7 +40,7 @@ function setupRestMocks(
         },
     }));
     server.use(
-        rest.get(`${process.env.VUE_APP_BACKEND_BASE_URL}/users/${userId}`, (_, res, ctx) => {
+        rest.get(`${getConfigValue("VUE_APP_BACKEND_BASE_URL")}/users/${userId}`, (_, res, ctx) => {
             return res(
                 ctx.status(200),
                 ctx.json({
@@ -56,7 +57,7 @@ function setupRestMocks(
                 })
             );
         }),
-        rest.get(`${process.env.VUE_APP_BACKEND_BASE_URL}/users/${userId}/balance`, (_, res, ctx) => {
+        rest.get(`${getConfigValue("VUE_APP_BACKEND_BASE_URL")}/users/${userId}/balance`, (_, res, ctx) => {
             return res(
                 ctx.status(200),
                 ctx.json({
@@ -64,7 +65,7 @@ function setupRestMocks(
                 })
             );
         }),
-        rest.get(`${process.env.VUE_APP_BACKEND_BASE_URL}/users/${userId}/actions`, (_, res, ctx) => {
+        rest.get(`${getConfigValue("VUE_APP_BACKEND_BASE_URL")}/users/${userId}/actions`, (_, res, ctx) => {
             return res(ctx.status(200), ctx.json(actionResponse));
         })
     );
@@ -141,7 +142,7 @@ describe("Payment", () => {
         const initialVivs = getAmount();
         const { userId, fullName, unPaidActions, balance } = generateTestData(initialVivs);
         server.use(
-            rest.post(`${process.env.VUE_APP_BACKEND_BASE_URL}/payments`, (req, res, ctx) => {
+            rest.post(`${getConfigValue("VUE_APP_BACKEND_BASE_URL")}/payments`, (req, res, ctx) => {
                 const body = req.body as PaymentPost;
                 expect(body.actionIds).toHaveLength(1);
                 expect(body.actionIds).toEqual(expect.arrayContaining([unPaidActions[0].id]));
