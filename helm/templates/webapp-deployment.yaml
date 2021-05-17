@@ -15,6 +15,10 @@ spec:
             labels:
                 {{- include "labels" $labelData | nindent 16 }}
         spec:
+            volumes:
+              - name: config-volume
+                configMap:
+                  name: {{ .Release.Name }}-{{ .Values.webapp.name }}-config
             containers:
             - name: {{ .Release.Name }}-{{ .Values.webapp.name }}-pod
               image: {{ tpl .Values.webapp.image . }}
@@ -22,5 +26,9 @@ spec:
               imagePullPolicy: Always
               ports:
               - containerPort: 80
+              volumeMounts:
+                - name: config-volume
+                  mountPath: /usr/share/nginx/html/config.js
+                  subPath: config.js
             imagePullSecrets:
             - name: {{ .Values.global.pullSecretName }}

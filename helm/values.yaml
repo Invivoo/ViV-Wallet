@@ -45,6 +45,9 @@ resources:
             limit: 200Mi
             request: 20Mi
 
+x4b:
+    appsExternalUrl: http://apps.X4B FRONT END.com
+
 api:
     name: api
     image: "xcomponent/viv-wallet-api:{{ .Values.global.sha1 }}"
