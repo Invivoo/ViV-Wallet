@@ -45,7 +45,7 @@ export class LoginService {
         return this.decodedToken?.user || "";
     }
 
-    static getJwtToken(): string {
+    static getJwtToken() {
         return getCurrentToken();
     }
 }
