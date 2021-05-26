@@ -3,6 +3,9 @@
 import Vue, { VNode } from "vue";
 
 declare global {
+    interface Window {
+        configs?: { [key: string]: string };
+    }
     namespace JSX {
         // tslint:disable no-empty-interface
         type Element = VNode;

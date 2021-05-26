@@ -7,14 +7,14 @@ const customRender = async (Component: unknown, options = {}) => {
         history: createWebHistory(process.env.BASE_URL),
         routes,
     });
-    const renderResult = render(Component, {
+    const utils = render(Component, {
         global: {
             plugins: [router],
         },
         ...options,
     });
     await router.isReady();
-    return { ...renderResult, router };
+    return { ...utils, router };
 };
 
 export * from "@testing-library/vue";

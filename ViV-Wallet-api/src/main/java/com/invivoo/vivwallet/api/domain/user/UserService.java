@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -48,7 +49,7 @@ public class UserService {
 
     public Optional<User> findByX4bIdOrByFullName(String x4bId) {
         Optional<User> userByX4bId = userRepository.findByX4bIdIgnoreCase(x4bId);
-        if(userByX4bId.isPresent()){
+        if (userByX4bId.isPresent()) {
             return userByX4bId;
         }
         Optional<User> userByFullName = userRepository.findByFullNameIgnoreCase(getFullNameFromX4bId(x4bId));
@@ -80,7 +81,7 @@ public class UserService {
 
     public int computeBalance(User user) {
         LocalDateTime vivInitialBalanceDate = Optional.ofNullable(user.getVivInitialBalanceDate())
-                                                      .orElse(LocalDateTime.MIN);
+                                                      .orElse(LocalDateTime.ofEpochSecond(0, 0, ZoneOffset.UTC));
         int userBalanceFromActionsInVivAfterInitialBalanceDate = actionRepository.findAllByAchieverAndValueDateAfter(user, vivInitialBalanceDate)
                                                                                  .stream()
                                                                                  .filter(Action::isPayable)

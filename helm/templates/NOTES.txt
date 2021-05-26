@@ -9,4 +9,4 @@ To learn more about the release, try:
 
 Endpoints:
 
-- ViV-Wallet : {{ include "protocol" . -}}://{{ include "vivwallet.url" . }}
+- ViV-Wallet : {{ include "protocol" . -}}://{{ include "vivwallet.base" . }}

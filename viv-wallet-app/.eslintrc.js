@@ -43,12 +43,14 @@ module.exports = {
         "unicorn/no-useless-undefined": ["error", { checkArguments: false }],
         "unicorn/no-array-reduce": "off",
         "unicorn/no-array-for-each": "off",
+        "unicorn/prefer-module": "off",
         "prettier/prettier": [
             "error",
             {
                 endOfLine: "auto",
             },
         ],
+        "import/no-extraneous-dependencies": "off",
         "simple-import-sort/exports": "error",
         "simple-import-sort/imports": [
             "error",
@@ -70,6 +72,7 @@ module.exports = {
         "no-restricted-syntax": "off",
         "no-use-before-define": "off",
         "no-shadow": "off",
+        "no-param-reassign": "off",
     },
     overrides: [
         {

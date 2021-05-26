@@ -4,10 +4,10 @@
 
 Table des matières :
 
-- [Introduction](#introduction)
-- [Contribuer au projet fil rouge](#contribuer-au-projet-fil-rouge)
-- [À lire avant de commencer](#à-lire-avant-de-commencer)
-- [Let's code](#lets-code)
+-   [Introduction](#introduction)
+-   [Contribuer au projet fil rouge](#contribuer-au-projet-fil-rouge)
+-   [À lire avant de commencer](#à-lire-avant-de-commencer)
+-   [Let's code](#lets-code)
 
 ## Introduction
 
@@ -17,16 +17,16 @@ Pour cela, le programme repose principalement sur la mise en place d&#39;un parc
 
 Le VIV-Wallet est une application qui s&#39;adresses à différents types d&#39;utilisateurs, ou persona. Il va permettre :
 
-- à chaque consultant de suivre sa cagnotte de VIV,
-- aux membres du programme de suivre leurs objectifs,
-- aux membres de l&#39;équipe Admin, de convertir ses VIV sur la paie du collaborateur.
+-   à chaque consultant de suivre sa cagnotte de VIV,
+-   aux membres du programme de suivre leurs objectifs,
+-   aux membres de l&#39;équipe Admin, de convertir ses VIV sur la paie du collaborateur.
 
 ## À lire avant de commencer
 
 Quelques guidelines ont été données pour assurer la cohérence du projet ainsi que son modèle de données
 
-- Dans ce projet, tu pourras retrouver des tickets Java et des tickets Front-End. Retrouve [ici l'intégralité des user stories par persona qui ont permis de les générer](https://invivoo.sharepoint.com/:w:/s/Managersd'Expertise/EeWUsfMrHMdOgpooDoYeWCYBsczKABL8gNalyRRjTDFb_g?e=ebTLgZ).
-- Pour donner de la cohérence au projet, le modèle de données, les apis disponible et la structure du projet Java ont été défini en amont [dans les spécifications techniques](https://invivoo.sharepoint.com/:w:/s/Managersd'Expertise/ES5hwrPj9fdFj1g8w58NLvcBn2_JeJ9HslSdzdUwafGFpQ?e=KSssb3). Si il y a besoin de les faire évoluer, merci de créer une conversation à ce sujet dans [dans le canal du projet](https://teams.microsoft.com/l/channel/19%3a4ad8360f9c4e4016a157bfe3f7ca968a%40thread.skype/VIV-Wallet?groupId=d5a0827f-1103-4e19-89f3-d85e7caeb167&tenantId=6d13640c-ba8f-4480-a2a0-0093bacdb7c1).
+-   Dans ce projet, tu pourras retrouver des tickets Java et des tickets Front-End. Retrouve [ici l'intégralité des user stories par persona qui ont permis de les générer](https://invivoo.sharepoint.com/:w:/s/Managersd'Expertise/EeWUsfMrHMdOgpooDoYeWCYBsczKABL8gNalyRRjTDFb_g?e=ebTLgZ).
+-   Pour donner de la cohérence au projet, le modèle de données, les apis disponible et la structure du projet Java ont été défini en amont [dans les spécifications techniques](https://invivoo.sharepoint.com/:w:/s/Managersd'Expertise/ES5hwrPj9fdFj1g8w58NLvcBn2_JeJ9HslSdzdUwafGFpQ?e=KSssb3). Si il y a besoin de les faire évoluer, merci de créer une conversation à ce sujet dans [dans le canal du projet](https://teams.microsoft.com/l/channel/19%3a4ad8360f9c4e4016a157bfe3f7ca968a%40thread.skype/VIV-Wallet?groupId=d5a0827f-1103-4e19-89f3-d85e7caeb167&tenantId=6d13640c-ba8f-4480-a2a0-0093bacdb7c1).
 
 ## Contribuer au projet fil rouge
 
@@ -36,20 +36,20 @@ Le VIV Wallet est un projet fil rouge dans le cadre du Programme Grow Together. 
 
 Si tu veux contribuer, voilà la marche à suivre :
 
-- Lis bien l'intégralité de ce README !
-- Choisis le ticket que tu veux développer dans [la version en cours de développement](https://github.com/Invivoo/ViV-Wallet/projects/1),
-- Indique sur Teams [dans le canal du projet](https://teams.microsoft.com/l/channel/19%3a4ad8360f9c4e4016a157bfe3f7ca968a%40thread.skype/VIV-Wallet?groupId=d5a0827f-1103-4e19-89f3-d85e7caeb167&tenantId=6d13640c-ba8f-4480-a2a0-0093bacdb7c1) le ticket sur lequel tu souhaites t'impliquer en créant une conversation avec le lien du ticket,
-- Attend le go d'un manager d'expertise (il vérifiera que le ticket est faisable et n'est pas déjà traité par quelqu'un d'autre),
-- Déplace le ticket dans In Progress en t'affectant sur le ticket [ici](https://github.com/Invivoo/ViV-Wallet/projects/1). N'hésite pas à demander plus d'info dans la conversation liée au ticket sur Teams.
-- Crée une branche intitulée _viv/feature|hotfix/id-du-ticket_ à partir de la branche develop (exemple pour la feature #12, la branche serait viv/feature/12),
-- Pour chaque ticket, ajoute des Tests en t'inspirant de la spec et des tests existants !
-- Une fois le développement fait, crée une pull request et demande via Teams à un manager d'expertise de la valider dans la conversation liée au ticket sur Teams,
-- _Et Voilà_, le nombre de VIV associé au ticket sera débloqué une fois que l'ensemble de la version sera livrée.
+-   Lis bien l'intégralité de ce README !
+-   Choisis le ticket que tu veux développer dans [la version en cours de développement](https://github.com/Invivoo/ViV-Wallet/projects/1),
+-   Indique sur Teams [dans le canal du projet](https://teams.microsoft.com/l/channel/19%3a4ad8360f9c4e4016a157bfe3f7ca968a%40thread.skype/VIV-Wallet?groupId=d5a0827f-1103-4e19-89f3-d85e7caeb167&tenantId=6d13640c-ba8f-4480-a2a0-0093bacdb7c1) le ticket sur lequel tu souhaites t'impliquer en créant une conversation avec le lien du ticket,
+-   Attend le go d'un manager d'expertise (il vérifiera que le ticket est faisable et n'est pas déjà traité par quelqu'un d'autre),
+-   Déplace le ticket dans In Progress en t'affectant sur le ticket [ici](https://github.com/Invivoo/ViV-Wallet/projects/1). N'hésite pas à demander plus d'info dans la conversation liée au ticket sur Teams.
+-   Crée une branche intitulée _viv/feature|hotfix/id-du-ticket_ à partir de la branche develop (exemple pour la feature #12, la branche serait viv/feature/12),
+-   Pour chaque ticket, ajoute des Tests en t'inspirant de la spec et des tests existants !
+-   Une fois le développement fait, crée une pull request et demande via Teams à un manager d'expertise de la valider dans la conversation liée au ticket sur Teams,
+-   _Et Voilà_, le nombre de VIV associé au ticket sera débloqué une fois que l'ensemble de la version sera livrée.
 
 /!\ Attention /!\ dans certains cas, les VIVs ne seront pas crédités :
 
-- si tu es en intercontrat,
-- si les tickets sont développés pendant tes heures au siège (de 8h à 12h et 14h à 18h)
+-   si tu es en intercontrat,
+-   si les tickets sont développés pendant tes heures au siège (de 8h à 12h et 14h à 18h)
 
 ## Let's code
 
@@ -69,7 +69,7 @@ Ensuite le git clone la prendra en compte.
 
 Pour installer l'extension VSCode pour le remote development, suivre la procédure suivante: [https://code.visualstudio.com/docs/remote/containers](https://code.visualstudio.com/docs/remote/containers).
 
-### Pour travailler sur le backend avec le front
+### Pour travailler sur le backend avec le front et le back avec une base in memory
 
 Run `mvn clean install` from the project root to build ViV-Wallet-app and move it to ViV-Wallet-api resources.
 Run it in sudo mode the first time to install the version of node used by the frontend-maven-plugin.cd
@@ -84,7 +84,7 @@ The app should be running at `localhost:4200`.
 
 Launch sqlServer docker with `docker run --name sql -P -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=/EU22MQwyx' -e 'MSSQL_PID=Express' -p 1433:1433 -d mcr.microsoft.com/mssql/server:2017-CU14-ubuntu`
 Run `mvn clean install` and create a database named viv_wallet
-Run `mvn spring-boot:run` with sqlServer sprng profile activated
+Run `mvn spring-boot:run` with sqlServer spring profile activated
 
 ### Pour travailler sur le frontend
 

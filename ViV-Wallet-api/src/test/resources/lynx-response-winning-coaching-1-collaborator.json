@@ -1,0 +1,50 @@
+{
+    "dataTable": [
+        {
+            "funnel_stageid": 41,
+            "stage_name": "TechFcl Coach on Opp",
+            "activityid": 197607,
+            "activity_typeid": 98,
+            "activity_label": "Coach TechFcl sur Opp ",
+            "act_date": "2020-09-15T11:00:01",
+            "act_date_end": "2020-09-15T11:15:01",
+            "validity": "OK",
+            "value_date": "2020-09-15T00:00:00",
+            "act_status": "Held",
+            "activity_comment": "Coaching",
+            "relatedto": "Consultant",
+            "owner": "Collaborateur1",
+            "participant_email": "collaborateur@invivoo.com",
+            "others": "Sales Invivoo",
+            "opportunity": "Opportunité",
+            "opp_typeid": "1",
+            "opp_label": "01 Consulting/Unit",
+            "inv_entry": "2019-03-04T00:00:00",
+            "start_act_from": "2020-11-19T00:00:00",
+            "INFO": "Please define rp_login"
+        },
+        {
+            "funnel_stageid": 41,
+            "stage_name": "TechFcl Coach on Opp (won only)",
+            "activityid": 197607,
+            "activity_typeid": 98,
+            "activity_label": "Coach TechFcl sur Opp gagnée",
+            "act_date": "2020-09-15T11:00:01",
+            "act_date_end": "2020-09-15T11:15:01",
+            "validity": "OK",
+            "value_date": "2020-11-19T00:00:00",
+            "act_status": "Held",
+            "activity_comment": "Coaching",
+            "relatedto": "Consultant",
+            "owner": "Collaborateur1",
+            "participant_email": "collaborateur@invivoo.com",
+            "others": "Sales Invivoo",
+            "opportunity": "Opportunité",
+            "opp_typeid": "1",
+            "opp_label": "01 Consulting/Unit",
+            "inv_entry": "2019-03-04T00:00:00",
+            "start_act_from": "2020-11-19T00:00:00",
+            "INFO": "Please define rp_login"
+        }
+    ]
+}

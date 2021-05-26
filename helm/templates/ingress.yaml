@@ -13,13 +13,20 @@ metadata:
 spec:
   {{- include "ingress.tls" . | nindent 2 -}}
   rules:
-  - host: {{ include "vivwallet.url" . }}
+  - host: {{ include "vivwallet.base" . }}
     http:
       paths:
       - path: /
         pathType: ImplementationSpecific
         backend:
           service:
-            name: {{ .Release.Name }}-{{ .Values.vivwallet.name }}-svc
+            name: {{ .Release.Name }}-{{ .Values.webapp.name }}-svc
             port:
-              number: {{ .Values.vivwallet.service.externalPort }}
+              number: 80
+      - path: /api
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: {{ .Release.Name }}-{{ .Values.api.name }}-svc
+            port:
+              number: {{ .Values.api.service.externalPort }}

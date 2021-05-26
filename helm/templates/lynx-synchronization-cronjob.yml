@@ -18,6 +18,6 @@ spec:
               - "-ec"
               - |
                 echo "Starting Lynx Synchronization"
-                curl --fail -s -v -X POST "http://{{ .Release.Name }}-{{ .Values.vivwallet.name }}-svc:{{ .Values.vivwallet.service.externalPort }}/api/v1/actions/updateFromLynx" -H "Authorization: ApiKey {{ .Values.global.apiKey }}"
+                curl --fail -s -v -X POST "http://{{ .Release.Name }}-{{ .Values.api.name }}-svc:{{ .Values.api.service.externalPort }}/api/v1/actions/updateFromLynx" -H "Authorization: ApiKey {{ .Values.global.apiKey }}"
                 echo "Lynx Synchronization Complete"
           restartPolicy: Never

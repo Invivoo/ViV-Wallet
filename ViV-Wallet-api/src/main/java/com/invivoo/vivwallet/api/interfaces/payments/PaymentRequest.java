@@ -18,4 +18,5 @@ public class PaymentRequest {
     private LocalDate date;
     private Long receiverId;
     private Collection<Long> actionIds;
+    private int vivAmount;
 }

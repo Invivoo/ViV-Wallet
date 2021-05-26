@@ -38,6 +38,7 @@ import { defineComponent } from "vue";
 import CheckRoles from "./components/CheckRoles.vue";
 import CustomRouterLink from "./components/CustomRouterLink.vue";
 import { expertisesRoles, historyRoles, myWalletRoles, walletsRoles } from "./models/role";
+import getConfigValue from "./utils/configUtils";
 
 export default defineComponent({
     name: "App",
@@ -47,8 +48,8 @@ export default defineComponent({
     },
     data() {
         return {
-            appsUrl: process.env.VUE_APP_APPS_URL,
-            appVersion: process.env.VUE_APP_PRODUCT_VERSION || "[PRODUCT_VERSION]",
+            appsUrl: getConfigValue("VUE_APP_APPS_URL"),
+            appVersion: getConfigValue("VUE_APP_PRODUCT_VERSION") || "[PRODUCT_VERSION]",
             primaryColor: "#4c51bf",
             isMenuOpen: false,
             isBannerInitialized: false,
