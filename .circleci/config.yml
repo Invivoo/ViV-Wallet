@@ -185,6 +185,7 @@ jobs:
                   name: Package
                   working_directory: ~/project/helm
                   command: |
+                      sed -i -e "s%#SHA1#%${BUILD_VERSION_TAG}%g" ./values.yaml
                       if [[ -n "${CIRCLE_TAG}" ]]
                       then
                       helm package . --app-version="${BUILD_VERSION_TAG}" --version="${CIRCLE_TAG}.0"
