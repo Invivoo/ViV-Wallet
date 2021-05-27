@@ -88,7 +88,6 @@ export default defineComponent({
 html,
 body {
     height: 100%;
-    box-sizing: content-box;
 }
 
 .content {
