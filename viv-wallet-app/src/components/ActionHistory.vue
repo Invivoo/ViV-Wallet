@@ -54,7 +54,8 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
-import { ActionForHistory, PaymentStatus } from "../models/action";
+import paymentHelpers from "@/utils/paymentHelpers";
+import { ActionForHistory } from "../models/action";
 import FilterInput from "./FilterInput.vue";
 import StatusBadge from "./StatusBadge.vue";
 
@@ -81,27 +82,7 @@ export default defineComponent({
         },
     },
     methods: {
-        isPaymentPaid(action: ActionForHistory) {
-            return action.status === PaymentStatus.Paid;
-        },
-        formatPaymentStatus(status: PaymentStatus) {
-            switch (status) {
-                case PaymentStatus.Paid:
-                    return "Débloqué";
-                case PaymentStatus.Unpaid:
-                default:
-                    return "Non débloqué";
-            }
-        },
-        getPaymentStatusType(status: PaymentStatus) {
-            switch (status) {
-                case PaymentStatus.Paid:
-                    return "green";
-                case PaymentStatus.Unpaid:
-                default:
-                    return "red";
-            }
-        },
+        ...paymentHelpers,
     },
 });
 </script>
