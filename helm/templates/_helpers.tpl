@@ -80,7 +80,7 @@ Endpoint env variables
 {{- end -}}
 
 {{- define "vivwallet.base" -}}
-{{- if eq .Values.ingress.class "addon-http-application-routing" }}{{ print "vivwallet." (default .Release.Name .Values.global.devSubDomain) "." .Values.global.clusterSpecificDnszone }}{{- else }}{{ print .Values.global.vivwalletSpecificDnszone }}{{- end -}}
+{{- if eq .Values.ingress.class "addon-http-application-routing" }}{{ print "vivwallet." (default .Release.Name .Values.devSubDomain) "." .Values.clusterSpecificDnszone }}{{- else }}{{ print .Values.vivwalletSpecificDnszone }}{{- end -}}
 {{- end -}}
 
 {{- define "ingress.tls" -}}

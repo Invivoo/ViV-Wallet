@@ -31,4 +31,4 @@ spec:
                   mountPath: /usr/share/nginx/html/config.js
                   subPath: config.js
             imagePullSecrets:
-            - name: {{ .Values.global.pullSecretName }}
+            - name: {{ .Values.pullSecretName }}

@@ -2,20 +2,19 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-global:
-    sha1: "#SHA1#"
-    pullSecretName: regcred
-    clusterSpecificDnszone: "YOUR ZONE.northeurope.aksapp.io"
-    vivwalletSpecificDnszone: "vivwallet.test.com"
-    x4bAuthPublicKeyUrl: "Public Key Url"
-    lynxApiUrl: "Lynx Api Url"
-    apiKey: "YOUR API KEY"
-    useLocalhost: false
-    traceEnabled: true
-    prometheusCollectEnabled: false
-    sqlServerUrl: "SQL_SERVER_URL"
-    sqlServerUsername: "SQL_SERVER_USERNAME"
-    sqlServerPassword: "SQL_SERVER_PASSWORD"
+sha1: "#SHA1#"
+pullSecretName: regcred
+clusterSpecificDnszone: "YOUR ZONE.northeurope.aksapp.io"
+vivwalletSpecificDnszone: "vivwallet.test.com"
+x4bAuthPublicKeyUrl: "Public Key Url"
+lynxApiUrl: "Lynx Api Url"
+apiKey: "YOUR API KEY"
+useLocalhost: false
+traceEnabled: true
+prometheusCollectEnabled: false
+sqlServerUrl: "SQL_SERVER_URL"
+sqlServerUsername: "SQL_SERVER_USERNAME"
+sqlServerPassword: "SQL_SERVER_PASSWORD"
 
 strategy:
     rollingUpdate:
@@ -50,7 +49,7 @@ x4b:
 
 api:
     name: api
-    image: "xcomponent/viv-wallet-api:{{ .Values.global.sha1 }}"
+    image: "xcomponent/viv-wallet-api:{{ .Values.sha1 }}"
     port: 8080
     replicaCount: 1
     minReadySeconds: 10
@@ -59,7 +58,7 @@ api:
 
 webapp:
     name: webapp
-    image: "xcomponent/viv-wallet-webapp:{{ .Values.global.sha1 }}"
+    image: "xcomponent/viv-wallet-webapp:{{ .Values.sha1 }}"
     replicaCount: 1
     minReadySeconds: 10
 
