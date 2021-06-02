@@ -30,9 +30,15 @@ spec:
               - name: SqlServerUsername
                 value: {{ .Values.sqlServerUsername }}
               - name: SqlServerPassword
-                value: {{ .Values.sqlServerPassword }}
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ .Release.Name }}-secret
+                    key: sqlServerPassword
               - name: ApiKey
-                value : {{ .Values.apiKey }}
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ .Release.Name }}-secret
+                    key: apiKey
               - name: VivWalletUrl
                 value : {{ include "vivwallet.url" . }}
               {{- include "resources.large" . | nindent 14 }}
