@@ -59,6 +59,7 @@ export default defineComponent({
         getConsultantStatusType(status: ConsultantStatus) {
             switch (status) {
                 case ConsultantStatus.CONSULTANT_SENIOR:
+                case ConsultantStatus.CONSULTANT:
                 case ConsultantStatus.MANAGER:
                     return "green";
                 case ConsultantStatus.CONSULTANT_SENIOR_IN_ONBOARDING:
