@@ -29,13 +29,13 @@ export class ConsultantsService extends ServiceBase {
 export function normalizeRawConsultant(rawConsultant: RawConsultant): Consultant {
     return {
         ...rawConsultant,
-        status: ConsultantStatus[rawConsultant.status || ConsultantStatus.CONSULTANT_SENIOR],
+        status: ConsultantStatus[rawConsultant.status || ConsultantStatus.CONSULTANT],
     };
 }
 
 export function consultantToRaw(consultant: Consultant): RawConsultant {
     return {
         ...consultant,
-        status: ConsultantStatus[consultant.status || ConsultantStatus.CONSULTANT_SENIOR],
+        status: ConsultantStatus[consultant.status || ConsultantStatus.CONSULTANT],
     };
 }
