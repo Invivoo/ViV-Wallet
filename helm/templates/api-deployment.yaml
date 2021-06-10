@@ -22,17 +22,23 @@ spec:
               - name: DNS
                 value: "kube-dns.kube-system"
               - name: X4BAuthPublicKeyUrl
-                value: {{ .Values.global.x4bAuthPublicKeyUrl }}
+                value: {{ .Values.x4bAuthPublicKeyUrl }}
               - name: LynxApiUrl
-                value: {{ .Values.global.lynxApiUrl }}
+                value: {{ .Values.lynxApiUrl }}
               - name: SqlServerUrl
-                value: {{ .Values.global.sqlServerUrl }}
+                value: {{ .Values.sqlServerUrl }}
               - name: SqlServerUsername
-                value: {{ .Values.global.sqlServerUsername }}
+                value: {{ .Values.sqlServerUsername }}
               - name: SqlServerPassword
-                value: {{ .Values.global.sqlServerPassword }}
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ .Release.Name }}-secret
+                    key: sqlServerPassword
               - name: ApiKey
-                value : {{ .Values.global.apiKey }}
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ .Release.Name }}-secret
+                    key: apiKey
               - name: VivWalletUrl
                 value : {{ include "vivwallet.url" . }}
               {{- include "resources.large" . | nindent 14 }}
@@ -40,5 +46,4 @@ spec:
               ports:
               - containerPort: {{ .Values.api.port }}
             imagePullSecrets:
-            - name: {{ .Values.global.pullSecretName }}
-
+            - name: {{ .Values.pullSecretName }}

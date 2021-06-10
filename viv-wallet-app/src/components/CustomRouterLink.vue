@@ -2,8 +2,8 @@
     <router-link v-slot="{ route, href, navigate }" :to="to" custom>
         <a
             :href="href"
-            :class="route.path === $route.path ? 'router-link-active' : ''"
-            :aria-current="route.path === $route.path && route.path"
+            :class="isActive() ? 'router-link-active' : ''"
+            :aria-current="isActive() && route.path"
             @click="navigate"
         >
             <slot></slot>
@@ -20,6 +20,12 @@ export default defineComponent({
         to: {
             type: String,
             required: true,
+        },
+    },
+    methods: {
+        isActive() {
+            // I add a / character to avoid path conflicts such as /wallet and /wallets
+            return `${this.$route.path}/`.startsWith(`${this.to}/`);
         },
     },
 });

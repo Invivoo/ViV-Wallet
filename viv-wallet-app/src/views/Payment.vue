@@ -106,8 +106,9 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { Action, PaymentStatus } from "@/models/action";
+import { Action } from "@/models/action";
 import { UsersService } from "@/services/users";
+import paymentHelpers from "@/utils/paymentHelpers";
 import BalanceCard from "../components/BalanceCard.vue";
 import Checkbox from "../components/Checkbox.vue";
 import Illustration from "../components/Illustration.vue";
@@ -193,6 +194,7 @@ export default defineComponent({
         }
     },
     methods: {
+        ...paymentHelpers,
         formatConsultantStatus(status?: keyof typeof ConsultantStatus) {
             if (status) {
                 return toString(ConsultantStatus[status]);
@@ -216,29 +218,6 @@ export default defineComponent({
                 this.errored = true;
             } finally {
                 this.loading = false;
-            }
-        },
-        isPaymentPaid(action: Action) {
-            return action.status === PaymentStatus.Paid;
-        },
-
-        formatPaymentStatus(status: PaymentStatus) {
-            switch (status) {
-                case PaymentStatus.Paid:
-                    return "Débloqué";
-                case PaymentStatus.Unpaid:
-                default:
-                    return "Non débloqué";
-            }
-        },
-
-        getPaymentStatusType(status: PaymentStatus) {
-            switch (status) {
-                case PaymentStatus.Paid:
-                    return "green";
-                case PaymentStatus.Unpaid:
-                default:
-                    return "red";
             }
         },
     },
