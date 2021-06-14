@@ -126,8 +126,6 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-@import "../styles/table.scss";
-
 .payment {
     font-weight: 600;
     color: $gray-700;

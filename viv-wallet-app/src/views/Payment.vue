@@ -225,9 +225,6 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-@import "../styles/form.scss";
-@import "../styles/table.scss";
-@import "../styles/buttons.scss";
 .inline-bloc {
     display: inline-block;
 }

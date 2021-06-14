@@ -69,9 +69,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import "../styles/table.scss";
-@import "../styles/buttons.scss";
-
 .payment-date {
     color: $gray-600;
     font-weight: 400;

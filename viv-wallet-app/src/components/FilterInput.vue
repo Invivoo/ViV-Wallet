@@ -36,8 +36,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import "../styles/form.scss";
-
 .filter {
     display: flex;
     align-items: baseline;

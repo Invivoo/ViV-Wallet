@@ -88,9 +88,6 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-@import "../styles/buttons.scss";
-@import "../styles/select.scss";
-
 .wallets {
     max-width: 900px;
     margin: 0 auto;

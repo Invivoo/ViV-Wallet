@@ -12,7 +12,7 @@ export const routes: Array<RouteRecordRaw> = [
     {
         path: "/wallet",
         name: "wallet",
-        component: () => import(/* webpackChunkName: "wallet" */ "../views/Wallet.vue"),
+        component: () => import(/* webpackChunkName: "wallets" */ "../views/Wallet.vue"),
     },
     {
         path: "/actions",
