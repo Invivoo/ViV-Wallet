@@ -162,10 +162,6 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-@import "../styles/form.scss";
-@import "../styles/select.scss";
-@import "../styles/buttons.scss";
-
 .consultantEdit {
     width: 50%;
     margin: auto;

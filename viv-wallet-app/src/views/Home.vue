@@ -11,8 +11,6 @@
 </template>
 
 <style lang="scss" scoped>
-@import "../styles/buttons.scss";
-
 .home {
     width: 95%;
     margin: $m-7 auto;

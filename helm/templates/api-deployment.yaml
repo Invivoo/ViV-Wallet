@@ -47,3 +47,4 @@ spec:
               - containerPort: {{ .Values.api.port }}
             imagePullSecrets:
             - name: {{ .Values.pullSecretName }}
+
