@@ -105,7 +105,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import "../styles/buttons.scss";
 .main {
     max-width: 900px;
     margin: 0 auto;

@@ -74,9 +74,6 @@ export default defineComponent({
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-@import "../styles/table.scss";
-@import "../styles/buttons.scss";
-
 td {
     white-space: nowrap;
     overflow: hidden;
