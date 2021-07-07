@@ -13,6 +13,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { useRoute } from "vue-router";
 
 export default defineComponent({
     name: "CustomRouterLink",
@@ -22,11 +23,15 @@ export default defineComponent({
             required: true,
         },
     },
-    methods: {
-        isActive() {
+    setup(props) {
+        const route = useRoute();
+        const isActive = () => {
             // I add a / character to avoid path conflicts such as /wallet and /wallets
-            return `${this.$route.path}/`.startsWith(`${this.to}/`);
-        },
+            return `${route.path}/`.startsWith(`${props.to}/`);
+        };
+        return {
+            isActive,
+        };
     },
 });
 </script>

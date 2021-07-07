@@ -52,22 +52,24 @@ export default defineComponent({
             type: Array as PropType<Consultant[]>,
         },
     },
-    methods: {
-        formatConsultantStatus(status: ConsultantStatus) {
-            return toString(status);
-        },
-        getConsultantStatusType(status: ConsultantStatus) {
-            switch (status) {
-                case ConsultantStatus.CONSULTANT_SENIOR:
-                case ConsultantStatus.CONSULTANT:
-                case ConsultantStatus.MANAGER:
-                    return "green";
-                case ConsultantStatus.CONSULTANT_SENIOR_IN_ONBOARDING:
-                    return "yellow";
-                default:
-                    return "red";
-            }
-        },
+    setup() {
+        return {
+            formatConsultantStatus(status: ConsultantStatus) {
+                return toString(status);
+            },
+            getConsultantStatusType(status: ConsultantStatus) {
+                switch (status) {
+                    case ConsultantStatus.CONSULTANT_SENIOR:
+                    case ConsultantStatus.CONSULTANT:
+                    case ConsultantStatus.MANAGER:
+                        return "green";
+                    case ConsultantStatus.CONSULTANT_SENIOR_IN_ONBOARDING:
+                        return "yellow";
+                    default:
+                        return "red";
+                }
+            },
+        };
     },
 });
 </script>
