@@ -62,8 +62,10 @@ export default defineComponent({
             type: Array as PropType<Action[]>,
         },
     },
-    methods: {
-        ...paymentHelpers,
+    setup() {
+        return {
+            ...paymentHelpers,
+        };
     },
 });
 </script>

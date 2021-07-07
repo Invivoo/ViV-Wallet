@@ -20,21 +20,20 @@ export default defineComponent({
             type: Boolean,
         },
     },
-    data() {
-        return {
-            loginService: new LoginService(),
-        };
-    },
-    methods: {
-        isAuthorized() {
-            const userRoles = this.loginService.getRoles();
-            for (const role of this.roles) {
+    setup(props) {
+        const loginService = new LoginService();
+        const isAuthorized = () => {
+            const userRoles = loginService.getRoles();
+            for (const role of props.roles) {
                 if (userRoles.includes(role)) {
                     return true;
                 }
             }
             return false;
-        },
+        };
+        return {
+            isAuthorized,
+        };
     },
 });
 </script>

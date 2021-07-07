@@ -53,7 +53,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
+import { defineComponent, PropType, ref, watch } from "vue";
 import paymentHelpers from "@/utils/paymentHelpers";
 import { ActionForHistory } from "../models/action";
 import FilterInput from "./FilterInput.vue";
@@ -68,21 +68,19 @@ export default defineComponent({
             type: Array as PropType<ActionForHistory[]>,
         },
     },
-    data() {
-        return {
-            filterValue: "",
-            filteredActions: [...this.actions],
-        };
-    },
-    watch: {
-        filterValue() {
-            this.filteredActions = this.actions.filter((action) =>
-                action.achiever?.fullName?.toLowerCase().includes(this.filterValue.toLowerCase())
+    setup(props) {
+        const filterValue = ref("");
+        const filteredActions = ref([...props.actions]);
+        watch(filterValue, (currentValue) => {
+            filteredActions.value = props.actions.filter((action) =>
+                action.achiever?.fullName?.toLowerCase().includes(currentValue.toLowerCase())
             );
-        },
-    },
-    methods: {
-        ...paymentHelpers,
+        });
+        return {
+            filterValue,
+            filteredActions,
+            ...paymentHelpers,
+        };
     },
 });
 </script>
