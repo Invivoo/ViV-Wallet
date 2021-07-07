@@ -103,7 +103,9 @@ jobs:
             - run:
                   name: Unit Test
                   working_directory: viv-wallet-app
-                  command: npm run test:unit
+                  command: npm run test:unit-ci
+                  environment:
+                      JEST_JUNIT_OUTPUT_DIR: ./reports/junit/
             - *save_node
             - run:
                   name: Build docker image
@@ -122,6 +124,10 @@ jobs:
                           docker push xcomponent/viv-wallet-webapp:${CIRCLE_SHA1}
                           docker push xcomponent/viv-wallet-webapp:${BUILD_VERSION_TAG}
                       fi
+            - store_test_results:
+                  path: ./viv-wallet-app/reports/junit/
+            - store_artifacts:
+                  path: ./viv-wallet-app/reports/junit
 
     api:
         docker:
