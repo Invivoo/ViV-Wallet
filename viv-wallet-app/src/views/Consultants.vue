@@ -8,7 +8,7 @@
                         <div class="selector-container">
                             <label class="expertise-label" for="select-expertise">Expertise :</label>
                             <div class="select">
-                                <select id="select-expertise" v-model="selectedExpertiseId" @change="expertiseChanged">
+                                <select id="select-expertise" v-model="selectedExpertiseId">
                                     <option disabled value>Choisissez</option>
                                     <option v-for="expertise in expertises" :key="expertise.id" :value="expertise.id">
                                         {{ expertise.expertiseName }}
@@ -72,6 +72,11 @@ export default defineComponent({
                 await this.updateConsultants();
             }
         },
+        async selectedExpertiseId(value, oldValue) {
+            if (value && value !== oldValue) {
+                this.$router.push(`/members/${value}`);
+            }
+        },
     },
     async mounted() {
         try {
@@ -89,9 +94,6 @@ export default defineComponent({
         }
     },
     methods: {
-        expertiseChanged() {
-            this.$router.push(`/members/${this.selectedExpertiseId}`);
-        },
         async updateConsultants() {
             const consultantsService = new ConsultantsService();
             this.consultants = await consultantsService.getConsultants(this.selectedExpertiseId);
