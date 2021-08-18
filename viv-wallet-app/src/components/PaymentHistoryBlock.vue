@@ -148,6 +148,7 @@ table {
 
 .wrapper {
     display: flex;
+    align-items: flex-start;
 }
 
 .illustration {
