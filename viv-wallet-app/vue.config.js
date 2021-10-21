@@ -8,7 +8,7 @@ module.exports = {
                 return {
                     ...options,
                     compilerOptions: {
-                        ...(options.compilerOptions || {}),
+                        ...options.compilerOptions,
                         isCustomElement: (tag) => tag.startsWith("x4b-"),
                     },
                 };

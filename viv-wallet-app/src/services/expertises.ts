@@ -8,6 +8,6 @@ export class ExpertisesService extends ServiceBase {
     }
 
     async getExpertises(): Promise<Expertise[]> {
-        return (await this.http.get("")).data;
+        return (await this.http.get<Expertise[]>("")).data;
     }
 }
