@@ -92,9 +92,7 @@ body {
 
 .content {
     height: 100%;
-    padding-left: $m-6;
-    padding-top: $m-6;
-    padding-right: $m-6;
+    padding: $m-6;
     flex-grow: 1;
     flex-shrink: 1;
     overflow-y: auto;

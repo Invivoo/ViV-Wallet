@@ -112,15 +112,17 @@ export default defineComponent({
             type: Array as PropType<Payment[]>,
         },
     },
-    methods: {
-        formatWithCurrency(value: number) {
-            const formatter = new Intl.NumberFormat("fr", {
-                style: "currency",
-                currency: "EUR",
-            });
+    setup() {
+        return {
+            formatWithCurrency(value: number) {
+                const formatter = new Intl.NumberFormat("fr", {
+                    style: "currency",
+                    currency: "EUR",
+                });
 
-            return formatter.format(value);
-        },
+                return formatter.format(value);
+            },
+        };
     },
 });
 </script>
@@ -146,6 +148,7 @@ table {
 
 .wrapper {
     display: flex;
+    align-items: flex-start;
 }
 
 .illustration {

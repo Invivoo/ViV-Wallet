@@ -22,7 +22,7 @@ export class ConsultantsService extends ServiceBase {
     }
 
     async getConsultant(id: string): Promise<Consultant> {
-        return normalizeRawConsultant((await this.http.get(`/users/${id}`)).data);
+        return normalizeRawConsultant((await this.http.get<RawConsultant>(`/users/${id}`)).data);
     }
 }
 
