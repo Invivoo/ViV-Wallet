@@ -20,7 +20,7 @@
         "jwt-decode": "^3.1.2",
         "vue": "^3.1.1",
         "vue-router": "^4.0.8",
-        "x4b-ui": "https://www.myget.org/F/x4b/auth/d1a81b83-2f89-4063-85a4-9489e9ef0042/npm/x4b-ui/-/13.0.0.tgz"
+        "x4b-ui": "https://www.myget.org/F/x4b/auth/d1a81b83-2f89-4063-85a4-9489e9ef0042/npm/x4b-ui/-/14.0.0.tgz"
     },
     "devDependencies": {
         "@testing-library/jest-dom": "^5.14.1",
