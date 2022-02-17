@@ -61,7 +61,7 @@ references:
 jobs:
     checkout:
         docker:
-            - image: circleci/node:15.14
+            - image: cimg/node:15.14
               <<: *docker_auth
         resource_class: small
         steps:
@@ -72,7 +72,7 @@ jobs:
                       - .
     webapp:
         docker:
-            - image: circleci/node:15.14.0-browsers
+            - image: cimg/node:15.14.0-browsers
               <<: *docker_auth
         working_directory: ~/project
         steps:
@@ -131,7 +131,7 @@ jobs:
 
     api:
         docker:
-            - image: circleci/openjdk:11-jdk-browsers
+            - image: cimg/openjdk:11-jdk-browsers
               <<: *docker_auth
         working_directory: ~/project
         environment:
