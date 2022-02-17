@@ -131,7 +131,7 @@ jobs:
 
     api:
         docker:
-            - image: cimg/openjdk:11-jdk-browsers
+            - image: cimg/openjdk:11.0-browsers
               <<: *docker_auth
         working_directory: ~/project
         environment:
