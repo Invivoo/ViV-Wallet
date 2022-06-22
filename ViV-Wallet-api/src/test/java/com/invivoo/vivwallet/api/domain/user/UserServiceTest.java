@@ -3,6 +3,7 @@ package com.invivoo.vivwallet.api.domain.user;
 import com.invivoo.vivwallet.api.domain.action.Action;
 import com.invivoo.vivwallet.api.domain.action.ActionRepository;
 import com.invivoo.vivwallet.api.domain.payment.PaymentRepository;
+import com.invivoo.vivwallet.api.infrastructure.lynx.LynxConnector;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -27,6 +28,8 @@ public class UserServiceTest {
     private ActionRepository actionRepository;
     @Mock
     private PaymentRepository paymentRepository;
+    @Mock
+    private LynxConnector lynxConnector;
 
     @Test
     public void should_return_a_balance_of_20_VIV_when_one_user_did_2_actions_of_10_VIV_not_paid() {
@@ -36,7 +39,7 @@ public class UserServiceTest {
         Action action2 = Action.builder().id((long) 2).vivAmount(10).valueDate(LocalDateTime.of(2020,1,1,0,0)).achiever(user).build();
         List<Action> notPaidActions = Arrays.asList(action1, action2);
         when(actionRepository.findAllByAchieverAndValueDateAfter(Mockito.any(User.class), Mockito.any(LocalDateTime.class))).thenReturn(notPaidActions);
-        UserService userService = new UserService(userRepository, actionRepository, paymentRepository);
+        UserService userService = new UserService(userRepository, actionRepository, paymentRepository, lynxConnector);
 
         //When
         long balance = userService.computeBalance(user);
@@ -53,7 +56,7 @@ public class UserServiceTest {
         Action action2 = Action.builder().id((long) 2).vivAmount(10).valueDate(LocalDateTime.of(2020,1,1,0,0)).achiever(user).build();
         List<Action> notPaidActions = Arrays.asList(action1, action2);
         when(actionRepository.findAllByAchieverAndValueDateAfter(Mockito.any(User.class), Mockito.any(LocalDateTime.class))).thenReturn(notPaidActions);
-        UserService userService = new UserService(userRepository, actionRepository, paymentRepository);
+        UserService userService = new UserService(userRepository, actionRepository, paymentRepository, lynxConnector);
 
         //When
         long balance = userService.computeBalance(user);
@@ -67,7 +70,7 @@ public class UserServiceTest {
         //Given
         User user = User.builder().id((long) 1).build();
         when(actionRepository.findAllByAchieverAndValueDateAfter(Mockito.any(User.class), Mockito.any(LocalDateTime.class))).thenReturn(Collections.emptyList());
-        UserService userService = new UserService(userRepository, actionRepository, paymentRepository);
+        UserService userService = new UserService(userRepository, actionRepository, paymentRepository, lynxConnector);
 
         //When
         long balance = userService.computeBalance(user);
@@ -79,7 +82,7 @@ public class UserServiceTest {
     @Test
     public void shouldCallFindByFullNameIgnoreCase_whenCallFindByUserName() {
         //Given
-        UserService userService = new UserService(userRepository, actionRepository, paymentRepository);
+        UserService userService = new UserService(userRepository, actionRepository, paymentRepository, lynxConnector);
         String fullName = "fullName";
 
         //When
@@ -88,5 +91,4 @@ public class UserServiceTest {
         //Then
         verify(userRepository, Mockito.times(1)).findByFullNameIgnoreCase(fullName);
     }
-
 }

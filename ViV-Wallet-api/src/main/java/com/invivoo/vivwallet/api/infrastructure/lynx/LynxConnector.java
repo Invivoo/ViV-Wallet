@@ -4,9 +4,13 @@ import com.invivoo.vivwallet.api.domain.action.Action;
 import com.invivoo.vivwallet.api.domain.action.ActionType;
 import com.invivoo.vivwallet.api.domain.role.Role;
 import com.invivoo.vivwallet.api.domain.role.RoleType;
+import com.invivoo.vivwallet.api.domain.user.User;
 import com.invivoo.vivwallet.api.infrastructure.lynx.mapper.ActivityToActionMapper;
+import com.invivoo.vivwallet.api.infrastructure.lynx.mapper.LynxUserToUserMapper;
 import com.invivoo.vivwallet.api.infrastructure.lynx.model.Activities;
 import com.invivoo.vivwallet.api.infrastructure.lynx.model.Activity;
+import com.invivoo.vivwallet.api.infrastructure.lynx.model.LynxUser;
+import com.invivoo.vivwallet.api.infrastructure.lynx.model.Users;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,17 +41,22 @@ public class LynxConnector {
     public static final List<ActionType> ACTION_TYPES_WITH_PAYMENT_DEPENDING_ON_ROLE_AND_HOUR = Arrays.asList(ActionType.TECHNICAL_ASSESSMENT, ActionType.COACHING);
     private final RestTemplate restTemplate;
     private String vivApiUrl;
+    private String userApiUrl;
     private final ActivityToActionMapper activityToActionMapper;
+    private final LynxUserToUserMapper lynxUserToUserMapper;
 
-    public LynxConnector(@Qualifier(LYNX_CONNECTOR_REST_TEMPLATE) RestTemplate restTemplate, @Value("${lynx.vivApiUrl}") String vivApiUrl, ActivityToActionMapper activityToActionMapper) {
+    public LynxConnector(@Qualifier(LYNX_CONNECTOR_REST_TEMPLATE) RestTemplate restTemplate, @Value("${lynx.vivApiUrl}") String vivApiUrl, @Value("${lynx.userApiUrl}") String userApiUrl, ActivityToActionMapper activityToActionMapper, LynxUserToUserMapper lynxUserToUserMapper) {
         this.restTemplate = restTemplate;
         this.vivApiUrl = vivApiUrl;
+        this.userApiUrl = userApiUrl;
         this.activityToActionMapper = activityToActionMapper;
+        this.lynxUserToUserMapper = lynxUserToUserMapper;
     }
 
     public List<Action> findActions() {
         List<Activity> activities = findActivities();
         return getActionsFromActivities(activities);
+
     }
 
     public List<Action> getActionsFromActivities(List<Activity> activities) {
@@ -105,5 +114,21 @@ public class LynxConnector {
                          .stream()
                          .map(Role::getType)
                          .allMatch(RoleType.CONSULTANT::equals);
+    }
+
+    public List<User> findUsers() {
+        return getLynxUsers().stream().map(lynxUserToUserMapper::convert).collect(Collectors.toList());
+    }
+
+    private List<LynxUser> getLynxUsers() {
+        UriComponents lynxUserUri = UriComponentsBuilder.fromHttpUrl(userApiUrl)
+                                                           .build();
+        ResponseEntity<Users> response = restTemplate.getForEntity(lynxUserUri.toString(), Users.class);
+        if (HttpStatus.OK != response.getStatusCode()) {
+            return Collections.emptyList();
+        }
+        return Optional.ofNullable(response.getBody())
+                       .map(Users::getUsers)
+                       .orElse(Collections.emptyList());
     }
 }

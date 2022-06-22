@@ -6,14 +6,17 @@ import com.invivoo.vivwallet.api.domain.expertise.Expertise;
 import com.invivoo.vivwallet.api.domain.payment.Payment;
 import com.invivoo.vivwallet.api.domain.payment.PaymentRepository;
 import com.invivoo.vivwallet.api.domain.role.RoleType;
+import com.invivoo.vivwallet.api.infrastructure.lynx.LynxConnector;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @PersistenceContext
@@ -22,11 +25,13 @@ public class UserService {
     private final UserRepository userRepository;
     private final ActionRepository actionRepository;
     private final PaymentRepository paymentRepository;
+    private final LynxConnector lynxConnector;
 
-    public UserService(UserRepository userRepository, ActionRepository actionRepository, PaymentRepository paymentRepository) {
+    public UserService(UserRepository userRepository, ActionRepository actionRepository, PaymentRepository paymentRepository, LynxConnector lynxConnector) {
         this.userRepository = userRepository;
         this.actionRepository = actionRepository;
         this.paymentRepository = paymentRepository;
+        this.lynxConnector = lynxConnector;
     }
 
     public List<User> findAll() {
@@ -103,5 +108,20 @@ public class UserService {
 
     private String getFullNameFromX4bId(String x4bId) {
         return x4bId.replaceAll("[0-9]", "").trim();
+    }
+
+    @Transactional
+	public List<User> updateFromLynx() {
+        return updateFromLynx(lynxConnector.findUsers());
+	}
+
+    private List<User> updateFromLynx(List<User> users) {
+        List<User> usersToAdd = users.stream()
+                                     .filter(user -> !userRepository.existsById(user.getId()))
+                                     .collect(Collectors.toList());
+
+        userRepository.saveAll(usersToAdd);
+
+        return usersToAdd;
     }
 }

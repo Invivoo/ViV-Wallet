@@ -5,6 +5,7 @@ import com.invivoo.vivwallet.api.domain.action.Action;
 import com.invivoo.vivwallet.api.domain.user.User;
 import com.invivoo.vivwallet.api.domain.user.UserService;
 import com.invivoo.vivwallet.api.infrastructure.lynx.mapper.ActivityToActionMapper;
+import com.invivoo.vivwallet.api.infrastructure.lynx.mapper.LynxUserToUserMapper;
 import com.invivoo.vivwallet.api.infrastructure.lynx.model.Activity;
 import com.invivoo.vivwallet.api.infrastructure.lynx.model.ActivityType;
 import org.junit.Assert;
@@ -59,7 +60,7 @@ public class LynxConnectorTest {
     @Test
     public void should_return_activities_when_get_from_lynx() throws IOException, URISyntaxException {
         // given
-        LynxConnector lynxConnector = new LynxConnector(restTemplate, "http://vivApiUrl", null);
+        LynxConnector lynxConnector = new LynxConnector(restTemplate, "http://vivApiUrl", "http://userApiUrl", null, null);
 
         Path lynxResponse = Paths.get(Objects.requireNonNull(getClass().getClassLoader().getResource("lynx-response.json")).toURI());
         String expectedLynxResponse = Files.lines(lynxResponse).collect(Collectors.joining());
@@ -98,7 +99,7 @@ public class LynxConnectorTest {
         // Given
         when(userService.findByFullName("Collaborateur1")).thenReturn(
                 Optional.of(new User(1L, "Collaborateur1", "Collaborateur1", emptySet(), emptySet())));
-        LynxConnector lynxConnector = new LynxConnector(restTemplate, "http://vivApiUrl", new ActivityToActionMapper(userService));
+        LynxConnector lynxConnector = new LynxConnector(restTemplate, "http://vivApiUrl", "http://userApiUrl", new ActivityToActionMapper(userService), new LynxUserToUserMapper());
 
         Path lynxResponse = Paths.get(Objects.requireNonNull(getClass().getClassLoader().getResource("lynx-response-winning-coaching-1-collaborator.json")).toURI());
         String expectedLynxResponse = Files.lines(lynxResponse).collect(Collectors.joining());
@@ -118,7 +119,7 @@ public class LynxConnectorTest {
         when(userService.findByFullName(collaborator1.getFullName())).thenReturn(Optional.of(collaborator1));
         User collaborator2 = new User(2L, "Collaborateur2", "Collaborateur2", emptySet(), emptySet());
         when(userService.findByFullName(collaborator2.getFullName())).thenReturn(Optional.of(collaborator2));
-        LynxConnector lynxConnector = new LynxConnector(restTemplate, "http://vivApiUrl", new ActivityToActionMapper(userService));
+        LynxConnector lynxConnector = new LynxConnector(restTemplate, "http://vivApiUrl", "http://userApiUrl", new ActivityToActionMapper(userService), new LynxUserToUserMapper());
 
         Path lynxResponse = Paths.get(Objects.requireNonNull(getClass().getClassLoader().getResource("lynx-response-winning-coaching-2-collaborators.json")).toURI());
         String expectedLynxResponse = Files.lines(lynxResponse).collect(Collectors.joining());
