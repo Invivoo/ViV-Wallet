@@ -1,9 +1,13 @@
 package com.invivoo.vivwallet.api.infrastructure.lynx;
 
 import com.invivoo.vivwallet.api.domain.action.Action;
+import com.invivoo.vivwallet.api.domain.user.User;
 import com.invivoo.vivwallet.api.infrastructure.lynx.mapper.ActivityToActionMapper;
+import com.invivoo.vivwallet.api.infrastructure.lynx.mapper.LynxUserToUserMapper;
 import com.invivoo.vivwallet.api.infrastructure.lynx.model.Activities;
 import com.invivoo.vivwallet.api.infrastructure.lynx.model.Activity;
+import com.invivoo.vivwallet.api.infrastructure.lynx.model.LynxUser;
+import com.invivoo.vivwallet.api.infrastructure.lynx.model.LynxUsersResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,20 +33,27 @@ public class LynxConnector {
     public static final String ACTIVITY_HELD_STATUS = "Held";
     public static final String ACTIVITY_IS_OK = "OK";
     private final RestTemplate restTemplate;
-    private String vivApiUrl;
     private final ActivityToActionMapper activityToActionMapper;
+    private final LynxUserToUserMapper lynxUserToUserMapper;
+    private final String vivApiUrl;
+    private final String userApiUrl;
 
     public LynxConnector(@Qualifier(LYNX_CONNECTOR_REST_TEMPLATE) RestTemplate restTemplate,
                          @Value("${lynx.vivApiUrl}") String vivApiUrl,
-                         ActivityToActionMapper activityToActionMapper) {
+                         @Value("${lynx.userApiUrl}") String userApiUrl,
+                         ActivityToActionMapper activityToActionMapper,
+                         LynxUserToUserMapper lynxUserToUserMapper) {
         this.restTemplate = restTemplate;
         this.vivApiUrl = vivApiUrl;
+        this.userApiUrl = userApiUrl;
         this.activityToActionMapper = activityToActionMapper;
+        this.lynxUserToUserMapper = lynxUserToUserMapper;
     }
 
     public List<Action> findActions() {
         List<Activity> activities = findActivities();
         return getActionsFromActivities(activities);
+
     }
 
     public List<Action> getActionsFromActivities(List<Activity> activities) {
@@ -108,4 +119,21 @@ public class LynxConnector {
         action.setVivAmount(action.getType().getValue() / count);
     }
 
+    public List<User> findUsers() {
+        return getLynxUsers().stream()
+                             .map(lynxUserToUserMapper::convert)
+                             .collect(Collectors.toList());
+    }
+
+    private List<LynxUser> getLynxUsers() {
+        UriComponents lynxUserUri = UriComponentsBuilder.fromHttpUrl(userApiUrl)
+                                                        .build();
+        ResponseEntity<LynxUsersResponse> response = restTemplate.getForEntity(lynxUserUri.toString(), LynxUsersResponse.class);
+        if (HttpStatus.OK != response.getStatusCode()) {
+            return Collections.emptyList();
+        }
+        return Optional.ofNullable(response.getBody())
+                       .map(LynxUsersResponse::getUsers)
+                       .orElse(Collections.emptyList());
+    }
 }
