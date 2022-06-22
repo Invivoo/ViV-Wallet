@@ -10,15 +10,8 @@ import com.invivoo.vivwallet.api.interfaces.actions.ActionDto;
 import com.invivoo.vivwallet.api.interfaces.payments.PaymentDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.Comparator;
@@ -141,6 +134,16 @@ public class UsersController {
     @GetMapping("/{id}/payments")
     public ResponseEntity<List<PaymentDto>> getPayments(@PathVariable("id") Long userId) {
         return ResponseEntity.ok(paymentService.findAllByReceiver(userId));
+    }
+
+    @PostMapping("/updateFromLynx")
+    @PreAuthorize("hasAnyAuthority('API_USER')")
+    public ResponseEntity<List<UserDto>> updateFromLynx() {
+        List<UserDto> users = userService.updateFromLynx()
+                                         .stream()
+                                         .map(UserDto::createFromUser)
+                                         .collect(Collectors.toList());
+        return ResponseEntity.ok(users);
     }
 
     private URI getLocation(User savedUser) {

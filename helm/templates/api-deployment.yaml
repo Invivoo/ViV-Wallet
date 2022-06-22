@@ -19,22 +19,24 @@ spec:
             - name: {{ .Release.Name }}-{{ .Values.api.name }}-pod
               image: {{ tpl .Values.api.image . }}
               env:
-              - name: DNS
-                value: "kube-dns.kube-system"
-              - name: X4BAuthPublicKeyUrl
-                value: {{ .Values.x4bAuthPublicKeyUrl }}
-              - name: LynxApiUrl
-                value: {{ .Values.lynxApiUrl }}
-              - name: SqlServerUrl
-                value: {{ .Values.sqlServerUrl }}
-              - name: SqlServerUsername
-                value: {{ .Values.sqlServerUsername }}
-              - name: SqlServerPassword
-                valueFrom:
-                  secretKeyRef:
-                    name: {{ .Release.Name }}-secret
-                    key: sqlServerPassword
-              - name: ApiKey
+                - name: DNS
+                  value: "kube-dns.kube-system"
+                - name: X4BAuthPublicKeyUrl
+                  value: { { .Values.x4bAuthPublicKeyUrl } }
+                - name: LynxApiUrl
+                  value: { { .Values.lynxApiUrl } }
+                - name: LynxUserApiUrl
+                  value: { { .Values.lynxUserApiUrl } }
+                - name: SqlServerUrl
+                  value: { { .Values.sqlServerUrl } }
+                - name: SqlServerUsername
+                  value: { { .Values.sqlServerUsername } }
+                - name: SqlServerPassword
+                  valueFrom:
+                    secretKeyRef:
+                      name: { { .Release.Name } }-secret
+                      key: sqlServerPassword
+                - name: ApiKey
                 valueFrom:
                   secretKeyRef:
                     name: {{ .Release.Name }}-secret

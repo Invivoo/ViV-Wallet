@@ -16,4 +16,5 @@ x4b:
         issuer: X4B
         publicKeyUrl: https://x4b.uat.xcomponent.com/authentication/api/Configurations/Key
 lynx:
-    vivApiUrl: TO_BE_DEFINED
+    vivApiUrl: http://172.18.0.11:9000/api/report/getinfo?name=viv&begin_date=2022-01-01
+    userApiUrl: http://172.18.0.11:9000/api/report/getinfoformat?name=report&shortcut=consultants

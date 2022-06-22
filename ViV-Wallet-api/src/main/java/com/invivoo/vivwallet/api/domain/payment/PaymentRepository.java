@@ -13,7 +13,5 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
 
     List<Payment> findAllByReceiverOrderByDateDesc(User receiver);
 
-    List<Payment> findAllByReceiverOrderByDateAsc(User receiver);
-
     Optional<Payment> findByDateAndReceiver(LocalDate paymentDate, User user);
 }

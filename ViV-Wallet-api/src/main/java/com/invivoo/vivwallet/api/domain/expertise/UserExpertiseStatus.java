@@ -5,6 +5,7 @@ import java.util.stream.Stream;
 
 public enum UserExpertiseStatus {
     CONSULTANT_SENIOR_IN_ONBOARDING("Consultant Senior en cours d'onboarding"),
+    CONSULTANT("Consultant"),
     CONSULTANT_SENIOR("Consultant Senior"),
     MANAGER("Manager"),
     MANAGER_SENIOR("Manager Senior");

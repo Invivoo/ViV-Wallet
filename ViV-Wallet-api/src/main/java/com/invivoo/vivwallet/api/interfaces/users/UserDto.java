@@ -26,6 +26,7 @@ public class UserDto {
 
     private Long id;
     private String fullName;
+    private String email;
     private ExpertiseDto expertise;
     private UserExpertiseStatus status;
     private LocalDate startDate;
@@ -35,7 +36,8 @@ public class UserDto {
     public static UserDto createFromUser(User user) {
         UserDtoBuilder builder = UserDto.builder()
                                         .id(user.getId())
-                                        .fullName(user.getFullName());
+                                        .fullName(user.getFullName())
+                                        .email(user.getEmail());
         Optional.ofNullable(user.getRoles())
                 .ifPresent(roles -> builder.roles(user.getRoles().stream().map(Role::getType).collect(Collectors.toList())));
         LocalDate now = LocalDate.now();
