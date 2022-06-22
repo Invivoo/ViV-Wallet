@@ -1,6 +1,5 @@
 package com.invivoo.vivwallet.api.domain.payment;
 
-import com.invivoo.vivwallet.api.domain.action.ActionRepository;
 import com.invivoo.vivwallet.api.domain.user.User;
 import com.invivoo.vivwallet.api.domain.user.UserRepository;
 import com.invivoo.vivwallet.api.interfaces.payments.PaymentDto;
@@ -19,7 +18,6 @@ public class PaymentService {
 
     private final UserRepository userRepository;
     private final PaymentRepository paymentRepository;
-    private final ActionRepository actionRepository;
 
     public Optional<Payment> findById(Long paymentId) {
         return paymentRepository.findById(paymentId);

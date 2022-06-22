@@ -37,11 +37,14 @@ public class AuthorizationsControllerTest {
     private UserService userService;
 
     @Test
-    public void shouldGetAuthorizations_whenAuthorize() throws Exception {
+    public void shouldGetAuthorizations_whenAuthorizeWithX4BId() throws Exception {
         //given
         Mockito.when(jwtTokenProvider.resolveToken(Mockito.any(HttpServletRequest.class))).thenCallRealMethod();
 
         DecodedJWT decodedJWT = Mockito.mock(DecodedJWT.class);
+        Claim vivWalletClaims = Mockito.mock(Claim.class);
+        Mockito.when(vivWalletClaims.asString()).thenReturn("{\"userId\":314,\"roles\":[\"EXPERTISE_MANAGER\"]}");
+        Mockito.when(decodedJWT.getClaim("viv-wallet")).thenReturn(vivWalletClaims);
         Claim userClaim = Mockito.mock(Claim.class);
         Mockito.when(userClaim.asString()).thenReturn("John DOE");
         Mockito.when(decodedJWT.getClaim("user")).thenReturn(userClaim);
@@ -52,9 +55,39 @@ public class AuthorizationsControllerTest {
 
         //when
         ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/api/Authorizations")
-                                                                                 .header("Authorization",
-                                                                                         "Bearer jwt"))
-                                                  .andDo(MockMvcResultHandlers.print());
+                                                                            .header("Authorization",
+                                                                                    "Bearer jwt"))
+                                             .andDo(MockMvcResultHandlers.print());
+
+        //then
+        String expectedAuthorizations = mapper.writeValueAsString(AuthorizationsResponse.builder().roles(List.of()).build());
+        resultActions.andExpect(MockMvcResultMatchers.status().isOk())
+                     .andExpect(MockMvcResultMatchers.content().string(expectedAuthorizations));
+    }
+
+    @Test
+    public void shouldGetAuthorizations_whenAuthorizeWithEmail() throws Exception {
+        //given
+        Mockito.when(jwtTokenProvider.resolveToken(Mockito.any(HttpServletRequest.class))).thenCallRealMethod();
+
+        DecodedJWT decodedJWT = Mockito.mock(DecodedJWT.class);
+        Claim vivWalletClaims = Mockito.mock(Claim.class);
+        Mockito.when(vivWalletClaims.asString()).thenReturn("{\"userId\":314,\"roles\":[\"EXPERTISE_MANAGER\"]}");
+        Mockito.when(decodedJWT.getClaim("viv-wallet")).thenReturn(vivWalletClaims);
+        Claim emailClaim = Mockito.mock(Claim.class);
+        Mockito.when(emailClaim.asString()).thenReturn("john.doe@invivoo.com");
+        Mockito.when(decodedJWT.getClaim(AuthorizationsController.HTTP_SCHEMAS_XMLSOAP_ORG_WS_2005_05_IDENTITY_CLAIMS_EMAILADDRESS))
+               .thenReturn(emailClaim);
+
+        Mockito.when(jwtTokenProvider.verify("jwt")).thenReturn(decodedJWT);
+        Mockito.when(userService.findByEmail("john.doe@invivoo.com"))
+               .thenReturn(Optional.of(User.builder().build()));
+
+        //when
+        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/api/Authorizations")
+                                                                            .header("Authorization",
+                                                                                    "Bearer jwt"))
+                                             .andDo(MockMvcResultHandlers.print());
 
         //then
         String expectedAuthorizations = mapper.writeValueAsString(AuthorizationsResponse.builder().roles(List.of()).build());

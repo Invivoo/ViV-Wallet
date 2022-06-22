@@ -4,8 +4,9 @@ import com.invivoo.vivwallet.api.domain.action.Action;
 import com.invivoo.vivwallet.api.domain.action.ActionStatus;
 import com.invivoo.vivwallet.api.domain.action.ActionType;
 import com.invivoo.vivwallet.api.domain.user.User;
-import com.invivoo.vivwallet.api.domain.user.UserService;
+import com.invivoo.vivwallet.api.domain.user.UserRepository;
 import com.invivoo.vivwallet.api.infrastructure.lynx.model.Activity;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -15,15 +16,18 @@ import java.util.Optional;
 @Service
 public class ActivityToActionMapper {
 
-    private final UserService userService;
+    private final UserRepository userRepository;
 
-    public ActivityToActionMapper(UserService userService) {
-        this.userService = userService;
+    public ActivityToActionMapper(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     public Optional<Action> convert(Activity activity) {
         String owner = getCleanedOwnerFullName(activity);
-        Optional<User> achieverOpt = userService.findByFullName(owner);
+        Optional<User> achieverOpt = Optional.ofNullable(activity.getParticipantEmail())
+                                             .filter(StringUtils::isNotBlank)
+                                             .flatMap(userRepository::findByEmail)
+                                             .or(() -> userRepository.findByFullNameTrimIgnoreCase(owner));
         if (achieverOpt.isEmpty()) {
             return Optional.empty();
         }
@@ -147,11 +151,16 @@ public class ActivityToActionMapper {
                 break;
             case AUDIT_CIR_PHASE_1:
                 builder.type(ActionType.AUDIT_CIR_PHASE_1);
-                builder.context(String.format("Audit R&D - phase 1 : %s\nRéponse à un questionnaire et éventuellement entretien téléphonique pour valider la compréhension des questions", activity.getComment()));
+                builder.context(String.format(
+                        "Audit R&D - phase 1 : %s\nRéponse à un questionnaire et éventuellement entretien téléphonique pour valider la "
+                        + "compréhension des questions",
+                        activity.getComment()));
                 break;
             case AUDIT_CIR_PHASE_2:
                 builder.type(ActionType.AUDIT_CIR_PHASE_2);
-                builder.context(String.format("Audit R&D - phase 2 : %s\nRelecture de la partie concernant l’intervenant sur le rapport technique", activity.getComment()));
+                builder.context(String.format(
+                        "Audit R&D - phase 2 : %s\nRelecture de la partie concernant l’intervenant sur le rapport technique",
+                        activity.getComment()));
                 break;
             case DEV_SMALL:
                 builder.type(ActionType.PROJET_FIL_ROUGE_TICKET_S);

@@ -7,20 +7,22 @@ public enum Expertise {
     PROGRAMMATION_C_PLUS_PLUS("Programmation C++"),
     PROGRAMMATION_PYTHON("Programmation Python"),
     FRONT_END("Front-End"),
-    MACHINE_LEARNING("Machine Learning"),
-    MODELISATION_ET_PRICING("Modélisation & Pricing"),
+    MODELISATION_ET_PRICING("Front-Office"),
     PROGRAMMATION_C_SHARP("Programmation C#"),
     PROGRAMMATION_JAVA("Programmation Java"),
     ARCHITECTURE_ET_DESIGN("Architecture & Design"),
     RISQUES("Risques"),
-    BIG_DATA("Big Data"),
+    BIG_DATA("Big Data Engineering"),
     POST_TRADE("Post-Trade"),
+    MACHINE_LEARNING("Data Science"),
+    ANALYTICS_ET_BI("Analytics & BI"),
     MOA("MOA Transverse"),
     AGILITE_ET_CRAFT("Agilité & Craft"),
     DEVOPS("Devops"),
-    SUPPORT_ET_PRODUCTION_APPLICATIVE("Support & Production Applicative");
+    SUPPORT_ET_PRODUCTION_APPLICATIVE("Support & Production Applicative"),
+    UNKNOWN_EXPERTISE("Expertise inconnue");
 
-    private String expertiseName;
+    private final String expertiseName;
 
     Expertise(String expertiseName) {
         this.expertiseName = expertiseName;

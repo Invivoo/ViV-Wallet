@@ -1,5 +1,6 @@
 package com.invivoo.vivwallet.api.interfaces.authorizations;
 
+import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.invivoo.vivwallet.api.application.security.JWTTokenProvider;
 import com.invivoo.vivwallet.api.domain.role.Role;
@@ -23,6 +24,9 @@ import java.util.stream.Collectors;
 public class AuthorizationsController {
 
     public static final String API_V_1_AUTH = "/api/Authorizations";
+    public static final String HTTP_SCHEMAS_XMLSOAP_ORG_WS_2005_05_IDENTITY_CLAIMS_EMAILADDRESS = "http://schemas.xmlsoap"
+                                                                                                  + ".org/ws/2005/05/identity/claims"
+                                                                                                  + "/emailaddress";
 
     private final JWTTokenProvider jwtTokenProvider;
     private final UserService userService;
@@ -33,17 +37,21 @@ public class AuthorizationsController {
     }
 
     @PostMapping
-    public ResponseEntity<AuthorizationsResponse> authorize(HttpServletRequest httpServletRequest) throws InvalidKeySpecException, NoSuchAlgorithmException {
+    public ResponseEntity<AuthorizationsResponse> authorize(HttpServletRequest httpServletRequest) throws InvalidKeySpecException,
+                                                                                                          NoSuchAlgorithmException {
         String token = jwtTokenProvider.resolveToken(httpServletRequest);
         DecodedJWT verify = jwtTokenProvider.verify(token);
-        String x4bId = verify.getClaim("user").asString();
-        return userService.findByX4bIdOrByFullName(x4bId)
-                   .map(user -> AuthorizationsResponse.builder()
-                                                      .userId(user.getId())
-                                                      .roles(getRolesAsString(user.getRoles()))
-                                                      .build())
-                   .map(ResponseEntity::ok)
-                   .orElseGet(ResponseEntity.notFound()::build);
+        Optional<String> x4bId = Optional.ofNullable(verify.getClaim("user")).map(Claim::asString);
+        Optional<String> emailFromClaims = Optional.ofNullable(verify.getClaim(
+                HTTP_SCHEMAS_XMLSOAP_ORG_WS_2005_05_IDENTITY_CLAIMS_EMAILADDRESS)).map(Claim::asString);
+        return emailFromClaims.flatMap(userService::findByEmail)
+                              .or(() -> x4bId.flatMap(userService::findByX4bIdOrByFullName))
+                              .map(user -> AuthorizationsResponse.builder()
+                                                                 .userId(user.getId())
+                                                                 .roles(getRolesAsString(user.getRoles()))
+                                                                 .build())
+                              .map(ResponseEntity::ok)
+                              .orElseGet(ResponseEntity.notFound()::build);
     }
 
     private List<String> getRolesAsString(Set<Role> roles) {

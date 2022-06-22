@@ -26,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -39,6 +40,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -46,6 +48,8 @@ import java.util.stream.Collectors;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Data
 @RunWith(SpringRunner.class)
@@ -128,9 +132,9 @@ public class UsersControllerTest {
                                                   .andDo(MockMvcResultHandlers.print());
         //then
         verify(userService, Mockito.times(1)).save(testUser);
-        resultActions.andExpect(MockMvcResultMatchers.status().isCreated())
+        resultActions.andExpect(status().isCreated())
                      .andExpect(MockMvcResultMatchers.redirectedUrl(String.format("/api/v1/users/%s", testUser.getId())))
-                     .andExpect(MockMvcResultMatchers.content().string(mapper.writeValueAsString(UserDto.createFromUser(testUser))));
+                     .andExpect(content().string(mapper.writeValueAsString(UserDto.createFromUser(testUser))));
     }
 
     @Test
@@ -184,7 +188,7 @@ public class UsersControllerTest {
                                                   .andDo(MockMvcResultHandlers.print());
         //then
         verify(userService, Mockito.times(1)).delete(testUser);
-        resultActions.andExpect(MockMvcResultMatchers.status().isOk());
+        resultActions.andExpect(status().isOk());
     }
 
     @Test
@@ -202,7 +206,7 @@ public class UsersControllerTest {
 
         //Then
         verify(userService).computeBalance(testUser);
-        resultActions.andExpect(MockMvcResultMatchers.status().isOk())
+        resultActions.andExpect(status().isOk())
                      .andExpect(MockMvcResultMatchers.jsonPath("$.value", Matchers.is(20)));
     }
 
@@ -351,17 +355,35 @@ public class UsersControllerTest {
                                                                        + "mots\",\"comment\":\"This is a comment\","
                                                                        + "\"creationDate\":\"2020-01-01T12:00:00\",\"valueDate\":null,"
                                                                        + "\"payment\":15,\"status\":\"PAYABLE\",\"achiever\":{\"id\":1,"
-                                                                       + "\"fullName\":\"User 1\","
+                                                                       + "\"fullName\":\"User 1\",\"email\":null,"
                                                                        + "\"expertise\":{\"id\":\"PROGRAMMATION_JAVA\","
                                                                        + "\"expertiseName\":\"Programmation Java\"},\"status\":null,"
                                                                        + "\"startDate\":null,\"endDate\":null,\"roles\":[]}},{\"id\":2,"
                                                                        + "\"userId\":1,\"type\":\"Coaching\",\"comment\":\"This is a "
                                                                        + "comment\",\"creationDate\":\"2021-02-01T12:00:00\","
                                                                        + "\"valueDate\":null,\"payment\":10,\"status\":\"NON_PAYABLE\","
-                                                                       + "\"achiever\":{\"id\":1,\"fullName\":\"User 1\","
+                                                                       + "\"achiever\":{\"id\":1,\"fullName\":\"User 1\",\"email\":null,"
                                                                        + "\"expertise\":{\"id\":\"PROGRAMMATION_JAVA\","
                                                                        + "\"expertiseName\":\"Programmation Java\"},\"status\":null,"
                                                                        + "\"startDate\":null,\"endDate\":null,\"roles\":[]}}]"));
+    }
+
+    @Test
+    @WithMockUser(username = "Poney PONEY", authorities = {"API_USER"})
+    public void whenPostUpdateFromLynx_shouldReturnListUser() throws Exception {
+        // GIVEN
+        when(userService.updateFromLynx()).thenReturn(Collections.singletonList(TEST_USER_1));
+
+        // WHEN
+        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/users/updateFromLynx"));
+
+        // THEN
+        List<UserDto> expectedUsers = Collections.singletonList(UserDto.createFromUser(TEST_USER_1));
+        resultActions.andExpect(status().isOk())
+                     .andExpect(content().string(mapper.writeValueAsString(expectedUsers)));
+
+        verify(userService).updateFromLynx();
+
     }
 
     private Action anNonPayableAction(User user) {
