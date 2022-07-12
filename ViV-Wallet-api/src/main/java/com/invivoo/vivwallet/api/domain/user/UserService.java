@@ -48,8 +48,7 @@ public class UserService {
 
     public Optional<User> findByFullName(String fullName) {
         return Optional.ofNullable(fullName)
-                       .map(String::trim)
-                       .flatMap(userRepository::findByFullNameIgnoreCase);
+                       .flatMap(userRepository::findByFullNameTrimIgnoreCase);
     }
 
     public Optional<User> findByX4bIdOrByFullName(String x4bId) {

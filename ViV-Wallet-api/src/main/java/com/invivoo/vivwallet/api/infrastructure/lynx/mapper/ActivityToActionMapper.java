@@ -3,6 +3,7 @@ package com.invivoo.vivwallet.api.infrastructure.lynx.mapper;
 import com.invivoo.vivwallet.api.domain.action.Action;
 import com.invivoo.vivwallet.api.domain.action.ActionType;
 import com.invivoo.vivwallet.api.domain.user.User;
+import com.invivoo.vivwallet.api.domain.user.UserRepository;
 import com.invivoo.vivwallet.api.domain.user.UserService;
 import com.invivoo.vivwallet.api.infrastructure.lynx.model.Activity;
 import org.springframework.stereotype.Service;
@@ -14,15 +15,15 @@ import java.util.Optional;
 @Service
 public class ActivityToActionMapper {
 
-    private final UserService userService;
+    private final UserRepository userRepository;
 
-    public ActivityToActionMapper(UserService userService) {
-        this.userService = userService;
+    public ActivityToActionMapper(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     public Optional<Action> convert(Activity activity) {
         String owner = getCleanedOwnerFullName(activity);
-        Optional<User> achieverOpt = userService.findByFullName(owner);
+        Optional<User> achieverOpt = userRepository.findByFullNameTrimIgnoreCase(owner);
         if (achieverOpt.isEmpty()) {
             return Optional.empty();
         }
