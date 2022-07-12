@@ -89,6 +89,6 @@ public class UserServiceTest {
         userService.findByFullName(fullName);
 
         //Then
-        verify(userRepository, Mockito.times(1)).findByFullNameIgnoreCase(fullName);
+        verify(userRepository, Mockito.times(1)).findByFullNameTrimIgnoreCase(fullName);
     }
 }
