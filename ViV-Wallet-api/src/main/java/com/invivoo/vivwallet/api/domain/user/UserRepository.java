@@ -23,4 +23,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findFirstByRolesType(RoleType type);
 
+    List<User> findByEmailNotNullAndIn(List<String> emails);
 }

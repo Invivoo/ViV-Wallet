@@ -117,7 +117,9 @@ public class LynxConnector {
     }
 
     public List<User> findUsers() {
-        return getLynxUsers().stream().map(lynxUserToUserMapper::convert).collect(Collectors.toList());
+        return getLynxUsers().stream()
+                .map(lynxUserToUserMapper::convert)
+                .collect(Collectors.toList());
     }
 
     private List<LynxUser> getLynxUsers() {

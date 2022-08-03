@@ -98,6 +98,11 @@ public class UserService {
         return user.getVivInitialBalance() + userBalanceFromActionsInVivAfterInitialBalanceDate - userPaymentsAmountInViv;
     }
 
+    @Transactional
+	public List<User> updateFromLynx() {
+        return updateFromLynx(lynxConnector.findUsers());
+	}
+
     private void updateRelatedEntitiesWithUser(User user) {
         Optional.ofNullable(user.getRoles())
                 .ifPresent(roles -> roles.forEach(r -> r.setUser(user)));
@@ -109,18 +114,14 @@ public class UserService {
         return x4bId.replaceAll("[0-9]", "").trim();
     }
 
-    @Transactional
-	public List<User> updateFromLynx() {
-        return updateFromLynx(lynxConnector.findUsers());
-	}
-
     private List<User> updateFromLynx(List<User> users) {
+        List<String> existingEmails = userRepository.findByEmailNotNullAndIn(users.stream().map(User::getEmail).collect(Collectors.toList()))
+                .stream()
+                .map(User::getEmail)
+                .collect(Collectors.toList());
         List<User> usersToAdd = users.stream()
-                                     .filter(user -> !userRepository.existsById(user.getId()))
+                                     .filter(user -> !existingEmails.contains(user.getEmail()))
                                      .collect(Collectors.toList());
-
-        userRepository.saveAll(usersToAdd);
-
-        return usersToAdd;
+        return userRepository.saveAll(usersToAdd);
     }
 }

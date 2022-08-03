@@ -34,6 +34,8 @@ public class User {
     private String x4bId;
     @Column(unique = true)
     private String fullName;
+
+    private String email;
     @OneToMany(
             mappedBy = "user",
             cascade = CascadeType.ALL,
