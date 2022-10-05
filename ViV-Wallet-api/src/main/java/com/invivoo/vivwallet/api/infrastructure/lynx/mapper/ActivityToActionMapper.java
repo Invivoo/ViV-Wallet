@@ -145,11 +145,11 @@ public class ActivityToActionMapper {
                 break;
             case AUDIT_CIR_PHASE_1:
                 builder.type(ActionType.AUDIT_CIR_PHASE_1);
-                builder.context(String.format("Audit CIR - phase 1 : %s\nRéponse à un questionnaire et éventuellement entretien téléphonique pour valider la compréhension des questions", activity.getComment()));
+                builder.context(String.format("Audit R&D - phase 1 : %s\nRéponse à un questionnaire et éventuellement entretien téléphonique pour valider la compréhension des questions", activity.getComment()));
                 break;
             case AUDIT_CIR_PHASE_2:
                 builder.type(ActionType.AUDIT_CIR_PHASE_2);
-                builder.context(String.format("Audit CIR - phase 2 : %s\nRelecture de la partie concernant l’intervenant sur le rapport technique", activity.getComment()));
+                builder.context(String.format("Audit R&D - phase 2 : %s\nRelecture de la partie concernant l’intervenant sur le rapport technique", activity.getComment()));
                 break;
             case DEV_SMALL:
                 builder.type(ActionType.PROJET_FIL_ROUGE_TICKET_S);
