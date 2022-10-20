@@ -128,7 +128,6 @@ describe("BalanceService", () => {
         const postedPayment: PaymentPost = {
             receiverId: "userId",
             date: new Date(2020, 1, 1),
-            actionIds: ["1", "2", "3"],
             vivAmount: 200,
         };
         const result = true;
