@@ -68,4 +68,8 @@ export class WalletService extends ServiceBase {
     async saveUserPayment(payment: PaymentPost): Promise<Object> {
         return (await this.http.post<boolean>("payments", payment)).data;
     }
+
+    async deleteUserPayment(paymentId: string) {
+        return this.http.delete<{}>(`payments/${paymentId}`);
+    }
 }
