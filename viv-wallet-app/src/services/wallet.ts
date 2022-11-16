@@ -40,7 +40,7 @@ export class WalletService extends ServiceBase {
             ...rawAction,
             creationDate: new Date(rawAction.creationDate),
             valueDate: new Date(rawAction.valueDate),
-            paymentDate: new Date(rawAction.paymentDate),
+            paymentDate: rawAction.paymentDate ? new Date(rawAction.paymentDate) : undefined,
             status: PaymentStatus[rawAction.status],
         }));
     }
@@ -71,5 +71,17 @@ export class WalletService extends ServiceBase {
 
     async deleteUserPayment(paymentId: string) {
         return this.http.delete<{}>(`payments/${paymentId}`);
+    }
+
+    async saveActions(userId: string, actions: Action[]): Promise<Object> {
+        const rawActions = actions.map((e) => ({
+            ...e,
+            creationDate: e.creationDate.toISOString(),
+            valueDate: e.valueDate.toISOString(),
+            paymentDate: e.paymentDate ? e.paymentDate.toISOString : undefined,
+            status: e.status.toString(),
+        }));
+        console.warn(userId, rawActions);
+        return (await this.http.post<RawAction[]>(`/users/${userId}/actions`, rawActions)).data;
     }
 }

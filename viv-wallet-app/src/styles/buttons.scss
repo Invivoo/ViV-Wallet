@@ -13,8 +13,7 @@
         cursor: pointer;
     }
     &:disabled {
-        background: $white;
-        color: $primary-700;
+        opacity: 0.7;
     }
     &:hover:enabled,
     &:hover:not(button) {
@@ -41,8 +40,7 @@
         cursor: pointer;
     }
     &:disabled {
-        background: $white;
-        color: $red-700;
+        opacity: 0.7;
     }
     &:hover:enabled,
     &:hover:not(button) {

@@ -11,17 +11,7 @@
                     />
                     <illustration />
                 </div>
-                <check-roles :roles="adminOnly">
-                    <div>
-                        <router-link
-                            v-if="shouldDisplayPayButton()"
-                            class="primary-button payment-btn"
-                            :to="{ path: `/payment/${user.id}` }"
-                            >Payer maintenant</router-link
-                        >
-                    </div>
-                </check-roles>
-                <actions-block :actions="actions" />
+                <actions-block :user-id="userId" :actions="actions" />
                 <payment-history-block :user-id="userId" @paymentDeleted="onPaymentDelete" />
             </check-roles>
         </loading>
@@ -115,10 +105,5 @@ export default defineComponent({
 .header {
     display: flex;
     justify-content: space-between;
-}
-
-.payment-btn {
-    float: right;
-    margin-top: $m-6;
 }
 </style>
