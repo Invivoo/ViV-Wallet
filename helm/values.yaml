@@ -61,6 +61,7 @@ webapp:
     image: "xcomponent/viv-wallet-webapp:{{ .Values.sha1 }}"
     replicaCount: 1
     minReadySeconds: 10
+    maintenance: false
 
 ingress:
     name: ingress

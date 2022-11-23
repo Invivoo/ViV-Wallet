@@ -22,6 +22,9 @@ spec:
             containers:
             - name: {{ .Release.Name }}-{{ .Values.webapp.name }}-pod
               image: {{ tpl .Values.webapp.image . }}
+              env: 
+              - name: VUE_APP_MAINTENANCE_MODE
+                value: {{ .Values.webapp.maintenance }}
               {{- include "resources.small" . | nindent 14 }}
               imagePullPolicy: Always
               ports:
