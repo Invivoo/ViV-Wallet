@@ -7,4 +7,5 @@ data:
   config.js: |
     window.configs = {
         VUE_APP_APPS_URL: {{ .Values.x4b.appsExternalUrl | quote }},
+        VUE_APP_MAINTENANCE_MODE: {{ .Values.webapp.maintenance | quote }},
     };
