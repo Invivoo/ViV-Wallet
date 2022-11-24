@@ -1,8 +1,8 @@
 spring:
     datasource:
-        url: jdbc:sqlserver://localhost:1433;databaseName=viv_wallet
-        username: sa
-        password: /EU22MQwyx
+        url: jdbc:sqlserver://x4b-vivwallet-uat.database.windows.net:1433;databaseName=vivwallet_uat_db
+        username: vivwallet-admin
+        password: Qwfge54A953e4V
         driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
     jpa:
         database-platform: org.hibernate.dialect.SQLServer2012Dialect

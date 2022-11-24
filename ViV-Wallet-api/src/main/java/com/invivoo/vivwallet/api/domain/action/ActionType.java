@@ -6,6 +6,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum ActionType {
+    INITIAL_BALANCE("Solde initial", null, Constants.IS_NOT_SHARED_BY_MULTIPLE_ACHIEVERS),
     COACHING("Coaching", 10, Constants.IS_NOT_SHARED_BY_MULTIPLE_ACHIEVERS),
     SUCCESSFUL_COACHING("Coaching gagnant", 40, Constants.IS_SHARED_BY_MULTIPLE_ACHIEVERS),
     TECHNICAL_ASSESSMENT("Évaluation technique", 10, Constants.IS_NOT_SHARED_BY_MULTIPLE_ACHIEVERS),

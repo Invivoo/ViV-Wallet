@@ -1,8 +1,10 @@
 package com.invivoo.vivwallet.api.application;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.invivoo.vivwallet.api.application.security.NoAuthJWTAuthenticationFilter;
 import com.invivoo.vivwallet.api.domain.action.Action;
 import com.invivoo.vivwallet.api.domain.action.ActionService;
+import com.invivoo.vivwallet.api.domain.action.ActionStatus;
 import com.invivoo.vivwallet.api.domain.expertise.Expertise;
 import com.invivoo.vivwallet.api.domain.expertise.UserExpertise;
 import com.invivoo.vivwallet.api.domain.payment.Payment;
@@ -50,9 +52,16 @@ public class DatabaseInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        if (!isInMemoryDatabase()) {
-            return;
+        if (isInMemoryDatabase()) {
+            initInMemoryDatabaseData();
         }
+        if (Arrays.asList(env.getActiveProfiles()).contains(NoAuthJWTAuthenticationFilter.NO_AUTH_PROFILE)) {
+            initNoAuthUser();
+        }
+
+    }
+
+    private void initInMemoryDatabaseData() throws IOException {
         User theophileMontgomery = User.builder()
                                        .fullName("Théophile MONTGOMERY")
                                        .id(1L)
@@ -84,12 +93,17 @@ public class DatabaseInitializer implements CommandLineRunner {
                                  .build();
 
         paymentService.save(payment);
-        List<Action> paidActions = actions.subList(0, actions.size() / 2)
-                                          .stream()
-                                          .peek(action -> action.setPayment(payment))
-                                          .collect(Collectors.toList());
-        actionService.saveAll(paidActions);
+        List<Action> payableActions = actions.subList(0, actions.size() / 2)
+                                             .stream()
+                                             .peek(action -> action.setStatus(ActionStatus.PAYABLE))
+                                             .collect(Collectors.toList());
+        actionService.saveAll(payableActions);
+    }
 
+    private void initNoAuthUser() {
+        if (userService.findByX4bIdOrByFullName(NoAuthJWTAuthenticationFilter.NO_AUTH_USER.getFullName()).isEmpty()) {
+            userService.save(NoAuthJWTAuthenticationFilter.NO_AUTH_USER);
+        }
     }
 
     private String readFromInputStream(InputStream inputStream)
