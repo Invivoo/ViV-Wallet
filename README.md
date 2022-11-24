@@ -80,11 +80,12 @@ Then move to the `viv-wallet-app/` folder, run ` npm run serve:localbackend` to 
 
 The app should be running at `localhost:4200`.
 
-### Pour travailler sur le backend avec une base en local
+### Pour travailler sur le backend avec une base en local en mode non authentifié
 
 Launch sqlServer docker with `docker run --name sql -P -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=/EU22MQwyx' -e 'MSSQL_PID=Express' -p 1433:1433 -d mcr.microsoft.com/mssql/server:2017-CU14-ubuntu`
+Ask for a dump of the db and import it with Azure Data Studio
 Run `mvn clean install` and create a database named viv_wallet
-Run `mvn spring-boot:run` with sqlServer spring profile activated
+Run `mvn spring-boot:run` with sqlServer and noAuth spring profiles activated
 
 ### Pour travailler sur le frontend
 

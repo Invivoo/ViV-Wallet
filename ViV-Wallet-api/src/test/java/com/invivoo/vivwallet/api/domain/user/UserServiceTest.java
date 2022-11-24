@@ -2,6 +2,7 @@ package com.invivoo.vivwallet.api.domain.user;
 
 import com.invivoo.vivwallet.api.domain.action.Action;
 import com.invivoo.vivwallet.api.domain.action.ActionRepository;
+import com.invivoo.vivwallet.api.domain.action.ActionStatus;
 import com.invivoo.vivwallet.api.domain.payment.PaymentRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,7 +36,8 @@ public class UserServiceTest {
         Action action1 = Action.builder().id((long) 1).vivAmount(10).valueDate(LocalDateTime.of(2020,1,1,0,0)).achiever(user).build();
         Action action2 = Action.builder().id((long) 2).vivAmount(10).valueDate(LocalDateTime.of(2020,1,1,0,0)).achiever(user).build();
         List<Action> notPaidActions = Arrays.asList(action1, action2);
-        when(actionRepository.findAllByAchieverAndValueDateAfter(Mockito.any(User.class), Mockito.any(LocalDateTime.class))).thenReturn(notPaidActions);
+        when(actionRepository.findAllByAchieverAndValueDateAfterAndStatus(Mockito.any(User.class), Mockito.any(LocalDateTime.class), Mockito.any(
+                ActionStatus.class))).thenReturn(notPaidActions);
         UserService userService = new UserService(userRepository, actionRepository, paymentRepository);
 
         //When
@@ -52,7 +54,8 @@ public class UserServiceTest {
         Action action1 = Action.builder().id((long) 1).vivAmount(10).valueDate(LocalDateTime.of(2020,1,1,0,0)).achiever(user).build();
         Action action2 = Action.builder().id((long) 2).vivAmount(10).valueDate(LocalDateTime.of(2020,1,1,0,0)).achiever(user).build();
         List<Action> notPaidActions = Arrays.asList(action1, action2);
-        when(actionRepository.findAllByAchieverAndValueDateAfter(Mockito.any(User.class), Mockito.any(LocalDateTime.class))).thenReturn(notPaidActions);
+        when(actionRepository.findAllByAchieverAndValueDateAfterAndStatus(Mockito.any(User.class), Mockito.any(LocalDateTime.class), Mockito.any(
+                ActionStatus.class))).thenReturn(notPaidActions);
         UserService userService = new UserService(userRepository, actionRepository, paymentRepository);
 
         //When
@@ -66,14 +69,30 @@ public class UserServiceTest {
     public void should_return_a_balance_of_0_VIV_when_no_not_paid_action() {
         //Given
         User user = User.builder().id((long) 1).build();
-        when(actionRepository.findAllByAchieverAndValueDateAfter(Mockito.any(User.class), Mockito.any(LocalDateTime.class))).thenReturn(Collections.emptyList());
+        when(actionRepository.findAllByAchieverAndValueDateAfterAndStatus(Mockito.any(User.class), Mockito.any(LocalDateTime.class), Mockito.any(
+                ActionStatus.class))).thenReturn(Collections.emptyList());
         UserService userService = new UserService(userRepository, actionRepository, paymentRepository);
 
         //When
         long balance = userService.computeBalance(user);
 
         //Then
-        assertThat(balance).isEqualTo(0);
+        assertThat(balance).isZero();
+    }
+
+    @Test
+    public void should_return_a_balance_of_10_VIV_when_initial_balance_is_10__and_no_action_done() {
+        //Given
+        User user = User.builder().id((long) 1).vivInitialBalance(10).build();
+        when(actionRepository.findAllByAchieverAndValueDateAfterAndStatus(Mockito.any(User.class), Mockito.any(LocalDateTime.class), Mockito.any(
+                ActionStatus.class))).thenReturn(Collections.emptyList());
+        UserService userService = new UserService(userRepository, actionRepository, paymentRepository);
+
+        //When
+        long balance = userService.computeBalance(user);
+
+        //Then
+        assertThat(balance).isEqualTo(10);
     }
 
     @Test

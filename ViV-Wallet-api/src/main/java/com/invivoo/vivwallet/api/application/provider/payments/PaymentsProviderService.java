@@ -73,37 +73,7 @@ public class PaymentsProviderService {
             payments.add(payment);
         }
         paymentService.saveAll(payments);
-        payments.stream()
-                .map(Payment::getReceiver)
-                .distinct()
-                .forEach(this::addActionsForPayment);
         return payments;
-    }
-
-    private void addActionsForPayment(User user) {
-        int balance = user.getVivInitialBalance();
-        List<Payment> payments = paymentService.findAllByReceiverOrderByDateAsc(user);
-        List<Action> actions = actionService.findAllByAchieverAndPaymentIsNullOrderByDateAsc(user);
-        for (Payment payment : payments) {
-            balance = balance - payment.getVivAmount();
-            if (balance >= 0) {
-                continue;
-            }
-            List<Action> unpaidActions = actions.stream()
-                                                .filter(a -> ActionType.NO_MAPPING_FOUND != a.getType())
-                                                .filter(a -> a.getPayment() == null)
-                                                .filter(a -> a.getDate().toLocalDate().isBefore(payment.getDate()))
-                                                .filter(a -> a.getVivAmount() > 0)
-                                                .collect(Collectors.toList());
-            for (Action unpaidAction : unpaidActions) {
-                balance += unpaidAction.getVivAmount();
-                unpaidAction.setPayment(payment);
-                if (balance >= 0) {
-                    break;
-                }
-            }
-        }
-        actionService.saveAll(actions);
     }
 
     private LocalDate convertToLocalDate(Date date) {

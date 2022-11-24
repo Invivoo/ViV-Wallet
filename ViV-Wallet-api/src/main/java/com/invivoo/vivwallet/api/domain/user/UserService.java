@@ -2,6 +2,7 @@ package com.invivoo.vivwallet.api.domain.user;
 
 import com.invivoo.vivwallet.api.domain.action.Action;
 import com.invivoo.vivwallet.api.domain.action.ActionRepository;
+import com.invivoo.vivwallet.api.domain.action.ActionStatus;
 import com.invivoo.vivwallet.api.domain.expertise.Expertise;
 import com.invivoo.vivwallet.api.domain.payment.Payment;
 import com.invivoo.vivwallet.api.domain.payment.PaymentRepository;
@@ -82,9 +83,8 @@ public class UserService {
     public int computeBalance(User user) {
         LocalDateTime vivInitialBalanceDate = Optional.ofNullable(user.getVivInitialBalanceDate())
                                                       .orElse(LocalDateTime.ofEpochSecond(0, 0, ZoneOffset.UTC));
-        int userBalanceFromActionsInVivAfterInitialBalanceDate = actionRepository.findAllByAchieverAndValueDateAfter(user, vivInitialBalanceDate)
+        int userBalanceFromActionsInVivAfterInitialBalanceDate = actionRepository.findAllByAchieverAndValueDateAfterAndStatus(user, vivInitialBalanceDate, ActionStatus.PAYABLE)
                                                                                  .stream()
-                                                                                 .filter(Action::isPayable)
                                                                                  .mapToInt(Action::getVivAmount)
                                                                                  .sum();
         int userPaymentsAmountInViv = paymentRepository.findAllByReceiverOrderByDateDesc(user)
