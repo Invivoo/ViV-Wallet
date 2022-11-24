@@ -23,7 +23,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.net.URI;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @RestController
@@ -112,6 +114,28 @@ public class UsersController {
                                                     .collect(Collectors.toList());
 
         return ResponseEntity.ok(userActionDtos);
+    }
+
+    @PostMapping("/{id}/actions")
+    public ResponseEntity<List<ActionDto>> updateActions(@PathVariable("id") Long userId, @RequestBody ActionsUpdateRequest updateRequest) {
+        Optional<User> userOpt = userService.findById(userId);
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        Map<String, ActionUpdateRequest> updateById = updateRequest.getUpdates()
+                                                                   .stream()
+                                                                   .filter(actionUpdateRequest -> !Action.ACTION_FOR_INITIAL_BALANCE_ID.toString()
+                                                                                                                                       .equals(actionUpdateRequest.getId()))
+                                                                   .collect(Collectors.toMap(ActionUpdateRequest::getId,
+                                                                                             Function.identity()));
+        List<Action> actions = actionService.findAllByAchieverAndIdIn(userOpt.get(),
+                                                                      updateById.keySet()
+                                                                                .stream()
+                                                                                .map(Long::valueOf)
+                                                                                .collect(Collectors.toList()));
+        actions.forEach(action -> action.setStatus(updateById.get(String.valueOf(action.getId())).getStatus()));
+        actionService.saveAll(actions);
+        return ResponseEntity.ok(actions.stream().map(ActionDto::createFromAction).collect(Collectors.toList()));
     }
 
     @GetMapping("/{id}/payments")

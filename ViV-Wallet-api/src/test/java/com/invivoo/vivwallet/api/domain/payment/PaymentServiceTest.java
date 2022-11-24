@@ -101,7 +101,7 @@ public class PaymentServiceTest {
                                  .date(LocalDate.of(2020, Month.JULY, 1))
                                  .receiver(testUser)
                                  .vivAmount(actionVivAmount)
-                                 .actions(List.of(Action.builder().id(1L).vivAmount(actionVivAmount).build())).build();
+                                 .build();
         when(paymentRepository.findAllByReceiverOrderByDateDesc(testUser)).thenReturn(List.of(payment));
         PaymentService paymentService = new PaymentService(userRepository, paymentRepository, actionRepository);
 
@@ -130,9 +130,7 @@ public class PaymentServiceTest {
                                  .date(LocalDate.of(2020, Month.JULY, 1))
                                  .receiver(testUser)
                                  .vivAmount(100)
-                                 .actions(List.of(
-                                         Action.builder().id(1L).vivAmount(50).build(),
-                                         Action.builder().id(2L).vivAmount(50).build())).build();
+                                 .build();
         when(paymentRepository.findAllByReceiverOrderByDateDesc(testUser)).thenReturn(List.of(payment));
         PaymentService paymentService = new PaymentService(userRepository, paymentRepository, actionRepository);
 
@@ -161,13 +159,13 @@ public class PaymentServiceTest {
                                   .date(LocalDate.of(2020, Month.JANUARY, 1))
                                   .receiver(testUser)
                                   .vivAmount(50)
-                                  .actions(List.of(Action.builder().id(1L).vivAmount(50).build())).build();
+                                  .build();
         Payment payment2 = Payment.builder()
                                   .id(1L)
                                   .date(LocalDate.of(2020, Month.JULY, 1))
                                   .receiver(testUser)
                                   .vivAmount(50)
-                                  .actions(List.of(Action.builder().id(2L).vivAmount(50).build())).build();
+                                  .build();
         when(paymentRepository.findAllByReceiverOrderByDateDesc(testUser)).thenReturn(List.of(payment2, payment1));
         PaymentService paymentService = new PaymentService(userRepository, paymentRepository, actionRepository);
 

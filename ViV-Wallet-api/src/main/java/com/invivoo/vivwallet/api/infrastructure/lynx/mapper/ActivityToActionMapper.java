@@ -1,6 +1,7 @@
 package com.invivoo.vivwallet.api.infrastructure.lynx.mapper;
 
 import com.invivoo.vivwallet.api.domain.action.Action;
+import com.invivoo.vivwallet.api.domain.action.ActionStatus;
 import com.invivoo.vivwallet.api.domain.action.ActionType;
 import com.invivoo.vivwallet.api.domain.user.User;
 import com.invivoo.vivwallet.api.domain.user.UserService;
@@ -31,6 +32,7 @@ public class ActivityToActionMapper {
                                              .date(activity.getDate())
                                              .valueDate(activity.getValueDate())
                                              .lynxActivityId(activity.getId())
+                                             .status(ActionStatus.TO_VALIDATE)
                                              .achiever(user);
         setActivityTypeContext(activity, user, builder);
         return Optional.of(builder.build());
