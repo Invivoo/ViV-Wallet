@@ -1,6 +1,5 @@
 package com.invivoo.vivwallet.api.domain.payment;
 
-import com.invivoo.vivwallet.api.domain.action.Action;
 import com.invivoo.vivwallet.api.domain.action.ActionRepository;
 import com.invivoo.vivwallet.api.domain.user.User;
 import com.invivoo.vivwallet.api.domain.user.UserRepository;
@@ -27,15 +26,6 @@ public class PaymentService {
         return payments != null && !payments.isEmpty() ? payments : Collections.emptyList();
     }
 
-    public List<Payment> findAllByReceiverOrderByDateAsc(User receiver) {
-        return paymentRepository.findAllByReceiverOrderByDateAsc(receiver);
-    }
-
-    public List<Action> getActionsByPaymentId(Long paymentId) {
-        List<Action> actions = actionRepository.findAllByPaymentIdOrderByDateDesc(paymentId);
-        return actions != null && !actions.isEmpty() ? actions : Collections.emptyList();
-    }
-
     public List<PaymentDto> findAllByReceiver(Long receiverId) {
         return userRepository.findById(receiverId)
                              .map(paymentRepository::findAllByReceiverOrderByDateDesc)
@@ -50,10 +40,7 @@ public class PaymentService {
     }
 
     public Payment save(Payment payment) {
-        Optional.ofNullable(payment.getActions())
-                .ifPresent(actions -> actions.forEach(a -> a.setPayment(payment)));
-        paymentRepository.save(payment);
-        return payment;
+        return paymentRepository.save(payment);
     }
 
     public List<Payment> saveAll(List<Payment> payments) {

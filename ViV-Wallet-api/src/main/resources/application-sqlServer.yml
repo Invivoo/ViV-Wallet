@@ -1,14 +1,14 @@
 spring:
-  datasource:
-    url: jdbc:sqlserver://localhost:1433;databaseName=viv_wallet
-    username: SA
-    password: /EU22MQwyx
-    driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
-  jpa:
-    database-platform: org.hibernate.dialect.SQLServer2012Dialect
-    h2:
-      console:
-        enabled: false
-        path: /h2
-  flyway:
-    enabled: true
+    datasource:
+        url: jdbc:sqlserver://localhost:1433;databaseName=viv_wallet
+        username: sa
+        password: /EU22MQwyx
+        driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    jpa:
+        database-platform: org.hibernate.dialect.SQLServer2012Dialect
+        h2:
+            console:
+                enabled: false
+                path: /h2
+    flyway:
+        enabled: true

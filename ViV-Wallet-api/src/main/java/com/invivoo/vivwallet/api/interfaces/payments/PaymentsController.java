@@ -30,7 +30,6 @@ public class PaymentsController {
     public static final String API_V_1_PAYMENTS = "/api/v1/payments";
 
     private final PaymentService paymentService;
-    private final ActionService actionService;
     private final SecurityService securityService;
     private final UserService userService;
 
@@ -46,11 +45,6 @@ public class PaymentsController {
     @PreAuthorize("hasAnyAuthority('COMPANY_ADMINISTRATOR')")
     public ResponseEntity<PaymentDto> postPayment(@RequestBody PaymentRequest paymentRequest) {
         Optional<User> receiverOpt = userService.findById(paymentRequest.getReceiverId());
-        List<Action> actionsToPay = actionService.findAllById(paymentRequest.getActionIds())
-                                                 .stream()
-                                                 .filter(action -> action.getVivAmount() > 0)
-                                                 .filter(Action::isPayable)
-                                                 .collect(Collectors.toList());
         Optional<User> connectedUser = securityService.getConnectedUser();
         if (receiverOpt.isEmpty() || connectedUser.isEmpty()) {
             return ResponseEntity.badRequest()
@@ -67,17 +61,10 @@ public class PaymentsController {
                                      .receiver(receiver)
                                      .creator(connectedUser.get())
                                      .vivAmount(paymentRequest.getVivAmount())
-                                     .actions(actionsToPay)
                                      .build();
         Payment savedPayment = paymentService.save(payment);
         return ResponseEntity.created(getLocation(savedPayment))
                              .body(PaymentDto.createFromPayment(savedPayment));
-    }
-
-    @GetMapping("/{paymentId}/actions")
-    public ResponseEntity<List<Action>> getPaymentActions(@PathVariable("paymentId") Long paymentId) {
-        List<Action> actions = paymentService.getActionsByPaymentId(paymentId);
-        return ResponseEntity.ok(actions);
     }
 
     private URI getLocation(Payment payment) {

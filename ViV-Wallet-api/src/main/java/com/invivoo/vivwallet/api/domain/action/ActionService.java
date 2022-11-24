@@ -6,9 +6,14 @@ import com.invivoo.vivwallet.api.infrastructure.lynx.model.Activities;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,20 +27,17 @@ public class ActionService {
         this.lynxConnector = lynxConnector;
     }
 
-    public List<Action> findAllById(Collection<Long> actionIds) {
-        return actionRepository.findAllById(actionIds);
-    }
-
     public List<Action> findAllByOrderByDateDesc() {
         return actionRepository.findAllByIsDeletedFalseOrderByDateDesc();
     }
 
     public List<Action> findAllByAchieverOrderByDateDesc(User achiever) {
-        return actionRepository.findAllByAchieverOrderByDateDesc(achiever);
-    }
-
-    public List<Action> findAllByAchieverAndPaymentIsNullOrderByDateAsc(User achiever) {
-        return actionRepository.findAllByAchieverAndPaymentIsNullOrderByDateAsc(achiever);
+        LocalDateTime startValueDate = Optional.ofNullable(achiever.getVivInitialBalanceDate()).orElse(
+                LocalDateTime.MIN);
+        ArrayList<Action> actions = new ArrayList<>(actionRepository.findAllByAchieverAndValueDateAfter(achiever, startValueDate));
+        getActionForInitialBalance(achiever).ifPresent(actions::add);
+        actions.sort(Comparator.comparing(Action::getDate).reversed());
+        return actions;
     }
 
 
@@ -58,15 +60,31 @@ public class ActionService {
         actionRepository.deleteAll();
     }
 
+    protected Optional<Action> getActionForInitialBalance(User achiever) {
+        if (achiever.getVivInitialBalance() == 0) {
+            return Optional.empty();
+        }
+        return Optional.of(Action.builder()
+                                 .achiever(achiever).type(ActionType.INITIAL_BALANCE)
+                                 .status(ActionStatus.PAYABLE)
+                                 .vivAmount(achiever.getVivInitialBalance())
+                                 .date(achiever.getVivInitialBalanceDate())
+                                 .context(String.format("Cumul des actions avant le %s", achiever.getVivInitialBalanceDate().format(
+                                         DateTimeFormatter.ofPattern("dd/MM/yyyy"))))
+                                 .build());
+    }
+
     private List<Action> updateActions(List<Action> actionsFromLynx) {
-        actionRepository.deleteAllByPaymentIsNull();
-        Map<String, Action> paidActionsByLynxId = actionRepository.findAllByLynxActivityIdInAndPaymentIsNotNull(actionsFromLynx.stream()
-                                                                                                                               .map(Action::getLynxActivityId)
-                                                                                                                               .collect(Collectors.toList()))
+        actionRepository.deleteAllByStatus(ActionStatus.TO_VALIDATE);
+        Map<String, Action> validatedActions = actionRepository.findAllByLynxActivityIdIn(actionsFromLynx.stream()
+                                                                                                            .map(Action::getLynxActivityId)
+                                                                                                            .collect(
+                                                                                                                                       Collectors.toList()))
                                                                   .stream()
                                                                   .collect(Collectors.toMap(this::getActionUniqueKey, a -> a));
         List<Action> actionsToSave = actionsFromLynx.stream()
-                                                    .filter(actionFromLynx -> !paidActionsByLynxId.containsKey(getActionUniqueKey(actionFromLynx)))
+                                                    .filter(actionFromLynx -> !validatedActions.containsKey(getActionUniqueKey(
+                                                            actionFromLynx)))
                                                     .collect(Collectors.toList());
         return actionRepository.saveAll(actionsToSave);
     }

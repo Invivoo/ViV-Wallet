@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Data
 @NoArgsConstructor
@@ -24,28 +23,20 @@ public class ActionDto {
     private LocalDateTime creationDate;
     private LocalDateTime valueDate;
     private Integer payment;
-    private String status;
+    private com.invivoo.vivwallet.api.domain.action.ActionStatus status;
     private LocalDate paymentDate;
     private UserDto achiever;
 
     public static ActionDto createFromAction(Action action) {
-        ActionDto actionDto = ActionDto.builder()
-                                       .id(action.getId())
-                                       .userId(action.getAchiever().getId())
-                                       .type(action.getType().getName())
-                                       .comment(action.getContext())
-                                       .creationDate(action.getDate())
-                                       .valueDate(action.getValueDate())
-                                       .achiever(UserDto.createFromUser(action.getAchiever()))
-                                       .payment(action.getVivAmount()).build();
-        Optional.ofNullable(action.getPayment()).ifPresentOrElse(
-                payment -> {
-                    actionDto.setStatus(ActionStatus.PAID.getLabel());
-                    actionDto.setPaymentDate(payment.getDate());
-                },
-                () -> actionDto.setStatus(ActionStatus.UNPAID.getLabel())
-        );
-
-        return actionDto;
+        return ActionDto.builder()
+                        .id(action.getId())
+                        .userId(action.getAchiever().getId())
+                        .type(action.getType().getName())
+                        .status(action.getStatus())
+                        .comment(action.getContext())
+                        .creationDate(action.getDate())
+                        .valueDate(action.getValueDate())
+                        .achiever(UserDto.createFromUser(action.getAchiever()))
+                        .payment(action.getVivAmount()).build();
     }
 }

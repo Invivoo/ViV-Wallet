@@ -48,8 +48,6 @@ public class AdminController {
     public static final int ACTION_VIV_AMOUNT_COLUMN_INDEX = 4;
     public static final int ACTION_CONTEXT_COLUMN_INDEX = 5;
     public static final int ACTION_ACHIEVER_COLUMN_INDEX = 7;
-    public static final int ACTION_PAYMENT_AMOUNT_COLUMN_INDEX = 6;
-    public static final int ACTION_PAYMENT_DATE_COLUMN_INDEX = 8;
 
     private UsersProviderService usersProviderService;
     private PaymentsProviderService paymentsProviderService;
@@ -116,8 +114,6 @@ public class AdminController {
         headerRow.createCell(ACTION_VIV_AMOUNT_COLUMN_INDEX).setCellValue("vivAmount");
         headerRow.createCell(ACTION_CONTEXT_COLUMN_INDEX).setCellValue("context");
         headerRow.createCell(ACTION_ACHIEVER_COLUMN_INDEX).setCellValue("fullName");
-        headerRow.createCell(ACTION_PAYMENT_DATE_COLUMN_INDEX).setCellValue("paymentDate");
-        headerRow.createCell(ACTION_PAYMENT_AMOUNT_COLUMN_INDEX).setCellValue("paymentAmount");
     }
 
     private void addActionRow(XSSFRow row, Action action) {
@@ -128,11 +124,6 @@ public class AdminController {
         row.createCell(ACTION_VIV_AMOUNT_COLUMN_INDEX).setCellValue(action.getVivAmount());
         row.createCell(ACTION_CONTEXT_COLUMN_INDEX).setCellValue(action.getContext());
         row.createCell(ACTION_ACHIEVER_COLUMN_INDEX).setCellValue(action.getAchiever().getFullName());
-        row.createCell(ACTION_PAYMENT_DATE_COLUMN_INDEX).setCellValue(Optional.ofNullable(action.getPayment()).map(Payment::getDate).orElse(null));
-        Optional.ofNullable(action.getPayment())
-                .map(Payment::getVivAmount)
-                .map(Integer::doubleValue)
-                .ifPresent(row.createCell(ACTION_PAYMENT_AMOUNT_COLUMN_INDEX)::setCellValue);
     }
 
 }

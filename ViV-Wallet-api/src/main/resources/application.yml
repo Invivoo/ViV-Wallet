@@ -1,19 +1,19 @@
 app:
-  url: http://localhost:4200
+    url: http://localhost:4200
 api:
-  key: DEV_API_KEY
+    key: DEV_API_KEY
 spring:
-  datasource:
-    url: jdbc:h2:mem:testdb
-  h2:
-    console:
-      enabled: true
-      path: /h2
-  flyway:
-    enabled: false
+    datasource:
+        url: jdbc:h2:mem:testdb
+    h2:
+        console:
+            enabled: true
+            path: /h2
+    flyway:
+        enabled: false
 x4b:
-  auth:
-    issuer: X4B
-    publicKeyUrl: https://login.uat.xcomponent.com/authentication/api/Configurations/Key
+    auth:
+        issuer: X4B
+        publicKeyUrl: https://x4b.uat.xcomponent.com/authentication/api/Configurations/Key
 lynx:
-  vivApiUrl: TO_BE_DEFINED
+    vivApiUrl: TO_BE_DEFINED

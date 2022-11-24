@@ -3,6 +3,7 @@ package com.invivoo.vivwallet.api.application;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.invivoo.vivwallet.api.domain.action.Action;
 import com.invivoo.vivwallet.api.domain.action.ActionService;
+import com.invivoo.vivwallet.api.domain.action.ActionStatus;
 import com.invivoo.vivwallet.api.domain.expertise.Expertise;
 import com.invivoo.vivwallet.api.domain.expertise.UserExpertise;
 import com.invivoo.vivwallet.api.domain.payment.Payment;
@@ -84,11 +85,11 @@ public class DatabaseInitializer implements CommandLineRunner {
                                  .build();
 
         paymentService.save(payment);
-        List<Action> paidActions = actions.subList(0, actions.size() / 2)
+        List<Action> payableActions = actions.subList(0, actions.size() / 2)
                                           .stream()
-                                          .peek(action -> action.setPayment(payment))
+                                          .peek(action -> action.setStatus(ActionStatus.PAYABLE))
                                           .collect(Collectors.toList());
-        actionService.saveAll(paidActions);
+        actionService.saveAll(payableActions);
 
     }
 
