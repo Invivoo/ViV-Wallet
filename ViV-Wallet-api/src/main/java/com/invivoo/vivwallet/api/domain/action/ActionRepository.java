@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface ActionRepository extends JpaRepository<Action, Long> {
 
+    List<Action> findAllByAchieverAndIdIn(User achiever, List<Long> actionIds);
+
     List<Action> findAllByIsDeletedFalseOrderByDateDesc();
 
     List<Action> findAllByAchieverAndValueDateAfterAndStatus(User achiever, LocalDateTime date, ActionStatus status);
@@ -17,4 +19,5 @@ public interface ActionRepository extends JpaRepository<Action, Long> {
     List<Action> findAllByLynxActivityIdIn(List<Long> lynxActivityId);
 
     List<Action> deleteAllByStatus(ActionStatus status);
+
 }
