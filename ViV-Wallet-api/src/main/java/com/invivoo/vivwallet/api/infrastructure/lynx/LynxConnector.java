@@ -46,15 +46,8 @@ public class LynxConnector {
     }
 
     public List<Action> getActionsFromActivities(List<Activity> activities) {
-        LocalDateTime validityDate = LocalDateTime.now();
         List<Activity> validatedActivities = activities.stream()
-                                                       .filter(activity -> Objects.nonNull(activity.getType()) && StringUtils.isNotBlank(
-                                                               activity.getOwner()))
-                                                       .filter(activity -> Optional.ofNullable(activity.getValueDate())
-                                                                                   .filter(validityDate::isAfter)
-                                                                                   .isPresent())
-                                                       .filter(activity -> ACTIVITY_HELD_STATUS.equals(activity.getStatus())
-                                                                           && ACTIVITY_IS_OK.equals(activity.getValidity()))
+                                                       .filter(this::isValid)
                                                        .collect(Collectors.toList());
         List<Action> actions = validatedActivities.stream()
                                                   .map(activityToActionMapper::convert)
@@ -66,6 +59,28 @@ public class LynxConnector {
                                                   .collect(Collectors.toList());
         actions.forEach(action -> setVivFromRelatedActivities(action, validatedActivities));
         return actions;
+    }
+
+    private boolean isValid(Activity activity) {
+        return isStatusHeldAndValidityOk(activity)
+               && isValueDateAfterNow(activity)
+               && isTypeAndOwnerPresent(activity);
+    }
+
+    private boolean isStatusHeldAndValidityOk(Activity activity) {
+        return ACTIVITY_HELD_STATUS.equals(activity.getStatus())
+               && ACTIVITY_IS_OK.equals(activity.getValidity());
+    }
+
+    private boolean isValueDateAfterNow(Activity activity) {
+        return Optional.ofNullable(activity.getValueDate())
+                       .filter(LocalDateTime.now()::isAfter)
+                       .isPresent();
+    }
+
+    private boolean isTypeAndOwnerPresent(Activity activity) {
+        return Objects.nonNull(activity.getType()) && StringUtils.isNotBlank(
+                activity.getOwner());
     }
 
     protected List<Activity> findActivities() {

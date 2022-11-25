@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -24,7 +23,6 @@ public class ActionDto {
     private LocalDateTime valueDate;
     private Integer payment;
     private com.invivoo.vivwallet.api.domain.action.ActionStatus status;
-    private LocalDate paymentDate;
     private UserDto achiever;
 
     public static ActionDto createFromAction(Action action) {

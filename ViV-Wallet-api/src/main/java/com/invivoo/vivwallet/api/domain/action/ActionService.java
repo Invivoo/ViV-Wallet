@@ -9,7 +9,6 @@ import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +39,9 @@ public class ActionService {
         return actions;
     }
 
+    public List<Action> findAllByAchieverAndIdIn(User achiever, List<Long> actionIds) {
+        return actionRepository.findAllByAchieverAndIdIn(achiever, actionIds);
+    }
 
     public void saveAll(List<Action> actions) {
         actionRepository.saveAll(actions);
@@ -92,4 +94,5 @@ public class ActionService {
     private String getActionUniqueKey(Action a) {
         return a.getLynxActivityId().toString() + "_" + a.getType() + a.getAchiever().getId().toString();
     }
+
 }

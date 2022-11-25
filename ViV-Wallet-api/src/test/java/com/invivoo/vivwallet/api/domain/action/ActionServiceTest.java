@@ -67,8 +67,7 @@ public class ActionServiceTest {
                 actionBefore));
         ActionService actionService = new ActionService(actionRepository, lynxConnector);
         Action expectedActionForInitialBalance = Action.builder()
-                                                       .achiever(user)
-                                                       .type(ActionType.INITIAL_BALANCE)
+                                                       .achiever(user).type(ActionType.INITIAL_BALANCE)
                                                        .vivAmount(user.getVivInitialBalance())
                                                        .date(user.getVivInitialBalanceDate())
                                                        .status(ActionStatus.PAYABLE)
