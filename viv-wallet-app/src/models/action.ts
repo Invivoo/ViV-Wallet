@@ -1,8 +1,9 @@
 import { Consultant } from "@/models/consultant";
 
 export enum PaymentStatus {
-    Unpaid = "Unpaid",
-    Paid = "Paid",
+    PAYABLE = "PAYABLE",
+    NON_PAYABLE = "NON_PAYABLE",
+    TO_VALIDATE = "TO_VALIDATE",
 }
 
 export interface Action {

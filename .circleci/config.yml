@@ -61,7 +61,7 @@ references:
 jobs:
     checkout:
         docker:
-            - image: cimg/node:15.14
+            - image: cimg/node:16.18
               <<: *docker_auth
         resource_class: small
         steps:
@@ -72,9 +72,10 @@ jobs:
                       - .
     webapp:
         docker:
-            - image: cimg/node:15.14.0-browsers
+            - image: cimg/node:16.18.0-browsers
               <<: *docker_auth
         working_directory: ~/project
+        resource_class: large
         steps:
             - attach_workspace:
                   at: ~/project

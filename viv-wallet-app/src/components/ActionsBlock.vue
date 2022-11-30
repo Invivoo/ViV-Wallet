@@ -1,12 +1,20 @@
 <template>
     <section>
-        <h2>Actions</h2>
+        <div class="title-wrapper">
+            <h2 class="title">Actions</h2>
+            <check-roles :roles="adminOnly">
+                <button class="primary-button" :disabled="!canSave" @click="saveChanges">Sauvegarder</button>
+                <router-link class="primary-button payment-btn" :to="{ path: `/payment/${userId}` }"
+                    >Payer maintenant</router-link
+                >
+            </check-roles>
+        </div>
         <table v-if="actions.length > 0">
             <colgroup>
                 <col style="width: 25%" />
-                <col style="width: 42%" />
+                <col style="width: 40%" />
                 <col style="width: 8%" />
-                <col style="width: 25%" />
+                <col style="width: 27%" />
             </colgroup>
             <thead>
                 <tr>
@@ -31,12 +39,22 @@
                     <td>
                         <div>
                             <div>
-                                <status-badge :type="getPaymentStatusType(action.status)">
-                                    {{ formatPaymentStatus(action.status) }}
-                                </status-badge>
-                            </div>
-                            <div v-if="isPaymentPaid(action)" class="payment-date">
-                                {{ action.paymentDate ? action.paymentDate.toDateString() : "" }}
+                                <check-roles :not="true" :roles="adminOnly">
+                                    <status-badge :type="getPaymentStatusType(action.status)">
+                                        {{ formatPaymentStatus(action.status) }}
+                                    </status-badge>
+                                </check-roles>
+                                <check-roles :roles="adminOnly">
+                                    <div class="select">
+                                        <select v-model="action.status">
+                                            <option disabled value>Choisissez</option>
+                                            <option v-for="status in paymentStatusList" :key="status" :value="status">
+                                                {{ formatPaymentStatus(status) }}
+                                            </option>
+                                        </select>
+                                        <span class="select-focus"></span>
+                                    </div>
+                                </check-roles>
                             </div>
                         </div>
                     </td>
@@ -48,23 +66,44 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
+import { defineComponent, PropType, ref, watch } from "vue";
 import paymentHelpers from "@/utils/paymentHelpers";
-import { Action } from "../models/action";
+import { Action, PaymentStatus } from "../models/action";
+import { adminOnly } from "../models/role";
+import { WalletService } from "../services/wallet";
+import CheckRoles from "./CheckRoles.vue";
 import StatusBadge from "./StatusBadge.vue";
 
 export default defineComponent({
     name: "ActionsBlock",
-    components: { StatusBadge },
+    components: { StatusBadge, CheckRoles },
     props: {
         actions: {
             default: () => [],
             type: Array as PropType<Action[]>,
         },
+        userId: {
+            required: true,
+            type: String,
+        },
     },
-    setup() {
+    emits: ["actionsSaved"],
+    setup(props, { emit }) {
+        const canSave = ref(false);
+        const walletService = new WalletService();
+        watch([props.actions], () => {
+            canSave.value = true;
+        });
         return {
             ...paymentHelpers,
+            adminOnly,
+            canSave,
+            paymentStatusList: [PaymentStatus.PAYABLE, PaymentStatus.NON_PAYABLE, PaymentStatus.TO_VALIDATE],
+            saveChanges: async () => {
+                await walletService.saveActions(props.userId, props.actions);
+                emit("actionsSaved");
+                canSave.value = false;
+            },
         };
     },
 });
@@ -91,7 +130,7 @@ export default defineComponent({
     color: $gray-600;
     font-weight: 400;
     margin-top: $m-2;
-    overflow: hidden;
+
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
@@ -100,5 +139,18 @@ export default defineComponent({
 .type {
     font-weight: 600;
     color: $gray-700;
+}
+
+.title {
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-right: auto;
+}
+
+.title-wrapper {
+    display: flex;
+    width: 100%;
+    gap: $m-2;
+    margin: $m-6 0 $m-3 0;
 }
 </style>

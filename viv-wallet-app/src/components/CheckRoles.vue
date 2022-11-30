@@ -15,6 +15,10 @@ export default defineComponent({
             default: () => [],
             type: Array as PropType<Role[]>,
         },
+        not: {
+            default: false,
+            type: Boolean,
+        },
         withErrorMessage: {
             default: false,
             type: Boolean,
@@ -26,10 +30,10 @@ export default defineComponent({
             const userRoles = loginService.getRoles();
             for (const role of props.roles) {
                 if (userRoles.includes(role)) {
-                    return true;
+                    return !props.not;
                 }
             }
-            return false;
+            return props.not;
         };
         return {
             isAuthorized,

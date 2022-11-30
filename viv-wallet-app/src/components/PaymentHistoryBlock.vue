@@ -4,12 +4,14 @@
         <div v-if="payments.length > 0" class="wrapper">
             <table>
                 <colgroup>
-                    <col style="width: 45%" />
-                    <col style="width: 20%" />
-                    <col style="width: 35%" />
+                    <col style="width: 24px" />
+                    <col />
+                    <col style="width: 110px" />
+                    <col style="width: 170px" />
                 </colgroup>
                 <thead>
                     <tr>
+                        <th />
                         <th class="right">DATE DE PAIEMENT</th>
                         <th class="right">VIV</th>
                         <th class="right amount-header">MONTANT</th>
@@ -17,6 +19,11 @@
                 </thead>
                 <tbody>
                     <tr v-for="payment in payments" :key="payment.id">
+                        <td>
+                            <check-roles :roles="adminOnly">
+                                <delete-payment-button :payment="payment" @paymentDelete="deletePayment" />
+                            </check-roles>
+                        </td>
                         <td class="right">{{ payment.date.toDateString() }}</td>
                         <td class="right viv">{{ payment.viv }}</td>
                         <td class="right payment">
@@ -101,19 +108,32 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
+import { defineComponent, onMounted, ref } from "vue";
 import { Payment } from "../models/payment";
+import { adminOnly } from "../models/role";
+import { WalletService } from "../services/wallet";
+import CheckRoles from "./CheckRoles.vue";
+import DeletePaymentButton from "./DeletePaymentButton.vue";
 
 export default defineComponent({
     name: "PaymentHistoryBlock",
+    components: { DeletePaymentButton, CheckRoles },
     props: {
-        payments: {
-            default: () => [],
-            type: Array as PropType<Payment[]>,
+        userId: {
+            default: () => "",
+            type: String,
         },
     },
-    setup() {
+    emits: ["paymentDeleted"],
+    setup(props, { emit }) {
+        const walletService = new WalletService();
+        const payments = ref<Payment[]>([]);
+        onMounted(async () => {
+            payments.value = await walletService.getUserPayments(props.userId);
+        });
         return {
+            payments,
+            adminOnly,
             formatWithCurrency(value: number) {
                 const formatter = new Intl.NumberFormat("fr", {
                     style: "currency",
@@ -121,6 +141,15 @@ export default defineComponent({
                 });
 
                 return formatter.format(value);
+            },
+            async deletePayment(paymentId: string) {
+                try {
+                    await walletService.deleteUserPayment(paymentId);
+                    payments.value = await walletService.getUserPayments(props.userId);
+                    emit("paymentDeleted");
+                } catch (error: unknown) {
+                    console.error(error);
+                }
             },
         };
     },
