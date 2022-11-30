@@ -90,7 +90,8 @@ export default defineComponent({
             type: String,
         },
     },
-    setup(props) {
+    emits: ["actionsSaved"],
+    setup(props, { emit }) {
         const canSave = ref(false);
         const walletService = new WalletService();
         watch([props.actions], () => {
@@ -102,8 +103,8 @@ export default defineComponent({
             canSave,
             paymentStatusList: [PaymentStatus.Paid, PaymentStatus.Unpaid],
             saveChanges: async () => {
-                // save changes + update balance (with event)
                 await walletService.saveActions(props.userId, props.actions);
+                emit("actionsSaved");
                 canSave.value = false;
             },
         };

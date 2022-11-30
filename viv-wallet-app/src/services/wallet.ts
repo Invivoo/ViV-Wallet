@@ -81,7 +81,6 @@ export class WalletService extends ServiceBase {
             paymentDate: e.paymentDate ? e.paymentDate.toISOString : undefined,
             status: e.status.toString(),
         }));
-        console.warn(userId, rawActions);
         return (await this.http.post<RawAction[]>(`/users/${userId}/actions`, rawActions)).data;
     }
 }

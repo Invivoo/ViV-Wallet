@@ -11,8 +11,8 @@
                     />
                     <illustration />
                 </div>
-                <actions-block :user-id="userId" :actions="actions" />
-                <payment-history-block :user-id="userId" @paymentDeleted="onPaymentDelete" />
+                <actions-block :user-id="userId" :actions="actions" @actionsSaved="onUpdate" />
+                <payment-history-block :user-id="userId" @paymentDeleted="onUpdate" />
             </check-roles>
         </loading>
     </div>
@@ -77,7 +77,7 @@ export default defineComponent({
         },
     },
     methods: {
-        async onPaymentDelete() {
+        async onUpdate() {
             this.balance = await this.walletService.getUserBalance(this.userId);
             console.warn("balance updated", this.balance);
         },
