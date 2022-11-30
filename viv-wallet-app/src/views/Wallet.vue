@@ -11,18 +11,8 @@
                     />
                     <illustration />
                 </div>
-                <check-roles :roles="adminOnly">
-                    <div>
-                        <router-link
-                            v-if="shouldDisplayPayButton()"
-                            class="primary-button payment-btn"
-                            :to="{ path: `/payment/${user.id}` }"
-                            >Payer maintenant</router-link
-                        >
-                    </div>
-                </check-roles>
-                <actions-block :actions="actions" />
-                <payment-history-block :payments="payments" />
+                <actions-block :user-id="userId" :actions="actions" @actionsSaved="onUpdate" />
+                <payment-history-block :user-id="userId" @paymentDeleted="onUpdate" />
             </check-roles>
         </loading>
     </div>
@@ -38,7 +28,6 @@ import Loading from "../components/Loading.vue";
 import PaymentHistoryBlock from "../components/PaymentHistoryBlock.vue";
 import { Action } from "../models/action";
 import { ConsultantStatus, toString } from "../models/consultant";
-import { Payment } from "../models/payment";
 import { adminOnly, myWalletRoles, Role } from "../models/role";
 import { LoginService } from "../services/login";
 import { UsersService } from "../services/users";
@@ -51,7 +40,6 @@ export default defineComponent({
         return {
             userRoles: undefined as Role[] | null | undefined,
             actions: [] as Action[],
-            payments: [] as Payment[],
             loading: true,
             errored: false,
             walletService: new WalletService(),
@@ -74,10 +62,9 @@ export default defineComponent({
                         ? (this.$route.params.consultantId as string)
                         : (await this.loginService.getUserId()) || "1";
 
-                    [this.balance, this.actions, this.payments, this.userRoles, this.user] = await Promise.all([
+                    [this.balance, this.actions, this.userRoles, this.user] = await Promise.all([
                         this.walletService.getUserBalance(this.userId),
                         this.walletService.getUserActions(this.userId),
-                        this.walletService.getUserPayments(this.userId),
                         this.loginService.getRoles(),
                         this.usersService.getUser(this.userId),
                     ]);
@@ -90,6 +77,10 @@ export default defineComponent({
         },
     },
     methods: {
+        async onUpdate() {
+            this.balance = await this.walletService.getUserBalance(this.userId);
+            console.warn("balance updated", this.balance);
+        },
         formatConsultantStatus(status?: keyof typeof ConsultantStatus) {
             if (status) {
                 return toString(ConsultantStatus[status]);
@@ -114,10 +105,5 @@ export default defineComponent({
 .header {
     display: flex;
     justify-content: space-between;
-}
-
-.payment-btn {
-    float: right;
-    margin-top: $m-6;
 }
 </style>
