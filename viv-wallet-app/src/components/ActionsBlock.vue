@@ -3,7 +3,7 @@
         <div class="title-wrapper">
             <h2 class="title">Actions</h2>
             <check-roles :roles="adminOnly">
-                <button class="primary-button" :disabled="!canSave" @click="saveChanges">Sauvergarder</button>
+                <button class="primary-button" :disabled="!canSave" @click="saveChanges">Sauvegarder</button>
                 <router-link class="primary-button payment-btn" :to="{ path: `/payment/${userId}` }"
                     >Payer maintenant</router-link
                 >
