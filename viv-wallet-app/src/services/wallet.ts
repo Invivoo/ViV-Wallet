@@ -50,7 +50,7 @@ export class WalletService extends ServiceBase {
         const actions = await this.getUserActions(userId);
         return actions.filter(
             (action) =>
-                action.status === PaymentStatus.Unpaid &&
+                action.status === PaymentStatus.NON_PAYABLE &&
                 (action.valueDate.getFullYear() < now.getFullYear() ||
                     (action.valueDate.getFullYear() === now.getFullYear() &&
                         action.valueDate.getMonth() < now.getMonth()))

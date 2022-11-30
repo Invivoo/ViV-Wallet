@@ -56,7 +56,7 @@
                                     </div>
                                 </check-roles>
                             </div>
-                            <div v-if="isPaymentPaid(action)" class="payment-date">
+                            <div v-if="action.paymentDate" class="payment-date">
                                 {{ action.paymentDate ? action.paymentDate.toDateString() : "" }}
                             </div>
                         </div>
@@ -101,7 +101,7 @@ export default defineComponent({
             ...paymentHelpers,
             adminOnly,
             canSave,
-            paymentStatusList: [PaymentStatus.Paid, PaymentStatus.Unpaid],
+            paymentStatusList: [PaymentStatus.PAYABLE, PaymentStatus.NON_PAYABLE, PaymentStatus.TO_VALIDATE],
             saveChanges: async () => {
                 await walletService.saveActions(props.userId, props.actions);
                 emit("actionsSaved");

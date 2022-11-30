@@ -41,7 +41,7 @@ describe("BalanceService", () => {
             creationDate: "2020-07-15T13:00:00.000Z",
             valueDate: "2020-07-15T13:00:00.000Z",
             payment: 20,
-            status: "Paid",
+            status: "PAYABLE",
             paymentDate: "2020-07-15T13:00:00.000Z",
             expertise: "Front-End",
         };
@@ -54,7 +54,7 @@ describe("BalanceService", () => {
         expect(1).toEqual(returnedActions.length);
         expect(returnedActions[0]).toMatchObject({
             ...action,
-            status: PaymentStatus.Paid,
+            status: PaymentStatus.PAYABLE,
             paymentDate: new Date(action.paymentDate),
             creationDate: new Date(action.creationDate),
             valueDate: new Date(action.valueDate),
@@ -70,7 +70,7 @@ describe("BalanceService", () => {
                 type: "Interview",
                 payment: 20,
                 valueDate: new Date("2020-07-15T15:00:00"),
-                status: PaymentStatus[PaymentStatus.Unpaid],
+                status: PaymentStatus[PaymentStatus.NON_PAYABLE],
                 expertise: "Front-End",
             },
             {
@@ -78,7 +78,7 @@ describe("BalanceService", () => {
                 type: "Interview",
                 payment: 30,
                 valueDate: new Date("2020-07-15T15:00:00"),
-                status: PaymentStatus[PaymentStatus.Paid],
+                status: PaymentStatus[PaymentStatus.PAYABLE],
                 expertise: "Front-End",
             },
             {
@@ -86,7 +86,7 @@ describe("BalanceService", () => {
                 type: "Interview",
                 payment: 50,
                 valueDate: new Date("2020-07-15T15:00:00"),
-                status: PaymentStatus[PaymentStatus.Unpaid],
+                status: PaymentStatus[PaymentStatus.NON_PAYABLE],
                 expertise: "Front-End",
             },
         ];
@@ -99,7 +99,7 @@ describe("BalanceService", () => {
 
         expect(2).toEqual(returnedActions.length);
         returnedActions.forEach((action) => {
-            expect(PaymentStatus.Unpaid).toEqual(action.status);
+            expect(PaymentStatus.NON_PAYABLE).toEqual(action.status);
         });
 
         expect(mockedAxios.get).toHaveBeenCalledWith(`/users/id1/actions`);

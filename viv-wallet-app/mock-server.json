@@ -135,7 +135,7 @@
             "creationDate": "2020-07-15T15:00:00",
             "valueDate": "2020-07-15T15:00:00",
             "payment": 20,
-            "status": "Paid",
+            "status": "PAYABLE",
             "paymentDate": "2020-07-15T15:00:00",
             "expertise": "Front-End",
             "achiever": {
@@ -156,7 +156,7 @@
             "creationDate": "2020-07-12T15:00:00",
             "valueDate": "2020-07-15T15:00:00",
             "payment": 20,
-            "status": "Unpaid",
+            "status": "NON_PAYABLE",
             "expertise": "Front-End",
             "achiever": {
                 "id": "1",
@@ -176,7 +176,7 @@
             "creationDate": "2020-07-15T15:00:00",
             "valueDate": "2020-07-15T15:00:00",
             "payment": 50,
-            "status": "Paid",
+            "status": "TO_VALIDATE",
             "paymentDate": "2020-07-12T15:00:00",
             "expertise": "Front-End",
             "achiever": {
@@ -197,7 +197,7 @@
             "creationDate": "2020-07-15T15:00:00",
             "valueDate": "2020-07-15T15:00:00",
             "payment": 50,
-            "status": "Unpaid",
+            "status": "PAYABLE",
             "paymentDate": "2020-07-12T15:00:00",
             "expertise": "Front-End",
             "achiever": {
@@ -218,7 +218,7 @@
             "creationDate": "2020-07-15T15:00:00",
             "valueDate": "2020-07-15T15:00:00",
             "payment": 20,
-            "status": "Paid",
+            "status": "PAYABLE",
             "paymentDate": "2020-07-15T15:00:00",
             "expertise": "Front-End",
             "achiever": {
@@ -240,7 +240,7 @@
             "creationDate": "2020-07-15T15:00:00",
             "valueDate": "2020-07-15T15:00:00",
             "payment": 20,
-            "status": "Unpaid",
+            "status": "NON_PAYABLE",
             "paymentDate": "2020-07-15T15:00:00",
             "expertise": "Front-End",
             "achiever": {
@@ -262,7 +262,7 @@
             "creationDate": "2020-07-15T15:00:00",
             "valueDate": "2020-07-15T15:00:00",
             "payment": 50,
-            "status": "Paid",
+            "status": "PAYABLE",
             "paymentDate": "2020-07-15T15:00:00",
             "expertise": "Front-End",
             "achiever": {
