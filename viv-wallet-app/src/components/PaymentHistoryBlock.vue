@@ -20,7 +20,9 @@
                 <tbody>
                     <tr v-for="payment in payments" :key="payment.id">
                         <td>
-                            <delete-payment-button :payment="payment" @paymentDelete="deletePayment" />
+                            <check-roles :roles="adminOnly">
+                                <delete-payment-button :payment="payment" @paymentDelete="deletePayment" />
+                            </check-roles>
                         </td>
                         <td class="right">{{ payment.date.toDateString() }}</td>
                         <td class="right viv">{{ payment.viv }}</td>
@@ -108,12 +110,14 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref } from "vue";
 import { Payment } from "../models/payment";
+import { adminOnly } from "../models/role";
 import { WalletService } from "../services/wallet";
+import CheckRoles from "./CheckRoles.vue";
 import DeletePaymentButton from "./DeletePaymentButton.vue";
 
 export default defineComponent({
     name: "PaymentHistoryBlock",
-    components: { DeletePaymentButton },
+    components: { DeletePaymentButton, CheckRoles },
     props: {
         userId: {
             default: () => "",
@@ -129,6 +133,7 @@ export default defineComponent({
         });
         return {
             payments,
+            adminOnly,
             formatWithCurrency(value: number) {
                 const formatter = new Intl.NumberFormat("fr", {
                     style: "currency",

@@ -28,6 +28,10 @@ a {
     text-decoration: none;
 }
 
+body {
+    overflow: hidden;
+}
+
 .sr-only {
     position: absolute;
     width: 1px;

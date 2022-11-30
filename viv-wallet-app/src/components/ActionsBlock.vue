@@ -12,9 +12,9 @@
         <table v-if="actions.length > 0">
             <colgroup>
                 <col style="width: 25%" />
-                <col style="width: 42%" />
+                <col style="width: 40%" />
                 <col style="width: 8%" />
-                <col style="width: 25%" />
+                <col style="width: 27%" />
             </colgroup>
             <thead>
                 <tr>
@@ -55,9 +55,6 @@
                                         <span class="select-focus"></span>
                                     </div>
                                 </check-roles>
-                            </div>
-                            <div v-if="action.paymentDate" class="payment-date">
-                                {{ action.paymentDate ? action.paymentDate.toDateString() : "" }}
                             </div>
                         </div>
                     </td>
