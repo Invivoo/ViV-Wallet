@@ -2,7 +2,7 @@ version: 2.1
 
 orbs:
     azure-cli: circleci/azure-cli@1.2.0
-    helm: circleci/helm@0.2.3
+    helm: circleci/helm@2.0.1
     docker: circleci/docker@1.5.0
 
 references:
@@ -180,6 +180,9 @@ jobs:
             - attach_workspace:
                   at: ~/project
             - docker/install-docker
+            - run:
+                  name: Update openssl
+                  command: apk add openssl
             - helm/install-helm-client:
                   version: v3.1.1
             - *build_version_variables
