@@ -2,13 +2,12 @@ package com.invivoo.vivwallet.api.application.security;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.invivoo.vivwallet.api.domain.user.UserService;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.GenericFilterBean;
 
-import javax.naming.AuthenticationException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
@@ -36,8 +35,10 @@ public class JWTAuthenticationFilter extends GenericFilterBean {
             try {
                 DecodedJWT decodedJWT = jwtTokenProvider.verify(token);
                 JWTUserDetails jwtUserDetails = JWTUserDetails.fromDecodedJWT(decodedJWT, objectMapper)
-                                                              .orElseThrow(AuthenticationException::new);
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(jwtUserDetails, null, jwtUserDetails.getAuthorities());
+                                                              .orElseThrow(() -> new BadCredentialsException(token));
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(jwtUserDetails,
+                                                                                                             null,
+                                                                                                             jwtUserDetails.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } catch (Exception e) {

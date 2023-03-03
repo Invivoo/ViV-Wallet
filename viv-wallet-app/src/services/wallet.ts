@@ -40,7 +40,7 @@ export class WalletService extends ServiceBase {
             ...rawAction,
             creationDate: new Date(rawAction.creationDate),
             valueDate: new Date(rawAction.valueDate),
-            paymentDate: new Date(rawAction.paymentDate),
+            paymentDate: rawAction.paymentDate ? new Date(rawAction.paymentDate) : undefined,
             status: PaymentStatus[rawAction.status],
         }));
     }
@@ -50,7 +50,7 @@ export class WalletService extends ServiceBase {
         const actions = await this.getUserActions(userId);
         return actions.filter(
             (action) =>
-                action.status === PaymentStatus.Unpaid &&
+                action.status === PaymentStatus.NON_PAYABLE &&
                 (action.valueDate.getFullYear() < now.getFullYear() ||
                     (action.valueDate.getFullYear() === now.getFullYear() &&
                         action.valueDate.getMonth() < now.getMonth()))
@@ -67,5 +67,20 @@ export class WalletService extends ServiceBase {
 
     async saveUserPayment(payment: PaymentPost): Promise<Object> {
         return (await this.http.post<boolean>("payments", payment)).data;
+    }
+
+    async deleteUserPayment(paymentId: string) {
+        return this.http.delete<{}>(`payments/${paymentId}`);
+    }
+
+    async saveActions(userId: string, actions: Action[]): Promise<Object> {
+        const rawActions = actions.map((e) => ({
+            ...e,
+            creationDate: e.creationDate.toISOString(),
+            valueDate: e.valueDate.toISOString(),
+            paymentDate: e.paymentDate ? e.paymentDate.toISOString : undefined,
+            status: e.status.toString(),
+        }));
+        return (await this.http.post<RawAction[]>(`/users/${userId}/actions`, { updates: rawActions })).data;
     }
 }

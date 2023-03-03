@@ -2,7 +2,7 @@ version: 2.1
 
 orbs:
     azure-cli: circleci/azure-cli@1.2.0
-    helm: circleci/helm@0.2.3
+    helm: circleci/helm@2.0.1
     docker: circleci/docker@1.5.0
 
 references:
@@ -61,7 +61,7 @@ references:
 jobs:
     checkout:
         docker:
-            - image: cimg/node:15.14
+            - image: cimg/node:16.18
               <<: *docker_auth
         resource_class: small
         steps:
@@ -72,9 +72,10 @@ jobs:
                       - .
     webapp:
         docker:
-            - image: cimg/node:15.14.0-browsers
+            - image: cimg/node:16.18.0-browsers
               <<: *docker_auth
         working_directory: ~/project
+        resource_class: large
         steps:
             - attach_workspace:
                   at: ~/project
@@ -179,6 +180,9 @@ jobs:
             - attach_workspace:
                   at: ~/project
             - docker/install-docker
+            - run:
+                  name: Update openssl
+                  command: apk add openssl
             - helm/install-helm-client:
                   version: v3.1.1
             - *build_version_variables

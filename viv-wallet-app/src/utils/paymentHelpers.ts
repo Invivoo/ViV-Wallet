@@ -1,29 +1,28 @@
-import { ActionForHistory, PaymentStatus } from "@/models/action";
+import { PaymentStatus } from "@/models/action";
 
-export function isPaymentPaid(action: ActionForHistory) {
-    return action.status === PaymentStatus.Paid;
-}
 export function formatPaymentStatus(status: PaymentStatus) {
     switch (status) {
-        case PaymentStatus.Paid:
-            return "Débloqué";
-        case PaymentStatus.Unpaid:
+        case PaymentStatus.PAYABLE:
+            return "Monétisable";
+        case PaymentStatus.NON_PAYABLE:
+            return "Non monétisable";
         default:
-            return "Non débloqué";
+            return "À valider";
     }
 }
 export function getPaymentStatusType(status: PaymentStatus) {
     switch (status) {
-        case PaymentStatus.Paid:
+        case PaymentStatus.PAYABLE:
             return "green";
-        case PaymentStatus.Unpaid:
+        case PaymentStatus.TO_VALIDATE:
+            return "yellow";
+        case PaymentStatus.NON_PAYABLE:
         default:
             return "red";
     }
 }
 
 export default {
-    isPaymentPaid,
     formatPaymentStatus,
     getPaymentStatusType,
 };

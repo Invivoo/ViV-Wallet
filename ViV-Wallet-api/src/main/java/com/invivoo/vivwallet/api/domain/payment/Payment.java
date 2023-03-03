@@ -21,7 +21,6 @@ import java.util.Collection;
 @Table(name="payments")
 @Entity
 @Data
-@ToString(exclude = "actions")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
@@ -36,6 +35,5 @@ public class Payment {
     @ManyToOne
     private User creator;
     private int vivAmount;
-    @OneToMany(mappedBy = "payment")
-    private Collection<Action> actions;
+
 }

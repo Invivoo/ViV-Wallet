@@ -40,7 +40,7 @@
                                     formatPaymentStatus(action.status)
                                 }}</status-badge>
                             </div>
-                            <div v-if="isPaymentPaid(action)" class="payment-date">
+                            <div v-if="action.paymentDate" class="payment-date">
                                 {{ action.paymentDate ? action.paymentDate.toDateString() : "" }}
                             </div>
                         </div>

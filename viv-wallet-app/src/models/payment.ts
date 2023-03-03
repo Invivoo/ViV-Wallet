@@ -7,6 +7,5 @@ export interface Payment {
 export interface PaymentPost {
     date: Date;
     receiverId: string;
-    actionIds: string[];
     vivAmount: number;
 }

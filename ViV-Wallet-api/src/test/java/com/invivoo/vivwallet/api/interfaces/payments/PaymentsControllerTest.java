@@ -43,24 +43,31 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @WebMvcTest(PaymentsController.class)
 public class PaymentsControllerTest {
-
-    private static final Action ACTION_1 = Action.builder().id(1L).vivAmount(10).valueDate(LocalDateTime.of(2020,7,1,0,0,0)).build();
-    private static final Action ACTION_2 = Action.builder().id(2L).vivAmount(10).valueDate(LocalDateTime.of(2020,7,1,0,0,0)).build();
-    private static final List<Action> ACTIONS = Arrays.asList(ACTION_1, ACTION_2);
     private static final LocalDate PAYMENT_DATE = LocalDate.of(2020, 1, 1);
     private static final User THEOPHILE_MONTGOMERY = User.builder().id(1L).fullName("Théophile MONTGOMERY").build();
     public static final User RECEIVER = User.builder()
                                             .id(8L)
                                             .fullName("John DOE")
                                             .build();
-    private static final Payment PAYMENT_1 = Payment.builder().id(1L).creator(THEOPHILE_MONTGOMERY).receiver(RECEIVER).date(PAYMENT_DATE).vivAmount(20).actions(ACTIONS).build();
-    private static final Payment PAYMENT_2 = Payment.builder().id(2L).creator(THEOPHILE_MONTGOMERY).receiver(RECEIVER).date(PAYMENT_DATE).vivAmount(20).actions(ACTIONS).build();
+    private static final Payment PAYMENT_1 = Payment.builder()
+                                                    .id(1L)
+                                                    .creator(THEOPHILE_MONTGOMERY)
+                                                    .receiver(RECEIVER)
+                                                    .date(PAYMENT_DATE)
+                                                    .vivAmount(20)
+                                                    .build();
+    private static final Payment PAYMENT_2 = Payment.builder()
+                                                    .id(2L)
+                                                    .creator(THEOPHILE_MONTGOMERY)
+                                                    .receiver(RECEIVER)
+                                                    .date(PAYMENT_DATE)
+                                                    .vivAmount(20)
+                                                    .build();
     private static final List<Payment> PAYMENTS = Arrays.asList(PAYMENT_1, PAYMENT_2);
     private static final PaymentRequest PAYMENT_REQUEST = PaymentRequest.builder()
                                                                         .date(PAYMENT_DATE)
                                                                         .receiverId(RECEIVER.getId())
                                                                         .vivAmount(20)
-                                                                        .actionIds(ACTIONS.stream().map(Action::getId).collect(Collectors.toList()))
                                                                         .build();
     private static final ObjectMapper mapper = new ViVWalletApiApplication().objectMapper();
 
@@ -73,9 +80,6 @@ public class PaymentsControllerTest {
 
     @MockBean
     private PaymentService paymentService;
-
-    @MockBean
-    private ActionService actionService;
 
     @MockBean
     private UserService userService;
@@ -91,39 +95,22 @@ public class PaymentsControllerTest {
 
         // when
         ResultActions resultActions = this.mockMvc.perform(
-                get("/api/v1/payments"))
-                .andDo(MockMvcResultHandlers.print());
+                                                  get("/api/v1/payments"))
+                                                  .andDo(MockMvcResultHandlers.print());
         // then
         resultActions.andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string(mapper.writeValueAsString(PAYMENTS.stream()
-                                                                                                    .map(PaymentDto::createFromPayment)
-                                                                                                    .collect(Collectors.toList()))));
+                     .andExpect(MockMvcResultMatchers.content().string(mapper.writeValueAsString(PAYMENTS.stream()
+                                                                                                         .map(PaymentDto::createFromPayment)
+                                                                                                         .collect(Collectors.toList()))));
     }
 
     @Test
-    public void getActionsByPaymentId() throws Exception {
-        // given
-        when(paymentService.getActionsByPaymentId(anyLong()))
-                .thenReturn(ACTIONS);
-        String jsonActions = mapper.writeValueAsString(ACTIONS);
-
-        // when
-        ResultActions resultActions = this.mockMvc.perform(
-                get(String.format("/api/v1/payments/%s/actions", PAYMENT_1.getId())))
-                .andDo(MockMvcResultHandlers.print());
-        // then
-        resultActions.andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string(jsonActions));
-    }
-
-    @Test
-    @WithMockUser(username = "Théophile MONTGOMERY", authorities = { "COMPANY_ADMINISTRATOR"})
+    @WithMockUser(username = "Théophile MONTGOMERY", authorities = {"COMPANY_ADMINISTRATOR"})
     public void shouldReturnOKAndCreatedPayment_whenPostPaymentRequest() throws Exception {
 
         // given
         when(userService.findById(PAYMENT_REQUEST.getReceiverId())).thenReturn(Optional.of(RECEIVER));
         when(securityService.getConnectedUser()).thenReturn(Optional.of(THEOPHILE_MONTGOMERY));
-        when(actionService.findAllById(ACTIONS.stream().map(Action::getId).collect(Collectors.toList()))).thenReturn(ACTIONS);
         when(userService.computeBalance(RECEIVER)).thenReturn(PAYMENT_1.getVivAmount());
         when(paymentService.save(any(Payment.class))).thenReturn(PAYMENT_1);
 
@@ -146,7 +133,6 @@ public class PaymentsControllerTest {
         // given
         when(userService.findById(PAYMENT_REQUEST.getReceiverId())).thenReturn(Optional.of(RECEIVER));
         when(securityService.getConnectedUser()).thenReturn(Optional.of(THEOPHILE_MONTGOMERY));
-        when(actionService.findAllById(ACTIONS.stream().map(Action::getId).collect(Collectors.toList()))).thenReturn(ACTIONS);
         when(paymentService.save(any(Payment.class))).thenReturn(PAYMENT_1);
 
         // when

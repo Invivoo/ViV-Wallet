@@ -1,6 +1,5 @@
 package com.invivoo.vivwallet.api.domain.payment;
 
-import com.invivoo.vivwallet.api.domain.action.Action;
 import com.invivoo.vivwallet.api.domain.action.ActionRepository;
 import com.invivoo.vivwallet.api.domain.user.User;
 import com.invivoo.vivwallet.api.domain.user.UserRepository;
@@ -22,18 +21,13 @@ public class PaymentService {
     private final PaymentRepository paymentRepository;
     private final ActionRepository actionRepository;
 
+    public Optional<Payment> findById(Long paymentId) {
+        return paymentRepository.findById(paymentId);
+    }
+
     public List<Payment> getAll() {
         List<Payment> payments = paymentRepository.getAllByOrderByDateDesc();
         return payments != null && !payments.isEmpty() ? payments : Collections.emptyList();
-    }
-
-    public List<Payment> findAllByReceiverOrderByDateAsc(User receiver) {
-        return paymentRepository.findAllByReceiverOrderByDateAsc(receiver);
-    }
-
-    public List<Action> getActionsByPaymentId(Long paymentId) {
-        List<Action> actions = actionRepository.findAllByPaymentIdOrderByDateDesc(paymentId);
-        return actions != null && !actions.isEmpty() ? actions : Collections.emptyList();
     }
 
     public List<PaymentDto> findAllByReceiver(Long receiverId) {
@@ -50,10 +44,7 @@ public class PaymentService {
     }
 
     public Payment save(Payment payment) {
-        Optional.ofNullable(payment.getActions())
-                .ifPresent(actions -> actions.forEach(a -> a.setPayment(payment)));
-        paymentRepository.save(payment);
-        return payment;
+        return paymentRepository.save(payment);
     }
 
     public List<Payment> saveAll(List<Payment> payments) {
@@ -62,5 +53,10 @@ public class PaymentService {
 
     public void deleteAll() {
         paymentRepository.deleteAll();
+    }
+
+    public Payment delete(Payment payment) {
+        paymentRepository.delete(payment);
+        return payment;
     }
 }

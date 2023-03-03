@@ -1,7 +1,5 @@
 package com.invivoo.vivwallet.api.domain.action;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.invivoo.vivwallet.api.domain.payment.Payment;
 import com.invivoo.vivwallet.api.domain.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,7 +8,10 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,13 +20,15 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import java.time.LocalDateTime;
 
-@Table(name="actions", uniqueConstraints = @UniqueConstraint(columnNames = {"lynxActivityId", "achiever_id", "type"}))
+@Table(name = "actions", uniqueConstraints = @UniqueConstraint(columnNames = {"lynxActivityId", "achiever_id", "type"}))
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class Action {
+
+    public static final Long ACTION_FOR_INITIAL_BALANCE_ID = -1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,18 +47,8 @@ public class Action {
     @EqualsAndHashCode.Exclude
     @ManyToOne
     private User creator;
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    @ManyToOne
-    private Payment payment;
+    @Enumerated(EnumType.STRING)
+    private ActionStatus status;
     private boolean isDeleted;
 
-    @JsonIgnore
-    public boolean isPayable() {
-        if(valueDate == null){
-            return false;
-        }
-        LocalDateTime now = LocalDateTime.now();
-        return valueDate.getYear() < now.getYear() || (valueDate.getMonth().getValue() < now.getMonth().getValue() && valueDate.getYear() == now.getYear());
-    }
 }

@@ -13,8 +13,7 @@
         cursor: pointer;
     }
     &:disabled {
-        background: $white;
-        color: $primary-700;
+        opacity: 0.7;
     }
     &:hover:enabled,
     &:hover:not(button) {
@@ -23,6 +22,33 @@
     &:focus {
         outline: none;
         box-shadow: 0 0 0 2px $primary-400;
+    }
+}
+
+.primary-red-button {
+    display: block;
+    width: fit-content;
+    font-family: "Open Sans", sans-serif;
+    background: $red-700;
+    color: $white;
+    font-weight: 700;
+    font-size: $text-sm;
+    border-radius: $rounded-md;
+    border: none;
+    padding: $m-2 $m-4;
+    &:enabled {
+        cursor: pointer;
+    }
+    &:disabled {
+        opacity: 0.7;
+    }
+    &:hover:enabled,
+    &:hover:not(button) {
+        background: $red-800;
+    }
+    &:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px $red-400;
     }
 }
 
@@ -45,6 +71,28 @@
     &:focus {
         outline: none;
         box-shadow: 0 0 0 2px $primary-400;
+    }
+}
+
+.secondary-gray-button {
+    display: block;
+    width: fit-content;
+    font-family: "Open Sans", sans-serif;
+    background: transparent;
+    color: $gray-700;
+    font-weight: 700;
+    font-size: $text-sm;
+    border-radius: $rounded-md;
+    border: solid 1px $gray-700;
+    padding: $m-2 $m-4;
+    cursor: pointer;
+    &:hover {
+        background: $gray-700;
+        color: $white;
+    }
+    &:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px $gray-400;
     }
 }
 
