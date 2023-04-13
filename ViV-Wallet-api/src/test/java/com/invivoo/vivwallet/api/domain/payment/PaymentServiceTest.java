@@ -1,6 +1,5 @@
 package com.invivoo.vivwallet.api.domain.payment;
 
-import com.invivoo.vivwallet.api.domain.action.Action;
 import com.invivoo.vivwallet.api.domain.action.ActionRepository;
 import com.invivoo.vivwallet.api.domain.user.User;
 import com.invivoo.vivwallet.api.domain.user.UserRepository;
@@ -49,7 +48,7 @@ public class PaymentServiceTest {
         Payment payment4 = Payment.builder().id((long) 4).date(LocalDate.now()).creator(creator).receiver(receiver2).build();
         List<Payment> payments = Arrays.asList(payment1, payment2, payment3, payment4);
         when(paymentRepository.getAllByOrderByDateDesc()).thenReturn(payments);
-        PaymentService paymentService = new PaymentService(userRepository, paymentRepository, actionRepository);
+        PaymentService paymentService = new PaymentService(userRepository, paymentRepository);
         //When
         List<Payment> list = paymentService.getAll();
 
@@ -63,7 +62,7 @@ public class PaymentServiceTest {
         //Given
         long unknwonUserId = 1L;
         when(userRepository.findById(unknwonUserId)).thenReturn(Optional.empty());
-        PaymentService paymentService = new PaymentService(userRepository, paymentRepository, actionRepository);
+        PaymentService paymentService = new PaymentService(userRepository, paymentRepository);
 
         //When
         List<PaymentDto> paymentDtos = paymentService.findAllByReceiver(unknwonUserId);
@@ -79,7 +78,7 @@ public class PaymentServiceTest {
         User testUser = TEST_USER;
         when(userRepository.findById(testUser.getId())).thenReturn(Optional.of(testUser));
         when(paymentRepository.findAllByReceiverOrderByDateDesc(testUser)).thenReturn(Collections.emptyList());
-        PaymentService paymentService = new PaymentService(userRepository, paymentRepository, actionRepository);
+        PaymentService paymentService = new PaymentService(userRepository, paymentRepository);
 
         //When
         List<PaymentDto> paymentDtos = paymentService.findAllByReceiver(testUser.getId());
@@ -103,7 +102,7 @@ public class PaymentServiceTest {
                                  .vivAmount(actionVivAmount)
                                  .build();
         when(paymentRepository.findAllByReceiverOrderByDateDesc(testUser)).thenReturn(List.of(payment));
-        PaymentService paymentService = new PaymentService(userRepository, paymentRepository, actionRepository);
+        PaymentService paymentService = new PaymentService(userRepository, paymentRepository);
 
         //When
         List<PaymentDto> paymentDtos = paymentService.findAllByReceiver(testUser.getId());
@@ -132,7 +131,7 @@ public class PaymentServiceTest {
                                  .vivAmount(100)
                                  .build();
         when(paymentRepository.findAllByReceiverOrderByDateDesc(testUser)).thenReturn(List.of(payment));
-        PaymentService paymentService = new PaymentService(userRepository, paymentRepository, actionRepository);
+        PaymentService paymentService = new PaymentService(userRepository, paymentRepository);
 
         //When
         List<PaymentDto> paymentDtos = paymentService.findAllByReceiver(testUser.getId());
@@ -167,7 +166,7 @@ public class PaymentServiceTest {
                                   .vivAmount(50)
                                   .build();
         when(paymentRepository.findAllByReceiverOrderByDateDesc(testUser)).thenReturn(List.of(payment2, payment1));
-        PaymentService paymentService = new PaymentService(userRepository, paymentRepository, actionRepository);
+        PaymentService paymentService = new PaymentService(userRepository, paymentRepository);
 
         //When
         List<PaymentDto> paymentDtos = paymentService.findAllByReceiver(testUser.getId());

@@ -8,6 +8,7 @@ clusterSpecificDnszone: "YOUR ZONE.northeurope.aksapp.io"
 vivwalletSpecificDnszone: "vivwallet.test.com"
 x4bAuthPublicKeyUrl: "Public Key Url"
 lynxApiUrl: "Lynx Api Url"
+lynxUserApiUrl: "Lynx User Api Url"
 apiKey: "YOUR API KEY"
 useLocalhost: false
 traceEnabled: true
@@ -73,3 +74,8 @@ lynxSynchronization:
     image: curlimages/curl:7.74.0
     suspend: true
     cronExpression: "@hourly"
+
+lynxUserSynchronization:
+    image: curlimages/curl:7.74.0
+    suspend: true
+    cronExpression: "@daily"

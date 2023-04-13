@@ -1,0 +1,23 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .Release.Name }}-lynx-user-synchronization
+spec:
+  schedule: {{ .Values.lynxUserSynchronization.cronExpression | quote }}
+  concurrencyPolicy: Forbid
+  suspend: {{ .Values.lynxUserSynchronization.suspend }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: {{ .Release.Name }}-lynx-user-synchronization-cronjob
+              image: {{ .Values.lynxUserSynchronization.image }}
+              command:
+              - "/bin/sh"
+              - "-ec"
+              - |
+                echo "Starting Lynx User Synchronization"
+                curl --fail -s -v -X POST "http://{{ .Release.Name }}-{{ .Values.api.name }}-svc:{{ .Values.api.service.externalPort }}/api/v1/users/updateFromLynx" -H "Authorization: ApiKey {{ .Values.apiKey }}"
+                echo "Lynx User Synchronization Complete"
+          restartPolicy: Never

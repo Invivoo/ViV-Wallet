@@ -9,12 +9,11 @@ export class ServiceBase {
 
     constructor(http?: AxiosInstance, route = "") {
         this.loginService = new LoginService();
-        const requestTimeoutInMs = getConfigValue("VUE_APP_REQUEST_TIMEOUT_MS");
         this.http =
             http ||
             axios.create({
                 baseURL: `${getConfigValue("VUE_APP_BACKEND_BASE_URL")}${route}`,
-                timeout: requestTimeoutInMs ? Number.parseInt(requestTimeoutInMs, 10) : undefined,
+                timeout: undefined,
                 headers: { Authorization: `Bearer ${LoginService.getJwtToken()}` },
                 withCredentials: true,
             });

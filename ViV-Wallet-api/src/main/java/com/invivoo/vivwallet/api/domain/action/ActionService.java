@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 @Service
 public class ActionService {
 
+    public static final LocalDateTime MINIMUM_SART_VALUE_DATE_VALID_FOR_JPA_QUERY = LocalDateTime.of(2000, Month.JANUARY, 1, 0, 0);
     private final ActionRepository actionRepository;
     private final LynxConnector lynxConnector;
 
@@ -31,8 +33,7 @@ public class ActionService {
     }
 
     public List<Action> findAllByAchieverOrderByDateDesc(User achiever) {
-        LocalDateTime startValueDate = Optional.ofNullable(achiever.getVivInitialBalanceDate()).orElse(
-                LocalDateTime.MIN);
+        LocalDateTime startValueDate = Optional.ofNullable(achiever.getVivInitialBalanceDate()).orElse(MINIMUM_SART_VALUE_DATE_VALID_FOR_JPA_QUERY);
         ArrayList<Action> actions = new ArrayList<>(actionRepository.findAllByAchieverAndValueDateAfter(achiever, startValueDate));
         getActionForInitialBalance(achiever).ifPresent(actions::add);
         actions.sort(Comparator.comparing(Action::getDate).reversed());
