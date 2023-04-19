@@ -1,0 +1,171 @@
+{
+    "info": {
+        "_postman_id": "7c65f97d-b672-455c-8ebc-ec0c14f0cc81",
+        "name": "Invivoo",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "_exporter_id": "21797038"
+    },
+    "item": [
+        {
+            "name": "api/v1/admin/generateMasterExcel",
+            "request": {
+                "auth": {
+                    "type": "apikey",
+                    "apikey": [
+                        {
+                            "key": "key",
+                            "value": "Authorization",
+                            "type": "string"
+                        },
+                        {
+                            "key": "value",
+                            "value": "ApiKey CNnGGPzCT9xdKy7G",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "method": "POST",
+                "header": [],
+                "url": {
+                    "raw": "{{viv-wallet}}/api/v1/admin/generateMasterExcel",
+                    "host": ["{{viv-wallet}}"],
+                    "path": ["api", "v1", "admin", "generateMasterExcel"]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "api/v1/users/updateFromLynx",
+            "request": {
+                "auth": {
+                    "type": "apikey",
+                    "apikey": [
+                        {
+                            "key": "value",
+                            "value": "DEV_API_KEY",
+                            "type": "string"
+                        },
+                        {
+                            "key": "key",
+                            "value": "ApiKey",
+                            "type": "string"
+                        },
+                        {
+                            "key": "in",
+                            "value": "header",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "method": "POST",
+                "header": [],
+                "url": {
+                    "raw": "{{viv-wallet}}/api/v1/users/updateFromLynx",
+                    "host": ["{{viv-wallet}}"],
+                    "path": ["api", "v1", "users", "updateFromLynx"]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "api/v1/actions/updateFromLynx",
+            "request": {
+                "auth": {
+                    "type": "apikey",
+                    "apikey": [
+                        {
+                            "key": "value",
+                            "value": "DEV_API_KEY",
+                            "type": "string"
+                        },
+                        {
+                            "key": "key",
+                            "value": "ApiKey",
+                            "type": "string"
+                        },
+                        {
+                            "key": "in",
+                            "value": "header",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "method": "POST",
+                "header": [],
+                "url": {
+                    "raw": "{{viv-wallet}}/api/v1/actions/updateFromLynx",
+                    "host": ["{{viv-wallet}}"],
+                    "path": ["api", "v1", "actions", "updateFromLynx"]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "api/v1/users",
+            "request": {
+                "auth": {
+                    "type": "apikey",
+                    "apikey": [
+                        {
+                            "key": "value",
+                            "value": "DEV_API_KEY",
+                            "type": "string"
+                        },
+                        {
+                            "key": "key",
+                            "value": "ApiKey",
+                            "type": "string"
+                        },
+                        {
+                            "key": "in",
+                            "value": "header",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{viv-wallet}}/api/v1/users",
+                    "host": ["{{viv-wallet}}"],
+                    "path": ["api", "v1", "users"]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "https://vivwallet.uat.invivoo.com/api/v1/actions",
+            "request": {
+                "auth": {
+                    "type": "apikey",
+                    "apikey": [
+                        {
+                            "key": "value",
+                            "value": "DEV_API_KEY",
+                            "type": "string"
+                        },
+                        {
+                            "key": "key",
+                            "value": "ApiKey",
+                            "type": "string"
+                        },
+                        {
+                            "key": "in",
+                            "value": "header",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "https://vivwallet.uat.invivoo.com/api/v1/users",
+                    "protocol": "https",
+                    "host": ["vivwallet", "uat", "invivoo", "com"],
+                    "path": ["api", "v1", "users"]
+                }
+            },
+            "response": []
+        }
+    ]
+}

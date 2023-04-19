@@ -37,10 +37,10 @@ Le VIV Wallet est un projet fil rouge dans le cadre du Programme Grow Together. 
 Si tu veux contribuer, voilà la marche à suivre :
 
 -   Lis bien l'intégralité de ce README !
--   Choisis le ticket que tu veux développer dans [la version en cours de développement](https://github.com/Invivoo/ViV-Wallet/projects/1),
--   Indique sur Teams [dans le canal du projet](https://teams.microsoft.com/l/channel/19%3a4ad8360f9c4e4016a157bfe3f7ca968a%40thread.skype/VIV-Wallet?groupId=d5a0827f-1103-4e19-89f3-d85e7caeb167&tenantId=6d13640c-ba8f-4480-a2a0-0093bacdb7c1) le ticket sur lequel tu souhaites t'impliquer en créant une conversation avec le lien du ticket,
+-   Choisis le ticket que tu veux développer dans [la version en cours de développement](https://github.com/Invivoo/ViV-Wallet/projects/2),
+-   Indique sur Teams [dans le canal du projet](https://teams.microsoft.com/l/channel/19%3ab4db94c02b504ed29dcdde8ed49c3aa3%40thread.tacv2/VIV%2520Wallet?groupId=5b6a22b3-b1d6-4c81-82c4-0f5d886712e4&tenantId=6d13640c-ba8f-4480-a2a0-0093bacdb7c1) le ticket sur lequel tu souhaites t'impliquer en créant une conversation avec le lien du ticket,
 -   Attend le go d'un manager d'expertise (il vérifiera que le ticket est faisable et n'est pas déjà traité par quelqu'un d'autre),
--   Déplace le ticket dans In Progress en t'affectant sur le ticket [ici](https://github.com/Invivoo/ViV-Wallet/projects/1). N'hésite pas à demander plus d'info dans la conversation liée au ticket sur Teams.
+-   Déplace le ticket dans In Progress en t'affectant sur le ticket [ici](https://github.com/Invivoo/ViV-Wallet/projects/2). N'hésite pas à demander plus d'info dans la conversation liée au ticket sur Teams.
 -   Crée une branche intitulée _feature|hotfix/id-du-ticket_ à partir de la branche develop (exemple pour la feature #12, la branche serait feature/12),
 -   Pour chaque ticket, ajoute des Tests en t'inspirant de la spec et des tests existants !
 -   Une fois le développement fait, crée une pull request et demande via Teams à un manager d'expertise de la valider dans la conversation liée au ticket sur Teams,
@@ -63,11 +63,17 @@ Suivez [ce guide](https://git-scm.com/book/fr/v2/Git-sur-le-serveur-G%C3%A9n%C3%
 
 Ensuite le git clone la prendra en compte.
 
-### Pour ceux qui veulent travailler en isolation dans un container avec VSCode Remote Development
+### Pour travailler sur le backend avec la base d'uat en mode non authentifié
 
-[VSCode Remote Development](https://code.visualstudio.com/docs/remote/remote-overview) permet de travailler dans un environnement isolé (container docker par exemple). Pas besoin d'installer de jdk ou nodejs sur sa machine, l'environnement standard de dev (défini dans le répertoire .devcontainer) est créé automatiquement lors du premier lancement.
+Connect to invivoo local network using the wifi at the office or a vpn.
+Run `mvn clean install`.
+Run `mvn spring-boot:run` with uat and noAuth spring profiles activated.
+Use node v16, move to the `viv-wallet-app/` folder, run `npm i` and then `npm run serve:localbackend`.
 
-Pour installer l'extension VSCode pour le remote development, suivre la procédure suivante: [https://code.visualstudio.com/docs/remote/containers](https://code.visualstudio.com/docs/remote/containers).
+Pour utiliser les apis, intégrer ViV-Wallet-api/Invivoo.postman_collection.json dans postman et définir un environnement avec les propriétés suivantes :
+
+-   viv-wallet=locahost:8080,
+-   API_KEY=DEV_API_KEY,
 
 ### Pour travailler sur le backend avec le front et le back avec une base in memory
 
@@ -80,13 +86,6 @@ Then move to the `viv-wallet-app/` folder, run `npm run serve:localbackend` to s
 
 The app should be running at `localhost:4200`.
 
-### Pour travailler sur le backend avec la base d'uat en mode non authentifié
-
-Connect to invivoo local network using the wifi at the office or a vpn
-Run `mvn clean install`
-Run `mvn spring-boot:run` with uat and noAuth spring profiles activated
-Use node v16, move to the `viv-wallet-app/` folder and run `npm run serve:localbackend`
-
 ### Pour travailler sur le backend avec une base en local en mode non authentifié
 
 Launch sqlServer docker
@@ -94,6 +93,12 @@ with `docker run --name sql -P -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=/EU22MQwyx' -e
 Ask for a dump of the db and import it with Azure Data Studio
 Run `mvn clean install` and create a database named viv_wallet
 Run `mvn spring-boot:run` with sqlServer and noAuth spring profiles activated
+
+### Pour ceux qui veulent travailler en isolation dans un container avec VSCode Remote Development
+
+[VSCode Remote Development](https://code.visualstudio.com/docs/remote/remote-overview) permet de travailler dans un environnement isolé (container docker par exemple). Pas besoin d'installer de jdk ou nodejs sur sa machine, l'environnement standard de dev (défini dans le répertoire .devcontainer) est créé automatiquement lors du premier lancement.
+
+Pour installer l'extension VSCode pour le remote development, suivre la procédure suivante: [https://code.visualstudio.com/docs/remote/containers](https://code.visualstudio.com/docs/remote/containers).
 
 ### Pour travailler sur le frontend
 
