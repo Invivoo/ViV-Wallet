@@ -7,6 +7,7 @@ import lombok.Getter;
 @Getter
 public enum ActionType {
     INITIAL_BALANCE("Solde initial", null, Constants.IS_NOT_SHARED_BY_MULTIPLE_ACHIEVERS),
+    COACHING_HORS_OPP("Coaching Hors Opportunité", 0, Constants.IS_NOT_SHARED_BY_MULTIPLE_ACHIEVERS),
     COACHING("Coaching", 10, Constants.IS_NOT_SHARED_BY_MULTIPLE_ACHIEVERS),
     SUCCESSFUL_COACHING("Coaching gagnant", 40, Constants.IS_SHARED_BY_MULTIPLE_ACHIEVERS),
     TECHNICAL_ASSESSMENT("Évaluation technique", 10, Constants.IS_NOT_SHARED_BY_MULTIPLE_ACHIEVERS),
@@ -20,17 +21,27 @@ public enum ActionType {
     SCHOOL_PARTNERSHIP("Initier un partenariat école", 25, Constants.IS_SHARED_BY_MULTIPLE_ACHIEVERS),
     CORPORATE_PARTNERSHIP("Initier un partenariat entreprise", 100, Constants.IS_SHARED_BY_MULTIPLE_ACHIEVERS),
 
-    ONE_HOUR_FORMATION_TRAINING_SUPPORT("Formation interne 1 session d’1h – Création des supports", 25, Constants.IS_SHARED_BY_MULTIPLE_ACHIEVERS),
-    ONE_HOUR_FORMATION_ANIMATION("Formation interne 1 session d’1h – Animation", 15, Constants.IS_SHARED_BY_MULTIPLE_ACHIEVERS),
-    TWO_HOURS_FORMATION_TRAINING_SUPPORT("Formation interne de 2h sur 1 à 3 sessions max – Création des supports", 50, Constants.IS_SHARED_BY_MULTIPLE_ACHIEVERS),
-    TWO_HOURS_FORMATION_ANIMATION("Formation interne de 2h sur 1 à 3 sessions max – Animation", 30, Constants.IS_SHARED_BY_MULTIPLE_ACHIEVERS),
+    TWO_HOURS_HTT_TRAINING_SUPPORT("Création des supports de formation de 2 h hors temps de travail", 25, Constants.IS_SHARED_BY_MULTIPLE_ACHIEVERS),
+    ONE_DAY_TRAINING_SUPPORT("Création des supports de formation de 1 jour", 50, Constants.IS_SHARED_BY_MULTIPLE_ACHIEVERS),
+    ONE_DAY_HTT_TRAINING_SUPPORT("Création des supports de formation de 1 jour hors temps de travail", 120, Constants.IS_SHARED_BY_MULTIPLE_ACHIEVERS),
+    TWO_HOUR_HTT_FORMATION_ANIMATION("Animation de la session de 2 h hors temps de travail", 30, Constants.IS_SHARED_BY_MULTIPLE_ACHIEVERS),
+    ONE_DAY_FORMATION_ANIMATION("Animation de la session de 1 jour (forcément pendant tps de travail)", 30, Constants.IS_SHARED_BY_MULTIPLE_ACHIEVERS),
+    WEBINAR("Animation d'un Webinar", 15, Constants.IS_SHARED_BY_MULTIPLE_ACHIEVERS),
+
+    //ONE_HOUR_FORMATION_TRAINING_SUPPORT("Formation interne 1 session d’1h – Création des supports", 25, Constants.IS_SHARED_BY_MULTIPLE_ACHIEVERS),
+    //ONE_HOUR_FORMATION_ANIMATION("Formation interne 1 session d’1h – Animation", 15, Constants.IS_SHARED_BY_MULTIPLE_ACHIEVERS),
+    //TWO_HOURS_FORMATION_TRAINING_SUPPORT("Formation interne de 2h sur 1 à 3 sessions max – Création des supports", 50, Constants.IS_SHARED_BY_MULTIPLE_ACHIEVERS),
+    //TWO_HOURS_FORMATION_ANIMATION("Formation interne de 2h sur 1 à 3 sessions max – Animation", 30, Constants.IS_SHARED_BY_MULTIPLE_ACHIEVERS),
+
     SPEAKER("Speaker conference", 100, Constants.IS_SHARED_BY_MULTIPLE_ACHIEVERS),
+    RETEX("Retex", 10, Constants.IS_NOT_SHARED_BY_MULTIPLE_ACHIEVERS),
 
     SHORT_ARTICLE_PUBLICATION("Article court 100 – 500 mots", 5, Constants.IS_SHARED_BY_MULTIPLE_ACHIEVERS),
     ARTICLE_PUBLICATION("Article moyen 500 – 2500 mots", 15, Constants.IS_SHARED_BY_MULTIPLE_ACHIEVERS),
     LONG_ARTICLE_PUBLICATION("Article long >2500 mots", 20, Constants.IS_SHARED_BY_MULTIPLE_ACHIEVERS),
     WHITE_BOOK("Livre blanc", 100, Constants.IS_SHARED_BY_MULTIPLE_ACHIEVERS),
     CHEAT_SHEET("Cheat Sheet", 10, Constants.IS_SHARED_BY_MULTIPLE_ACHIEVERS),
+    INTERVIEW("Interview", 10, Constants.IS_NOT_SHARED_BY_MULTIPLE_ACHIEVERS),
 
     AUDIT_CIR_PHASE_1("Audit R&D - phase 1", 20, Constants.IS_NOT_SHARED_BY_MULTIPLE_ACHIEVERS),
     AUDIT_CIR_PHASE_2("Audit R&D - phase 2", 30, Constants.IS_NOT_SHARED_BY_MULTIPLE_ACHIEVERS),
