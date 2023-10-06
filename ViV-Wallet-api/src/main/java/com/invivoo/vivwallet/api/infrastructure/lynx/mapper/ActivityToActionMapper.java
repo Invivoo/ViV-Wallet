@@ -124,7 +124,7 @@ public class ActivityToActionMapper {
                 builder.type(ActionType.ONE_DAY_FORMATION_ANIMATION);
                 builder.context(String.format("Animation Formation 1J : %s", activity.getComment()));
                 break;
-            case ANIMATION_SESSION_DE_FORMATION_WEBINAR:
+            case ANIMATION_DUNE_SESSION_DE_FORMATION_AU_FORMAT_WEBINAR:
                 builder.type(ActionType.WEBINAR);
                 builder.context(String.format("Animation Formation Webinar : %s", activity.getComment()));
                 break;
