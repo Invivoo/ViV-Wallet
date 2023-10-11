@@ -56,9 +56,12 @@ public class ActivityToActionMapper {
         long activityDuration = getActivityDuration(activity);
         switch (activity.getType()) {
             case COACHING_HORS_OPPORTUNITE:
+                builder.type(ActionType.COACHING);
+                builder.context(String.format("Coaching de %s hors opportunité", activity.getRelatedTo()));
+                break;
             case COACHING_SUR_OPPORTUNITE:
                 builder.type(ActionType.COACHING);
-                builder.context(String.format("Coaching de %s", activity.getRelatedTo()));
+                builder.context(String.format("Coaching de %s sur opportunité", activity.getRelatedTo()));
                 break;
             case COACHING_SUR_OPPORTUNITE_GAGNEE:
                 builder.type(ActionType.SUCCESSFUL_COACHING);
@@ -101,33 +104,37 @@ public class ActivityToActionMapper {
                     builder.context(String.format("Partenariat Entreprise : %s %s", activity.getComment(), activity.getOpportunity()));
                 }
                 break;
-            case CREATION_DE_SUPPORT_DE_FORMATION:
-                if (activityDuration <= 1) {
-                    builder.type(ActionType.ONE_HOUR_FORMATION_TRAINING_SUPPORT);
-                } else {
-                    builder.type(ActionType.TWO_HOURS_FORMATION_TRAINING_SUPPORT);
-                }
-                builder.context(String.format("Support Formation : %s", activity.getComment()));
+            case CREATION_DE_SUPPORT_DE_FORMATION_2H_HTT:
+                builder.type(ActionType.TWO_HOURS_HTT_TRAINING_SUPPORT);
+                builder.context(String.format("Support Formation 2H HTT : %s", activity.getComment()));
                 break;
-            case ANIMATION_DUNE_SESSION_DE_FORMATION_EN_PRESENTIEL:
-                if (activityDuration <= 1) {
-                    builder.type(ActionType.ONE_HOUR_FORMATION_ANIMATION);
-                } else {
-                    builder.type(ActionType.TWO_HOURS_FORMATION_ANIMATION);
-                }
-                builder.context(String.format("Animation Formation : %s", activity.getComment()));
+            case CREATION_DE_SUPPORT_DE_FORMATION_1J:
+                builder.type(ActionType.ONE_DAY_TRAINING_SUPPORT);
+                builder.context(String.format("Support Formation 1J : %s", activity.getComment()));
+                break;
+            case CREATION_DE_SUPPORT_DE_FORMATION_1J_HTT:
+                builder.type(ActionType.ONE_DAY_HTT_TRAINING_SUPPORT);
+                builder.context(String.format("Support Formation 1J HTT : %s", activity.getComment()));
+                break;
+            case ANIMATION_SESSION_DE_FORMATION_2H_HTT:
+                builder.type(ActionType.TWO_HOUR_HTT_FORMATION_ANIMATION);
+                builder.context(String.format("Animation Formation 2H HTT : %s", activity.getComment()));
+                break;
+            case ANIMATION_SESSION_DE_FORMATION_1J:
+                builder.type(ActionType.ONE_DAY_FORMATION_ANIMATION);
+                builder.context(String.format("Animation Formation 1J : %s", activity.getComment()));
                 break;
             case ANIMATION_DUNE_SESSION_DE_FORMATION_AU_FORMAT_WEBINAR:
-                if (activityDuration <= 1) {
-                    builder.type(ActionType.ONE_HOUR_FORMATION_ANIMATION);
-                } else {
-                    builder.type(ActionType.TWO_HOURS_FORMATION_ANIMATION);
-                }
+                builder.type(ActionType.WEBINAR);
                 builder.context(String.format("Animation Formation Webinar : %s", activity.getComment()));
                 break;
             case PARTICIPATION_A_UNE_CONFERENCE_EN_TANT_QUE_SPEAKER:
                 builder.type(ActionType.SPEAKER);
                 builder.context(String.format("Conférence : %s %s", activity.getComment(), activity.getOpportunity()));
+                break;
+            case RETEX:
+                builder.type(ActionType.RETEX);
+                builder.context(String.format("Retex : %s", activity.getComment()));
                 break;
             case PUBLIER_UN_ARTICLE_COURT:
                 builder.type(ActionType.SHORT_ARTICLE_PUBLICATION);
@@ -148,6 +155,10 @@ public class ActivityToActionMapper {
             case PUBLIER_UN_CHEAT_SHEET:
                 builder.type(ActionType.CHEAT_SHEET);
                 builder.context(String.format("Cheat Sheet : %s", activity.getComment()));
+                break;
+            case INTERVIEW:
+                builder.type(ActionType.INTERVIEW);
+                builder.context(String.format("Interview Collaborateur : %s", activity.getComment()));
                 break;
             case AUDIT_CIR_PHASE_1:
                 builder.type(ActionType.AUDIT_CIR_PHASE_1);

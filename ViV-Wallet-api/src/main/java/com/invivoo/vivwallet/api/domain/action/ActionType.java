@@ -40,7 +40,19 @@ public enum ActionType {
     PROJET_FIL_ROUGE_TICKET_L("Projet Fil Rouge - ticket L", 25, Constants.IS_SHARED_BY_MULTIPLE_ACHIEVERS),
     PROJET_FIL_ROUGE_TICKET_XL("Projet Fil Rouge - ticket XL", 50, Constants.IS_SHARED_BY_MULTIPLE_ACHIEVERS),
 
-    NO_MAPPING_FOUND("No mapping found", 0, Constants.IS_NOT_SHARED_BY_MULTIPLE_ACHIEVERS);
+    NO_MAPPING_FOUND("No mapping found", 0, Constants.IS_NOT_SHARED_BY_MULTIPLE_ACHIEVERS),
+
+    COACHING_HORS_OPP("Coaching Hors Opportunité", 0, Constants.IS_NOT_SHARED_BY_MULTIPLE_ACHIEVERS),
+
+    TWO_HOURS_HTT_TRAINING_SUPPORT("Création des supports de formation de 2 h hors temps de travail", 25, Constants.IS_SHARED_BY_MULTIPLE_ACHIEVERS),
+    ONE_DAY_TRAINING_SUPPORT("Création des supports de formation de 1 jour", 50, Constants.IS_SHARED_BY_MULTIPLE_ACHIEVERS),
+    ONE_DAY_HTT_TRAINING_SUPPORT("Création des supports de formation de 1 jour hors temps de travail", 120, Constants.IS_SHARED_BY_MULTIPLE_ACHIEVERS),
+    TWO_HOUR_HTT_FORMATION_ANIMATION("Animation de la session de 2 h hors temps de travail", 30, Constants.IS_SHARED_BY_MULTIPLE_ACHIEVERS),
+    ONE_DAY_FORMATION_ANIMATION("Animation de la session de 1 jour (forcément pendant tps de travail)", 30, Constants.IS_SHARED_BY_MULTIPLE_ACHIEVERS),
+
+    WEBINAR("Animation d'un Webinar", 15, Constants.IS_SHARED_BY_MULTIPLE_ACHIEVERS),
+    RETEX("Retex", 10, Constants.IS_NOT_SHARED_BY_MULTIPLE_ACHIEVERS),
+    INTERVIEW("Interview", 10, Constants.IS_NOT_SHARED_BY_MULTIPLE_ACHIEVERS);
 
     private final String name;
     private final Integer value;

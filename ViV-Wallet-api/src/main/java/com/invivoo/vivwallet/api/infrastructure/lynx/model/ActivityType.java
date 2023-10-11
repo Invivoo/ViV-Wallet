@@ -42,16 +42,24 @@ public enum ActivityType {
     DEV_SMALL("Dev:Small"),
     DEV_MEDIUM("Dev:Medium"),
     DEV_LARGE("Dev:Large"),
-    DEV_EXTRA_LARGE("Dev:XLarge");
+    DEV_EXTRA_LARGE("Dev:XLarge"),
+
+    CREATION_DE_SUPPORT_DE_FORMATION_2H_HTT("Training:Supports2H-HTT"),
+    CREATION_DE_SUPPORT_DE_FORMATION_1J("Training:Supports1J"),
+    CREATION_DE_SUPPORT_DE_FORMATION_1J_HTT("Training:Supports1J-HTT"),
+    ANIMATION_SESSION_DE_FORMATION_2H_HTT("Training:Session2H-HTT"),
+    ANIMATION_SESSION_DE_FORMATION_1J("Training:Session1J"),
+    RETEX("Event:RETEX"),
+    INTERVIEW("Publish:Interview");
 
     private final String name;
 
     @JsonCreator
     public static ActivityType forValue(String value) {
         return Stream.of(ActivityType.values())
-                     .filter(a -> a.getName().equals(value))
-                     .findFirst()
-                     .orElse(null);
+                .filter(a -> a.getName().equals(value))
+                .findFirst()
+                .orElse(null);
     }
 
     @JsonValue
