@@ -1,34 +1,52 @@
 # viv-wallet-app
 
-## Project setup
+Viv Wallet App is a Vue.js SPA that allows users to manage their INVIVOO virtual currency wallet.
+
+## Requirements
+
+-   Node.js 16
+
+## Development
+
+-   Install node modules
+
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+-   Run the mock backend
+
+```
+npm run mock-server
+```
+
+-   Run the dev server
+
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
+-   Run lint and typecheck
+
 ```
-npm run build
+npm run lint
+npm run typecheck
 ```
 
-### Run your unit tests
+-   Run unit tests
+
 ```
 npm run test:unit
 ```
 
-### Run your end-to-end tests
+-   Build the bundle for production
+
 ```
-npm run test:e2e
+npm run build
 ```
 
-### Lints and fixes files
-```
-npm run lint
-```
+If you want to run the dev server with a local backend (instead of the mock server), you can use the following command:
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+```
+npm run serve:localbackend
+```
