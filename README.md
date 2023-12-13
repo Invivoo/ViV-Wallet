@@ -104,6 +104,14 @@ Pour installer l'extension VSCode pour le remote development, suivre la procédu
 
 In the `viv-wallet-app/` folder, run `npm run mock-server` to start a mock backend server. Then start the front end by typing `npm run serve`.
 
+### Pour travailler sur la partie DevOps
+
+La partie CI est gérée par [CircleCI](https://circleci.com/gh/Invivoo/ViV-Wallet). Le fichier de configuration est `.circleci/config.yml`.
+
+L'application (backend et frontend) est déployée dans Azure dans un cluster Kubernetes (AKS).
+
+On utilise un chart Helm qui se trouve dans le répertoire `helm/`. Le chart Helm est déployé dans le cluster AKS via un workflow CircleCI géré par l'équipe **XComponent**.
+
 ## License
 
 [Apache License 2.0](https://raw.githubusercontent.com/Invivoo/ViV-Wallet/develop/LICENSE)
