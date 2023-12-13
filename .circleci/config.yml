@@ -58,6 +58,12 @@ references:
                 - v2-viv-wallet-app-{{ .Branch }}-{{ checksum "viv-wallet-app/package-lock.json" }}
                 - v2-viv-wallet-app-{{ .Branch }}-
                 - v2-viv-wallet-app-
+
+    install_tools_orb: &install_tools_orb
+        run:
+            name: Install curl
+            command: apk update && apk add curl
+
 jobs:
     checkout:
         docker:
@@ -179,6 +185,7 @@ jobs:
         steps:
             - attach_workspace:
                   at: ~/project
+            - *install_tools_orb
             - docker/install-docker
             - run:
                   name: Update openssl
