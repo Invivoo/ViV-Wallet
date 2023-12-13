@@ -103,3 +103,7 @@ Pour installer l'extension VSCode pour le remote development, suivre la procédu
 ### Pour travailler sur le frontend
 
 In the `viv-wallet-app/` folder, run `npm run mock-server` to start a mock backend server. Then start the front end by typing `npm run serve`.
+
+## License
+
+[Apache License 2.0](https://raw.githubusercontent.com/Invivoo/ViV-Wallet/develop/LICENSE)
