@@ -62,7 +62,7 @@ references:
     install_tools_orb: &install_tools_orb
         run:
             name: Install curl
-            command: apk update && apk add curl
+            command: sudo apt-get update && sudo apt-get install -y curl
 
 jobs:
     checkout:
@@ -190,7 +190,7 @@ jobs:
             - docker/install-docker
             - run:
                   name: Update openssl
-                  command: apk add openssl
+                  command: sudo apt-get install -y openssl
             - helm/install-helm-client:
                   version: v3.1.1
             - *build_version_variables
