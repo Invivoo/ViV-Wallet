@@ -186,7 +186,6 @@ jobs:
         steps:
             - attach_workspace:
                   at: ~/project
-            - *install_tools_orb
             - docker/install-docker
             - run:
                   name: Update openssl
