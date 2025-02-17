@@ -180,7 +180,8 @@ jobs:
                       fi
 
     helm_chart:
-        executor: azure-cli/azure-docker
+        docker:
+            - image: cimg/azure:2024.03
         resource_class: small
         steps:
             - attach_workspace:
@@ -217,21 +218,21 @@ jobs:
                   working_directory: ~/project/helm
                   command: |
                       CONTAINER_REGISTRY=x4bcontainerregistry
+                      REPO="oci://$CONTAINER_REGISTRY.azurecr.io/helm"
                       az acr login --name "$CONTAINER_REGISTRY"
-                      az acr helm repo add --name "$CONTAINER_REGISTRY"
 
                       if [[ -n "${CIRCLE_TAG}" ]]
                       then
                       # this is a tag, the version we push here is the `official` one for this chart
                       # if the package version exists do not force the push
                       # we don't want to override any deployed version
-                      az acr helm push --name "$CONTAINER_REGISTRY" *.tgz
+                      helm push *.tgz "$REPO"
                       elif [[ "${CIRCLE_BRANCH}" == "develop" ]]
                       then
                       # on a develop branch push dummy version '0.0.1' of the
                       # package, they will have an app version like 'dev-develop'
                       # if the package version exists we force the push
-                      az acr helm push --force --name "$CONTAINER_REGISTRY" *.tgz || true
+                      helm push --force *.tgz "$REPO" || true
                       else
                       echo No need to publish a chart, this is not a tag or the develop branch
                       fi
